@@ -25,7 +25,7 @@ export default async function SolicitarPage() {
 
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center">{t.request.loading}</div>}>
-      <ContactFormClient ciudades={ciudadesOpciones} />
+      <ContactFormClient ciudades={ciudadesOpciones} locale={LOCALE} />
     </Suspense>
   );
 }

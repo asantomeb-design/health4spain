@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { PAISES_CON_CODIGO, CODIGOS_PARA_OTRO, PAISES } from '@/lib/constants';
+import { getDictionary } from '@/lib/dictionaries';
+import type { Locale } from '@/lib/routes';
 
-// Tipos
 interface FormData {
   servicio: string;
   ciudad_interes: string;
@@ -25,67 +26,56 @@ interface FormData {
   landing_page: string;
 }
 
+type RequestDict = ReturnType<typeof getDictionary>['request'];
+
 interface StepProps {
   formData: FormData;
   updateFormData: (field: keyof FormData, value: string) => void;
   errors: Partial<Record<keyof FormData, string>>;
   ciudades?: { id: string; label: string }[];
   onAutoAdvance?: () => void;
+  t: RequestDict;
 }
 
-const SERVICIOS = [
-  { id: 'seguros', label: 'Seguros de Salud', icon: '🏥' },
-  { id: 'abogados', label: 'Abogados', icon: '⚖️' },
-  { id: 'inmobiliarias', label: 'Inmobiliarias', icon: '🏠' },
-  { id: 'gestorias', label: 'Gestorías', icon: '📋' },
-];
+const SERVICIO_IDS = ['seguros', 'abogados', 'inmobiliarias', 'gestorias'] as const;
+const SERVICIO_ICONS: Record<string, string> = { seguros: '🏥', abogados: '⚖️', inmobiliarias: '🏠', gestorias: '📋' };
 
-const PRESUPUESTOS = [
-  { id: 'menos-5000', label: 'Menos de 5.000€', score: 10 },
-  { id: '5000-15000', label: '5.000€ - 15.000€', score: 20 },
-  { id: '15000-30000', label: '15.000€ - 30.000€', score: 35 },
-  { id: 'mas-30000', label: 'Más de 30.000€', score: 50 },
-  { id: 'no-seguro', label: 'No estoy seguro', score: 15 },
-];
+const PRESUPUESTO_SCORES: Record<string, number> = {
+  'menos-5000': 10, '5000-15000': 20, '15000-30000': 35, 'mas-30000': 50, 'no-seguro': 15,
+};
 
-const URGENCIAS = [
-  { id: 'esta-semana', label: 'Esta semana', score: 30 },
-  { id: 'este-mes', label: 'Este mes', score: 20 },
-  { id: 'proximo-trimestre', label: 'Próximo trimestre', score: 10 },
-  { id: 'solo-informacion', label: 'Solo busco información', score: 5 },
-];
+const URGENCIA_SCORES: Record<string, number> = {
+  'esta-semana': 30, 'este-mes': 20, 'proximo-trimestre': 10, 'solo-informacion': 5,
+};
 
-function Step1({ formData, updateFormData, errors, onAutoAdvance }: StepProps) {
+function Step1({ formData, updateFormData, errors, onAutoAdvance, t }: StepProps) {
   const handleServicioClick = (servicioId: string) => {
     updateFormData('servicio', servicioId);
-    // Auto-avanzar después de un pequeño delay para que el usuario vea la selección
     if (onAutoAdvance) {
-      setTimeout(() => {
-        onAutoAdvance();
-      }, 300);
+      setTimeout(() => { onAutoAdvance(); }, 300);
     }
   };
 
   return (
     <div className="space-y-3">
       <div className="mb-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-1">¿Qué servicio necesitas?</h2>
-        <p className="text-sm md:text-base text-gray-600">Selecciona el tipo de profesional que buscas</p>
+        <h2 className="text-xl md:text-2xl font-bold mb-1">{t.step1Title}</h2>
+        <p className="text-sm md:text-base text-gray-600">{t.step1Subtitle}</p>
       </div>
       <div className="space-y-2">
-        {SERVICIOS.map((servicio) => (
+        {SERVICIO_IDS.map((id) => (
           <button
-            key={servicio.id}
+            key={id}
             type="button"
-            onClick={() => handleServicioClick(servicio.id)}
+            onClick={() => handleServicioClick(id)}
             className={`w-full p-3 md:p-4 border-2 rounded-lg text-left transition-all flex items-center justify-between ${
-              formData.servicio === servicio.id
+              formData.servicio === id
                 ? 'border-black bg-gray-50'
                 : 'border-gray-200 hover:border-gray-400'
             }`}
           >
-            <span className="text-sm md:text-base font-semibold">{servicio.label}</span>
-            {formData.servicio === servicio.id && (
+            <span className="text-sm md:text-base font-semibold">{t.servicios[id]}</span>
+            {formData.servicio === id && (
               <svg className="w-6 h-6 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             )}
           </button>
@@ -96,22 +86,19 @@ function Step1({ formData, updateFormData, errors, onAutoAdvance }: StepProps) {
   );
 }
 
-function Step2({ formData, updateFormData, errors, ciudades = [], onAutoAdvance }: StepProps) {
+function Step2({ formData, updateFormData, errors, ciudades = [], onAutoAdvance, t }: StepProps) {
   const handleCiudadClick = (ciudadId: string) => {
     updateFormData('ciudad_interes', ciudadId);
-    // Auto-avanzar después de un pequeño delay para que el usuario vea la selección
     if (onAutoAdvance) {
-      setTimeout(() => {
-        onAutoAdvance();
-      }, 300);
+      setTimeout(() => { onAutoAdvance(); }, 300);
     }
   };
 
   return (
     <div className="space-y-3">
       <div className="mb-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-1">¿Dónde en España?</h2>
-        <p className="text-sm md:text-base text-gray-600">Selecciona la ciudad donde necesitas el servicio</p>
+        <h2 className="text-xl md:text-2xl font-bold mb-1">{t.step2Title}</h2>
+        <p className="text-sm md:text-base text-gray-600">{t.step2Subtitle}</p>
       </div>
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1.5 md:gap-2 max-h-[50vh] overflow-y-auto pr-2">
         {ciudades.map((ciudad) => (
@@ -137,7 +124,7 @@ function Step2({ formData, updateFormData, errors, ciudades = [], onAutoAdvance 
   );
 }
 
-function Step3({ formData, updateFormData, errors }: StepProps) {
+function Step3({ formData, updateFormData, errors, t }: StepProps) {
   const handlePaisChange = (pais: string) => {
     updateFormData('pais_origen', pais);
     if (pais && pais !== 'Otro') {
@@ -151,35 +138,35 @@ function Step3({ formData, updateFormData, errors }: StepProps) {
   return (
     <div className="space-y-3">
       <div className="mb-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-1">Cuéntanos sobre ti</h2>
-        <p className="text-sm md:text-base text-gray-600">Necesitamos algunos datos para conectarte con el profesional adecuado</p>
+        <h2 className="text-xl md:text-2xl font-bold mb-1">{t.step3Title}</h2>
+        <p className="text-sm md:text-base text-gray-600">{t.step3Subtitle}</p>
       </div>
       <div className="space-y-3">
         <div>
-          <label className="form-label-minimal">Nombre completo *</label>
+          <label className="form-label-minimal">{t.labelNombre}</label>
           <input
             type="text"
             value={formData.nombre}
             onChange={(e) => updateFormData('nombre', e.target.value)}
             className={`form-input-minimal ${errors.nombre ? 'border-accent' : ''}`}
-            placeholder="Tu nombre"
+            placeholder={t.placeholderNombre}
           />
           {errors.nombre && <p className="text-accent text-sm mt-1">{errors.nombre}</p>}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label className="form-label-minimal">Email *</label>
+            <label className="form-label-minimal">{t.labelEmail}</label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => updateFormData('email', e.target.value)}
               className={`form-input-minimal ${errors.email ? 'border-accent' : ''}`}
-              placeholder="tu@email.com"
+              placeholder={t.placeholderEmail}
             />
             {errors.email && <p className="text-accent text-sm mt-1">{errors.email}</p>}
           </div>
           <div>
-            <label className="form-label-minimal">Fecha de nacimiento *</label>
+            <label className="form-label-minimal">{t.labelFechaNacimiento}</label>
             <input
               type="date"
               value={formData.fecha_nacimiento}
@@ -191,13 +178,13 @@ function Step3({ formData, updateFormData, errors }: StepProps) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label className="form-label-minimal">País de origen *</label>
+            <label className="form-label-minimal">{t.labelPaisOrigen}</label>
             <select
               value={formData.pais_origen}
               onChange={(e) => handlePaisChange(e.target.value)}
               className={`form-input-minimal ${errors.pais_origen ? 'border-accent' : ''}`}
             >
-              <option value="">Selecciona tu país</option>
+              <option value="">{t.placeholderPais}</option>
               {PAISES.map((pais) => (
                 <option key={pais} value={pais}>{pais}</option>
               ))}
@@ -205,19 +192,19 @@ function Step3({ formData, updateFormData, errors }: StepProps) {
             {errors.pais_origen && <p className="text-accent text-sm mt-1">{errors.pais_origen}</p>}
           </div>
           <div>
-            <label className="form-label-minimal">Ciudad de origen</label>
+            <label className="form-label-minimal">{t.labelCiudadOrigen}</label>
             <input
               type="text"
               value={formData.ciudad_origen}
               onChange={(e) => updateFormData('ciudad_origen', e.target.value)}
               className="form-input-minimal"
-              placeholder="Tu ciudad actual"
+              placeholder={t.placeholderCiudadOrigen}
             />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-3">
           <div className="min-w-[120px]">
-            <label className="form-label-minimal">Código país *</label>
+            <label className="form-label-minimal">{t.labelCodigoPais}</label>
             {formData.pais_origen && formData.pais_origen !== 'Otro' ? (
               <div className="form-input-minimal bg-gray-50 text-gray-700">
                 {PAISES_CON_CODIGO.find(p => p.pais === formData.pais_origen)?.codigo || formData.codigo_pais}
@@ -228,7 +215,7 @@ function Step3({ formData, updateFormData, errors }: StepProps) {
                 onChange={(e) => updateFormData('codigo_pais', e.target.value)}
                 className={`form-input-minimal ${errors.codigo_pais ? 'border-accent' : ''}`}
               >
-                <option value="">Selecciona código</option>
+                <option value="">{t.placeholderCodigo}</option>
                 {CODIGOS_PARA_OTRO.map(({ codigo, pais }) => (
                   <option key={codigo} value={codigo}>{codigo} {pais}</option>
                 ))}
@@ -237,13 +224,13 @@ function Step3({ formData, updateFormData, errors }: StepProps) {
             {errors.codigo_pais && <p className="text-accent text-sm mt-1">{errors.codigo_pais}</p>}
           </div>
           <div>
-            <label className="form-label-minimal">Teléfono *</label>
+            <label className="form-label-minimal">{t.labelTelefono}</label>
             <input
               type="tel"
               value={formData.telefono}
               onChange={(e) => updateFormData('telefono', e.target.value.replace(/\D/g, ''))}
               className={`form-input-minimal ${errors.telefono ? 'border-accent' : ''}`}
-              placeholder="600 123 456"
+              placeholder={t.placeholderTelefono}
             />
             {errors.telefono && <p className="text-accent text-sm mt-1">{errors.telefono}</p>}
           </div>
@@ -253,30 +240,33 @@ function Step3({ formData, updateFormData, errors }: StepProps) {
   );
 }
 
-function Step4({ formData, updateFormData, errors }: StepProps) {
+function Step4({ formData, updateFormData, errors, t }: StepProps) {
+  const presupuestoIds = Object.keys(t.presupuestos) as Array<keyof typeof t.presupuestos>;
+  const urgenciaIds = Object.keys(t.urgencias) as Array<keyof typeof t.urgencias>;
+
   return (
     <div className="space-y-3">
       <div className="mb-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-1">Últimos detalles</h2>
-        <p className="text-sm md:text-base text-gray-600">Esto nos ayudará a encontrar el profesional ideal para ti</p>
+        <h2 className="text-xl md:text-2xl font-bold mb-1">{t.step4Title}</h2>
+        <p className="text-sm md:text-base text-gray-600">{t.step4Subtitle}</p>
       </div>
       <div className="space-y-3">
         <div>
-          <label className="form-label-minimal mb-2">¿Cuál es tu presupuesto aproximado? *</label>
+          <label className="form-label-minimal mb-2">{t.labelPresupuesto}</label>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5 md:gap-2 mt-2">
-            {PRESUPUESTOS.map((option) => (
+            {presupuestoIds.map((id) => (
               <button
-                key={option.id}
+                key={id}
                 type="button"
-                onClick={() => updateFormData('presupuesto', option.id)}
+                onClick={() => updateFormData('presupuesto', id)}
                 className={`p-2 md:p-2.5 border rounded text-left transition-all ${
-                  formData.presupuesto === option.id
+                  formData.presupuesto === id
                     ? 'border-black bg-gray-50 font-semibold'
                     : 'border-gray-200 hover:border-gray-400'
                 }`}
               >
-                <span className="text-xs md:text-sm block">{option.label}</span>
-                {formData.presupuesto === option.id && (
+                <span className="text-xs md:text-sm block">{t.presupuestos[id]}</span>
+                {formData.presupuesto === id && (
                   <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 )}
               </button>
@@ -285,21 +275,21 @@ function Step4({ formData, updateFormData, errors }: StepProps) {
           {errors.presupuesto && <p className="text-accent text-xs mt-1">{errors.presupuesto}</p>}
         </div>
         <div>
-          <label className="form-label-minimal mb-2">¿Cuándo lo necesitas? *</label>
+          <label className="form-label-minimal mb-2">{t.labelUrgencia}</label>
           <div className="grid grid-cols-2 gap-1.5 md:gap-2 mt-2">
-            {URGENCIAS.map((option) => (
+            {urgenciaIds.map((id) => (
               <button
-                key={option.id}
+                key={id}
                 type="button"
-                onClick={() => updateFormData('urgencia', option.id)}
+                onClick={() => updateFormData('urgencia', id)}
                 className={`p-2 md:p-2.5 border rounded text-left transition-all ${
-                  formData.urgencia === option.id
+                  formData.urgencia === id
                     ? 'border-black bg-gray-50 font-semibold'
                     : 'border-gray-200 hover:border-gray-400'
                 }`}
               >
-                <span className="text-xs md:text-sm block">{option.label}</span>
-                {formData.urgencia === option.id && (
+                <span className="text-xs md:text-sm block">{t.urgencias[id]}</span>
+                {formData.urgencia === id && (
                   <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 )}
               </button>
@@ -309,13 +299,13 @@ function Step4({ formData, updateFormData, errors }: StepProps) {
         </div>
         <div>
           <label className="form-label-minimal">
-            ¿Algo más que debamos saber? <span className="text-gray-400">(opcional)</span>
+            {t.labelMensaje} <span className="text-gray-400">{t.labelMensajeOpcional}</span>
           </label>
           <textarea
             value={formData.mensaje}
             onChange={(e) => updateFormData('mensaje', e.target.value)}
             className="form-input-minimal min-h-[80px] mt-1.5"
-            placeholder="Cuéntanos más sobre tu situación..."
+            placeholder={t.placeholderMensaje}
           />
         </div>
       </div>
@@ -325,9 +315,11 @@ function Step4({ formData, updateFormData, errors }: StepProps) {
 
 interface ContactFormClientProps {
   ciudades: { id: string; label: string }[];
+  locale?: Locale;
 }
 
-export default function ContactFormClient({ ciudades }: ContactFormClientProps) {
+export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFormClientProps) {
+  const t = getDictionary(locale).request;
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -416,59 +408,37 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
     }
   };
 
+  const validatePersonalData = (newErrors: Partial<Record<keyof FormData, string>>) => {
+    if (!formData.nombre.trim()) newErrors.nombre = t.errorNombre;
+    if (!formData.email.trim()) newErrors.email = t.errorEmail;
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = t.errorEmailInvalido;
+    if (!formData.fecha_nacimiento) newErrors.fecha_nacimiento = t.errorFechaNacimiento;
+    if (!formData.codigo_pais) newErrors.codigo_pais = t.errorCodigoPais;
+    if (!formData.telefono.trim()) newErrors.telefono = t.errorTelefono;
+    if (!formData.pais_origen) newErrors.pais_origen = t.errorPais;
+  };
+
+  const validateBudget = (newErrors: Partial<Record<keyof FormData, string>>) => {
+    if (!formData.presupuesto) newErrors.presupuesto = t.errorPresupuesto;
+    if (!formData.urgencia) newErrors.urgencia = t.errorUrgencia;
+  };
+
   const validateStep = (step: number): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {};
     
-    // Validación según el tipo de flujo
     if (flowType === 'from-service') {
-      // Flujo: ciudad → datos → detalles
-      if (step === 1 && !formData.ciudad_interes) newErrors.ciudad_interes = 'Selecciona una ciudad';
-      if (step === 2) {
-        if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio';
-        if (!formData.email.trim()) newErrors.email = 'El email es obligatorio';
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Email no válido';
-        if (!formData.fecha_nacimiento) newErrors.fecha_nacimiento = 'La fecha de nacimiento es obligatoria';
-        if (!formData.codigo_pais) newErrors.codigo_pais = 'El código de país es obligatorio';
-        if (!formData.telefono.trim()) newErrors.telefono = 'El teléfono es obligatorio';
-        if (!formData.pais_origen) newErrors.pais_origen = 'Selecciona tu país';
-      }
-      if (step === 3) {
-        if (!formData.presupuesto) newErrors.presupuesto = 'Selecciona tu presupuesto';
-        if (!formData.urgencia) newErrors.urgencia = 'Selecciona cuándo lo necesitas';
-      }
+      if (step === 1 && !formData.ciudad_interes) newErrors.ciudad_interes = t.errorCiudad;
+      if (step === 2) validatePersonalData(newErrors);
+      if (step === 3) validateBudget(newErrors);
     } else if (flowType === 'from-city') {
-      // Flujo: servicio → datos → detalles
-      if (step === 1 && !formData.servicio) newErrors.servicio = 'Selecciona un servicio';
-      if (step === 2) {
-        if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio';
-        if (!formData.email.trim()) newErrors.email = 'El email es obligatorio';
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Email no válido';
-        if (!formData.fecha_nacimiento) newErrors.fecha_nacimiento = 'La fecha de nacimiento es obligatoria';
-        if (!formData.codigo_pais) newErrors.codigo_pais = 'El código de país es obligatorio';
-        if (!formData.telefono.trim()) newErrors.telefono = 'El teléfono es obligatorio';
-        if (!formData.pais_origen) newErrors.pais_origen = 'Selecciona tu país';
-      }
-      if (step === 3) {
-        if (!formData.presupuesto) newErrors.presupuesto = 'Selecciona tu presupuesto';
-        if (!formData.urgencia) newErrors.urgencia = 'Selecciona cuándo lo necesitas';
-      }
+      if (step === 1 && !formData.servicio) newErrors.servicio = t.errorServicio;
+      if (step === 2) validatePersonalData(newErrors);
+      if (step === 3) validateBudget(newErrors);
     } else {
-      // Flujo default: servicio → ciudad → datos → detalles
-      if (step === 1 && !formData.servicio) newErrors.servicio = 'Selecciona un servicio';
-      if (step === 2 && !formData.ciudad_interes) newErrors.ciudad_interes = 'Selecciona una ciudad';
-      if (step === 3) {
-        if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio';
-        if (!formData.email.trim()) newErrors.email = 'El email es obligatorio';
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Email no válido';
-        if (!formData.fecha_nacimiento) newErrors.fecha_nacimiento = 'La fecha de nacimiento es obligatoria';
-        if (!formData.codigo_pais) newErrors.codigo_pais = 'El código de país es obligatorio';
-        if (!formData.telefono.trim()) newErrors.telefono = 'El teléfono es obligatorio';
-        if (!formData.pais_origen) newErrors.pais_origen = 'Selecciona tu país';
-      }
-      if (step === 4) {
-        if (!formData.presupuesto) newErrors.presupuesto = 'Selecciona tu presupuesto';
-        if (!formData.urgencia) newErrors.urgencia = 'Selecciona cuándo lo necesitas';
-      }
+      if (step === 1 && !formData.servicio) newErrors.servicio = t.errorServicio;
+      if (step === 2 && !formData.ciudad_interes) newErrors.ciudad_interes = t.errorCiudad;
+      if (step === 3) validatePersonalData(newErrors);
+      if (step === 4) validateBudget(newErrors);
     }
     
     setErrors(newErrors);
@@ -484,10 +454,8 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
 
   const calculateScore = (): number => {
     let score = 50;
-    const presupuestoOption = PRESUPUESTOS.find((p) => p.id === formData.presupuesto);
-    if (presupuestoOption) score += presupuestoOption.score;
-    const urgenciaOption = URGENCIAS.find((u) => u.id === formData.urgencia);
-    if (urgenciaOption) score += urgenciaOption.score;
+    score += PRESUPUESTO_SCORES[formData.presupuesto] ?? 0;
+    score += URGENCIA_SCORES[formData.urgencia] ?? 0;
     if (['seguros', 'abogados', 'inmobiliarias'].includes(formData.servicio)) score += 10;
     if (formData.ciudad_interes && formData.ciudad_interes !== 'otra') score += 5;
     if (formData.mensaje && formData.mensaje.length > 50) score += 5;
@@ -521,17 +489,17 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
           utm_medium: formData.utm_medium,
           utm_campaign: formData.utm_campaign,
           score,
-          idioma_preferido: 'es',
+          idioma_preferido: locale,
         }),
       });
       if (response.ok) setIsSuccess(true);
       else {
         const data = await response.json();
-        alert(data.error || 'Error al enviar. Por favor, inténtalo de nuevo.');
+        alert(data.error || t.errorEnvio);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error de conexión. Por favor, inténtalo de nuevo.');
+      alert(t.errorConexion);
     } finally {
       setIsSubmitting(false);
     }
@@ -545,16 +513,16 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-accent/10 text-accent mb-8">
               <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Solicitud Recibida</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{t.successTitle}</h1>
             <p className="text-xl text-gray-600 mb-10 max-w-lg mx-auto">
-              Gracias por confiar en Health4Spain. Un profesional se pondrá en contacto contigo en menos de 24 horas.
+              {t.successMessage}
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-10 text-sm text-gray-500">
-              <span className="inline-flex items-center gap-1"><svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Respuesta en menos de 24h</span>
-              <span className="inline-flex items-center gap-1"><svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg> Datos protegidos</span>
+              <span className="inline-flex items-center gap-1"><svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {t.successRespuesta}</span>
+              <span className="inline-flex items-center gap-1"><svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg> {t.successDatos}</span>
             </div>
-            <Link href="/es" className="btn-minimal-lg">
-              Volver al Inicio
+            <Link href={`/${locale}`} className="btn-minimal-lg">
+              {t.volverInicio}
             </Link>
           </div>
         </div>
@@ -574,43 +542,28 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
   
   // Función para renderizar el paso correcto según el flujo
   const renderStep = () => {
+    const common = { formData, updateFormData, errors, t };
     if (flowType === 'from-service') {
-      // Flujo: ciudad → datos → detalles
       switch (currentStep) {
-        case 1:
-          return <Step2 formData={formData} updateFormData={updateFormData} errors={errors} ciudades={ciudades} onAutoAdvance={autoAdvanceToNextStep} />;
-        case 2:
-          return <Step3 formData={formData} updateFormData={updateFormData} errors={errors} />;
-        case 3:
-          return <Step4 formData={formData} updateFormData={updateFormData} errors={errors} />;
-        default:
-          return null;
+        case 1: return <Step2 {...common} ciudades={ciudades} onAutoAdvance={autoAdvanceToNextStep} />;
+        case 2: return <Step3 {...common} />;
+        case 3: return <Step4 {...common} />;
+        default: return null;
       }
     } else if (flowType === 'from-city') {
-      // Flujo: servicio → datos → detalles
       switch (currentStep) {
-        case 1:
-          return <Step1 formData={formData} updateFormData={updateFormData} errors={errors} onAutoAdvance={autoAdvanceToNextStep} />;
-        case 2:
-          return <Step3 formData={formData} updateFormData={updateFormData} errors={errors} />;
-        case 3:
-          return <Step4 formData={formData} updateFormData={updateFormData} errors={errors} />;
-        default:
-          return null;
+        case 1: return <Step1 {...common} onAutoAdvance={autoAdvanceToNextStep} />;
+        case 2: return <Step3 {...common} />;
+        case 3: return <Step4 {...common} />;
+        default: return null;
       }
     } else {
-      // Flujo default: servicio → ciudad → datos → detalles
       switch (currentStep) {
-        case 1:
-          return <Step1 formData={formData} updateFormData={updateFormData} errors={errors} onAutoAdvance={autoAdvanceToNextStep} />;
-        case 2:
-          return <Step2 formData={formData} updateFormData={updateFormData} errors={errors} ciudades={ciudades} onAutoAdvance={autoAdvanceToNextStep} />;
-        case 3:
-          return <Step3 formData={formData} updateFormData={updateFormData} errors={errors} />;
-        case 4:
-          return <Step4 formData={formData} updateFormData={updateFormData} errors={errors} />;
-        default:
-          return null;
+        case 1: return <Step1 {...common} onAutoAdvance={autoAdvanceToNextStep} />;
+        case 2: return <Step2 {...common} ciudades={ciudades} onAutoAdvance={autoAdvanceToNextStep} />;
+        case 3: return <Step3 {...common} />;
+        case 4: return <Step4 {...common} />;
+        default: return null;
       }
     }
   };
@@ -622,13 +575,12 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs font-medium uppercase tracking-wider text-gray-600">
               {(() => {
-                // Mostrar mensaje más claro según el contexto
                 if (flowType === 'from-service' && currentStep === 1) {
-                  return `Elige ciudad - Paso ${currentStep} / ${totalSteps}`;
+                  return `${t.eligeCiudadPaso} ${currentStep} / ${totalSteps}`;
                 } else if (flowType === 'from-city' && currentStep === 1) {
-                  return `Elige servicio - Paso ${currentStep} / ${totalSteps}`;
+                  return `${t.eligeServicioPaso} ${currentStep} / ${totalSteps}`;
                 } else {
-                  return `Paso ${currentStep} / ${totalSteps}`;
+                  return `${t.paso} ${currentStep} / ${totalSteps}`;
                 }
               })()}
             </span>
@@ -645,7 +597,7 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
           {/* Banner de información preseleccionada - ahora EDITABLE */}
           {(formData.servicio || formData.ciudad_interes) && currentStep > 1 && (
             <div className="mb-4 p-2.5 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-xs text-blue-800 font-medium mb-2">Buscas:</p>
+              <p className="text-xs text-blue-800 font-medium mb-2">{t.buscas}</p>
               <div className="flex flex-wrap gap-2">
                 {formData.servicio && (
                   <button
@@ -664,7 +616,7 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
                   >
                     <span className="text-blue-600">✓</span>
                     <span className="font-medium">
-                      {SERVICIOS.find(s => s.id === formData.servicio)?.label}
+                      {t.servicios[formData.servicio as keyof typeof t.servicios] ?? formData.servicio}
                     </span>
                     <span className="text-xs text-gray-400 group-hover:text-blue-600">✏️</span>
                   </button>
@@ -693,7 +645,7 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
                   </button>
                 )}
               </div>
-              <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">Haz clic para cambiar <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></p>
+              <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">{t.hazClicCambiar} <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></p>
             </div>
           )}
           
@@ -706,11 +658,11 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
               disabled={currentStep === 1}
               className={`btn-ghost-minimal ${currentStep === 1 ? 'invisible' : ''}`}
             >
-              ← Anterior
+              {t.anterior}
             </button>
             {currentStep < totalSteps ? (
               <button type="button" onClick={nextStep} className="btn-minimal">
-                Siguiente →
+                {t.siguiente}
               </button>
             ) : (
               <button
@@ -719,14 +671,14 @@ export default function ContactFormClient({ ciudades }: ContactFormClientProps) 
                 disabled={isSubmitting}
                 className="btn-minimal"
               >
-                {isSubmitting ? 'Enviando...' : 'Enviar Solicitud'}
+                {isSubmitting ? t.enviando : t.enviarSolicitud}
               </button>
             )}
           </div>
         </div>
 
         <div className="mt-4 text-center">
-          <p className="text-xs text-gray-600 flex items-center justify-center gap-1"><svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg> Tus datos están seguros y protegidos</p>
+          <p className="text-xs text-gray-600 flex items-center justify-center gap-1"><svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg> {t.datosProtegidos}</p>
         </div>
       </div>
     </div>

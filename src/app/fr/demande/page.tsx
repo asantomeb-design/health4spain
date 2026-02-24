@@ -24,7 +24,7 @@ export default async function RequestPage() {
 
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center">{t.request.loading}</div>}>
-      <ContactFormClient ciudades={ciudadesOpciones} />
+      <ContactFormClient ciudades={ciudadesOpciones} locale={locale} />
     </Suspense>
   );
 }
