@@ -632,49 +632,180 @@ async function CityView({
                 </div>
               </div>
 
+              {contenidoDB.clima_detalle && (
+                <div>
+                  <h2 className="mb-8">{t.landingUI.climate}</h2>
+                  <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">{contenidoDB.clima_detalle}</p>
+                </div>
+              )}
+
+              {contenidoDB.coste_vida_utilidades && (
+                <div className="border-t-3 border-gray-300 pt-6">
+                  <h3 className="text-xl font-bold mb-3 flex items-center gap-3">
+                    <span className="text-2xl">💡</span>
+                    {t.landingUI.utilities}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed whitespace-pre-line">{contenidoDB.coste_vida_utilidades}</p>
+                </div>
+              )}
+
+              {contenidoDB.primeros_30_dias && contenidoDB.primeros_30_dias.length > 0 && (
+                <div>
+                  <h2 className="mb-4">{t.landingUI.first30Days} {ciudadData.nombre}</h2>
+                  <p className="text-gray-700 text-lg mb-8">{t.landingUI.first30DaysDesc}</p>
+                  <div className="space-y-6">
+                    {contenidoDB.primeros_30_dias.map((semana: any, idx: number) => (
+                      <div key={idx} className="border-l-4 border-accent pl-6 py-4">
+                        <div className="text-sm font-bold text-accent uppercase tracking-wider mb-1">{semana.dias}</div>
+                        <h3 className="text-xl font-bold mb-2">{semana.titulo}</h3>
+                        <p className="text-gray-600 leading-relaxed">{semana.descripcion}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {contenidoDB.tramites && contenidoDB.tramites.length > 0 && (
                 <div>
-                  <h2 className="mb-8">
-                    {t.landingUI.essentialProcedures}
-                  </h2>
-                  <p className="text-gray-700 text-lg mb-8">
-                    {t.landingUI.proceduresDesc}
-                  </p>
+                  <h2 className="mb-8">{t.landingUI.essentialProcedures}</h2>
+                  <p className="text-gray-700 text-lg mb-8">{t.landingUI.proceduresDesc}</p>
                   <ul className="service-list-minimal">
                     {contenidoDB.tramites.map((tramite: string, idx: number) => (
                       <li key={idx} className="py-6 border-b border-gray-300 flex items-start gap-4">
-                        <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center shrink-0 font-bold">
-                          {idx + 1}
-                        </div>
+                        <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center shrink-0 font-bold">{idx + 1}</div>
                         <p className="text-gray-700 text-lg">{tramite}</p>
                       </li>
                     ))}
                   </ul>
                   <div className="mt-8 bg-white border-t-3 border-accent p-6">
-                    <p className="text-gray-700 mb-4">
-                      <strong>💡 {t.landingUI.recommendation}:</strong> {t.landingUI.proceduresTip}
-                    </p>
-                    <Link 
-                      href={`/${LOCALE}/${r.request}?servicio=gestorias&ciudad=${slug}`}
-                      className="btn-minimal"
-                    >
-                      {t.landingUI.requestContact} →
-                    </Link>
+                    <p className="text-gray-700 mb-4"><strong>💡 {t.landingUI.recommendation}:</strong> {t.landingUI.proceduresTip}</p>
+                    <Link href={`/${LOCALE}/${r.request}?servicio=gestorias&ciudad=${slug}`} className="btn-minimal">{t.landingUI.requestContact} →</Link>
+                  </div>
+                </div>
+              )}
+
+              {contenidoDB.consulados_embajadas && (
+                <div>
+                  <h2 className="mb-4">{t.landingUI.consulatesTitle}</h2>
+                  <p className="text-gray-700 text-lg mb-8">{contenidoDB.consulados_embajadas.descripcion}</p>
+                  {contenidoDB.consulados_embajadas.lista_consulados?.length > 0 && (
+                    <div className="space-y-4 mb-8">
+                      {contenidoDB.consulados_embajadas.lista_consulados.map((c: any, idx: number) => (
+                        <div key={idx} className="border-t border-gray-300 pt-4">
+                          <h3 className="font-bold text-lg">{c.pais}</h3>
+                          <p className="text-gray-600 text-sm">{c.direccion}</p>
+                          {c.web && <a href={c.web.startsWith('http') ? c.web : `https://${c.web}`} target="_blank" rel="noopener noreferrer" className="text-accent text-sm hover:underline">{c.web}</a>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {contenidoDB.consulados_embajadas.documentos_basicos?.length > 0 && (
+                    <div className="bg-gray-50 p-6 rounded">
+                      <h4 className="font-bold mb-3">{t.landingUI.consulatesDocTitle}</h4>
+                      <ul className="space-y-2">
+                        {contenidoDB.consulados_embajadas.documentos_basicos.map((doc: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">•</span> {doc}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {contenidoDB.trabajo_emprendimiento && (
+                <div>
+                  <h2 className="mb-8">{t.landingUI.workTitle}</h2>
+                  {contenidoDB.trabajo_emprendimiento.sectores_principales?.length > 0 && (
+                    <div className="mb-8">
+                      <h3 className="text-xl font-bold mb-4">{t.landingUI.workSectors}</h3>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        {contenidoDB.trabajo_emprendimiento.sectores_principales.map((s: string, idx: number) => (
+                          <div key={idx} className="flex items-center gap-2 p-3 bg-gray-50 rounded">
+                            <svg className="w-5 h-5 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            <span className="text-gray-700">{s}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {contenidoDB.trabajo_emprendimiento.donde_buscar?.length > 0 && (
+                    <div className="mb-8">
+                      <h3 className="text-xl font-bold mb-4">{t.landingUI.workWhereToFind}</h3>
+                      <ul className="space-y-2">
+                        {contenidoDB.trabajo_emprendimiento.donde_buscar.map((d: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">→</span> {d}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {contenidoDB.trabajo_emprendimiento.tips_emprendimiento?.length > 0 && (
+                    <div>
+                      <h3 className="text-xl font-bold mb-4">{t.landingUI.workEntrepreneurship}</h3>
+                      <ul className="space-y-2">
+                        {contenidoDB.trabajo_emprendimiento.tips_emprendimiento.map((tip: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">💼</span> {tip}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {contenidoDB.condiciones_entrada && (
+                <div>
+                  <h2 className="mb-8">{t.landingUI.entryConditionsTitle}</h2>
+                  {contenidoDB.condiciones_entrada.sin_visa?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.entryWithoutVisa}</h3><ul className="space-y-2">{contenidoDB.condiciones_entrada.sin_visa.map((item: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-green-500 mt-1">✓</span> {item}</li>))}</ul></div>)}
+                  {contenidoDB.condiciones_entrada.con_visa?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.entryWithVisa}</h3><ul className="space-y-2">{contenidoDB.condiciones_entrada.con_visa.map((item: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">→</span> {item}</li>))}</ul></div>)}
+                  {contenidoDB.condiciones_entrada.documentos_requeridos?.length > 0 && (<div className="bg-gray-50 p-6 rounded"><h3 className="font-bold mb-3">{t.landingUI.entryDocsRequired}</h3><ul className="space-y-2">{contenidoDB.condiciones_entrada.documentos_requeridos.map((doc: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent">📄</span> {doc}</li>))}</ul></div>)}
+                </div>
+              )}
+
+              {contenidoDB.riesgos_frontera && (
+                <div>
+                  <h2 className="mb-8">{t.landingUI.borderRisksTitle}</h2>
+                  {contenidoDB.riesgos_frontera.errores_comunes?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.borderCommonErrors}</h3><ul className="space-y-2">{contenidoDB.riesgos_frontera.errores_comunes.map((e: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-red-500 mt-1">⚠️</span> {e}</li>))}</ul></div>)}
+                  {contenidoDB.riesgos_frontera.que_no_hacer?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.borderDontDo}</h3><ul className="space-y-2">{contenidoDB.riesgos_frontera.que_no_hacer.map((item: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-red-500 mt-1">✗</span> {item}</li>))}</ul></div>)}
+                  {contenidoDB.riesgos_frontera.consejos?.length > 0 && (<div className="bg-green-50 p-6 rounded"><h3 className="font-bold mb-3">{t.landingUI.borderAdvice}</h3><ul className="space-y-2">{contenidoDB.riesgos_frontera.consejos.map((c: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-green-600 mt-1">✓</span> {c}</li>))}</ul></div>)}
+                </div>
+              )}
+
+              {contenidoDB.residencia_nacionalidad && (
+                <div>
+                  <h2 className="mb-8">{t.landingUI.residencyTitle}</h2>
+                  {contenidoDB.residencia_nacionalidad.tipos_residencia?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.residencyTypes}</h3><ul className="space-y-3">{contenidoDB.residencia_nacionalidad.tipos_residencia.map((tipo: string, idx: number) => (<li key={idx} className="flex items-start gap-3 p-3 bg-gray-50 rounded text-gray-700"><div className="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center shrink-0 text-sm font-bold">{idx + 1}</div>{tipo}</li>))}</ul></div>)}
+                  {contenidoDB.residencia_nacionalidad.proceso_nacionalidad?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.residencyNationality}</h3><ul className="space-y-2">{contenidoDB.residencia_nacionalidad.proceso_nacionalidad.map((p: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">🏛️</span> {p}</li>))}</ul></div>)}
+                </div>
+              )}
+
+              {contenidoDB.integracion_practica && (
+                <div>
+                  <h2 className="mb-8">{t.landingUI.integrationTitle}</h2>
+                  {contenidoDB.integracion_practica.asociaciones?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.integrationAssociations}</h3><ul className="space-y-2">{contenidoDB.integracion_practica.asociaciones.map((a: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">🤝</span> {a}</li>))}</ul></div>)}
+                  {contenidoDB.integracion_practica.cursos_idiomas?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.integrationLanguage}</h3><ul className="space-y-2">{contenidoDB.integracion_practica.cursos_idiomas.map((c: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">📚</span> {c}</li>))}</ul></div>)}
+                  {contenidoDB.integracion_practica.apps_utiles?.length > 0 && (<div className="mb-6"><h3 className="text-xl font-bold mb-3">{t.landingUI.integrationApps}</h3><ul className="space-y-2">{contenidoDB.integracion_practica.apps_utiles.map((app: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">📱</span> {app}</li>))}</ul></div>)}
+                  {contenidoDB.integracion_practica.comunidades_online?.length > 0 && (<div><h3 className="text-xl font-bold mb-3">{t.landingUI.integrationOnline}</h3><ul className="space-y-2">{contenidoDB.integracion_practica.comunidades_online.map((co: string, idx: number) => (<li key={idx} className="flex items-start gap-2 text-gray-700"><span className="text-accent mt-1">🌐</span> {co}</li>))}</ul></div>)}
+                </div>
+              )}
+
+              {contenidoDB.checklists && (
+                <div>
+                  <h2 className="mb-8">{t.landingUI.checklistTitle}</h2>
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    {contenidoDB.checklists.antes_viajar?.length > 0 && (<div className="bg-blue-50 p-6 rounded"><h3 className="font-bold mb-3">{t.landingUI.checklistBeforeTravel}</h3><ul className="space-y-1 text-sm">{contenidoDB.checklists.antes_viajar.map((item: string, idx: number) => (<li key={idx} className="text-gray-700">{item}</li>))}</ul></div>)}
+                    {contenidoDB.checklists.primeros_dias?.length > 0 && (<div className="bg-green-50 p-6 rounded"><h3 className="font-bold mb-3">{t.landingUI.checklistFirstDays}</h3><ul className="space-y-1 text-sm">{contenidoDB.checklists.primeros_dias.map((item: string, idx: number) => (<li key={idx} className="text-gray-700">{item}</li>))}</ul></div>)}
+                    {contenidoDB.checklists.tramites?.length > 0 && (<div className="bg-yellow-50 p-6 rounded"><h3 className="font-bold mb-3">{t.landingUI.checklistProcedures}</h3><ul className="space-y-1 text-sm">{contenidoDB.checklists.tramites.map((item: string, idx: number) => (<li key={idx} className="text-gray-700">{item}</li>))}</ul></div>)}
+                    {contenidoDB.checklists.integracion?.length > 0 && (<div className="bg-purple-50 p-6 rounded"><h3 className="font-bold mb-3">{t.landingUI.checklistIntegration}</h3><ul className="space-y-1 text-sm">{contenidoDB.checklists.integracion.map((item: string, idx: number) => (<li key={idx} className="text-gray-700">{item}</li>))}</ul></div>)}
                   </div>
                 </div>
               )}
 
               {contenidoDB.faqs && contenidoDB.faqs.length > 0 && (
                 <div>
-                  <h2 className="mb-6 md:mb-8 text-xl sm:text-2xl md:text-3xl">
-                    {t.landingUI.faqs}
-                  </h2>
+                  <h2 className="mb-6 md:mb-8 text-xl sm:text-2xl md:text-3xl">{t.landingUI.faqs}</h2>
                   <div className="space-y-6">
                     {contenidoDB.faqs.map((faq: any, idx: number) => (
                       <div key={idx} className="border-t-3 border-gray-300 pt-6">
-                        <h3 className="text-xl font-bold mb-3">
-                          {faq.pregunta}
-                        </h3>
+                        <h3 className="text-xl font-bold mb-3">{faq.pregunta}</h3>
                         <p className="text-gray-600 leading-relaxed whitespace-pre-line">{faq.respuesta}</p>
                       </div>
                     ))}
