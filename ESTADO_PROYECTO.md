@@ -1,211 +1,208 @@
 # 📊 Estado del Proyecto Health4Spain
 
-**Fecha de última actualización:** 12 de Febrero 2026
+**Fecha de última actualización:** 24 de Febrero 2026
 
 ---
 
-## ✅ ESTADO ACTUAL: OPTIMIZADO Y PRODUCTION-READY
+## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO COMPLETO + PRODUCTION-READY
 
-### 🎯 Objetivo Alcanzado
+### 🎯 Hitos Alcanzados
 
-El proyecto Health4Spain ha completado exitosamente:
+- ✅ **5 idiomas completos** (ES, EN, FR, DE, PT) con páginas idénticas
+- ✅ **644 páginas estáticas** generadas en build
+- ✅ **19 ciudades con contenido exhaustivo** basado en guía de migración (14 secciones)
+- ✅ **Contenido ciudades traducido** a 4 idiomas con OpenAI GPT-4o
+- ✅ **SEO completo**: JSON-LD, hreflang, canonicals, OG, Twitter Cards, robots.txt
 - ✅ **76 landing pages SEO** (4 servicios × 19 ciudades)
-- ✅ **Optimización LCP y WebP**: Logos convertidos a WebP, hero con Image de Next.js
-- ✅ **UX condensada**: Espaciado reducido, formulario ultra-compacto, todo visible sin scroll
-- ✅ **Formulario optimizado**: Lista vertical de servicios, grid denso de ciudades
-- ✅ **Mejoras UX finales**: CTAs claros, blog directo, coherencia visual
+- ✅ **Blog multiidioma** con artículos traducidos
+- ✅ **Formulario embebido** en landings (conversión directa)
 
 ---
 
-## 📊 Números Finales
+## 📊 Números
 
-### Landing Pages Generadas
-- **Total**: **76/76** ✅
-- **Seguros**: 19 landing pages
-- **Abogados**: 19 landing pages
-- **Inmobiliarias**: 19 landing pages
-- **Gestorías**: 19 landing pages
+### Páginas por Idioma
 
-### Servicios Core
-1. **Seguros de Salud** - Pólizas obligatorias para visados
-2. **Abogados** - Familia, civil, laboral, extranjería
-3. **Inmobiliarias** - Compra, venta y alquiler especializado
-4. **Gestorías** - Trámites administrativos y fiscales
+| Idioma | Home | Blog | Destinos | Servicios | Legal/Otros | Total |
+|--------|------|------|----------|-----------|-------------|-------|
+| 🇪🇸 ES | 1 | 1 + [slug] | 1 + 19 [slug] | 1 + 4 [slug] | 8 | ~130+ |
+| 🇬🇧 EN | 1 | 1 + [slug] | 1 + 19 [slug] | 1 + 4 [slug] | 8 | ~130+ |
+| 🇫🇷 FR | 1 | 1 + [slug] | 1 + 19 [slug] | 1 + 4 [slug] | 8 | ~130+ |
+| 🇩🇪 DE | 1 | 1 + [slug] | 1 + 19 [slug] | 1 + 4 [slug] | 8 | ~130+ |
+| 🇵🇹 PT | 1 | 1 + [slug] | 1 + 19 [slug] | 1 + 4 [slug] | 8 | ~130+ |
+| **Total build** | | | | | | **644** |
 
-### Ciudades Estratégicas (19)
+### Contenido de Ciudades
 
-**Región de Murcia (12):** Murcia, Cartagena, Lorca, Mazarrón, Torre Pacheco, San Javier, San Pedro del Pinatar, Molina de Segura, Águilas, Cieza, Jumilla, Yecla
+| Campo | Descripción |
+|-------|-------------|
+| **19 ciudades** × **5 idiomas** = **95 registros** en `ciudades_contenido` |
+| **14 secciones** por ciudad (basadas en GUIA_COTENIDO_LANDING_DESTINOS) |
+| **22 campos** en la tabla (incluyendo 8 JSONB nuevos) |
 
-**Provincia de Alicante (7):** Alicante, Elche, Torrevieja, Orihuela, Rojales, Benidorm, Dénia
+### Secciones por Ciudad
+
+1. Intro + ventajas + barrios
+2. Coste de vida (alquiler, compra, alimentación, transporte, suministros)
+3. Clima detallado
+4. Primeros 30 días (guía semana a semana)
+5. Trámites esenciales
+6. Consulados y embajadas
+7. Trabajo y emprendimiento
+8. Condiciones de entrada en España
+9. Riesgos al pasar la frontera
+10. Residencia legal y nacionalidad
+11. Integración práctica
+12. Checklists (antes de viajar, primeros días, trámites, integración)
+13. FAQs
+14. Meta SEO
 
 ---
 
-## 🚀 Últimas Optimizaciones (12 Feb 2026)
+## 🌐 Sistema Multi-Idioma
 
-### Formulario Embebido en Landings (12 Feb 2026)
-- ✅ **LandingFormEmbed**: Formulario directo en hero de landings con servicio+ciudad
-- ✅ **2 pasos**: Datos personales (3) + Presupuesto/urgencia (4) — servicio y ciudad fijos
-- ✅ **Estética idéntica** a `/solicitar`: labels, grids, botones negro/gris
-- ✅ **Centrado en PC** con `mx-auto`
-- ✅ **Fallback**: Si no hay servicio+ciudad, se muestra enlace tradicional
+### Traducciones UI (dictionaries.ts)
+- **200+ claves** en cada idioma
+- Cubre: navegación, formularios, landing UI, SEO, legal, blog, destinos
 
-### Landings y Diseño (12 Feb 2026)
-- ✅ **H1 interlineado**: `!leading-[1.5]` para evitar solapamiento en títulos largos
-- ✅ **Iconos unificados**: Checkmark en sección problemas (antes: círculo-X)
-- ✅ **Iconos seguridad**: Shield/Lock para "Datos protegidos" (antes: globo)
-- ✅ **Enlaces landings**: `servicio=X&ciudad=Y` → formulario /solicitar abre en paso 3
+### Traducciones Dinámicas (Supabase)
+- Blog posts: columna `lang`
+- Landing pages: columna `idioma`
+- Contenido ciudades: columna `idioma`
+- Catálogos: tablas `_traducciones` + RPCs
 
-### Mejoras UX Finales (11 Feb 2026)
-- ✅ **CTAs más claros**: "Solicitar ayuda" → "Solicitar contacto"
-- ✅ **Barra progreso azul**: Color corporativo `#3bbdda` en formulario
-- ✅ **Países alfabéticos**: 26 países ordenados A-Z en formulario
-- ✅ **Hero Nosotros**: Hero compacto con imagen (coherencia con otras páginas)
-- ✅ **Blog optimizado**: Sin destacado, 3 columnas directas desde el inicio
+### URLs Traducidas (routes.ts)
 
-### Performance y LCP
-- ✅ Script de conversión PNG → WebP (`npm run images:webp`)
-- ✅ 11 logos convertidos a WebP (85% quality, 60-70% reducción tamaño)
-- ✅ Hero con `<Image>` de Next.js + `priority` + `fetchPriority="high"`
-- ✅ Logos centralizados en `LOGO_PATHS` (constants.ts)
-- ✅ Next.js sirve AVIF/WebP automáticamente según navegador
+| Sección | ES | EN | FR | DE | PT |
+|---------|----|----|----|----|-----|
+| Destinos | destinos | destinations | destinations | reiseziele | destinos |
+| Servicios | servicios | services | services | dienstleistungen | servicos |
+| Blog | blog | blog | blog | blog | blog |
+| Contacto | contacto | contact | contact | kontakt | contacto |
+| Solicitar | solicitar | request | demande | anfrage | solicitar |
 
-### UX y Espaciado - Condensación Global
-**Objetivo:** Más información, menos scroll, mejor UX móvil/desktop
+---
 
-- ✅ **Secciones**: `py-16 md:py-32` → `py-8 md:py-16` (50% reducción)
-- ✅ **Hero**: 65vh → 55vh (75vh → 60vh móvil)
-- ✅ **Hero compacto**: 32vh → 28vh
-- ✅ **Headings**: 
-  - h1: 4rem/6rem → 2.5rem/3.5rem
-  - h2: 3rem/4rem → 1.875rem/2.5rem
-  - h3: 2rem/2.5rem → 1.5rem/2rem
-- ✅ **Service items**: `py-12` → `py-6 md:py-8`, gap reducido
-- ✅ **Containers**: `px-16` → `px-12`
+## 🔍 SEO Implementado
 
-### Formulario Contacto - Ultra-Compacto
-**Objetivo:** Todo visible sin scroll en cada paso
+### Por Página
+- ✅ Meta title y description únicos
+- ✅ Canonical URL
+- ✅ Hreflang alternates (5 idiomas)
+- ✅ Open Graph (título, descripción, URL, imagen, locale)
+- ✅ Twitter Cards
 
-- ✅ **Paso 1 - Servicios**:
-  - Grid 2x2 → **Lista vertical limpia**
-  - Sin iconos emoji (más profesional)
-  - 4 botones uno debajo del otro
-  - `space-y-2`, botones `p-3 md:p-4`
+### JSON-LD Structured Data
+- ✅ **Organization** - En todas las home pages
+- ✅ **WebSite** - En todas las home pages
+- ✅ **BlogPosting** - En artículos de blog
+- ✅ **BreadcrumbList** - En destinos y servicios dinámicos
+- ✅ **FAQPage** - En destinos y servicios con FAQs
+- ✅ **Service** - En páginas de servicios
 
-- ✅ **Paso 2 - Ciudades**:
-  - Grid **3-5 columnas** (vs 2-3)
-  - Botones pequeños: `p-2 md:p-2.5`, `text-xs md:text-sm`
-  - Max-height `50vh` con scroll interno
-  - Gap mínimo: `gap-1.5 md:gap-2`
-
-- ✅ **Paso 3 - Datos**:
-  - `space-y-3`, `gap-3` entre campos
-  - Textos más pequeños
-
-- ✅ **Paso 4 - Presupuesto/Urgencia**:
-  - Botones compactos: `p-2 md:p-2.5`
-  - `text-xs md:text-sm`
-  - Textarea reducido: 80px
-  - `space-y-3` entre bloques
-
-- ✅ **Container**: `p-4 md:p-6` (vs `p-8 md:p-12`)
-- ✅ **Navegación**: `mt-4 pt-4` (vs `mt-6 pt-6`)
+### Técnico
+- ✅ `robots.txt` dinámico
+- ✅ `sitemap.xml` dinámico
+- ✅ `<html lang="">` dinámico por ruta
+- ✅ SSG con `revalidate` para blog y destinos
+- ✅ `generateStaticParams` para pre-renderizado
+- ✅ Alt text descriptivo en todas las imágenes
 
 ---
 
 ## 📁 Base de Datos (Supabase)
 
-### Tablas Principales
-- `landing_pages`: 76 registros ✅
-- `ciudades_catalogo`: 19 registros ✅
-- `servicios_catalogo`: 4 registros ✅
-- `blog_posts`: Blog activo
-- `leads`: Sistema de leads operativo
+### Tablas
+
+| Tabla | Registros | Idiomas |
+|-------|-----------|---------|
+| `ciudades_contenido` | 95 | 5 (es/en/fr/de/pt) |
+| `landing_pages` | 76+ | 5 |
+| `blog_posts` | 150+ | 5 |
+| `ciudades_catalogo` | 19 | - |
+| `servicios_catalogo` | 4 | - |
+| `ciudades_catalogo_traducciones` | 95 | 5 |
+| `servicios_catalogo_traducciones` | 20 | 5 |
+| `idiomas` | 5 | - |
+| `leads` | Variable | - |
+
+### Migraciones SQL Ejecutadas
+
+1. `schema.sql` - Esquema base
+2. `landing-pages-schema.sql` - Landing pages
+3. `06-soporte-multi-idioma.sql` - Soporte multiidioma
+4. `07-estructura-completa-multi-idioma.sql` - Estructura completa
+5. `08-traducciones-ciudades-catalogo.sql` - Traducciones catálogos
+6. `09-expand-ciudades-contenido.sql` - 8 nuevas columnas JSONB (guía completa)
+7. `10-expand-text-fields.sql` - Campos TEXT expandidos
 
 ---
 
-## 🛠️ Scripts Disponibles
+## 🛠️ Scripts
+
+### Generación de Contenido
+
+| Script | Función | Modelo | Coste aprox |
+|--------|---------|--------|-------------|
+| `generate-city-content-full.js` | Contenido completo 19 ciudades (guía) | GPT-4o | $0.43 |
+| `translate-cities-content.js` | Traducir ciudades a 4 idiomas | GPT-4o | ~$2.00 |
+| `translate-all.js` | Traducir blog + landings | GPT-4o | ~$1.50 |
+| `generate-landings.ts` | 76 landing pages | GPT-4o-mini | $0.20 |
+| `generate-blog-posts.ts` | 30 artículos blog | GPT-4o-mini | $1.00 |
+
+### Uso
 
 ```bash
-# Performance
-npm run images:webp            # Convertir imágenes a WebP
+# Ciudades (contenido completo basado en guía)
+node scripts/generate-city-content-full.js --all
+node scripts/generate-city-content-full.js murcia alicante
 
-# Contenido
-npm run generate-landings      # Generar 76 landing pages
-npm run generate-cities        # Contenido extendido ciudades
-npm run generate-blog          # Posts de blog
+# Traducir ciudades
+node scripts/translate-cities-content.js --force
+node scripts/translate-cities-content.js --only=en murcia
 
-# Base de datos
-npm run fix-database           # Limpiar
-npm run insert-ciudades        # Insertar 19 ciudades
-npm run clear-landings         # Borrar landings
-npm run clean-auxiliary        # Limpiar auxiliares
+# Traducción masiva
+node scripts/translate-all.js
 
-# Verificación
-npm run check-landings         # Estado landing pages
+# Landing pages
+npm run generate-landings
+npm run check-landings
 ```
 
 ---
 
-## 📈 Performance Metrics
+## 📈 Performance
 
-### Core Web Vitals Optimizados
-- **LCP**: < 2.5s (WebP + Image priority + condensación)
+### Build
+- **644 páginas** generadas estáticamente
+- **Build time**: ~45 segundos
+- **0 errores**
+
+### Core Web Vitals
+- **LCP**: < 2.5s (WebP + Image priority)
 - **FID**: < 100ms
 - **CLS**: < 0.1
-- **Reduction scroll**: ~50% menos scroll en todas las páginas
-
-### Tamaño de Assets
-- Logos WebP: 60-70% más ligeros que PNG
-- Hero con srcset optimizado por Next.js
-- Fonts: `display: swap` para evitar FOIT
-
----
-
-## 📝 Documentación
-
-- [README.md](./README.md) - Visión general, stack, arquitectura
-- [docs/AUDITORIA.md](./docs/AUDITORIA.md) - Auditoría completa
-- [INDICE_DOCUMENTACION.md](./INDICE_DOCUMENTACION.md) - Índice
-- [docs/MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md) - Modelo negocio
-- [docs/HISTORIAL.md](./docs/HISTORIAL.md) - Historial cambios
 
 ---
 
 ## 🚀 Próximos Pasos
 
-### Testing
-- [ ] Testing cross-browser (Chrome, Safari, Firefox)
-- [ ] Testing dispositivos reales (iOS, Android)
-- [ ] Lighthouse audit (objetivo 90+)
-
-### Analytics
+### Pendiente
 - [ ] Google Analytics 4
-- [ ] Google Search Console
-- [ ] Hotjar/Clarity para heatmaps
-
-### SEO
-- [ ] Schema markup JSON-LD
-- [ ] Sitemap submission
-- [ ] Posts de blog SEO
-
-### Partners
+- [ ] Google Search Console + sitemap submission
+- [ ] Testing cross-browser
 - [ ] Onboarding primeros partners
-- [ ] Sistema CRM para leads
 - [ ] Dashboard partners
+
+### Completado Recientemente (Feb 2026)
+- ✅ Multi-idioma completo (5 idiomas)
+- ✅ Contenido ciudades con guía completa (14 secciones)
+- ✅ SEO exhaustivo (JSON-LD, hreflang, OG, canonicals)
+- ✅ Blog traducido a 4 idiomas
+- ✅ Traducción automática con OpenAI
 
 ---
 
-**Estado**: ✅ OPTIMIZADO Y PRODUCTION-READY
-
-**Última optimización**: 12 de Febrero 2026
-
-**Commits clave**:
-- `4c97c1b` - Formulario embebido en landings + estética /solicitar
-- `cf9047e` - H1 !leading-[1.5], form centrado, icono checkmark
-- `1152abf` - Formulario: lista vertical sin iconos
-- `3f59c19` - Formulario ultra-condensado
-- `1152abf` - Formulario: lista vertical sin iconos
-- `3f59c19` - Formulario ultra-condensado  
-- `1ce1245` - Condensación global UX (50% menos padding)
-- `78954c1` - LCP y WebP optimización
-- `e00308d` - Separación visual enlace Solicitar
+**Estado**: ✅ MULTI-IDIOMA + SEO COMPLETO + PRODUCTION-READY  
+**Última actualización**: 24 de Febrero 2026  
+**Versión**: 3.0.0

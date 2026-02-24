@@ -1,5 +1,9 @@
 # Configuración de Supabase para Health4Spain
 
+**Última actualización:** 24 Febrero 2026
+
+---
+
 ## 1. Crear Proyecto
 
 1. Ir a [supabase.com](https://supabase.com) y crear nuevo proyecto
@@ -12,48 +16,84 @@
 
 En **SQL Editor**, ejecutar en orden:
 
-```
-1. schema.sql              # Esquema principal (leads, blog_posts)
-2. landing-pages-schema.sql # Landings + ciudades_catalogo + servicios_catalogo
-3. 01-limpiar-ciudades.sql  # (Opcional) Limpia ciudades no estratégicas
-4. 02-insertar-19-ciudades.sql  # 19 ciudades: 12 Murcia + 7 Alicante
-5. 03-actualizar-abogados.sql   # Abogados general (no solo extranjería)
-6. rls-policies.sql         # Políticas RLS
-7. storage-policies.sql     # Políticas Storage
-```
+| # | Archivo | Descripción |
+|---|---------|-------------|
+| 1 | `schema.sql` | Esquema principal (leads, blog_posts) |
+| 2 | `landing-pages-schema.sql` | Landing pages + ciudades_catalogo + servicios_catalogo |
+| 3 | `01-limpiar-ciudades.sql` | (Opcional) Limpia ciudades no estratégicas |
+| 4 | `02-insertar-19-ciudades.sql` | 19 ciudades: 12 Murcia + 7 Alicante |
+| 5 | `03-actualizar-abogados.sql` | Abogados general (no solo extranjería) |
+| 6 | `06-soporte-multi-idioma.sql` | Tabla idiomas + columnas idioma en tablas |
+| 7 | `07-estructura-completa-multi-idioma.sql` | RPCs, traducciones servicios/ciudades |
+| 8 | `08-traducciones-ciudades-catalogo.sql` | Traducciones catálogos EN/FR/DE/PT |
+| 9 | `09-expand-ciudades-contenido.sql` | 8 columnas JSONB (guía migración completa) |
+| 10 | `10-expand-text-fields.sql` | Campos expandidos a TEXT (meta, coste_vida, etc.) |
+| 11 | `rls-policies.sql` | Row Level Security |
+| 12 | `storage-policies.sql` | Políticas Storage |
 
-## 3. Configurar Storage
+## 3. Tablas Principales
 
-### Crear bucket
+| Tabla | Descripción | Idiomas |
+|-------|-------------|---------|
+| `leads` | Leads capturados del formulario | - |
+| `blog_posts` | Artículos de blog | `lang` (es/en/fr/de/pt) |
+| `landing_pages` | Landing pages SEO | `idioma` |
+| `ciudades_catalogo` | 19 ciudades base | - |
+| `servicios_catalogo` | 4 servicios base | - |
+| `ciudades_contenido` | Contenido completo ciudades (22 campos) | `idioma` |
+| `idiomas` | Idiomas activos (5) | - |
+| `servicios_catalogo_traducciones` | Nombres servicios traducidos | 5 idiomas |
+| `ciudades_catalogo_traducciones` | Nombres ciudades traducidos | 5 idiomas |
+
+### ciudades_contenido (22 campos)
+
+Tabla principal del contenido de ciudades con 14 secciones:
+
+| Campo | Tipo | Contenido |
+|-------|------|-----------|
+| `meta_title` | VARCHAR(255) | Título SEO |
+| `meta_description` | VARCHAR(500) | Descripción SEO |
+| `meta_keywords` | TEXT | Keywords SEO |
+| `intro_text` | TEXT | Introducción extensa |
+| `ventajas` | JSONB | Array de ventajas |
+| `barrios` | JSONB | Array de barrios/zonas |
+| `coste_vida_alquiler` | TEXT | Coste alquiler |
+| `coste_vida_compra` | TEXT | Coste compra |
+| `coste_vida_alimentacion` | TEXT | Coste alimentación |
+| `coste_vida_transporte` | TEXT | Coste transporte |
+| `coste_vida_utilidades` | TEXT | Coste suministros |
+| `clima_detalle` | TEXT | Clima detallado |
+| `tramites` | JSONB | Trámites esenciales |
+| `faqs` | JSONB | Preguntas frecuentes |
+| `primeros_30_dias` | JSONB | Guía primeros 30 días |
+| `consulados_embajadas` | JSONB | Info consular |
+| `trabajo_emprendimiento` | JSONB | Sectores, portales, autónomos |
+| `condiciones_entrada` | JSONB | Requisitos entrada España |
+| `riesgos_frontera` | JSONB | Errores comunes frontera |
+| `residencia_nacionalidad` | JSONB | Tipos residencia + nacionalidad |
+| `integracion_practica` | JSONB | Asociaciones, apps, comunidades |
+| `checklists` | JSONB | 4 checklists (viaje, primeros días, trámites, integración) |
+
+### RPCs Disponibles
+
+| Función | Descripción |
+|---------|-------------|
+| `get_servicio_traducido(p_slug, p_lang)` | Servicio con nombre traducido |
+| `get_ciudad_traducida(p_slug, p_lang)` | Ciudad con nombre traducido |
+
+## 4. Configurar Storage
 
 1. Dashboard > **Storage** > **New bucket**
-2. Nombre: `blog-images`
-3. **Public bucket**: ✅ ON
-4. Click **Create bucket**
+2. Nombre: `blog-images` | Public: ✅ ON
+3. Ejecutar `storage-policies.sql`
 
-### Aplicar políticas
+## 5. Configurar Autenticación
 
-Ejecutar `supabase/storage-policies.sql` en SQL Editor.
+1. **Authentication** > **Providers** > Email habilitado
+2. **Authentication** > **Users** > Crear usuario admin
+3. Email debe coincidir con `NEXT_PUBLIC_ADMIN_EMAILS`
 
-**⚠️ IMPORTANTE**: Cambiar los emails en el SQL por los de tus administradores.
-
-## 4. Configurar Autenticación
-
-### Habilitar Email Auth
-
-1. **Authentication** > **Providers**
-2. Asegurar que **Email** está habilitado
-
-### Crear usuario admin
-
-1. **Authentication** > **Users** > **Add user**
-2. Email: debe coincidir con `NEXT_PUBLIC_ADMIN_EMAILS`
-3. Password: contraseña segura
-4. Click **Create user**
-
-## 5. Variables de Entorno
-
-Añadir a `.env.local`:
+## 6. Variables de Entorno
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
@@ -62,17 +102,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGci...
 NEXT_PUBLIC_ADMIN_EMAILS=tu-email@gmail.com
 ```
 
-## Archivos SQL
-
-| Archivo | Descripción |
-|---------|-------------|
-| `schema.sql` | Tablas principales (leads, blog_posts) |
-| `landing-pages-schema.sql` | Tabla landing_pages, ciudades_catalogo, servicios_catalogo |
-| `01-limpiar-ciudades.sql` | Limpieza de ciudades no estratégicas |
-| `02-insertar-19-ciudades.sql` | Las 19 ciudades iniciales (12 Murcia + 7 Alicante) |
-| `03-actualizar-abogados.sql` | Actualiza abogados a formato general (no solo extranjería) |
-| `rls-policies.sql` | Row Level Security para tablas |
-| `storage-policies.sql` | Políticas para bucket blog-images |
+---
 
 ## Troubleshooting
 
@@ -85,10 +115,9 @@ NEXT_PUBLIC_ADMIN_EMAILS=tu-email@gmail.com
 - Email debe coincidir con `NEXT_PUBLIC_ADMIN_EMAILS`
 
 ### Las imágenes no se suben
-- Verificar que bucket `blog-images` existe y es público
-- Ejecutar políticas de `storage-policies.sql`
-- Cambiar emails en las políticas por los correctos
+- Verificar bucket `blog-images` (público)
+- Ejecutar `storage-policies.sql`
 
-### Error 401 en APIs
-- Verificar que el token se envía en Authorization header
-- Verificar email en `NEXT_PUBLIC_ADMIN_EMAILS`
+### Error con columnas JSONB
+- Verificar que `09-expand-ciudades-contenido.sql` se ejecutó
+- Verificar que `10-expand-text-fields.sql` se ejecutó

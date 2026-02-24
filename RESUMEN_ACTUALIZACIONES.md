@@ -1,206 +1,128 @@
 # 📋 Resumen de Actualizaciones - Health4Spain
 
-## 🆕 Formulario Embebido y Landings - 12 Febrero 2026
+---
+
+## 🆕 Multi-Idioma Completo + Contenido Ciudades — 19-24 Febrero 2026
+
+### 1. **Contenido Exhaustivo de 19 Ciudades**
+- Script `generate-city-content-full.js` con guía completa (GUIA_COTENIDO_LANDING_DESTINOS)
+- **14 secciones** por ciudad: intro, ventajas, barrios, coste de vida, clima, primeros 30 días, trámites, consulados, trabajo, entrada, riesgos frontera, residencia, integración, checklists, FAQs
+- **8 nuevas columnas JSONB** en `ciudades_contenido` (migración `09-expand-ciudades-contenido.sql`)
+- Campos TEXT expandidos (migración `10-expand-text-fields.sql`)
+- Contenido específico y real para cada ciudad (no genérico)
+
+### 2. **Traducción Masiva con OpenAI**
+- Script `translate-cities-content.js`: 19 ciudades × 4 idiomas = 76 traducciones
+- Traduce los 22 campos (incluyendo 8 JSONB con subestructuras)
+- Flag `--force` para sobrescribir traducciones existentes
+- Script `translate-all.js`: blog + landings a EN/FR/DE/PT
+
+### 3. **Páginas de Destinos Actualizadas**
+- 5 páginas dinámicas `[slug]/page.tsx` (ES/EN/FR/DE/PT) muestran las 14 secciones
+- Renderizado condicional: solo muestra secciones con datos
+- Todas las etiquetas UI via `dictionaries.ts`
+- Diseño idéntico entre idiomas
+
+### 4. **Diccionarios Expandidos**
+- `src/lib/dictionaries.ts`: 200+ claves en 5 idiomas
+- Nuevas claves: `first30Days`, `consulatesTitle`, `workSectors`, `checklistBeforeTravel`, `entryConditions`, `borderRisks`, `residenceTitle`, `integrationTitle`, etc.
+
+### 5. **SEO Completo**
+- JSON-LD: Organization, WebSite, BlogPosting, BreadcrumbList, FAQPage, Service
+- Hreflang alternates en todas las páginas (5 idiomas)
+- Canonical URLs, Open Graph, Twitter Cards
+- `<html lang="">` dinámico via `HtmlLang.tsx`
+- robots.txt y sitemap.xml dinámicos
+
+### 6. **Build Exitoso**
+- **644 páginas estáticas** generadas
+- **0 errores** en `next build`
+
+---
+
+## 🆕 Sistema Multi-Idioma Base — 14-18 Febrero 2026
+
+### 1. **Estructura de Carpetas por Idioma**
+- `src/app/es/` (base) duplicado a `en/`, `fr/`, `de/`, `pt/`
+- URLs traducidas: destinations, services, contact, etc.
+- `src/lib/routes.ts` centraliza las rutas por idioma
+
+### 2. **Sistema de Traducciones**
+- `src/lib/dictionaries.ts`: traducciones estáticas UI
+- Supabase: tablas multiidioma (columna `idioma`/`lang`)
+- RPCs: `get_servicio_traducido()`, `get_ciudad_traducida()`
+- Migraciones: `06`, `07`, `08` para soporte multi-idioma
+
+### 3. **Componentes Actualizados**
+- `Navigation.tsx`: selector de idioma
+- `Footer.tsx`: links traducidos
+- `HtmlLang.tsx`: dynamic `<html lang="">`
+- `seo.tsx`: helpers SEO multiidioma
+- `data.ts`: capa de datos locale-aware
+
+---
+
+## 🆕 Formulario Embebido y Landings — 12 Febrero 2026
 
 ### 1. **LandingFormEmbed**
 - Formulario de conversión directa en hero de landings con servicio+ciudad
-- 2 pasos: datos personales + presupuesto/urgencia (pasos 3 y 4 del flujo completo)
+- 2 pasos: datos personales + presupuesto/urgencia
 - Estética idéntica a /solicitar
 - Centrado en PC con `mx-auto`
 
 ### 2. **Landings UX**
 - H1 con `!leading-[1.5]` para evitar solapamiento
-- Icono checkmark en sección problemas (antes: círculo-X)
+- Icono checkmark en sección problemas
 - Enlaces con `servicio=X&ciudad=Y` → /solicitar abre en paso 3
 
-### 3. **Iconos**
-- Datos protegidos: Shield/Lock (antes: globo)
-- Problemas landings: Checkmark (antes: círculo-X)
+---
+
+## 🆕 Mejoras UX y Configuración — 11 Febrero 2026
+
+### 1. **Banner de Cookies (GDPR)**
+- `CookieConsent.tsx` conforme a GDPR
+- Categorías: Esenciales, Análisis, Marketing
+
+### 2. **URL Canónica con www**
+- Redirect 301: `health4spain.com` → `www.health4spain.com`
+
+### 3. **Condensación UX (50% menos scroll)**
+- Secciones: py-16/32 → py-8/16
+- Hero: 65vh → 55vh
+- Headings reducidos 30-40%
+
+### 4. **Formulario Ultra-Compacto**
+- Servicios: lista vertical sin iconos
+- Ciudades: grid 3-5 columnas
+- Todo visible sin scroll en cada paso
 
 ---
 
-## 🆕 Mejoras UX y Configuración - 11 Febrero 2026
+## 📊 Evolución del Proyecto
 
-### 1. **Banner de Cookies (GDPR / Normativa UE)**
-- **Componente**: `CookieConsent.tsx` — Banner conforme a GDPR
-- **Categorías**: Esenciales (siempre activas), Análisis, Marketing — sin pre-marcadas
-- **Opciones**: Aceptar todas, Rechazar opcionales, Personalizar
-- **Footer**: Enlace "Modificar consentimiento de cookies" en sección Legal
-- **Lib**: `src/lib/cookie-consent.ts` — `canUseAnalytics()`, `canUseMarketing()`
-
-### 2. **Corrección Menú Móvil**
-- Parpadeo del menú móvil corregido en `Navigation.tsx`
-
-### 3. **URL Canónica con www**
-- **Dominio**: `https://www.health4spain.com` (siempre con www)
-- **Redirect 301**: `health4spain.com` → `www.health4spain.com` (next.config.js)
-- **Actualizado**: metadataBase, sitemap, constants, .env.example
-- **Archivos**: layout.tsx, sitemap.ts, constants.ts, sitemap-html, BlogPostForm, presupuesto
-
-### 4. **Tamaños "Solicitar →" unificados**
-- **Estándar**: text-base (1rem) móvil, text-lg (1.125rem) desktop, font-weight 600
-- **Aplicado en**: /destinos (lista ciudades), /servicios (lista servicios)
-- **Archivos**: destinos/page.tsx, globals.css (service-item-minimal .service-arrow)
-
-### 5. **Blog en navegación**
-- **Componente**: `Navigation.tsx` — **único navbar del sitio** (no hay otro)
-- **Añadido**: Enlace Blog entre Servicios y Contacto
-- **Orden**: Inicio → Destinos → Servicios → **Blog** → Contacto
-
-### 6. **Documentación actualizada**
-- **docs/AUDITORIA.md** (NUEVO) — Auditoría completa: rutas, datos, CTAs, flujo leads
-- README.md — Flujo de datos, CTAs, referencia a auditoría
-- ESTADO_PROYECTO.md, CONFIGURACION_VERCEL.md, INDICE_DOCUMENTACION.md
-- docs/ESTRATEGIA_BLOG.md (URLs con www)
+| Fecha | Hito | Páginas |
+|-------|------|---------|
+| 7 Feb 2026 | 76 landing pages generadas | ~200 |
+| 11 Feb 2026 | UX condensada + GDPR | ~200 |
+| 12 Feb 2026 | Formulario embebido en landings | ~200 |
+| 14-18 Feb 2026 | Multi-idioma base (5 idiomas) | ~600 |
+| 19-24 Feb 2026 | Contenido ciudades completo + traducido | **644** |
 
 ---
 
-## ✅ Documentos Actualizados (7 Febrero 2026)
+## 💰 Costes IA Acumulados
 
-### 1. **ESTADO_PROYECTO.md** (NUEVO)
-Documento maestro del estado actual del proyecto con:
-- ✅ 76 landing pages completadas
-- 📊 Estadísticas finales
-- 🛠️ Scripts disponibles
-- 💰 Costes reales
-- 🎯 Próximos pasos opcionales
-
-### 2. **README.md**
-- ✅ Añadido badge de estado: "Proyecto completado - 76 landing pages generadas (7 Feb 2026)"
-- ✅ Actualizada sección de generación de landings con scripts y estadísticas
-- ✅ Costes reales: ~$0.15-0.20 USD
-
-### 3. **docs/HISTORIAL.md**
-- ✅ Ampliada sección "Sistema de Landing Pages con IA"
-- ✅ Proceso completo de generación documentado
-- ✅ Corrección de `gestorias-zaragoza` → `gestorias-san-javier`
-- ✅ Estadísticas finales: 76/76, ~12 minutos, 129,200 tokens
-
-### 4. **docs/SCRIPTS_LANDINGS.md**
-- ✅ Actualizado con estado actual (7 Feb 2026)
-- ✅ Añadidos nuevos scripts: `verify-landings.ts`, `fix-missing-landing.ts`, `list-all-landings.ts`
-- ✅ Workflow completado documentado
-- ✅ Costes reales actualizados
-- ✅ Lecciones aprendidas
-
-### 5. **scripts/README.md**
-- ✅ Añadido badge de estado al principio
-- ✅ Servicios actualizados: 6 → 4
-- ✅ Ciudades actualizadas: 40 → 19
-- ✅ Landings actualizadas: 240 → 76
-- ✅ Costes reales: $2.00-4.00 → $0.15-0.20
-- ✅ Tabla de costes actualizada con estado real
+| Concepto | Modelo | Coste |
+|----------|--------|-------|
+| 76 landing pages | GPT-4o-mini | $0.20 |
+| 30 blog posts | GPT-4o-mini | $1.00 |
+| 19 ciudades contenido completo | GPT-4o | $0.43 |
+| 76 traducciones ciudades | GPT-4o | ~$2.00 |
+| Traducciones blog + landings | GPT-4o | ~$1.50 |
+| **TOTAL** | | **~$5.13** |
 
 ---
 
-## 📊 Números Clave Actualizados
-
-| Concepto | Antes (Estimado) | Ahora (Real) |
-|----------|------------------|--------------|
-| Servicios | 6 | **4** ✅ |
-| Ciudades | 40 | **19** ✅ |
-| Landing Pages | 240 | **76** ✅ |
-| Coste | $2.00-4.00 | **$0.15-0.20** ✅ |
-| Tiempo generación | N/A | **~12 minutos** ✅ |
-| Tokens totales | N/A | **~129,200** ✅ |
-
----
-
-## 🎯 Servicios Finales (4)
-
-1. **Abogados** - 19 landing pages
-2. **Seguros** - 19 landing pages
-3. **Inmobiliarias** - 19 landing pages
-4. **Gestorías** - 19 landing pages
-
----
-
-## 🏙️ Ciudades Finales (19)
-
-### Región de Murcia (12)
-1. Murcia
-2. Cartagena
-3. Lorca
-4. Mazarrón
-5. Torre Pacheco
-6. San Javier
-7. San Pedro del Pinatar
-8. Molina de Segura
-9. Águilas
-10. Cieza
-11. Jumilla
-12. Yecla
-
-### Provincia de Alicante (7)
-13. Alicante
-14. Elche
-15. Torrevieja
-16. Orihuela
-17. Rojales
-18. Benidorm
-19. Dénia
-
----
-
-## 📝 Archivos Creados/Actualizados
-
-```
-✅ ESTADO_PROYECTO.md                      (Documento maestro)
-✅ README.md                               (ACTUALIZADO - 11 Feb)
-✅ docs/HISTORIAL.md                       (v2.5.1 cookies GDPR)
-✅ docs/AUDITORIA.md                       (Layout + CookieConsent)
-✅ INDICE_DOCUMENTACION.md                 (ACTUALIZADO - 11 Feb)
-✅ RESUMEN_ACTUALIZACIONES.md              (Este archivo - 11 Feb)
-✅ docs/SCRIPTS_LANDINGS.md                (ACTUALIZADO)
-✅ scripts/README.md                      (ACTUALIZADO)
-✅ CONFIGURACION_VERCEL.md                 (ACTUALIZADO - URL www)
-✅ docs/ESTRATEGIA_BLOG.md                 (URLs con www)
-```
-
----
-
-## 🚀 Scripts Nuevos Documentados
-
-1. `verify-landings.ts` - Detecta qué landing pages faltan
-2. `list-all-landings.ts` - Lista todas las landing pages con conteo
-3. `fix-missing-landing.ts` - Corrige landing pages incorrectas
-4. `clean-auxiliary-tables.ts` - Limpia logs y tablas auxiliares
-
----
-
-## 💡 Lecciones Aprendidas
-
-1. **Validación previa**: Siempre verificar ciudades en `ciudades_catalogo` antes de generar
-2. **Errores JSON**: OpenAI GPT-4o-mini ocasionalmente genera JSON inválido (~10% de casos)
-3. **Limpieza importante**: Mantener `landing_generation_log` limpio para mejor seguimiento
-4. **Scripts modulares**: Tener scripts separados para cada tarea facilita debugging
-5. **Verificación constante**: Usar `check-landings` y `verify-landings` frecuentemente
-
----
-
-## ✅ Estado Final
-
-```
-📊 LANDING PAGES: 76/76 ✅
-📦 SERVICIOS: 4/4 ✅
-🏙️ CIUDADES: 19/19 ✅
-💰 COSTE REAL: $0.15-0.20 ✅
-⏱️ TIEMPO: ~12 minutos ✅
-📝 DOCUMENTACIÓN: Actualizada ✅
-```
-
----
-
-## 🎯 Próximos Pasos Opcionales
-
-1. Generar contenido extendido para las 19 ciudades: `npm run generate-cities`
-2. Generar artículos de blog: `npm run generate-blog`
-3. Validar manualmente el contenido de las landing pages
-4. Configurar sitemap.xml
-5. Implementar schema markup (JSON-LD)
-
----
-
-**Fecha de actualización:** 11 de Febrero 2026  
-**Últimas mejoras:** Cookies GDPR, parpadeo menú móvil, URL www, UX Solicitar unificado, Blog en navbar, docs actualizados  
-**Estado:** ✅ COMPLETADO
+**Fecha de actualización:** 24 de Febrero 2026  
+**Estado:** ✅ MULTI-IDIOMA + SEO COMPLETO + PRODUCTION-READY  
+**Versión:** 3.0.0

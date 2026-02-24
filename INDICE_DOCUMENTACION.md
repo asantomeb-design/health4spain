@@ -1,7 +1,8 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 12 de Febrero 2026  
-**Estado:** ✅ Optimizado y Production-Ready | WebP | UX Condensada | Formulario Embebido Landings
+**Fecha:** 24 de Febrero 2026  
+**Estado:** ✅ Multi-idioma (5) | SEO Completo | 644 Páginas | Production-Ready  
+**Versión:** 3.0.0
 
 ---
 
@@ -11,22 +12,22 @@
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
-| **[README.md](./README.md)** | 📘 Visión general, stack, estructura | ✅ Actualizado |
-| **[ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md)** | 📊 Estado actual + optimizaciones | ✅ Actualizado |
+| **[README.md](./README.md)** | 📘 Visión general, stack, arquitectura, multi-idioma | ✅ Actualizado |
+| **[ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md)** | 📊 Estado actual + hitos + números | ✅ Actualizado |
 | **[RESUMEN_ACTUALIZACIONES.md](./RESUMEN_ACTUALIZACIONES.md)** | 📝 Log de actualizaciones | ✅ Actualizado |
 
-### 📋 Guías y Correcciones
+### 📋 Guías
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
-| **[GUIA_FINAL.md](./GUIA_FINAL.md)** | 🎓 Proceso de corrección completo | ✅ Completo |
-| **[CORRECCIONES_FINALES.md](./CORRECCIONES_FINALES.md)** | ✏️ Detalle de correcciones | ✅ Completo |
+| **[GUIA_FINAL.md](./GUIA_FINAL.md)** | 🎓 Proceso de corrección | ✅ Completo |
+| **[GUIA_COTENIDO_LANDING_DESTINOS](./GUIA_COTENIDO_LANDING_DESTINOS)** | 📖 Guía completa contenido ciudades (8 episodios + 3 anexos) | ✅ Base |
 
 ### ⚙️ Configuración
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
-| **[CONFIGURACION_COMPLETADA.md](./CONFIGURACION_COMPLETADA.md)** | 🔧 Setup del proyecto | ✅ Completo |
+| **[CONFIGURACION_COMPLETADA.md](./CONFIGURACION_COMPLETADA.md)** | 🔧 Setup del proyecto | 📖 Referencia |
 | **[CONFIGURACION_VERCEL.md](./CONFIGURACION_VERCEL.md)** | 🚀 Deploy en Vercel | 📖 Referencia |
 | **[GUIA_CONFIGURACION_SUPABASE.md](./GUIA_CONFIGURACION_SUPABASE.md)** | 🗄️ Setup Supabase | 📖 Referencia |
 
@@ -34,7 +35,7 @@
 
 ## 📁 Documentación por Carpetas
 
-### 📂 `/docs` - Documentación Técnica
+### 📂 `/docs`
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
@@ -44,161 +45,71 @@
 | **[MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md)** | 💰 Modelo de negocio | 📖 Referencia |
 | **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners y leads | 📖 Referencia |
 | **[ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md)** | ✍️ Estrategia SEO blog | 📖 Referencia |
-| **[REGENERACION_LANDINGS.md](./docs/REGENERACION_LANDINGS.md)** | 🔄 Proceso regeneración | 📖 Histórico |
 
-### 📂 `/scripts` - Automatización
+### 📂 `/scripts`
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
-| **[README.md](./scripts/README.md)** | 🛠️ Todos los scripts disponibles | ✅ Actualizado |
-| **convert-images-to-webp.ts** | 📸 Conversión PNG → WebP | ✅ Nuevo |
+| **[README.md](./scripts/README.md)** | 🛠️ Todos los scripts | ✅ Actualizado |
+| `generate-city-content-full.js` | 🌍 Generador contenido ciudades (guía completa) | ✅ Nuevo |
+| `translate-cities-content.js` | 🌐 Traductor ciudades (EN/FR/DE/PT) | ✅ Nuevo |
+| `translate-all.js` | 🔄 Traductor masivo (blog + landings) | ✅ Actualizado |
+| `generate-landings.ts` | 📄 Generador landing pages | ✅ Operativo |
+| `generate-blog-posts.ts` | ✍️ Generador blog | ✅ Operativo |
 
-### 📂 `/supabase` - Base de Datos
+### 📂 `/supabase`
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
 | **[README.md](./supabase/README.md)** | 🗄️ Esquemas SQL | 📖 Referencia |
-
-### 📂 `/pruebas_html` - Diseños
-
-| Archivo | Descripción | Estado |
-|---------|-------------|--------|
-| **[RESUMEN_10_DISENOS.md](./pruebas_html/RESUMEN_10_DISENOS.md)** | 🎨 Galería diseños | 📖 Referencia |
-| **[RESUMEN_ACTUALIZADO.md](./pruebas_html/RESUMEN_ACTUALIZADO.md)** | 🖼️ Resumen actualizado | 📖 Referencia |
-| **[CONTENIDO_CORRECTO.md](./pruebas_html/CONTENIDO_CORRECTO.md)** | ✅ Contenido validado | 📖 Referencia |
+| `09-expand-ciudades-contenido.sql` | 8 columnas JSONB nuevas | ✅ Ejecutado |
+| `10-expand-text-fields.sql` | Campos expandidos a TEXT | ✅ Ejecutado |
 
 ---
 
 ## 🎯 Guías Rápidas por Tarea
 
-### Para Desarrolladores
+### Contenido de Ciudades
 
-**¿Entender el proyecto?**
-1. [README.md](./README.md) - Stack y estructura
-2. [docs/AUDITORIA.md](./docs/AUDITORIA.md) - Cómo funciona todo
-3. [ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md) - Estado y optimizaciones
+1. Editar `GUIA_COTENIDO_LANDING_DESTINOS` si necesitas cambiar la estructura
+2. `node scripts/generate-city-content-full.js --all` - Regenerar español
+3. `node scripts/translate-cities-content.js --force` - Traducir a 4 idiomas
 
-**¿Optimizaciones recientes?**
-- [ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md) - Sección "Últimas Optimizaciones"
+### Multi-Idioma
 
-**¿Scripts disponibles?**
-- [scripts/README.md](./scripts/README.md) - Todos los scripts
-- `npm run images:webp` - Conversión WebP
-- `npm run generate-landings` - 76 landings
+- **UI estático**: Editar `src/lib/dictionaries.ts`
+- **URLs**: Editar `src/lib/routes.ts`
+- **Contenido dinámico**: Supabase (columna `idioma`/`lang`)
+- **Traducción masiva**: `node scripts/translate-all.js`
 
-**¿Configuración?**
-1. [CONFIGURACION_COMPLETADA.md](./CONFIGURACION_COMPLETADA.md)
-2. [GUIA_CONFIGURACION_SUPABASE.md](./GUIA_CONFIGURACION_SUPABASE.md)
+### SEO
 
-### Para Stakeholders
+- **Helpers**: `src/lib/seo.tsx` (JSON-LD, OG, hreflang)
+- **Robots**: `src/app/robots.ts`
+- **Sitemap**: `src/app/sitemap.ts`
+- **HTML lang**: `src/components/HtmlLang.tsx`
 
-**¿Estado del proyecto?**
-- [ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md) - Estado completo
+### Deploy
 
-**¿Modelo de negocio?**
-- [docs/MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md) - Revenue, partners, leads
-- [docs/MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md) - Sistema partners
-
-**¿Estrategia de contenido?**
-- [docs/ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md) - Blog SEO
-- [README.md](./README.md) - Los 3 pilares
+1. `npm run build` (verifica 644 páginas, 0 errores)
+2. `git push` → Vercel autodeploy
 
 ---
 
-## 🔍 Búsqueda Rápida por Tema
+## 📊 Estadísticas del Proyecto
 
-### Performance y Optimización
-- [ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md) - Sección "Performance y LCP"
-- `scripts/convert-images-to-webp.ts` - Script conversión
-- `src/lib/constants.ts` - LOGO_PATHS (WebP)
-- `src/components/OptimizedImage.tsx` - Componentes Image
-
-### UX y Diseño
-- [ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md) - Sección "UX y Espaciado"
-- [MINIMALIST_ACTUALIZADO.md](./MINIMALIST_ACTUALIZADO.md) - Diseño minimalist
-- `src/app/globals.css` - Estilos condensados
-- `src/app/es/solicitar/ContactFormClient.tsx` - Formulario principal
-- `src/components/LandingFormEmbed.tsx` - Formulario embebido en landings
-
-### Landing Pages
-- [docs/AUDITORIA.md](./docs/AUDITORIA.md) - Auditoría rutas y datos
-- [ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md) - 76/76 landings
-- [docs/SCRIPTS_LANDINGS.md](./docs/SCRIPTS_LANDINGS.md) - Scripts generación
-
-### Base de Datos
-- [supabase/README.md](./supabase/README.md) - Esquemas
-- [GUIA_CONFIGURACION_SUPABASE.md](./GUIA_CONFIGURACION_SUPABASE.md) - Setup
+| Métrica | Valor |
+|---------|-------|
+| Páginas estáticas | 644 |
+| Idiomas | 5 (ES, EN, FR, DE, PT) |
+| Ciudades | 19 |
+| Secciones por ciudad | 14 |
+| Claves traducción UI | 200+ |
+| Landing pages SEO | 76 |
+| Artículos blog | 30+ × 5 idiomas |
+| Tablas Supabase | 9+ |
 
 ---
 
-## 📊 Estadísticas
-
-| Categoría | Archivos | Estado |
-|-----------|----------|--------|
-| 📊 Estado | 3 | ✅ Actualizado |
-| 📋 Guías | 2 | ✅ Completo |
-| ⚙️ Config | 3 | 📖 Referencia |
-| 📁 Docs Técnica | 7 | ✅ Actualizado |
-| 🛠️ Scripts | 2 | ✅ Actualizado |
-| 🗄️ DB | 1 | 📖 Referencia |
-| 🎨 Diseño | 4 | 📖 Referencia |
-| **TOTAL** | **22 archivos** | ✅ |
-
----
-
-## 🎯 Últimas Actualizaciones (12 Feb 2026)
-
-### Formulario Embebido en Landings
-- ✅ `LandingFormEmbed.tsx` — Conversión directa en hero cuando servicio+ciudad definidos
-- ✅ Estética idéntica a /solicitar
-- ✅ H1 interlineado `!leading-[1.5]`, form centrado en PC
-- ✅ Iconos: checkmark en problemas, shield/lock para datos protegidos
-
-### Optimización Performance (11 Feb)
-- ✅ Logos PNG → WebP (script `convert-images-to-webp.ts`)
-- ✅ Hero con Next.js Image (priority + fetchPriority)
-- ✅ LOGO_PATHS centralizadas en constants.ts
-- ✅ 60-70% reducción tamaño imágenes
-
-### Condensación UX (50% menos scroll)
-- ✅ Secciones: py-16/32 → py-8/16
-- ✅ Hero: 65vh → 55vh
-- ✅ Headings: reducidos 30-40%
-- ✅ Service items: py-12 → py-6/8
-- ✅ Containers: px-16 → px-12
-
-### Formulario Ultra-Compacto
-- ✅ Servicios: grid 2x2 → lista vertical (sin iconos emoji)
-- ✅ Ciudades: grid 3-5 columnas, botones pequeños
-- ✅ Todo el espaciado reducido: space-y-12 → space-y-3
-- ✅ Padding container: p-8/12 → p-4/6
-- ✅ **Todo visible sin scroll en cada paso**
-
-### Anteriores
-- ✅ Banner cookies GDPR
-- ✅ docs/AUDITORIA.md completa
-- ✅ URL canónica con www
-- ✅ Blog en navbar
-- ✅ Tamaños unificados "Solicitar →"
-
----
-
-## 💡 Navegación de Documentación
-
-### Empezar por aquí
-1. **[ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md)** - Visión actual completa
-2. **Este índice** - Encontrar documentación específica
-3. **[README.md](./README.md)** - Detalles técnicos
-
-### Por tipo de tarea
-- **Desarrollar**: README.md + docs/AUDITORIA.md
-- **Optimizar**: ESTADO_PROYECTO.md sección Performance
-- **Generar contenido**: scripts/README.md
-- **Configurar**: CONFIGURACION_*.md
-- **Negocio**: docs/MODELO_NEGOCIO.md
-
----
-
-**Última actualización:** 12 de Febrero 2026  
-**Estado:** ✅ OPTIMIZADO Y DOCUMENTADO  
-**Versión:** 2.6.0
+**Última actualización:** 24 de Febrero 2026  
+**Versión:** 3.0.0

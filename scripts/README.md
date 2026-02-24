@@ -1,243 +1,161 @@
 # Scripts de Health4Spain
 
-Esta carpeta contiene scripts para automatizar tareas administrativas y de generación de contenido del proyecto.
+Automatización de generación de contenido, traducción y mantenimiento.
 
 ---
 
-## ✅ ESTADO ACTUAL (12 Febrero 2026)
+## ✅ ESTADO ACTUAL (24 Febrero 2026)
 
-**76 landing pages generadas exitosamente** (4 servicios × 19 ciudades)
-
-- ✅ Abogados: 19/19
-- ✅ Seguros: 19/19  
-- ✅ Inmobiliarias: 19/19
-- ✅ Gestorías: 19/19
-
-**Coste total:** ~$0.17 USD (129,200 tokens con GPT-4o-mini)
+- ✅ **19 ciudades** con contenido completo (14 secciones basadas en guía migración)
+- ✅ **Contenido traducido** a EN/FR/DE/PT con OpenAI GPT-4o
+- ✅ **76 landing pages** generadas (4 servicios × 19 ciudades)
+- ✅ **Blog multiidioma** traducido
+- ✅ **644 páginas** en build final
 
 ---
 
-## 📍 generate-city-content.ts ⭐ NUEVO
+## 🌍 generate-city-content-full.js ⭐ PRINCIPAL
 
-Script para generar contenido SEO extenso y detallado para páginas de ciudades usando OpenAI GPT-4o.
+Genera contenido SEO exhaustivo para las 19 ciudades basándose en la **GUIA_COTENIDO_LANDING_DESTINOS** (8 episodios + 3 anexos).
 
 ### Uso
 
 ```bash
-# Generar todas las ciudades
-npx ts-node scripts/generate-city-content.ts
+# Todas las ciudades
+node scripts/generate-city-content-full.js --all
 
-# Solo ciudades destacadas (Madrid, Barcelona, Marbella, etc.)
-npx ts-node scripts/generate-city-content.ts --destacadas
+# Ciudades específicas
+node scripts/generate-city-content-full.js murcia alicante torrevieja
 
-# Una ciudad específica
-npx ts-node scripts/generate-city-content.ts --ciudad=marbella
+# Una ciudad
+node scripts/generate-city-content-full.js cartagena
 ```
 
-### Contenido Generado
+### Contenido Generado (14 secciones)
 
-Cada página de ciudad incluye **1500+ palabras** con:
+Cada ciudad recibe contenido específico y real:
 
-- **Introducción extensa** (200-300 palabras) sobre por qué vivir en la ciudad
-- **5+ barrios/zonas** con descripciones detalladas (60-100 palabras cada uno)
-- **Coste de vida desglosado**:
-  - Alquiler (100-150 palabras)
-  - Compra (100-150 palabras)
-  - Alimentación (80-120 palabras)
-  - Transporte (80-100 palabras)
-  - Utilidades (60-80 palabras)
-- **8+ trámites esenciales** con ubicaciones específicas
-- **8+ FAQs** con respuestas detalladas (100-150 palabras cada una)
-- **6+ ventajas** específicas de la ciudad
-- **Datos climáticos** detallados
-- **Metadatos SEO** optimizados
+| Sección | Campo DB | Tipo |
+|---------|----------|------|
+| Intro + por qué esta ciudad | `intro_text` | TEXT |
+| Ventajas (5+) | `ventajas` | JSONB |
+| Barrios/zonas (4+) | `barrios` | JSONB |
+| Coste de vida | `coste_vida_*` (5 campos) | TEXT |
+| Clima detallado | `clima_detalle` | TEXT |
+| Primeros 30 días | `primeros_30_dias` | JSONB |
+| Trámites esenciales (8+) | `tramites` | JSONB |
+| Consulados y embajadas | `consulados_embajadas` | JSONB |
+| Trabajo y emprendimiento | `trabajo_emprendimiento` | JSONB |
+| Condiciones de entrada | `condiciones_entrada` | JSONB |
+| Riesgos frontera | `riesgos_frontera` | JSONB |
+| Residencia y nacionalidad | `residencia_nacionalidad` | JSONB |
+| Integración práctica | `integracion_practica` | JSONB |
+| Checklists (4 listas) | `checklists` | JSONB |
+| FAQs (5+) | `faqs` | JSONB |
+| Meta SEO | `meta_title`, `meta_description`, `meta_keywords` | TEXT |
 
 ### Características
 
-- **Modelo**: GPT-4o (alta calidad para contenido largo)
-- **Tokens por ciudad**: 3,000-4,000
-- **Tiempo por ciudad**: 5-10 segundos
-- **Coste por ciudad**: $0.02-0.04
-- **Contenido específico** para cada ciudad (no genérico)
-- **Optimizado para SEO** con keywords long-tail
+- **Modelo**: GPT-4o (máxima calidad)
+- **Prompt**: Basado íntegro en GUIA_COTENIDO_LANDING_DESTINOS
+- **Datos reales**: Usa población, % extranjeros, provincia de `ciudades_catalogo`
+- **Coste**: ~$0.43 para las 19 ciudades
+- **Almacenamiento**: `ciudades_contenido` con `idioma='es'`
 
-### Almacenamiento
+---
 
-Los datos se guardan en la tabla `ciudades_contenido` de Supabase. Las páginas en `/es/destinos/{ciudad}` cargan automáticamente este contenido.
+## 🌐 translate-cities-content.js
 
-### Coste Estimado
+Traduce el contenido de ciudades del español a EN/FR/DE/PT usando OpenAI GPT-4o.
 
-- **10 ciudades destacadas**: ~$0.30
-- **40 ciudades totales**: ~$1.00-1.60
+### Uso
+
+```bash
+# Traducir todas las ciudades a los 4 idiomas
+node scripts/translate-cities-content.js --force
+
+# Solo un idioma
+node scripts/translate-cities-content.js --only=en
+
+# Solo una ciudad
+node scripts/translate-cities-content.js murcia
+
+# Solo una ciudad y un idioma
+node scripts/translate-cities-content.js --only=fr murcia
+```
+
+### Comportamiento
+
+- Lee los registros en español de `ciudades_contenido`
+- Traduce **todos** los campos (22 campos incluyendo 8 JSONB)
+- Upsert en `ciudades_contenido` con el idioma correspondiente
+- `--force`: Sobrescribe traducciones existentes
+- Campos numéricos (temperatura_media, dias_sol) se copian sin traducir
+
+### Coste
+
+- ~$2.00 para 19 ciudades × 4 idiomas = 76 traducciones
+- Modelo: GPT-4o
+
+---
+
+## 🔄 translate-all.js
+
+Traducción masiva de blog posts y landing pages.
+
+```bash
+node scripts/translate-all.js
+```
+
+Traduce los contenidos de las tablas `blog_posts` y `landing_pages` del español a EN/FR/DE/PT.
 
 ---
 
 ## 📍 generate-landings.ts
 
-Script para generar automáticamente landing pages de **servicio × ciudad** usando OpenAI GPT-4o-mini.
+Genera 76 landing pages (servicio × ciudad) con contenido SEO.
 
-### ⭐ Scripts Disponibles
-
-```bash
-# 1. GENERAR todas las landing pages (o filtradas)
-npm run generate-landings
-
-# 2. VERIFICAR cuáles están vacías/incompletas (NO genera nada, solo revisa)
-npm run check-landings
-
-# 3. REGENERAR solo las vacías/incompletas
-npm run retry-landings
-```
-
-### Uso de generate-landings
+### Uso
 
 ```bash
-# Generar todas las combinaciones
-npm run generate-landings
-
-# Solo un servicio específico
-npm run generate-landings servicio=abogados
-
-# Solo una ciudad específica
-npm run generate-landings ciudad=marbella
-
-# Una landing específica
-npm run generate-landings slug=abogados-marbella
+npm run generate-landings                    # Todas
+npm run generate-landings servicio=abogados  # Por servicio
+npm run generate-landings ciudad=murcia      # Por ciudad
+npm run check-landings                       # Verificar estado
+npm run retry-landings                       # Regenerar incompletas
 ```
 
-### 🔍 Script check-landings
+### Contenido por Landing
 
-**Verifica el estado de las landing pages sin generar nada nuevo.**
+- Meta SEO (title, description, keywords)
+- Hero (título, subtítulo, bullets)
+- Problema → Solución
+- Servicios específicos
+- Por qué la ciudad
+- FAQs (4-5)
+- CTA
 
-```bash
-npm run check-landings
-```
-
-**Salida:**
-- Total de landing pages encontradas
-- Número de páginas incompletas
-- Desglose por tipo de problema (sin título, sin servicios, sin FAQs, etc.)
-- Lista de slugs afectados
-
-Una landing se considera incompleta si:
-- ❌ `meta_title` < 10 caracteres
-- ❌ `hero_title` < 10 caracteres
-- ❌ `hero_subtitle` < 20 caracteres
-- ❌ `services` tiene menos de 3 elementos
-- ❌ `faqs` tiene menos de 2 elementos
-- ❌ `problem_title` < 5 caracteres
-- ❌ `solution_text` < 30 caracteres
-
-### 🔄 Script retry-landings
-
-**Regenera automáticamente solo las landing pages incompletas.**
-
-```bash
-npm run retry-landings
-```
-
-**Funcionalidad:**
-1. Detecta automáticamente páginas vacías/incompletas
-2. Usa OpenAI para generar contenido completo
-3. Sobrescribe el contenido existente
-4. Ahorra tiempo y dinero al no regenerar todo
-
-### Estructura de URLs
-
-```
-/es/destinos/{servicio}-{ciudad}
-
-Ejemplos:
-/es/destinos/abogados-marbella
-/es/destinos/seguros-barcelona
-/es/destinos/inmobiliarias-malaga
-```
-
-### Contenido Generado
-
-Cada landing incluye:
-
-- **SEO**: meta_title, meta_description, meta_keywords
-- **Hero**: título, subtítulo, bullets de beneficios
-- **Problemas**: título y lista de problemas del usuario
-- **Solución**: título y texto explicativo
-- **Servicios**: lista de servicios específicos
-- **Por qué la ciudad**: texto y estadísticas locales
-- **FAQs**: 4-5 preguntas frecuentes
-- **CTA**: título y subtítulo de llamada a la acción
-
-### Servicios (4) ✅ ACTUALIZADO
-
-| Slug | Nombre |
-|------|--------|
-| abogados | Abogados |
-| seguros | Seguros de Salud |
-| inmobiliarias | Inmobiliarias |
-| gestorias | Gestorías |
-
-### Ciudades (19) ✅ ACTUALIZADO
-
-**Región de Murcia (12):**  
-Murcia, Cartagena, Lorca, Mazarrón, Torre Pacheco, San Javier, San Pedro del Pinatar, Molina de Segura, Águilas, Cieza, Jumilla, Yecla
-
-**Provincia de Alicante (7):**  
-Alicante, Elche, Torrevieja, Orihuela, Rojales, Benidorm, Dénia
-
-### Coste Real (7 Feb 2026)
-
-- **Modelo**: gpt-4o-mini
-- **Tokens por landing**: ~1,700 tokens promedio
-- **Total 4×19 ciudades = 76 landings**: ~$0.15-0.20 USD
-- **Tiempo de generación**: ~12 minutos
+**Modelo**: GPT-4o-mini | **Coste**: ~$0.20 (76 landings)
 
 ---
 
-## 📄 generate-blog-posts.ts
+## ✍️ generate-blog-posts.ts
 
-Script para generar automáticamente artículos de blog completos con contenido optimizado para SEO usando OpenAI GPT-4o-mini.
-
-### Uso
+Genera 30 artículos de blog en español.
 
 ```bash
 npm run generate-blog
 ```
 
-### Características
+Categorías: Guías de Ciudad, Procedimientos, Salud, Finanzas, Vida en España.
 
-- Genera **30 artículos de blog** en español
-- Contenido entre **1500-2000 palabras** por artículo
-- **Categorías**: Guías de Ciudad, Procedimientos, Salud, Finanzas, Vida en España
-- Optimizado para **SEO** con meta descripciones
-- Se insertan directamente en **Supabase** con status `published`
-
-### Artículos Generados
-
-#### Guías de Ciudad (6)
-1. Vivir en Torrevieja: Guía Completa 2026
-2. Valencia para Expatriados: Todo lo que Necesitas Saber
-3. Málaga vs Alicante: ¿Dónde Establecerte en 2026?
-4. Madrid para Extranjeros: Costos, Barrios y Consejos
-5. Barcelona: Pros y Contras de Vivir en la Ciudad Condal
-6. Las Mejores Ciudades Pequeñas de la Costa Blanca
-
-#### Procedimientos (8)
-7. Visa No Lucrativa 2026: Guía Paso a Paso Actualizada
-8. Arraigo Social en España: Requisitos y Proceso Completo
-9. Golden Visa España: ¿Vale la Pena en 2026?
-10. Cómo Obtener el NIE: Guía Práctica y Documentación
-... y más
-
-### Coste Estimado
-
-- **Modelo**: gpt-4o-mini
-- **Total 30 artículos**: ~100,000 tokens
-- **Coste aproximado**: $0.50 - $1.00
+**Modelo**: GPT-4o-mini | **Coste**: ~$1.00
 
 ---
 
 ## 🧪 test-supabase.ts
 
-Script para verificar la conexión con Supabase.
+Verifica la conexión con Supabase.
 
 ```bash
 npx ts-node scripts/test-supabase.ts
@@ -245,9 +163,22 @@ npx ts-node scripts/test-supabase.ts
 
 ---
 
+## 💰 Resumen de Costes
+
+| Script | Modelo | Contenido | Coste |
+|--------|--------|-----------|-------|
+| `generate-city-content-full.js` | GPT-4o | 19 ciudades (14 secciones) | $0.43 |
+| `translate-cities-content.js` | GPT-4o | 76 traducciones | ~$2.00 |
+| `translate-all.js` | GPT-4o | Blog + landings × 4 idiomas | ~$1.50 |
+| `generate-landings.ts` | GPT-4o-mini | 76 landing pages | $0.20 |
+| `generate-blog-posts.ts` | GPT-4o-mini | 30 blog posts | $1.00 |
+| **TOTAL** | | | **~$5.13** |
+
+---
+
 ## 📋 Requisitos
 
-Asegúrate de tener estas variables en `.env.local`:
+Variables de entorno en `.env.local`:
 
 ```env
 OPENAI_API_KEY=sk-...
@@ -255,107 +186,39 @@ NEXT_PUBLIC_SUPABASE_URL=https://...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
 ```
 
-Y las tablas creadas en Supabase:
+Tablas necesarias:
 
 ```bash
-# Ejecutar en Supabase SQL Editor
-supabase/landing-pages-schema.sql
 supabase/schema.sql
-```
-
----
-
-## 🚀 Flujo de Trabajo Recomendado
-
-### 1. Configurar Base de Datos
-
-```bash
-# Ejecutar en Supabase SQL Editor
 supabase/landing-pages-schema.sql
+supabase/09-expand-ciudades-contenido.sql
+supabase/10-expand-text-fields.sql
 ```
-
-### 2. Generar Contenido de Ciudades Importantes
-
-```bash
-# Ciudades destacadas primero (Madrid, Barcelona, Marbella, etc.)
-npx ts-node scripts/generate-city-content.ts --destacadas
-```
-
-Esto genera contenido SEO extenso para las páginas `/es/destinos/{ciudad}`.
-
-### 3. Generar Landing Pages Servicio×Ciudad
-
-```bash
-# Por ejemplo, todas las combinaciones de abogados
-npm run generate-landings servicio=abogados
-
-# O todas las landings de una ciudad
-npm run generate-landings ciudad=marbella
-
-# IMPORTANTE: Después de generar, verifica si alguna quedó incompleta
-npm run check-landings
-
-# Si hay páginas incompletas, regenera solo esas
-npm run retry-landings
-```
-
-Esto genera landings para URLs como `/es/destinos/abogados-marbella`.
-
-### 4. Generar Blog Posts
-
-```bash
-npm run generate-blog
-```
-
-### 5. Revisar en el Admin
-
-Accede a `/administrator/landings` y `/administrator/blog` para revisar y activar el contenido.
 
 ---
 
-## 💰 Resumen de Costes (Actualizado 7 Feb 2026)
+## 🚀 Flujo de Trabajo
 
-| Script | Modelo | Contenido | Coste Real |
-|--------|--------|-----------|------------|
-| `generate-landings.ts` (76) | GPT-4o-mini | 76 landings | **$0.15-0.20** ✅ |
-| `generate-city-content.ts` | GPT-4o | 19 ciudades | $0.40-0.76 |
-| `generate-blog-posts.ts` | GPT-4o-mini | 30 posts | $0.50-1.00 |
-| **SUBTOTAL GENERADO** | | | **$0.15-0.20** |
-| **TOTAL COMPLETO** | | | **$1.05-1.96** |
+### Desde Cero
 
-**Estado actual:**
-- ✅ Landing pages: Completadas (76/76)
-- ⏸️ Contenido ciudades: Pendiente (opcional)
-- ⏸️ Blog posts: Pendiente (opcional)
+1. Ejecutar migraciones SQL en Supabase
+2. `node scripts/generate-city-content-full.js --all` (contenido ciudades ES)
+3. `node scripts/translate-cities-content.js --force` (traducir ciudades)
+4. `npm run generate-landings` (76 landings)
+5. `npm run generate-blog` (30 blog posts)
+6. `node scripts/translate-all.js` (traducir blog + landings)
+7. `npm run build` → Verificar 644 páginas
 
----
-
-## 📊 Logs y Debugging
-
-Los logs de generación se guardan en `landing_generation_log` e incluyen:
-- Tokens usados
-- Coste estimado
-- Tiempo de ejecución
-- Errores
-
----
-
-## ♻️ Actualizar Contenido
-
-Para regenerar contenido específico:
+### Actualizar Contenido
 
 ```bash
-# Una ciudad
-npx ts-node scripts/generate-city-content.ts --ciudad=marbella
+# Regenerar una ciudad
+node scripts/generate-city-content-full.js murcia
 
-# Una landing
-npm run generate-landings slug=abogados-marbella
-
-# Verificar si hay landings incompletas
-npm run check-landings
-
-# Regenerar solo las incompletas
-npm run retry-landings
+# Re-traducir
+node scripts/translate-cities-content.js --force murcia
 ```
 
-El contenido existente se sobrescribirá (upsert por slug).
+---
+
+**Última actualización:** 24 de Febrero 2026
