@@ -57,21 +57,20 @@ export default async function DestinationsPage() {
       </section>
 
       <section className="section-alt">
-        <div className="container-narrow space-y-8">
+        <div className="container-narrow">
           <Breadcrumbs items={[{ label: t.common.breadcrumbHome, href: '/de' }, { label: t.destinations.title }]} />
-          <div className="space-y-6">
-            <DestinosDropdown
-              regiones={regiones}
-              requestUrl="/de/anfrage"
-              selectPlaceholder={t.destinations.selectPlaceholder}
-              foreignPopLabel={t.destinations.foreignPop}
-            />
-            <div className="text-center">
-              <p className="text-gray-600 mb-4 text-sm">{t.destinations.cantFindCity}</p>
-              <Link href="/de/anfrage" className="btn-minimal">
-                {t.home.requestInfo} →
-              </Link>
-            </div>
+          <DestinosDropdown
+            regiones={regiones}
+            requestUrl="/de/anfrage"
+            selectPlaceholder={t.destinations.selectPlaceholder}
+            foreignPopLabel={t.destinations.foreignPop}
+            requestLabel={t.home.request}
+          />
+          <div className="text-center mt-10 pt-10 border-t border-gray-300">
+            <p className="text-gray-600 mb-4 text-sm">{t.destinations.cantFindCity}</p>
+            <Link href="/de/anfrage" className="btn-minimal">
+              {t.home.requestInfo} →
+            </Link>
           </div>
         </div>
       </section>

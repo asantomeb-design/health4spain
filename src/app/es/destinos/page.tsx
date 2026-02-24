@@ -92,26 +92,25 @@ export default async function DestinosPage() {
         </div>
       </section>
 
-      {/* Desplegable de Destinos por Región/Provincia */}
+      {/* Destinos por Región/Provincia */}
       <section className="section-alt">
-        <div className="container-narrow space-y-8">
+        <div className="container-narrow">
           <Breadcrumbs items={[
             { label: t.common.breadcrumbHome, href: `/${LOCALE}` },
             { label: t.destinations.title }
           ]} />
-          <div className="space-y-6">
-            <DestinosDropdown
-              regiones={regiones}
-              requestUrl={`/${LOCALE}/${r.request}`}
-              selectPlaceholder={t.destinations.selectPlaceholder}
-              foreignPopLabel={t.destinations.foreignPop}
-            />
-            <div className="text-center">
-              <p className="text-gray-600 mb-4 text-sm">{t.destinations.cantFindCity}</p>
-              <Link href={`/${LOCALE}/${r.request}`} className="btn-minimal">
-                {t.home.requestInfo} →
-              </Link>
-            </div>
+          <DestinosDropdown
+            regiones={regiones}
+            requestUrl={`/${LOCALE}/${r.request}`}
+            selectPlaceholder={t.destinations.selectPlaceholder}
+            foreignPopLabel={t.destinations.foreignPop}
+            requestLabel={t.home.request}
+          />
+          <div className="text-center mt-10 pt-10 border-t border-gray-300">
+            <p className="text-gray-600 mb-4 text-sm">{t.destinations.cantFindCity}</p>
+            <Link href={`/${LOCALE}/${r.request}`} className="btn-minimal">
+              {t.home.requestInfo} →
+            </Link>
           </div>
         </div>
       </section>
