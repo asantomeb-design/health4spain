@@ -14,6 +14,9 @@
  *   node scripts/translate-all.js --only=landings  # solo landing pages
  *   node scripts/translate-all.js --only=blog      # solo blog posts
  *   node scripts/translate-all.js --dry-run        # sin insertar, solo muestra
+ *
+ * El script completa TODO en una sola ejecución: reintentos automáticos ante
+ * rate limits, pausa de 2s entre posts, y reintento de fallidos al final.
  */
 
 const { createClient } = require('@supabase/supabase-js');
@@ -60,7 +63,8 @@ Context: ${context}
 JSON to translate:
 ${JSON.stringify(obj, null, 2)}`;
 
-  for (let attempt = 0; attempt < 3; attempt++) {
+  const maxAttempts = 6;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
       const response = await openai.chat.completions.create({
         model: MODEL,
@@ -73,9 +77,11 @@ ${JSON.stringify(obj, null, 2)}`;
       const text = response.choices[0].message.content;
       return JSON.parse(text);
     } catch (err) {
-      if (attempt < 2) {
-        console.log(`    ⏳ Retry ${attempt + 1}/3: ${err.message}`);
-        await sleep(2000 * (attempt + 1));
+      const isRateLimit = (err.status === 429 || err.statusCode === 429) || /rate limit|Rate limit|overloaded/i.test(err.message || '');
+      const waitMs = isRateLimit ? 60000 : 3000 * (attempt + 1);
+      if (attempt < maxAttempts - 1) {
+        console.log(`    ⏳ Reintento ${attempt + 1}/${maxAttempts}${isRateLimit ? ' (rate limit, esperando 60s)' : ''}: ${err.message}`);
+        await sleep(waitMs);
       } else {
         throw err;
       }
@@ -257,7 +263,7 @@ async function translateLandingPages() {
         totalErrors++;
       }
 
-      if (i + BATCH_SIZE < toTranslate.length) await sleep(500);
+      if (i + BATCH_SIZE < toTranslate.length) await sleep(2000);
     }
   }
 }
@@ -298,7 +304,7 @@ async function translateBlogPosts() {
 
     console.log(`  🔄 ${lang}: traduciendo ${toTranslate.length} posts...`);
 
-    // Blog posts uno a uno porque el content puede ser largo
+    const failed = [];
     for (let i = 0; i < toTranslate.length; i++) {
       const post = toTranslate[i];
       const progress = `[${i + 1}/${toTranslate.length}]`;
@@ -348,9 +354,53 @@ async function translateBlogPosts() {
       } catch (err) {
         console.log(`    ${progress} ❌ "${post.slug}": ${err.message}`);
         totalErrors++;
+        failed.push(post);
       }
 
-      if (i < toTranslate.length - 1) await sleep(300);
+      if (i < toTranslate.length - 1) await sleep(2000);
+    }
+
+    if (failed.length > 0) {
+      console.log(`  🔁 Reintentando ${failed.length} posts fallidos...`);
+      await sleep(10000);
+      for (let i = 0; i < failed.length; i++) {
+        const post = failed[i];
+        try {
+          const translated = await translateJSON(
+            { title: post.title, excerpt: post.excerpt, content: post.content, meta_title: post.meta_title, meta_description: post.meta_description, tags: post.tags },
+            lang,
+            'Blog article for Health4Spain. Content may contain HTML. Preserve all HTML tags, links, and formatting. Translate naturally for SEO.'
+          );
+          const newRow = {
+            slug: post.slug,
+            title: translated.title || post.title,
+            excerpt: translated.excerpt || post.excerpt,
+            content: translated.content || post.content,
+            featured_image: post.featured_image,
+            category: post.category,
+            tags: translated.tags || post.tags,
+            meta_title: translated.meta_title || post.meta_title,
+            meta_description: translated.meta_description || post.meta_description,
+            lang: lang,
+            translations: {},
+            author_id: post.author_id,
+            author_name: post.author_name,
+            status: post.status,
+            published_at: post.published_at,
+            views: 0
+          };
+          if (!DRY_RUN) {
+            const { error } = await supabase.from('blog_posts').upsert(newRow, { onConflict: 'slug,lang' });
+            if (error) throw error;
+          }
+          console.log(`    [retry] ✅ "${post.slug}" → ${lang}`);
+          totalInserted++;
+          totalErrors--;
+        } catch (err) {
+          console.log(`    [retry] ❌ "${post.slug}": ${err.message}`);
+        }
+        if (i < failed.length - 1) await sleep(5000);
+      }
     }
   }
 }
