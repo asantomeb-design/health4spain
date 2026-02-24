@@ -1,6 +1,20 @@
 import { supabase } from './supabase';
 import type { Locale } from './routes';
 
+/** Orden de servicios: Seguros de Salud destacado primero */
+const SERVICIOS_ORDER = ['seguros', 'abogados', 'inmobiliarias', 'gestorias'];
+
+function ordenarServicios(servicios: Servicio[]): Servicio[] {
+  return [...servicios].sort((a, b) => {
+    const ia = SERVICIOS_ORDER.indexOf(a.slug);
+    const ib = SERVICIOS_ORDER.indexOf(b.slug);
+    if (ia === -1 && ib === -1) return 0;
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+}
+
 export interface Servicio {
   slug: string;
   nombre: string;
@@ -22,10 +36,10 @@ export async function getServicios(locale: Locale = 'es'): Promise<Servicio[]> {
         .from('servicios_catalogo')
         .select('slug, nombre, nombre_plural, icon, descripcion_corta, keywords')
         .order('slug');
-      return fallback || [];
+      return ordenarServicios(fallback || []);
     }
 
-    return data || [];
+    return ordenarServicios(data || []);
   } catch (error) {
     console.error('Error fetching servicios:', error);
     return [];
