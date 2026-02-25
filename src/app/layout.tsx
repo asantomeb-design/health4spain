@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto_Slab, Ubuntu } from "next/font/google";
 import HtmlLang from "@/components/HtmlLang";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 // Roboto Slab para títulos
@@ -74,6 +75,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#43beda" />
       </head>
       <body className="font-body antialiased">
+        <GoogleAnalytics />
         <HtmlLang />
         {children}
       </body>
