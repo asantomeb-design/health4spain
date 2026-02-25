@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto_Slab, Ubuntu } from "next/font/google";
 import HtmlLang from "@/components/HtmlLang";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 // Roboto Slab para títulos
@@ -76,6 +77,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <GoogleAnalytics />
+        <SpeedInsights />
         <HtmlLang />
         {children}
       </body>
