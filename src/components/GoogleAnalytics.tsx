@@ -1,34 +1,34 @@
 'use client';
 
+import { GoogleAnalytics as GAScript } from '@next/third-parties/google';
 import Script from 'next/script';
-import { useState, useEffect } from 'react';
-import { canUseAnalytics } from '@/lib/cookie-consent';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export default function GoogleAnalytics() {
-  const [allowed, setAllowed] = useState(false);
-
-  useEffect(() => {
-    setAllowed(canUseAnalytics());
-
-    const handler = () => setAllowed(canUseAnalytics());
-    window.addEventListener('cookie-consent-updated', handler);
-    return () => window.removeEventListener('cookie-consent-updated', handler);
-  }, []);
-
-  if (!GA_ID || !allowed) return null;
+  if (!GA_ID) return null;
 
   return (
     <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="ga4-init" strategy="afterInteractive">
+      {/* 
+        Google Consent Mode v2 - Configuración Inicial
+        Se carga ANTES que el script de GA para establecer el estado por defecto a 'denied'.
+        Esto permite a Google recibir pings sin cookies (modelado) hasta que el usuario acepte.
+      */}
+      <Script id="google-consent-mode" strategy="beforeInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
+          
+          // Establecer valores predeterminados a 'denied'
+          gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied',
+            'wait_for_update': 500
+          });
+          
           gtag('js', new Date());
           gtag('config', '${GA_ID}', {
             page_path: window.location.pathname,
@@ -36,6 +36,9 @@ export default function GoogleAnalytics() {
           });
         `}
       </Script>
+
+      {/* Carga del script oficial de GA4 optimizado por Next.js */}
+      <GAScript gaId={GA_ID} />
     </>
   );
 }

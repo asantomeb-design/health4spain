@@ -9,6 +9,21 @@ import {
   getStoredConsent,
 } from '@/lib/cookie-consent';
 
+declare global {
+  interface Window {
+    gtag: (
+      command: 'consent',
+      type: 'update',
+      params: {
+        ad_storage?: 'granted' | 'denied';
+        ad_user_data?: 'granted' | 'denied';
+        ad_personalization?: 'granted' | 'denied';
+        analytics_storage?: 'granted' | 'denied';
+      }
+    ) => void;
+  }
+}
+
 export const COOKIE_CONSENT_REOPEN_EVENT = 'cookie-consent-reopen';
 
 const CONTENT = {
@@ -124,16 +139,30 @@ export default function CookieConsent({ lang = 'es' }: CookieConsentProps) {
   const content =
     (CONTENT[lang as Locale] ?? CONTENT.es) as (typeof CONTENT)['es'];
 
+  // Función para actualizar el estado de consentimiento en Google Analytics (Consent Mode v2)
+  const updateGoogleConsent = (consent: Partial<CookieConsentState>) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('consent', 'update', {
+        analytics_storage: consent.analytics ? 'granted' : 'denied',
+        ad_storage: consent.marketing ? 'granted' : 'denied',
+        ad_user_data: consent.marketing ? 'granted' : 'denied',
+        ad_personalization: consent.marketing ? 'granted' : 'denied',
+      });
+    }
+  };
+
   const checkAndShow = useCallback(() => {
     // Siempre mostrar si no hay consentimiento guardado
-    const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
-    if (!consent) {
+    const consentRaw = localStorage.getItem(COOKIE_CONSENT_KEY);
+    if (!consentRaw) {
       setIsVisible(true);
       return;
     }
     try {
-      JSON.parse(consent);
+      const consent = JSON.parse(consentRaw);
       setIsVisible(false);
+      // Restaurar el estado de consentimiento en Google al cargar
+      updateGoogleConsent(consent);
     } catch {
       setIsVisible(true);
     }
@@ -153,17 +182,23 @@ export default function CookieConsent({ lang = 'es' }: CookieConsentProps) {
   }, []);
 
   const handleAcceptAll = () => {
-    saveConsent({ analytics: true, marketing: true });
+    const consent = { analytics: true, marketing: true };
+    saveConsent(consent);
+    updateGoogleConsent(consent);
     setIsVisible(false);
   };
 
   const handleRejectAll = () => {
-    saveConsent({ analytics: false, marketing: false });
+    const consent = { analytics: false, marketing: false };
+    saveConsent(consent);
+    updateGoogleConsent(consent);
     setIsVisible(false);
   };
 
   const handleSavePreferences = () => {
-    saveConsent({ analytics, marketing });
+    const consent = { analytics, marketing };
+    saveConsent(consent);
+    updateGoogleConsent(consent);
     setIsVisible(false);
   };
 
