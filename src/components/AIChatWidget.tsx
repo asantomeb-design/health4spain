@@ -7,6 +7,16 @@ interface AIChatWidgetProps {
   lang?: string;
 }
 
+function getSessionId(): string {
+  const key = 'ai-chat-session-id';
+  let id = sessionStorage.getItem(key);
+  if (!id) {
+    id = crypto.randomUUID();
+    sessionStorage.setItem(key, id);
+  }
+  return id;
+}
+
 export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -14,6 +24,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
   const [isStreaming, setIsStreaming] = useState(false);
   const [config, setConfig] = useState<ChatbotPublicConfig | null>(null);
   const [configLoaded, setConfigLoaded] = useState(false);
+  const [sessionId, setSessionId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -28,6 +39,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
   }, []);
 
   useEffect(() => {
+    setSessionId(getSessionId());
     const stored = sessionStorage.getItem('ai-chat-history');
     if (stored) {
       try { setMessages(JSON.parse(stored)); } catch {}
@@ -68,6 +80,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
           message: text.trim(),
           history: updatedMessages.slice(-20),
           lang,
+          session_id: sessionId,
         }),
       });
 

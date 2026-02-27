@@ -6,6 +6,7 @@ interface ChatRequestBody {
   message: string;
   history: { role: 'user' | 'assistant'; content: string }[];
   lang: string;
+  session_id?: string;
 }
 
 let cachedConfig: any = null;
@@ -141,7 +142,7 @@ async function fetchContext(config: any, keywords: string[]): Promise<string> {
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequestBody = await request.json();
-    const { message, history = [], lang = 'es' } = body;
+    const { message, history = [], lang = 'es', session_id } = body;
 
     if (!message?.trim()) {
       return Response.json({ error: 'Message is required' }, { status: 400 });
@@ -194,18 +195,35 @@ export async function POST(request: NextRequest) {
     });
 
     const encoder = new TextEncoder();
+    const modelUsed = config.model || 'gpt-4o-mini';
 
     const readable = new ReadableStream({
       async start(controller) {
+        let fullResponse = '';
         try {
           for await (const chunk of stream) {
             const content = chunk.choices[0]?.delta?.content;
             if (content) {
+              fullResponse += content;
               controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content })}\n\n`));
             }
           }
           controller.enqueue(encoder.encode('data: [DONE]\n\n'));
           controller.close();
+
+          // Guardar el intercambio en chat_messages
+          if (fullResponse.trim()) {
+            const supabase = createServerSupabaseClient();
+            supabase.from('chat_messages').insert({
+              session_id: session_id || 'unknown',
+              user_message: message,
+              assistant_message: fullResponse,
+              lang,
+              model: modelUsed,
+            }).then(({ error: logErr }) => {
+              if (logErr) console.error('Error logging chat message:', logErr.message);
+            });
+          }
         } catch (err) {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: 'Stream error' })}\n\n`));
           controller.close();

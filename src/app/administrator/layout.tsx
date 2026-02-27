@@ -61,6 +61,12 @@ const ChatIAIcon = () => (
   </svg>
 );
 
+const ChatHistoryIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
 const navItems = [
   { href: '/administrator', label: 'Dashboard', icon: DashboardIcon, exact: true },
   { href: '/administrator/blog', label: 'Blog', icon: BlogIcon },
@@ -70,6 +76,7 @@ const navItems = [
   { href: '/administrator/landings', label: 'Landings', icon: LandingsIcon },
   { href: '/administrator/leads', label: 'Leads', icon: LeadsIcon },
   { href: '/administrator/chat-ia', label: 'Chat IA', icon: ChatIAIcon },
+  { href: '/administrator/chat-history', label: 'Chat History', icon: ChatHistoryIcon },
 ];
 
 function AdminSidebar() {

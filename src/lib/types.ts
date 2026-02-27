@@ -270,6 +270,22 @@ export interface ChatbotPublicConfig {
   suggested_questions: Record<string, string[]>;
 }
 
+// Chat History / Log
+export type ChatRating = 'correcta' | 'mejorable' | 'erronea';
+
+export interface ChatMessageLog {
+  id: string;
+  session_id: string;
+  user_message: string;
+  assistant_message: string;
+  lang: string;
+  model: string | null;
+  rating: ChatRating | null;
+  rated_at: string | null;
+  tokens_used: number | null;
+  created_at: string;
+}
+
 // Respuestas API
 export interface ApiResponse<T> {
   success: boolean;
