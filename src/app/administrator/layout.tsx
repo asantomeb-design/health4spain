@@ -55,6 +55,12 @@ const LogoutIcon = () => (
   </svg>
 );
 
+const ChatIAIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+  </svg>
+);
+
 const navItems = [
   { href: '/administrator', label: 'Dashboard', icon: DashboardIcon, exact: true },
   { href: '/administrator/blog', label: 'Blog', icon: BlogIcon },
@@ -63,6 +69,7 @@ const navItems = [
   { href: '/administrator/destinos', label: 'Destinos', icon: DestinationsIcon },
   { href: '/administrator/landings', label: 'Landings', icon: LandingsIcon },
   { href: '/administrator/leads', label: 'Leads', icon: LeadsIcon },
+  { href: '/administrator/chat-ia', label: 'Chat IA', icon: ChatIAIcon },
 ];
 
 function AdminSidebar() {

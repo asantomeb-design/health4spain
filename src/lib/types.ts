@@ -233,6 +233,43 @@ export interface LandingPage {
   updated_at: string;
 }
 
+// Tipos para Chatbot IA
+export interface ChatbotConfig {
+  id: string;
+  enabled: boolean;
+  model: string;
+  temperature: number;
+  max_tokens: number;
+  top_p: number;
+  frequency_penalty: number;
+  presence_penalty: number;
+  system_prompt: string;
+  agent_name: string;
+  agent_avatar: string;
+  primary_color: string;
+  welcome_message: Record<string, string>;
+  suggested_questions: Record<string, string[]>;
+  knowledge_tables: string[];
+  max_context_items: number;
+  max_history_messages: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface ChatbotPublicConfig {
+  enabled: boolean;
+  agent_name: string;
+  agent_avatar: string;
+  primary_color: string;
+  welcome_message: Record<string, string>;
+  suggested_questions: Record<string, string[]>;
+}
+
 // Respuestas API
 export interface ApiResponse<T> {
   success: boolean;

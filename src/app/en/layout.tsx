@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import StickyCTA from "@/components/StickyCTA";
 import BackToTop from "@/components/BackToTop";
 import CookieConsent from "@/components/CookieConsent";
+import AIChatWidget from "@/components/AIChatWidget";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.health4spain.com';
 
@@ -36,6 +37,7 @@ export default function LayoutEN({
       <StickyCTA />
       <BackToTop />
       <CookieConsent lang="en" />
+      <AIChatWidget lang="en" />
     </>
   );
 }
