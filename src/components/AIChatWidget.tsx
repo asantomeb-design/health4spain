@@ -7,6 +7,78 @@ interface AIChatWidgetProps {
   lang?: string;
 }
 
+function renderMarkdown(text: string): JSX.Element[] {
+  const lines = text.split('\n');
+  const elements: JSX.Element[] = [];
+
+  lines.forEach((line, lineIdx) => {
+    if (lineIdx > 0) elements.push(<br key={`br-${lineIdx}`} />);
+
+    const isBullet = /^[\-\*]\s+/.test(line.trim());
+    const content = isBullet ? line.trim().replace(/^[\-\*]\s+/, '') : line;
+
+    const parts: (string | JSX.Element)[] = [];
+    let remaining = content;
+    let partIdx = 0;
+
+    while (remaining.length > 0) {
+      const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
+      const linkMatch = remaining.match(/\[([^\]]+)\]\(([^)]+)\)/);
+
+      let firstMatch: { index: number; length: number; element: JSX.Element; type: string } | null = null;
+
+      if (boldMatch?.index !== undefined) {
+        firstMatch = {
+          index: boldMatch.index,
+          length: boldMatch[0].length,
+          element: <strong key={`b-${lineIdx}-${partIdx}`} className="font-semibold">{boldMatch[1]}</strong>,
+          type: 'bold',
+        };
+      }
+
+      if (linkMatch?.index !== undefined) {
+        if (!firstMatch || linkMatch.index < firstMatch.index) {
+          firstMatch = {
+            index: linkMatch.index,
+            length: linkMatch[0].length,
+            element: (
+              <a key={`a-${lineIdx}-${partIdx}`} href={linkMatch[2]} className="underline font-medium hover:opacity-70" target={linkMatch[2].startsWith('http') ? '_blank' : undefined} rel={linkMatch[2].startsWith('http') ? 'noopener noreferrer' : undefined}>
+                {linkMatch[1]}
+              </a>
+            ),
+            type: 'link',
+          };
+        }
+      }
+
+      if (!firstMatch) {
+        if (remaining) parts.push(remaining);
+        break;
+      }
+
+      if (firstMatch.index > 0) {
+        parts.push(remaining.slice(0, firstMatch.index));
+      }
+      parts.push(firstMatch.element);
+      remaining = remaining.slice(firstMatch.index + firstMatch.length);
+      partIdx++;
+    }
+
+    if (isBullet) {
+      elements.push(
+        <span key={`li-${lineIdx}`} className="flex gap-1.5 items-start">
+          <span className="shrink-0 mt-0.5">•</span>
+          <span>{parts}</span>
+        </span>
+      );
+    } else {
+      elements.push(<span key={`l-${lineIdx}`}>{parts}</span>);
+    }
+  });
+
+  return elements;
+}
+
 function getSessionId(): string {
   const key = 'ai-chat-session-id';
   let id = sessionStorage.getItem(key);
@@ -224,12 +296,12 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
                   }`}
                   style={msg.role === 'user' ? { backgroundColor: primaryColor } : undefined}
                 >
-                  <p className={`text-sm whitespace-pre-wrap break-words ${msg.role === 'user' ? 'text-white' : 'text-gray-700'}`}>
-                    {msg.content}
+                  <div className={`text-sm break-words ${msg.role === 'user' ? 'text-white whitespace-pre-wrap' : 'text-gray-700 flex flex-col gap-0.5'}`}>
+                    {msg.role === 'assistant' ? renderMarkdown(msg.content) : msg.content}
                     {isStreaming && i === messages.length - 1 && msg.role === 'assistant' && (
                       <span className="inline-block w-1.5 h-4 ml-0.5 bg-gray-400 animate-pulse rounded-sm" />
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
             ))}

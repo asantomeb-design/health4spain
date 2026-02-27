@@ -162,8 +162,12 @@ export async function POST(request: NextRequest) {
     const keywords = extractKeywords(message);
     const context = await fetchContext(config, keywords);
 
+    const langNames: Record<string, string> = { es: 'español', en: 'English', fr: 'français', de: 'Deutsch', pt: 'português' };
+    const langHint = langNames[lang] || lang;
+
     let systemContent = config.system_prompt || '';
-    systemContent += '\n\nREGLA CRÍTICA DE IDIOMA: Detecta el idioma en que el usuario escribe su mensaje y responde SIEMPRE en ese mismo idioma. Si escribe en inglés, responde en inglés. Si escribe en francés, responde en francés. NUNCA respondas en un idioma diferente al del mensaje del usuario.';
+    systemContent += `\n\nREGLA CRÍTICA DE IDIOMA: El usuario navega la web en ${langHint}. Responde SIEMPRE en el idioma en que el usuario escribe su mensaje. Si escribe en inglés, responde en inglés. Si escribe en francés, responde en francés. Si no puedes determinar el idioma del mensaje, usa ${langHint}. NUNCA respondas en un idioma diferente al del usuario.`;
+    systemContent += '\n\nFORMATO DE RESPUESTA: Usa formato Markdown en tus respuestas para mejorar la legibilidad. Usa **negrita** para destacar conceptos clave, servicios y nombres. Usa listas con - para enumerar opciones. Cuando invites al usuario a contactar, incluye un enlace al formulario con este formato: [Rellena el formulario](/es/contacto) (ajusta /es/ al idioma del usuario: /en/, /fr/, /de/, /pt/).';
     if (context) {
       systemContent += `\n\n--- INFORMACIÓN DE NUESTRA BASE DE DATOS ---\n${context}\n--- FIN DE LA INFORMACIÓN ---\n\nUsa la información anterior para responder con precisión.`;
     }
