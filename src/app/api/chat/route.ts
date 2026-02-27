@@ -164,12 +164,16 @@ export async function POST(request: NextRequest) {
 
     const langNames: Record<string, string> = { es: 'español', en: 'English', fr: 'français', de: 'Deutsch', pt: 'português' };
     const langHint = langNames[lang] || lang;
+    const contactPath = `/${lang}/contacto`;
 
-    let systemContent = config.system_prompt || '';
-    systemContent += `\n\nREGLA CRÍTICA DE IDIOMA: El usuario navega la web en ${langHint}. Responde SIEMPRE en el idioma en que el usuario escribe su mensaje. Si escribe en inglés, responde en inglés. Si escribe en francés, responde en francés. Si no puedes determinar el idioma del mensaje, usa ${langHint}. NUNCA respondas en un idioma diferente al del usuario.`;
-    systemContent += '\n\nFORMATO DE RESPUESTA: Usa formato Markdown en tus respuestas para mejorar la legibilidad. Usa **negrita** para destacar conceptos clave, servicios y nombres. Usa listas con - para enumerar opciones. Cuando invites al usuario a contactar, incluye un enlace al formulario con este formato: [Rellena el formulario](/es/contacto) (ajusta /es/ al idioma del usuario: /en/, /fr/, /de/, /pt/).';
+    let systemContent = `INSTRUCCIÓN PRIORITARIA — IDIOMA: Responde EXCLUSIVAMENTE en el idioma del mensaje del usuario. Si escribe en inglés → responde en inglés. Si escribe en francés → responde en francés. Si escribe en alemán → responde en alemán. El idioma de la web es ${langHint}, úsalo SOLO si el mensaje es ambiguo (ej: "hola", "hi"). Aunque la información de contexto esté en español, TÚ debes traducir y responder en el idioma del usuario. NUNCA respondas en español si el usuario escribe en otro idioma.
+
+FORMATO: Usa Markdown. Usa **negrita** para conceptos clave. Usa listas con - para enumerar. Para invitar a contactar, usa: [Rellena el formulario](${contactPath}) adaptado al idioma.
+
+`;
+    systemContent += config.system_prompt || '';
     if (context) {
-      systemContent += `\n\n--- INFORMACIÓN DE NUESTRA BASE DE DATOS ---\n${context}\n--- FIN DE LA INFORMACIÓN ---\n\nUsa la información anterior para responder con precisión.`;
+      systemContent += `\n\n--- DATOS DE REFERENCIA (pueden estar en español, traduce al idioma del usuario) ---\n${context}\n--- FIN ---`;
     }
 
     const maxHistory = config.max_history_messages || 10;
