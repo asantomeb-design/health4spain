@@ -33,22 +33,6 @@ async function getConfig() {
   return data;
 }
 
-function detectLanguage(message: string, fallback: string): string {
-  const lower = message.toLowerCase().trim();
-  const patterns: [string, RegExp[]][] = [
-    ['en', [/\b(i want|i need|how|what|where|please|can you|help me|looking for|i'm|i am|would like|do you|is there|tell me)\b/]],
-    ['fr', [/\b(je veux|j'ai besoin|comment|bonjour|merci|s'il vous|pouvez-vous|cherche|je suis|aidez|est-ce que|où)\b/]],
-    ['de', [/\b(ich möchte|ich brauche|wie|was|wo|bitte|können sie|hilfe|suche|ich bin|danke|gibt es)\b/]],
-    ['pt', [/\b(eu quero|preciso|como|onde|por favor|pode|ajuda|procuro|eu sou|obrigad)\b/]],
-    ['es', [/\b(quiero|necesito|cómo|dónde|por favor|puedes|ayuda|busco|soy|gracias|tengo|estoy)\b/]],
-  ];
-
-  for (const [lang, regexes] of patterns) {
-    if (regexes.some(r => r.test(lower))) return lang;
-  }
-  return fallback;
-}
-
 function extractKeywords(message: string): string[] {
   const stopWords = new Set([
     'el', 'la', 'los', 'las', 'un', 'una', 'de', 'del', 'en', 'a', 'y', 'o', 'que',
@@ -179,40 +163,41 @@ export async function POST(request: NextRequest) {
     const context = await fetchContext(config, keywords);
 
     const langNames: Record<string, string> = { es: 'español', en: 'English', fr: 'français', de: 'Deutsch', pt: 'português' };
-    const detectedMsgLang = detectLanguage(message, lang);
-    const detectedLangName = langNames[detectedMsgLang] || detectedMsgLang;
     const fallbackLangName = langNames[lang] || lang;
     const contactPath = `/${lang}/contacto`;
 
     let systemContent = `####### MANDATORY LANGUAGE RULE (HIGHEST PRIORITY) #######
-You MUST respond in: ${detectedLangName.toUpperCase()}.
-The user's message language has been detected as: ${detectedLangName}.
-The website locale is: ${fallbackLangName} (use ONLY as fallback for very ambiguous single-word greetings like "hola" or "hi").
+YOUR #1 TASK before answering: Detect the language of the user's LAST message.
+Then respond ENTIRELY in that detected language. This overrides everything else.
 
-RULES:
-- If the user writes in English → You MUST reply ENTIRELY in English. No Spanish words allowed.
-- If the user writes in French → You MUST reply ENTIRELY in French.
-- If the user writes in German → You MUST reply ENTIRELY in German.
-- If the user writes in Portuguese → You MUST reply ENTIRELY in Portuguese.
-- If the user writes in Spanish → Reply in Spanish.
-- The context data below may be in Spanish. You MUST translate it to ${detectedLangName} before including it in your answer.
+Examples:
+- User writes "hello" or "good night" or "sorry" → respond in English
+- User writes "bonjour" or "bonsoir" or "merci" → respond in French  
+- User writes "hallo" or "guten tag" or "danke" → respond in German
+- User writes "olá" or "boa noite" or "obrigado" → respond in Portuguese
+- User writes "hola" or "buenas noches" or "gracias" → respond in Spanish
+- User writes "bona sera" or "buona sera" → respond in Italian
+- If the user explicitly asks for a language (e.g. "english?" or "en français") → switch to THAT language immediately
+
+If you truly cannot determine the language (single emoji, numbers only), default to: ${fallbackLangName}.
+
+CRITICAL RULES:
+- ALWAYS match the user's language, even if the conversation history is in a different language.
+- The reference data below may be in Spanish. You MUST translate it to the user's language.
 - NEVER mix languages in a single response.
+- NEVER refuse to switch languages. If the user asks for English, respond in English.
 ####### END MANDATORY LANGUAGE RULE #######
 
-FORMATO / FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists with - for enumerations. To invite contact, use: [Fill out the form](${contactPath}) adapted to ${detectedLangName}.
+FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists with - for enumerations. To invite contact, use a link to ${contactPath} adapted to the user's language.
 
 `;
     systemContent += config.system_prompt || '';
     if (context) {
-      systemContent += `\n\n--- REFERENCE DATA (may be in Spanish — you MUST translate to ${detectedLangName} in your response) ---\n${context}\n--- END ---`;
+      systemContent += `\n\n--- REFERENCE DATA (may be in Spanish — you MUST translate to the user's language in your response) ---\n${context}\n--- END ---`;
     }
 
     const maxHistory = config.max_history_messages || 10;
     const trimmedHistory = history.slice(-maxHistory);
-
-    const langReminder = detectedMsgLang !== 'es'
-      ? `[SYSTEM REMINDER: The next user message is in ${detectedLangName}. You MUST respond ONLY in ${detectedLangName}. Do NOT use Spanish.]`
-      : '';
 
     const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
       { role: 'system', content: systemContent },
@@ -220,7 +205,6 @@ FORMATO / FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists 
         role: m.role as 'user' | 'assistant',
         content: m.content,
       })),
-      ...(langReminder ? [{ role: 'system' as const, content: langReminder }] : []),
       { role: 'user', content: message },
     ];
 
@@ -256,13 +240,12 @@ FORMATO / FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists 
 
           // Guardar el intercambio en chat_messages
           if (fullResponse.trim()) {
-            const detectedLang = detectLanguage(message, lang);
             const supabase = createServerSupabaseClient();
             supabase.from('chat_messages').insert({
               session_id: session_id || 'unknown',
               user_message: message,
               assistant_message: fullResponse,
-              lang: detectedLang,
+              lang,
               model: modelUsed,
             }).then(({ error: logErr }) => {
               if (logErr) console.error('Error logging chat message:', logErr.message);
