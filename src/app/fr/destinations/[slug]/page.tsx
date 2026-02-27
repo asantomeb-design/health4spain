@@ -209,11 +209,12 @@ function LandingPageView({ landing }: { landing: LandingPage }) {
           
           {landing.servicio_slug && landing.ciudad_slug ? (
             <div className="max-w-2xl mx-auto">
-              <LandingFormEmbed 
+              <LandingFormEmbed
                 servicioSlug={landing.servicio_slug}
                 ciudadSlug={landing.ciudad_slug}
                 servicioNombre={landing.servicio_nombre || landing.servicio_slug}
                 ciudadNombre={landing.ciudad_nombre || landing.ciudad_slug}
+                locale={LOCALE}
               />
             </div>
           ) : (

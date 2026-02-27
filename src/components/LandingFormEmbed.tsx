@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PAISES_CON_CODIGO, CODIGOS_PARA_OTRO, PAISES } from '@/lib/constants';
+import { getDictionary } from '@/lib/dictionaries';
+import type { Locale } from '@/lib/routes';
 
 interface LandingFormEmbedProps {
   servicioSlug: string;
   ciudadSlug: string;
   servicioNombre: string;
   ciudadNombre: string;
+  locale?: Locale;
 }
 
 interface FormData {
@@ -23,28 +26,19 @@ interface FormData {
   mensaje: string;
 }
 
-const PRESUPUESTOS = [
-  { id: 'menos-5000', label: 'Menos de 5.000€' },
-  { id: '5000-15000', label: '5.000€ - 15.000€' },
-  { id: '15000-30000', label: '15.000€ - 30.000€' },
-  { id: 'mas-30000', label: 'Más de 30.000€' },
-  { id: 'no-seguro', label: 'No estoy seguro' },
-];
-
-const URGENCIAS = [
-  { id: 'esta-semana', label: 'Esta semana' },
-  { id: 'este-mes', label: 'Este mes' },
-  { id: 'proximo-trimestre', label: 'Próximo trimestre' },
-  { id: 'solo-informacion', label: 'Solo busco información' },
-];
+const PRESUPUESTO_IDS = ['menos-5000', '5000-15000', '15000-30000', 'mas-30000', 'no-seguro'];
+const URGENCIA_IDS = ['esta-semana', 'este-mes', 'proximo-trimestre', 'solo-informacion'];
 
 export default function LandingFormEmbed({ 
   servicioSlug, 
   ciudadSlug,
   servicioNombre,
-  ciudadNombre 
+  ciudadNombre,
+  locale = 'es'
 }: LandingFormEmbedProps) {
   const router = useRouter();
+  const t = getDictionary(locale).request;
+  const tLanding = getDictionary(locale).landingUI;
   const [currentStep, setCurrentStep] = useState(1); // Paso 1: datos personales, Paso 2: presupuesto/urgencia
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -75,15 +69,15 @@ export default function LandingFormEmbed({
     const newErrors: Partial<Record<keyof FormData, string>> = {};
 
     if (step === 1) {
-      if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio';
-      if (!formData.email.trim()) newErrors.email = 'El email es obligatorio';
+      if (!formData.nombre.trim()) newErrors.nombre = t.errorNombre;
+      if (!formData.email.trim()) newErrors.email = t.errorEmail;
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        newErrors.email = 'Email no válido';
+        newErrors.email = t.errorEmailInvalido;
       }
-      if (!formData.fecha_nacimiento) newErrors.fecha_nacimiento = 'La fecha de nacimiento es obligatoria';
-      if (!formData.codigo_pais) newErrors.codigo_pais = 'El código de país es obligatorio';
-      if (!formData.telefono.trim()) newErrors.telefono = 'El teléfono es obligatorio';
-      if (!formData.pais_origen) newErrors.pais_origen = 'Selecciona tu país de origen';
+      if (!formData.fecha_nacimiento) newErrors.fecha_nacimiento = t.errorFechaNacimiento;
+      if (!formData.codigo_pais) newErrors.codigo_pais = t.errorCodigoPais;
+      if (!formData.telefono.trim()) newErrors.telefono = t.errorTelefono;
+      if (!formData.pais_origen) newErrors.pais_origen = t.errorPais;
     }
 
     setErrors(newErrors);
@@ -125,7 +119,8 @@ export default function LandingFormEmbed({
         setSubmitStatus('success');
         // Redirigir a página de gracias después de un breve delay
         setTimeout(() => {
-          router.push('/es/solicitar?success=true');
+          const requestPath = locale === 'es' ? 'solicitar' : locale === 'en' ? 'request' : locale === 'fr' ? 'demande' : locale === 'de' ? 'anfrage' : 'solicitar';
+          router.push(`/${locale}/${requestPath}?success=true`);
         }, 2000);
       } else {
         setSubmitStatus('error');
@@ -146,8 +141,8 @@ export default function LandingFormEmbed({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="text-2xl font-bold mb-2">¡Solicitud enviada!</h3>
-        <p className="text-gray-600">Te contactaremos en menos de 24 horas</p>
+        <h3 className="text-2xl font-bold mb-2">{tLanding.formSuccessTitle}</h3>
+        <p className="text-gray-600">{tLanding.formSuccessMsg}</p>
       </div>
     );
   }
@@ -157,12 +152,12 @@ export default function LandingFormEmbed({
       {/* Header con contexto */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xl md:text-2xl font-bold">Solicita información</h3>
+          <h3 className="text-xl md:text-2xl font-bold">{tLanding.sidebarTitle}</h3>
           <a 
-            href={`/es/solicitar?servicio=${servicioSlug}&ciudad=${ciudadSlug}`}
+            href={`/${locale}/${locale === 'es' ? 'solicitar' : locale === 'en' ? 'request' : locale === 'fr' ? 'demande' : locale === 'de' ? 'anfrage' : 'solicitar'}?servicio=${servicioSlug}&ciudad=${ciudadSlug}`}
             className="text-xs text-gray-500 hover:text-accent transition-colors"
           >
-            Cambiar
+            {tLanding.formChange}
           </a>
         </div>
         <div className="inline-flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-md">
@@ -170,7 +165,7 @@ export default function LandingFormEmbed({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
           <span className="text-sm font-medium text-gray-700">
-            {servicioNombre} en {ciudadNombre}
+            {servicioNombre} {tLanding.in} {ciudadNombre}
           </span>
         </div>
       </div>
@@ -180,12 +175,12 @@ export default function LandingFormEmbed({
         {currentStep === 1 && (
           <div className="space-y-3">
             <div>
-              <label className="form-label-minimal">Nombre completo *</label>
+              <label className="form-label-minimal">{t.labelNombre}</label>
               <input
                 type="text"
                 value={formData.nombre}
                 onChange={(e) => updateFormData('nombre', e.target.value)}
-                placeholder="Tu nombre"
+                placeholder={t.placeholderNombre}
                 className={`form-input-minimal ${errors.nombre ? 'border-accent' : ''}`}
               />
               {errors.nombre && <p className="text-accent text-sm mt-1">{errors.nombre}</p>}
@@ -193,18 +188,18 @@ export default function LandingFormEmbed({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label className="form-label-minimal">Email *</label>
+                <label className="form-label-minimal">{t.labelEmail}</label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
-                  placeholder="tu@email.com"
+                  placeholder={t.placeholderEmail}
                   className={`form-input-minimal ${errors.email ? 'border-accent' : ''}`}
                 />
                 {errors.email && <p className="text-accent text-sm mt-1">{errors.email}</p>}
               </div>
               <div>
-                <label className="form-label-minimal">Fecha de nacimiento *</label>
+                <label className="form-label-minimal">{t.labelFechaNacimiento}</label>
                 <input
                   type="date"
                   value={formData.fecha_nacimiento}
@@ -216,7 +211,7 @@ export default function LandingFormEmbed({
             </div>
 
             <div>
-              <label className="form-label-minimal">País de origen *</label>
+              <label className="form-label-minimal">{t.labelPaisOrigen}</label>
               <select
                 value={formData.pais_origen}
                 onChange={(e) => {
@@ -231,7 +226,7 @@ export default function LandingFormEmbed({
                 }}
                 className={`form-input-minimal ${errors.pais_origen ? 'border-accent' : ''}`}
               >
-                <option value="">Selecciona tu país</option>
+                <option value="">{t.placeholderPais}</option>
                 {PAISES.map((pais) => (
                   <option key={pais} value={pais}>
                     {pais}
@@ -243,7 +238,7 @@ export default function LandingFormEmbed({
 
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-3">
               <div className="min-w-[120px]">
-                <label className="form-label-minimal">Código país *</label>
+                <label className="form-label-minimal">{t.labelCodigoPais}</label>
                 {formData.pais_origen && formData.pais_origen !== 'Otro' ? (
                   <div className="form-input-minimal bg-gray-50 text-gray-700">
                     {PAISES_CON_CODIGO.find(p => p.pais === formData.pais_origen)?.codigo || formData.codigo_pais}
@@ -254,7 +249,7 @@ export default function LandingFormEmbed({
                     onChange={(e) => updateFormData('codigo_pais', e.target.value)}
                     className={`form-input-minimal ${errors.codigo_pais ? 'border-accent' : ''}`}
                   >
-                    <option value="">Selecciona código</option>
+                    <option value="">{t.placeholderCodigo}</option>
                     {CODIGOS_PARA_OTRO.map(({ codigo, pais }) => (
                       <option key={codigo} value={codigo}>{codigo} {pais}</option>
                     ))}
@@ -263,12 +258,12 @@ export default function LandingFormEmbed({
                 {errors.codigo_pais && <p className="text-accent text-sm mt-1">{errors.codigo_pais}</p>}
               </div>
               <div>
-                <label className="form-label-minimal">Teléfono *</label>
+                <label className="form-label-minimal">{t.labelTelefono}</label>
                 <input
                   type="tel"
                   value={formData.telefono}
                   onChange={(e) => updateFormData('telefono', e.target.value.replace(/\D/g, ''))}
-                  placeholder="600 123 456"
+                  placeholder={t.placeholderTelefono}
                   className={`form-input-minimal ${errors.telefono ? 'border-accent' : ''}`}
                 />
                 {errors.telefono && <p className="text-accent text-sm mt-1">{errors.telefono}</p>}
@@ -279,7 +274,7 @@ export default function LandingFormEmbed({
               type="submit"
               className="w-full py-3 px-6 bg-[#293f92] text-white font-bold hover:bg-[#1e2d6b] transition-colors rounded-sm"
             >
-              Continuar →
+              {tLanding.formContinue}
             </button>
           </div>
         )}
@@ -295,25 +290,25 @@ export default function LandingFormEmbed({
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Atrás
+              {tLanding.formBack}
             </button>
 
             <div>
-              <label className="form-label-minimal mb-2">¿Cuál es tu presupuesto aproximado?</label>
+              <label className="form-label-minimal mb-2">{t.labelPresupuesto}</label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5 md:gap-2 mt-2">
-                {PRESUPUESTOS.map((option) => (
+                {PRESUPUESTO_IDS.map((id) => (
                   <button
-                    key={option.id}
+                    key={id}
                     type="button"
-                    onClick={() => updateFormData('presupuesto', option.id)}
+                    onClick={() => updateFormData('presupuesto', id)}
                     className={`p-2 md:p-2.5 border rounded text-left transition-all ${
-                      formData.presupuesto === option.id
+                      formData.presupuesto === id
                         ? 'border-black bg-gray-50 font-semibold'
                         : 'border-gray-200 hover:border-gray-400'
                     }`}
                   >
-                    <span className="text-xs md:text-sm block">{option.label}</span>
-                    {formData.presupuesto === option.id && (
+                    <span className="text-xs md:text-sm block">{t.presupuestos[id as keyof typeof t.presupuestos]}</span>
+                    {formData.presupuesto === id && (
                       <svg className="w-4 h-4 text-accent shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     )}
                   </button>
@@ -322,21 +317,21 @@ export default function LandingFormEmbed({
             </div>
 
             <div>
-              <label className="form-label-minimal mb-2">¿Cuándo lo necesitas?</label>
+              <label className="form-label-minimal mb-2">{t.labelUrgencia}</label>
               <div className="grid grid-cols-2 gap-1.5 md:gap-2 mt-2">
-                {URGENCIAS.map((option) => (
+                {URGENCIA_IDS.map((id) => (
                   <button
-                    key={option.id}
+                    key={id}
                     type="button"
-                    onClick={() => updateFormData('urgencia', option.id)}
+                    onClick={() => updateFormData('urgencia', id)}
                     className={`p-2 md:p-2.5 border rounded text-left transition-all ${
-                      formData.urgencia === option.id
+                      formData.urgencia === id
                         ? 'border-black bg-gray-50 font-semibold'
                         : 'border-gray-200 hover:border-gray-400'
                     }`}
                   >
-                    <span className="text-xs md:text-sm block">{option.label}</span>
-                    {formData.urgencia === option.id && (
+                    <span className="text-xs md:text-sm block">{t.urgencias[id as keyof typeof t.urgencias]}</span>
+                    {formData.urgencia === id && (
                       <svg className="w-4 h-4 text-accent shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     )}
                   </button>
@@ -346,12 +341,12 @@ export default function LandingFormEmbed({
 
             <div>
               <label className="form-label-minimal">
-                ¿Algo más que debamos saber? <span className="text-gray-400">(opcional)</span>
+                {t.labelMensaje} <span className="text-gray-400">{t.labelMensajeOpcional}</span>
               </label>
               <textarea
                 value={formData.mensaje}
                 onChange={(e) => updateFormData('mensaje', e.target.value)}
-                placeholder="Cuéntanos más sobre tu situación..."
+                placeholder={t.placeholderMensaje}
                 className="form-input-minimal min-h-[80px] mt-1.5"
               />
             </div>
@@ -361,12 +356,12 @@ export default function LandingFormEmbed({
               disabled={isSubmitting}
               className="w-full py-3 px-6 bg-[#293f92] text-white font-bold hover:bg-[#1e2d6b] transition-colors rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Enviando...' : 'Enviar Solicitud'}
+              {isSubmitting ? t.enviando : t.enviarSolicitud}
             </button>
 
             {submitStatus === 'error' && (
               <p className="text-accent text-sm text-center">
-                Error al enviar. Inténtalo de nuevo.
+                {t.errorEnvio}
               </p>
             )}
           </div>
@@ -378,19 +373,19 @@ export default function LandingFormEmbed({
             <svg className="w-3 h-3 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
-            Sin compromiso
+            {tLanding.noCommitment}
           </span>
           <span className="flex items-center gap-1">
             <svg className="w-3 h-3 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Respuesta en 24h
+            {tLanding.response24h}
           </span>
           <span className="flex items-center gap-1">
             <svg className="w-3 h-3 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
-            Datos protegidos
+            {tLanding.formDataProtected}
           </span>
         </div>
       </form>
