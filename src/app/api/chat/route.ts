@@ -163,10 +163,9 @@ export async function POST(request: NextRequest) {
     const context = await fetchContext(config, keywords);
 
     let systemContent = config.system_prompt || '';
+    systemContent += '\n\nREGLA CRÍTICA DE IDIOMA: Detecta el idioma en que el usuario escribe su mensaje y responde SIEMPRE en ese mismo idioma. Si escribe en inglés, responde en inglés. Si escribe en francés, responde en francés. NUNCA respondas en un idioma diferente al del mensaje del usuario.';
     if (context) {
-      systemContent += `\n\n--- INFORMACIÓN DE NUESTRA BASE DE DATOS ---\n${context}\n--- FIN DE LA INFORMACIÓN ---\n\nUsa la información anterior para responder con precisión. Responde en el idioma del usuario (${lang}).`;
-    } else {
-      systemContent += `\n\nResponde en el idioma del usuario (${lang}).`;
+      systemContent += `\n\n--- INFORMACIÓN DE NUESTRA BASE DE DATOS ---\n${context}\n--- FIN DE LA INFORMACIÓN ---\n\nUsa la información anterior para responder con precisión.`;
     }
 
     const maxHistory = config.max_history_messages || 10;

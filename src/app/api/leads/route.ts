@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, handleSupabaseError } from '@/lib/supabase';
 import { validateAdminAuth } from '@/lib/auth';
 import { Lead } from '@/lib/types';
+import { createGHLContact } from '@/lib/gohighlevel';
 
 // POST /api/leads - Crear nuevo lead (endpoint público)
 export async function POST(request: NextRequest) {
@@ -93,8 +94,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(handleSupabaseError(error), { status: 500 });
     }
     
-    // TODO: Enviar notificación por email/webhook
-    // await sendLeadNotification(data);
+    // Enviar lead a GoHighLevel CRM (fire-and-forget, no bloquea la respuesta)
+    createGHLContact({
+      nombre: data.nombre,
+      email: data.email,
+      telefono: data.telefono,
+      codigo_pais: data.codigo_pais,
+      ciudad: data.ciudad,
+      pais_origen: data.pais_origen,
+      servicio: data.servicio,
+      presupuesto: data.presupuesto,
+      urgencia: data.urgencia,
+      idioma_preferido: data.idioma_preferido,
+      mensaje: data.mensaje,
+      landing_page: data.landing_page,
+      utm_source: data.utm_source,
+      utm_medium: data.utm_medium,
+      utm_campaign: data.utm_campaign,
+      score: data.score,
+    }).catch(err => console.error('[GHL] Error fire-and-forget:', err));
     
     return NextResponse.json({
       success: true,
