@@ -139,6 +139,39 @@ async function fetchContext(config: any, keywords: string[]): Promise<string> {
   return contextParts.join('\n');
 }
 
+async function detectLanguageWithAI(openai: OpenAI, message: string, history: { role: string; content: string }[]): Promise<string> {
+  const recentHistory = history.slice(-4).map(m =>
+    `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content.slice(0, 100)}`
+  ).join('\n');
+
+  const detection = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: [
+      {
+        role: 'system',
+        content: `You are a language detector. Your ONLY job is to identify the language of the user's message.
+Respond with ONLY the language name in English (e.g. "English", "French", "Spanish", "German", "Portuguese", "Italian", "Dutch", "Russian", "Arabic", "Chinese", "Japanese", "Korean", etc.).
+Do NOT respond with anything else. Just the language name. One word or two words max.
+
+Rules:
+- Focus on the LAST user message only.
+- If the user explicitly requests a language (e.g. "english?", "in english please", "en français"), return THAT requested language.
+- If the message is ambiguous (like "ok", "hi", emojis), look at the conversation history for context. If still ambiguous, return "English".`,
+      },
+      {
+        role: 'user',
+        content: recentHistory
+          ? `Conversation history:\n${recentHistory}\n\nNew message to detect: "${message}"`
+          : `Detect the language of: "${message}"`,
+      },
+    ],
+    temperature: 0,
+    max_tokens: 10,
+  });
+
+  return (detection.choices[0]?.message?.content || 'English').trim();
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequestBody = await request.json();
@@ -159,41 +192,28 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: 'OpenAI API key not configured' }, { status: 500 });
     }
 
+    const openai = new OpenAI({ apiKey });
+
+    // AGENTE 1: Detectar idioma del mensaje
+    const detectedLanguage = await detectLanguageWithAI(openai, message, history);
+
+    // Buscar contexto en paralelo (no depende del idioma)
     const keywords = extractKeywords(message);
     const context = await fetchContext(config, keywords);
 
-    const langNames: Record<string, string> = { es: 'español', en: 'English', fr: 'français', de: 'Deutsch', pt: 'português' };
-    const fallbackLangName = langNames[lang] || lang;
     const contactPath = `/${lang}/contacto`;
 
-    let systemContent = `####### MANDATORY LANGUAGE RULE (HIGHEST PRIORITY) #######
-YOUR #1 TASK before answering: Detect the language of the user's LAST message.
-Then respond ENTIRELY in that detected language. This overrides everything else.
+    // AGENTE 2: Responder al usuario en el idioma detectado
+    let systemContent = `You MUST respond ENTIRELY in ${detectedLanguage}. This is non-negotiable.
+If the reference data is in another language, translate it to ${detectedLanguage}.
+NEVER mix languages. Every single word of your response must be in ${detectedLanguage}.
 
-Examples:
-- User writes "hello" or "good night" or "sorry" → respond in English
-- User writes "bonjour" or "bonsoir" or "merci" → respond in French  
-- User writes "hallo" or "guten tag" or "danke" → respond in German
-- User writes "olá" or "boa noite" or "obrigado" → respond in Portuguese
-- User writes "hola" or "buenas noches" or "gracias" → respond in Spanish
-- User writes "bona sera" or "buona sera" → respond in Italian
-- If the user explicitly asks for a language (e.g. "english?" or "en français") → switch to THAT language immediately
-
-If you truly cannot determine the language (single emoji, numbers only), default to: ${fallbackLangName}.
-
-CRITICAL RULES:
-- ALWAYS match the user's language, even if the conversation history is in a different language.
-- The reference data below may be in Spanish. You MUST translate it to the user's language.
-- NEVER mix languages in a single response.
-- NEVER refuse to switch languages. If the user asks for English, respond in English.
-####### END MANDATORY LANGUAGE RULE #######
-
-FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists with - for enumerations. To invite contact, use a link to ${contactPath} adapted to the user's language.
+FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists with - for enumerations. To invite contact, use a link to ${contactPath} adapted to ${detectedLanguage}.
 
 `;
     systemContent += config.system_prompt || '';
     if (context) {
-      systemContent += `\n\n--- REFERENCE DATA (may be in Spanish — you MUST translate to the user's language in your response) ---\n${context}\n--- END ---`;
+      systemContent += `\n\n--- REFERENCE DATA (translate to ${detectedLanguage}) ---\n${context}\n--- END ---`;
     }
 
     const maxHistory = config.max_history_messages || 10;
@@ -207,8 +227,6 @@ FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists with - for
       })),
       { role: 'user', content: message },
     ];
-
-    const openai = new OpenAI({ apiKey });
 
     const stream = await openai.chat.completions.create({
       model: config.model || 'gpt-4o-mini',
@@ -238,14 +256,13 @@ FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists with - for
           controller.enqueue(encoder.encode('data: [DONE]\n\n'));
           controller.close();
 
-          // Guardar el intercambio en chat_messages
           if (fullResponse.trim()) {
             const supabase = createServerSupabaseClient();
             supabase.from('chat_messages').insert({
               session_id: session_id || 'unknown',
               user_message: message,
               assistant_message: fullResponse,
-              lang,
+              lang: detectedLanguage,
               model: modelUsed,
             }).then(({ error: logErr }) => {
               if (logErr) console.error('Error logging chat message:', logErr.message);
