@@ -132,6 +132,15 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
     if (isOpen) inputRef.current?.focus();
   }, [isOpen]);
 
+  const resetChat = useCallback(() => {
+    const newId = crypto.randomUUID();
+    sessionStorage.setItem('ai-chat-session-id', newId);
+    sessionStorage.removeItem('ai-chat-history');
+    setSessionId(newId);
+    setMessages([]);
+    setInput('');
+  }, []);
+
   const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isStreaming) return;
 
@@ -238,14 +247,27 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <div className="flex items-center gap-1">
+                {messages.length > 0 && (
+                  <button
+                    onClick={resetChat}
+                    className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
+                    title={lang === 'es' ? 'Nuevo chat' : lang === 'fr' ? 'Nouveau chat' : lang === 'de' ? 'Neuer Chat' : lang === 'pt' ? 'Novo chat' : 'New chat'}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
