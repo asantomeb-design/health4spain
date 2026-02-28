@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import Image from 'next/image';
 import type { ChatMessage, ChatbotPublicConfig } from '@/lib/types';
 
 const MARTA_AVATAR = '/images/chat_ia.png';
@@ -240,7 +239,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border-2 border-white/30">
-                  <Image src={MARTA_AVATAR} alt="Marta" width={40} height={40} className="w-full h-full object-cover" />
+                  <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h4 className="font-bold text-sm">Marta</h4>
@@ -281,7 +280,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
               <>
                 <div className="flex gap-2 items-start">
                   <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
-                    <Image src={MARTA_AVATAR} alt="Marta" width={28} height={28} className="w-full h-full object-cover" />
+                    <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
                   </div>
                   <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-sm max-w-[85%]">
                     <p className="text-sm text-gray-700">{welcomeMsg}</p>
@@ -310,7 +309,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
               <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'items-start'}`}>
                 {msg.role === 'assistant' && (
                   <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
-                    <Image src={MARTA_AVATAR} alt="Marta" width={28} height={28} className="w-full h-full object-cover" />
+                    <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
                   </div>
                 )}
                 <div
@@ -380,7 +379,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             </svg>
           </div>
         ) : (
-          <Image src={MARTA_AVATAR} alt="Chat con Marta" width={64} height={64} className="w-full h-full object-cover" />
+          <img src={MARTA_AVATAR} alt="Chat con Marta" className="w-full h-full object-cover" />
         )}
       </button>
 
