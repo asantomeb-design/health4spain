@@ -102,8 +102,8 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    fetch('/api/chat/config')
+  const fetchConfig = useCallback(() => {
+    fetch('/api/chat/config', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => {
         setConfig(data);
@@ -111,6 +111,12 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
       })
       .catch(() => setConfigLoaded(true));
   }, []);
+
+  useEffect(() => {
+    fetchConfig();
+    const interval = setInterval(fetchConfig, 5000);
+    return () => clearInterval(interval);
+  }, [fetchConfig]);
 
   useEffect(() => {
     setSessionId(getSessionId());

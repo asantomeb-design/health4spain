@@ -51,6 +51,10 @@ function extractKeywords(message: string): string[] {
     .filter(w => w.length > 2 && !stopWords.has(w));
 }
 
+const FORBIDDEN_KNOWLEDGE_TABLES = new Set([
+  'leads', 'chat_messages', 'chatbot_config', 'partners',
+]);
+
 async function fetchContext(config: any, keywords: string[]): Promise<string> {
   if (keywords.length === 0) return '';
 
@@ -58,11 +62,11 @@ async function fetchContext(config: any, keywords: string[]): Promise<string> {
   const tables = config.knowledge_tables || [];
   const maxItems = config.max_context_items || 10;
   const contextParts: string[] = [];
-  const searchPattern = keywords.map(k => `%${k}%`);
 
   const itemsPerTable = Math.max(2, Math.floor(maxItems / Math.max(tables.length, 1)));
 
   for (const table of tables) {
+    if (FORBIDDEN_KNOWLEDGE_TABLES.has(table)) continue;
     try {
       if (table === 'servicios_catalogo') {
         const { data } = await supabase

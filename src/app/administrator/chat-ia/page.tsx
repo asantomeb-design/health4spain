@@ -4,9 +4,12 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { ChatbotConfig } from '@/lib/types';
 
+// Modelos de Chat Completions de OpenAI (generativos de texto para chat)
 const AVAILABLE_MODELS = [
   { id: 'gpt-4o', label: 'GPT-4o (más capaz)' },
   { id: 'gpt-4o-mini', label: 'GPT-4o Mini (equilibrado)' },
+  { id: 'gpt-4.1', label: 'GPT-4.1 (coding / web)' },
+  { id: 'gpt-4.1-mini', label: 'GPT-4.1 Mini' },
   { id: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
   { id: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo (más rápido)' },
 ];
@@ -150,6 +153,19 @@ export default function ChatIAConfigPage() {
     setConfig(prev => prev ? { ...prev, [field]: value } : prev);
   }, []);
 
+  const setEnabledAndPersist = useCallback(async (newEnabled: boolean) => {
+    if (!config?.id) return;
+    updateField('enabled', newEnabled);
+    const { error } = await supabase
+      .from('chatbot_config')
+      .update({ enabled: newEnabled })
+      .eq('id', config.id);
+    if (error) {
+      updateField('enabled', !newEnabled);
+      setError(error.message);
+    }
+  }, [config?.id, updateField]);
+
   const updateWelcomeMessage = useCallback((lang: string, value: string) => {
     setConfig(prev => {
       if (!prev) return prev;
@@ -271,14 +287,16 @@ export default function ChatIAConfigPage() {
               <p className="text-sm text-gray-600 mt-1">Activa o desactiva el chat en el sitio web</p>
             </div>
             <button
-              onClick={() => updateField('enabled', !config.enabled)}
-              className={`relative w-14 h-7 rounded-full transition-colors ${
+              onClick={() => setEnabledAndPersist(!config.enabled)}
+              className={`relative w-14 h-7 rounded-full transition-colors overflow-hidden ${
                 config.enabled ? 'bg-green-500' : 'bg-gray-300'
               }`}
             >
-              <span className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${
-                config.enabled ? 'translate-x-7' : 'translate-x-0.5'
-              }`} />
+              <span
+                className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform left-0.5 ${
+                  config.enabled ? 'translate-x-6' : 'translate-x-0'
+                }`}
+              />
             </button>
           </div>
 

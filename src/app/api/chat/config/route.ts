@@ -1,7 +1,8 @@
 import { createServerSupabaseClient } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET() {
   try {
@@ -15,18 +16,21 @@ export async function GET() {
     if (error || !data) {
       return NextResponse.json(
         { enabled: false, agent_name: 'Asistente', agent_avatar: '🏥', primary_color: '#293f92', welcome_message: {}, suggested_questions: {} },
-        { status: 200 }
+        { status: 200, headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
       );
     }
 
     return NextResponse.json(data, {
-      headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120' },
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma': 'no-cache',
+      },
     });
   } catch (error) {
     console.error('Chat config API error:', error);
     return NextResponse.json(
       { enabled: false, agent_name: 'Asistente', agent_avatar: '🏥', primary_color: '#293f92', welcome_message: {}, suggested_questions: {} },
-      { status: 200 }
+      { status: 200, headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
     );
   }
 }
