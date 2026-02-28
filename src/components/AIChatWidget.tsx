@@ -235,8 +235,8 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
       >
         <div className="bg-white rounded-2xl shadow-2xl w-[calc(100vw-16px)] sm:w-[380px] max-w-[380px] overflow-hidden border border-gray-200 flex flex-col" style={{ maxHeight: '75vh' }}>
           {/* Header */}
-          <div className="text-white shrink-0 relative" style={{ backgroundColor: primaryColor }}>
-            <div className="flex items-center justify-end gap-1 px-3 pt-2">
+          <div className="text-white shrink-0 relative pt-6 pb-5 px-4" style={{ backgroundColor: primaryColor }}>
+            <div className="absolute top-2 right-2 flex items-center gap-1 z-10">
               {messages.length > 0 && (
                 <button
                   onClick={resetChat}
@@ -257,15 +257,17 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
                 </svg>
               </button>
             </div>
-            <div className="flex flex-col items-center pb-4 -mt-1">
-              <div className="w-16 h-16 rounded-full overflow-hidden border-3 border-white/40 shadow-lg">
+            <div className="flex items-center gap-4">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-3 border-white/50 shadow-xl shrink-0 flex-shrink-0">
                 <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
               </div>
-              <h4 className="font-bold text-base mt-2">Marta</h4>
-              <p className="text-xs text-white/80 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
-                {lang === 'es' ? 'Asistente virtual' : lang === 'fr' ? 'Assistante virtuelle' : lang === 'de' ? 'Virtuelle Assistentin' : lang === 'pt' ? 'Assistente virtual' : 'Virtual assistant'}
-              </p>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-bold text-lg">Marta</h4>
+                <p className="text-sm text-white/90 flex items-center gap-1.5 mt-0.5">
+                  <span className="w-2 h-2 bg-green-400 rounded-full shrink-0"></span>
+                  {lang === 'es' ? 'Asistente virtual' : lang === 'fr' ? 'Assistante virtuelle' : lang === 'de' ? 'Virtuelle Assistentin' : lang === 'pt' ? 'Assistente virtual' : 'Virtual assistant'}
+                </p>
+              </div>
             </div>
           </div>
 
