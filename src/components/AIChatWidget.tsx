@@ -259,10 +259,10 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-3 border-white/50 shadow-xl shrink-0 flex-shrink-0">
-                <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
+                <img src={MARTA_AVATAR} alt="Mar-IA" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-bold text-lg">Marta</h4>
+                <h4 className="font-bold text-lg">{config?.agent_name || 'Mar-IA'}</h4>
                 <p className="text-sm text-white/90 flex items-center gap-1.5 mt-0.5">
                   <span className="w-2 h-2 bg-green-400 rounded-full shrink-0"></span>
                   {lang === 'es' ? 'Asistente virtual' : lang === 'fr' ? 'Assistante virtuelle' : lang === 'de' ? 'Virtuelle Assistentin' : lang === 'pt' ? 'Assistente virtual' : 'Virtual assistant'}
@@ -357,7 +357,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
         onClick={() => setIsOpen(!isOpen)}
         className="fixed right-2 sm:right-4 bottom-2 sm:bottom-4 z-50 w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-lg transition-all hover:scale-110 overflow-hidden border-3"
         style={{ borderColor: primaryColor }}
-        aria-label="Chat con Marta"
+        aria-label="Chat con Mar-IA"
       >
         {isOpen ? (
           <div className="w-full h-full flex items-center justify-center text-white" style={{ backgroundColor: primaryColor }}>
@@ -366,7 +366,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             </svg>
           </div>
         ) : (
-          <img src={MARTA_AVATAR} alt="Chat con Marta" className="w-full h-full object-cover" />
+          <img src={MARTA_AVATAR} alt="Chat con Mar-IA" className="w-full h-full object-cover" />
         )}
       </button>
 
