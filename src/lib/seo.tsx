@@ -63,7 +63,7 @@ export function buildOpenGraph(locale: Locale, opts: {
     type: opts.type || 'website',
     images: opts.image
       ? [{ url: opts.image, width: 1200, height: 630, alt: opts.title }]
-      : [{ url: `${BASE_URL}/images/logo-horizontal.png`, width: 1200, height: 630, alt: 'Health4Spain' }],
+      : [{ url: `${BASE_URL}/images/h4s vertical color_recortado.webp`, width: 1200, height: 630, alt: 'Health4Spain' }],
     ...(opts.publishedTime && { publishedTime: opts.publishedTime }),
     ...(opts.authors && { authors: opts.authors }),
   };
@@ -74,7 +74,7 @@ export function buildTwitter(opts: { title: string; description: string; image?:
     card: 'summary_large_image' as const,
     title: opts.title,
     description: opts.description,
-    images: opts.image ? [opts.image] : [`${BASE_URL}/images/logo-horizontal.png`],
+    images: opts.image ? [opts.image] : [`${BASE_URL}/images/h4s vertical color_recortado.webp`],
   };
 }
 
@@ -86,7 +86,7 @@ export function organizationJsonLd() {
     '@type': 'Organization',
     name: 'Health4Spain',
     url: BASE_URL,
-    logo: `${BASE_URL}/images/logo-horizontal.png`,
+    logo: `${BASE_URL}/images/h4s vertical color_recortado.webp`,
     description: 'Conectamos extranjeros con profesionales verificados en España: abogados, seguros, inmobiliarias y gestorías.',
     contactPoint: {
       '@type': 'ContactPoint',
@@ -145,7 +145,7 @@ export function blogPostingJsonLd(opts: {
     headline: opts.title,
     description: opts.description,
     url: opts.url.startsWith('http') ? opts.url : `${BASE_URL}${opts.url}`,
-    image: opts.image || `${BASE_URL}/images/logo-horizontal.png`,
+    image: opts.image || `${BASE_URL}/images/h4s vertical color_recortado.webp`,
     datePublished: opts.publishedAt,
     dateModified: opts.publishedAt,
     author: {
@@ -155,7 +155,7 @@ export function blogPostingJsonLd(opts: {
     publisher: {
       '@type': 'Organization',
       name: 'Health4Spain',
-      logo: { '@type': 'ImageObject', url: `${BASE_URL}/images/logo-horizontal.png` },
+      logo: { '@type': 'ImageObject', url: `${BASE_URL}/images/h4s vertical color_recortado.webp` },
     },
     inLanguage: opts.locale,
     mainEntityOfPage: { '@type': 'WebPage', '@id': opts.url.startsWith('http') ? opts.url : `${BASE_URL}${opts.url}` },

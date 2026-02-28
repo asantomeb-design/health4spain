@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { ChatMessage, ChatbotPublicConfig } from '@/lib/types';
 
-const MARTA_AVATAR = '/images/chat_ia.png';
+const CHAT_AVATAR = '/images/chat_ia_logo.jpg';
 
 interface AIChatWidgetProps {
   lang?: string;
@@ -265,7 +265,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-3 border-white/50 shadow-xl shrink-0 flex-shrink-0">
-                <img src={MARTA_AVATAR} alt="Mar-IA" className="w-full h-full object-cover" />
+                <img src={CHAT_AVATAR} alt="Mar-IA" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
                 <h4 className="font-bold text-lg">{config?.agent_name || 'Mar-IA'}</h4>
@@ -372,7 +372,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             </svg>
           </div>
         ) : (
-          <img src={MARTA_AVATAR} alt="Chat con Mar-IA" className="w-full h-full object-cover" />
+          <img src={CHAT_AVATAR} alt="Chat con Mar-IA" className="w-full h-full object-cover" />
         )}
       </button>
 

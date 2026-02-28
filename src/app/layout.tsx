@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     siteName: "Health4Spain",
     images: [
       {
-        url: "/images/logo-horizontal.png",
+        url: "/images/h4s vertical color_recortado.webp",
         width: 1200,
         height: 630,
         alt: "Health4Spain",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/images/logo-horizontal.png"],
+    images: ["/images/h4s vertical color_recortado.webp"],
   },
   robots: {
     index: true,

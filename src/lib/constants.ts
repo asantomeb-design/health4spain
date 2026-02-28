@@ -14,11 +14,11 @@ export const HERO_IMAGES = {
 /** @deprecated Use HERO_IMAGES.home instead */
 export const HERO_IMAGE_URL = HERO_IMAGES.home;
 
-// Logos en WebP para mejor LCP y carga rápida
+// Logos en WebP para mejor LCP y carga rápida (todos usan el vertical)
 export const LOGO_PATHS = {
-  siglas: '/images/h4s siglas color_recortado.webp',
+  siglas: '/images/h4s vertical color_recortado.webp',
   vertical: '/images/h4s vertical color_recortado.webp',
-  horizontal: '/images/h4s horizontal_recortado.webp',
+  horizontal: '/images/h4s vertical color_recortado.webp',
 } as const;
 
 // Configuración del sitio
