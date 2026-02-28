@@ -1,7 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import type { ChatMessage, ChatbotPublicConfig } from '@/lib/types';
+
+const MARTA_AVATAR = '/images/chat_ia.png';
 
 interface AIChatWidgetProps {
   lang?: string;
@@ -236,11 +239,11 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
           <div className="text-white p-4 shrink-0" style={{ backgroundColor: primaryColor }}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0">
-                  <span className="text-xl">{config.agent_avatar || '🏥'}</span>
+                <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border-2 border-white/30">
+                  <Image src={MARTA_AVATAR} alt="Marta" width={40} height={40} className="w-full h-full object-cover" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm">{config.agent_name || 'Asistente'}</h4>
+                  <h4 className="font-bold text-sm">Marta</h4>
                   <p className="text-xs text-white/80 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
                     Online
@@ -277,8 +280,8 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             {messages.length === 0 && (
               <>
                 <div className="flex gap-2 items-start">
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-sm" style={{ backgroundColor: primaryColor + '15' }}>
-                    {config.agent_avatar || '🏥'}
+                  <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
+                    <Image src={MARTA_AVATAR} alt="Marta" width={28} height={28} className="w-full h-full object-cover" />
                   </div>
                   <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-sm max-w-[85%]">
                     <p className="text-sm text-gray-700">{welcomeMsg}</p>
@@ -306,8 +309,8 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'items-start'}`}>
                 {msg.role === 'assistant' && (
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-sm" style={{ backgroundColor: primaryColor + '15' }}>
-                    {config.agent_avatar || '🏥'}
+                  <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
+                    <Image src={MARTA_AVATAR} alt="Marta" width={28} height={28} className="w-full h-full object-cover" />
                   </div>
                 )}
                 <div
@@ -366,25 +369,25 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed right-2 sm:right-4 bottom-2 sm:bottom-4 z-50 w-12 h-12 sm:w-14 sm:h-14 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
-        style={{ backgroundColor: primaryColor }}
-        aria-label="Chat IA"
+        className="fixed right-2 sm:right-4 bottom-2 sm:bottom-4 z-50 w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-lg transition-all hover:scale-110 overflow-hidden border-3"
+        style={{ borderColor: primaryColor }}
+        aria-label="Chat con Marta"
       >
         {isOpen ? (
-          <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <div className="w-full h-full flex items-center justify-center text-white" style={{ backgroundColor: primaryColor }}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
         ) : (
-          <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-          </svg>
+          <Image src={MARTA_AVATAR} alt="Chat con Marta" width={64} height={64} className="w-full h-full object-cover" />
         )}
       </button>
 
       {/* Pulse animation */}
       {!isOpen && (
         <span
-          className="fixed right-2 sm:right-4 bottom-2 sm:bottom-4 z-40 w-12 h-12 sm:w-14 sm:h-14 rounded-full animate-ping opacity-20 pointer-events-none"
+          className="fixed right-2 sm:right-4 bottom-2 sm:bottom-4 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full animate-ping opacity-20 pointer-events-none"
           style={{ backgroundColor: primaryColor }}
         />
       )}
