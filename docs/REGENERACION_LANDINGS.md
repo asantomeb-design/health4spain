@@ -464,4 +464,4 @@ Si encuentras problemas:
 
 ---
 
-**Última actualización:** Febrero 2026
+**Última actualización:** 28 Febrero 2026

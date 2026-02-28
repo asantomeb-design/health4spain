@@ -1,6 +1,6 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 24 de Febrero 2026  
+**Fecha:** 28 de Febrero 2026  
 **Estado:** ✅ Multi-idioma (5) | SEO Completo | 644 Páginas | Production-Ready  
 **Versión:** 3.0.0
 
@@ -64,10 +64,18 @@
 | **[README.md](./supabase/README.md)** | 🗄️ Esquemas SQL | 📖 Referencia |
 | `09-expand-ciudades-contenido.sql` | 8 columnas JSONB nuevas | ✅ Ejecutado |
 | `10-expand-text-fields.sql` | Campos expandidos a TEXT | ✅ Ejecutado |
+| `11-chatbot-config.sql` | Configuración Chat IA (singleton) | ✅ Ejecutado |
+| `12-chat-messages.sql` | Historial conversaciones + ratings | ✅ Ejecutado |
 
 ---
 
 ## 🎯 Guías Rápidas por Tarea
+
+### Chat IA (Mar-IA)
+- **Widget**: `src/components/AIChatWidget.tsx` (avatar: `public/images/chat_ia_logo.jpg`)
+- **Config**: `/administrator/chat-ia` (estado on/off en BD, modelo, prompts, tablas de conocimiento)
+- **Historial**: `/administrator/chat-history`
+- **APIs**: `/api/chat`, `/api/chat/config`, `/api/chat/rate`
 
 ### Contenido de Ciudades
 
@@ -107,9 +115,9 @@
 | Claves traducción UI | 200+ |
 | Landing pages SEO | 76 |
 | Artículos blog | 30+ × 5 idiomas |
-| Tablas Supabase | 9+ |
+| Tablas Supabase | 11+ (incl. chatbot_config, chat_messages) |
 
 ---
 
-**Última actualización:** 24 de Febrero 2026  
+**Última actualización:** 28 de Febrero 2026  
 **Versión:** 3.0.0

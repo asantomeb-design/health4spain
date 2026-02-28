@@ -1,7 +1,7 @@
 # 💼 Health4Spain - Modelo de Partners y Gestión de Leads
 
 > **Documento Técnico del Modelo de Negocio**  
-> Última actualización: Enero 2026
+> Última actualización: Febrero 2026
 
 ---
 

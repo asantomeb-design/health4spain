@@ -14,9 +14,9 @@ export const HERO_IMAGES = {
 /** @deprecated Use HERO_IMAGES.home instead */
 export const HERO_IMAGE_URL = HERO_IMAGES.home;
 
-// Logos en WebP para mejor LCP y carga rápida (todos usan el vertical)
+// Logos en WebP para mejor LCP y carga rápida
 export const LOGO_PATHS = {
-  siglas: '/images/h4s vertical color_recortado.webp',
+  siglas: '/images/logo-siglas-gradient.webp',  // Navbar / menú
   vertical: '/images/h4s vertical color_recortado.webp',
   horizontal: '/images/h4s vertical color_recortado.webp',
 } as const;

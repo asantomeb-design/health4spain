@@ -32,7 +32,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 
 76 landing pages SEO + blog multiidioma + páginas de destinos con contenido completo
 
-**✅ ESTADO**: Proyecto multi-idioma, SEO completo, production-ready (24 Feb 2026)
+**✅ ESTADO**: Proyecto multi-idioma, SEO completo, production-ready (28 Feb 2026)
 
 ---
 
@@ -43,9 +43,11 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 - **Base de datos**: Supabase (PostgreSQL)
 - **Autenticación**: Supabase Auth
 - **Storage**: Supabase Storage (imágenes WebP)
+- **Logo**: Unificado en toda la web con `h4s vertical color_recortado.webp` (header, footer, Open Graph, SEO)
 - **Estilos**: Tailwind CSS
 - **Editor**: TinyMCE
-- **IA**: OpenAI GPT-4o / GPT-4o-mini
+- **IA**: OpenAI (GPT-4o, GPT-4o-mini, GPT-4.1, GPT-3.5 Turbo) para chat y generación de contenido
+- **Chat IA (Mar-IA)**: Widget flotante con asistente virtual; detección de idioma en dos agentes; contexto desde Supabase (servicios, ciudades, blog, landings); sin caché para estado activo/inactivo
 - **Optimización**: sharp (conversión WebP)
 - **i18n**: Sistema híbrido (Supabase dinámico + dictionaries.ts estático)
 
@@ -57,8 +59,8 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 health4spain/
 ├── src/
 │   ├── app/
-│   │   ├── api/                    # API Routes
-│   │   ├── administrator/          # Panel admin
+│   │   ├── api/                    # API Routes (chat, chat/config, chat/rate, leads)
+│   │   ├── administrator/          # Panel admin (Chat IA, Chat History, Blog, Leads…)
 │   │   ├── es/                     # Rutas español
 │   │   │   ├── blog/               # Blog + [slug]
 │   │   │   ├── contacto/
@@ -74,6 +76,7 @@ health4spain/
 │   │   ├── Navigation.tsx          # Navbar con selector idioma
 │   │   ├── Footer.tsx              # Footer multiidioma
 │   │   ├── HtmlLang.tsx            # Dynamic <html lang="">
+│   │   ├── AIChatWidget.tsx        # Chat Mar-IA (widget flotante, avatar chat_ia_logo.jpg)
 │   │   ├── CookieConsent.tsx       # GDPR
 │   │   ├── LandingFormEmbed.tsx    # Formulario en landings
 │   │   └── ServiceIcon.tsx         # Iconos por servicio
@@ -95,8 +98,10 @@ health4spain/
 │   ├── schema.sql                     # Esquema principal
 │   ├── 07-estructura-completa-multi-idioma.sql
 │   ├── 09-expand-ciudades-contenido.sql  # Nuevas secciones guía
-│   └── 10-expand-text-fields.sql         # Campos expandidos
-└── public/images/
+│   ├── 10-expand-text-fields.sql         # Campos expandidos
+│   ├── 11-chatbot-config.sql             # Configuración Chat IA (singleton)
+│   └── 12-chat-messages.sql              # Historial conversaciones + ratings
+└── public/images/                      # chat_ia_logo.jpg (avatar Mar-IA), favicon, logos
 ```
 
 ---
@@ -182,10 +187,23 @@ npm run images:webp                                       # PNG → WebP
 | `blog_posts` | 30+ × 5 | Artículos blog multiidioma |
 | `ciudades_catalogo` | 19 | Catálogo ciudades |
 | `servicios_catalogo` | 4 | Catálogo servicios |
-| `leads` | Variable | Leads capturados |
+| `leads` | Variable | Leads capturados (privado; no accesible por el chat) |
+| `chatbot_config` | 1 | Configuración Chat IA: enabled, modelo, prompts, tablas de conocimiento |
+| `chat_messages` | Variable | Historial de conversaciones y valoraciones (privado) |
 | `idiomas` | 5 | Idiomas activos |
 | `servicios_catalogo_traducciones` | 4 × 5 | Traducciones servicios |
 | `ciudades_catalogo_traducciones` | 19 × 5 | Traducciones ciudades |
+
+---
+
+## 🤖 Chat IA (Mar-IA)
+
+- **Widget flotante** en todas las páginas (idioma según ruta); avatar `chat_ia_logo.jpg`.
+- **Configurador** en `/administrator/chat-ia`: estado (on/off guarda en BD al instante), modelo OpenAI, temperatura, prompts, apariencia, mensajes de bienvenida, tablas de conocimiento.
+- **Historial** en `/administrator/chat-history`: conversaciones, valoración (correcta/mejorable/errónea), métricas por idioma.
+- **Dos agentes**: uno detecta idioma del mensaje; el otro responde en ese idioma usando solo tablas permitidas.
+- **Tablas de conocimiento** (solo lectura): `servicios_catalogo`, `ciudades_contenido`, `blog_posts`, `landing_pages`. Nunca: `leads`, `chat_messages`, `chatbot_config`, `partners`.
+- **Sin caché** en `/api/chat/config`; widget refetch cada 5 s para que activar/desactivar se vea al momento.
 
 ---
 
@@ -215,7 +233,7 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_ADMIN_EMAILS=admin@health4spain.com
-OPENAI_API_KEY=
+OPENAI_API_KEY=                    # Requerido para Chat Mar-IA y scripts de generación
 NEXT_PUBLIC_TINYMCE_API_KEY=
 NEXT_PUBLIC_WHATSAPP_NUMBER=34600000000
 NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
@@ -234,6 +252,6 @@ NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
 ---
 
 **Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, PRODUCTION-READY  
-**Última actualización**: 24 de Febrero 2026  
+**Última actualización**: 28 de Febrero 2026  
 **Build**: 644 páginas estáticas  
 **Licencia**: Privado - Health4Spain © 2026

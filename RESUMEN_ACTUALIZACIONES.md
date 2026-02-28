@@ -2,6 +2,15 @@
 
 ---
 
+## 🆕 Logo unificado — 28 Febrero 2026
+
+- **Logo único**: Toda la web usa `h4s vertical color_recortado.webp` (header, footer, Open Graph, Twitter Cards, JSON-LD y meta SEO).
+- **Constantes**: `LOGO_PATHS` en `src/lib/constants.ts` (siglas, horizontal, vertical) apuntan al mismo archivo.
+- **Layout y SEO**: `layout.tsx` y `src/lib/seo.tsx` usan el logo vertical para og:image y datos estructurados.
+- **Documentación**: README, INDICE_DOCUMENTACION, ESTADO_PROYECTO, scripts/README, supabase/README y `public/images/README.md` actualizados (fechas 28 Feb 2026; imágenes/README describe hero, logo y chat).
+
+---
+
 ## 🆕 Multi-Idioma Completo + Contenido Ciudades — 19-24 Febrero 2026
 
 ### 1. **Contenido Exhaustivo de 19 Ciudades**
@@ -123,6 +132,6 @@
 
 ---
 
-**Fecha de actualización:** 24 de Febrero 2026  
+**Fecha de actualización:** 28 de Febrero 2026  
 **Estado:** ✅ MULTI-IDIOMA + SEO COMPLETO + PRODUCTION-READY  
-**Versión:** 3.0.0
+**Versión:** 3.0.1

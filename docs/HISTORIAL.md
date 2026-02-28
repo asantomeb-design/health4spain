@@ -1,5 +1,16 @@
 # Historial de Desarrollo - Health4Spain
 
+## Versión 3.0.1 (28 Febrero 2026)
+
+### Logo unificado
+
+- **Logo único**: Toda la web usa `h4s vertical color_recortado.webp` como logo.
+- **Constantes**: En `src/lib/constants.ts`, `LOGO_PATHS.siglas`, `LOGO_PATHS.horizontal` y `LOGO_PATHS.vertical` apuntan al mismo archivo.
+- **Uso**: Header/navegación, footer, Open Graph, Twitter Cards, JSON-LD y meta SEO (layout y `src/lib/seo.tsx`).
+- **Documentación**: README e índices actualizados; `public/images/README.md` describe hero, logo y resto de imágenes.
+
+---
+
 ## Versión 2.6.0 (12 Febrero 2026)
 
 ### Formulario Embebido en Landings

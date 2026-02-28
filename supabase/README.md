@@ -1,6 +1,6 @@
 # Configuración de Supabase para Health4Spain
 
-**Última actualización:** 24 Febrero 2026
+**Última actualización:** 28 Febrero 2026
 
 ---
 
@@ -28,8 +28,10 @@ En **SQL Editor**, ejecutar en orden:
 | 8 | `08-traducciones-ciudades-catalogo.sql` | Traducciones catálogos EN/FR/DE/PT |
 | 9 | `09-expand-ciudades-contenido.sql` | 8 columnas JSONB (guía migración completa) |
 | 10 | `10-expand-text-fields.sql` | Campos expandidos a TEXT (meta, coste_vida, etc.) |
-| 11 | `rls-policies.sql` | Row Level Security |
-| 12 | `storage-policies.sql` | Políticas Storage |
+| 11 | `11-chatbot-config.sql` | Tabla `chatbot_config` (configuración Chat IA, singleton) |
+| 12 | `12-chat-messages.sql` | Tabla `chat_messages` (historial conversaciones + ratings) |
+| 13 | `rls-policies.sql` | Row Level Security |
+| 14 | `storage-policies.sql` | Políticas Storage |
 
 ## 3. Tablas Principales
 
@@ -44,6 +46,8 @@ En **SQL Editor**, ejecutar en orden:
 | `idiomas` | Idiomas activos (5) | - |
 | `servicios_catalogo_traducciones` | Nombres servicios traducidos | 5 idiomas |
 | `ciudades_catalogo_traducciones` | Nombres ciudades traducidos | 5 idiomas |
+| `chatbot_config` | Configuración Chat IA (enabled, modelo, prompts, tablas conocimiento) | 1 fila |
+| `chat_messages` | Historial conversaciones Mar-IA + valoración (correcta/mejorable/errónea) | Variable |
 
 ### ciudades_contenido (22 campos)
 

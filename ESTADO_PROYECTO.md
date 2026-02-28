@@ -1,6 +1,6 @@
 # 📊 Estado del Proyecto Health4Spain
 
-**Fecha de última actualización:** 24 de Febrero 2026
+**Fecha de última actualización:** 28 de Febrero 2026
 
 ---
 
@@ -16,6 +16,7 @@
 - ✅ **76 landing pages SEO** (4 servicios × 19 ciudades)
 - ✅ **Blog multiidioma** con artículos traducidos
 - ✅ **Formulario embebido** en landings (conversión directa)
+- ✅ **Chat IA (Mar-IA)**: widget flotante, configurador en admin, historial y valoraciones, detección de idioma en dos agentes, contexto desde BD (servicios, ciudades, blog, landings); estado on/off persistido en BD y sin caché
 
 ---
 
@@ -125,6 +126,8 @@
 | `servicios_catalogo_traducciones` | 20 | 5 |
 | `idiomas` | 5 | - |
 | `leads` | Variable | - |
+| `chatbot_config` | 1 | Configuración Chat IA (singleton) |
+| `chat_messages` | Variable | Historial conversaciones + ratings |
 
 ### Migraciones SQL Ejecutadas
 
@@ -135,6 +138,8 @@
 5. `08-traducciones-ciudades-catalogo.sql` - Traducciones catálogos
 6. `09-expand-ciudades-contenido.sql` - 8 nuevas columnas JSONB (guía completa)
 7. `10-expand-text-fields.sql` - Campos TEXT expandidos
+8. `11-chatbot-config.sql` - Tabla configuración Chat IA
+9. `12-chat-messages.sql` - Tabla historial conversaciones
 
 ---
 
@@ -200,9 +205,10 @@ npm run check-landings
 - ✅ SEO exhaustivo (JSON-LD, hreflang, OG, canonicals)
 - ✅ Blog traducido a 4 idiomas
 - ✅ Traducción automática con OpenAI
+- ✅ Chat IA Mar-IA: widget, configurador, historial, dos agentes idioma, tablas de conocimiento y bloqueo de tablas privadas
 
 ---
 
 **Estado**: ✅ MULTI-IDIOMA + SEO COMPLETO + PRODUCTION-READY  
-**Última actualización**: 24 de Febrero 2026  
+**Última actualización**: 28 de Febrero 2026  
 **Versión**: 3.0.0
