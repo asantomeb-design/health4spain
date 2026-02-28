@@ -45,16 +45,16 @@ export const metadata: Metadata = {
     siteName: "Health4Spain",
     images: [
       {
-        url: "/images/h4s vertical color_recortado.webp",
+        url: "/images/hero-servicios.webp",
         width: 1200,
         height: 630,
-        alt: "Health4Spain",
+        alt: "Health4Spain - Servicios para extranjeros en España",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/images/h4s vertical color_recortado.webp"],
+    images: ["/images/hero-servicios.webp"],
   },
   robots: {
     index: true,
