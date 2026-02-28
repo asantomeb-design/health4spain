@@ -71,15 +71,15 @@ export default function Header() {
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-[5%]">
-        <div className="flex items-center justify-between min-h-[225px] py-2">
+        <div className="flex items-center justify-between h-16 lg:h-20">
           {/* LOGO */}
           <Link href={`/${currentLang}`} className="flex items-center gap-2">
             <Image
               src={LOGO_PATHS.siglas}
               alt="H4S - Health4Spain"
-              height={225}
-              width={450}
-              className="h-[225px] w-auto"
+              height={80}
+              width={160}
+              className="max-h-11 w-auto h-auto"
               priority
               fetchPriority="high"
             />

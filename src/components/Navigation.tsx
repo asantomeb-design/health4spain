@@ -63,9 +63,9 @@ export default function Navigation() {
     <>
       <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between min-h-[250px] py-2">
+          <div className="flex items-center justify-between h-20">
             <Link href={`/${currentLang}`} className="flex items-center">
-              <Image src={LOGO_PATHS.siglas} alt="H4S - Health4Spain" height={250} width={600} className="h-[250px] w-auto" priority fetchPriority="high" />
+              <Image src={LOGO_PATHS.siglas} alt="H4S - Health4Spain" height={80} width={160} className="max-h-11 w-auto h-auto" priority fetchPriority="high" />
             </Link>
 
             <nav className="hidden md:flex items-center gap-8">
@@ -99,14 +99,14 @@ export default function Navigation() {
         </div>
       </header>
 
-      <div className="h-[250px]" />
+      <div className="h-20" />
 
       {isMenuOpen && (
         <div className="fixed inset-0 z-[999] md:hidden">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)} />
           <div className="absolute top-0 bottom-0 right-0 w-full max-w-sm bg-white shadow-2xl overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <Image src={LOGO_PATHS.siglas} alt="H4S" height={200} width={480} className="h-[200px] w-auto" />
+              <Image src={LOGO_PATHS.siglas} alt="H4S" height={64} width={128} className="max-h-10 w-auto h-auto" />
               <button onClick={() => setIsMenuOpen(false)} className="p-2 text-gray-500 hover:text-gray-700">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
