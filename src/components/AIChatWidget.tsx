@@ -235,41 +235,37 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
       >
         <div className="bg-white rounded-2xl shadow-2xl w-[calc(100vw-16px)] sm:w-[380px] max-w-[380px] overflow-hidden border border-gray-200 flex flex-col" style={{ maxHeight: '75vh' }}>
           {/* Header */}
-          <div className="text-white p-4 shrink-0" style={{ backgroundColor: primaryColor }}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border-2 border-white/30">
-                  <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm">Marta</h4>
-                  <p className="text-xs text-white/80 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
-                    Online
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1">
-                {messages.length > 0 && (
-                  <button
-                    onClick={resetChat}
-                    className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
-                    title={lang === 'es' ? 'Nuevo chat' : lang === 'fr' ? 'Nouveau chat' : lang === 'de' ? 'Neuer Chat' : lang === 'pt' ? 'Novo chat' : 'New chat'}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                  </button>
-                )}
+          <div className="text-white shrink-0 relative" style={{ backgroundColor: primaryColor }}>
+            <div className="flex items-center justify-end gap-1 px-3 pt-2">
+              {messages.length > 0 && (
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={resetChat}
                   className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
+                  title={lang === 'es' ? 'Nuevo chat' : lang === 'fr' ? 'Nouveau chat' : lang === 'de' ? 'Neuer Chat' : lang === 'pt' ? 'Novo chat' : 'New chat'}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
                 </button>
+              )}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex flex-col items-center pb-4 -mt-1">
+              <div className="w-16 h-16 rounded-full overflow-hidden border-3 border-white/40 shadow-lg">
+                <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
               </div>
+              <h4 className="font-bold text-base mt-2">Marta</h4>
+              <p className="text-xs text-white/80 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+                {lang === 'es' ? 'Asistente virtual' : lang === 'fr' ? 'Assistante virtuelle' : lang === 'de' ? 'Virtuelle Assistentin' : lang === 'pt' ? 'Assistente virtual' : 'Virtual assistant'}
+              </p>
             </div>
           </div>
 
@@ -278,17 +274,11 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             {/* Welcome message */}
             {messages.length === 0 && (
               <>
-                <div className="flex gap-2 items-start">
-                  <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
-                    <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-sm max-w-[85%]">
-                    <p className="text-sm text-gray-700">{welcomeMsg}</p>
-                  </div>
+                <div className="bg-white rounded-2xl px-4 py-2.5 shadow-sm">
+                  <p className="text-sm text-gray-700">{welcomeMsg}</p>
                 </div>
-                {/* Suggested questions */}
                 {suggestions.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 ml-9">
+                  <div className="flex flex-wrap gap-1.5">
                     {suggestions.map((q, i) => (
                       <button
                         key={i}
@@ -306,12 +296,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
 
             {/* Chat messages */}
             {messages.map((msg, i) => (
-              <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'items-start'}`}>
-                {msg.role === 'assistant' && (
-                  <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
-                    <img src={MARTA_AVATAR} alt="Marta" className="w-full h-full object-cover" />
-                  </div>
-                )}
+              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div
                   className={`rounded-2xl px-4 py-2.5 max-w-[85%] ${
                     msg.role === 'user'
