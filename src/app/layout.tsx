@@ -23,6 +23,7 @@ const ubuntu = Ubuntu({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.health4spain.com'),
+  manifest: '/manifest.json',
   title: {
     default: "Health4Spain - Tu Nueva Vida en España",
     template: "%s | Health4Spain"
@@ -32,8 +33,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Health4Spain" }],
   creator: "Health4Spain",
   icons: {
-    icon: '/icon.png',
-    apple: '/icon.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    apple: '/apple-icon.png',
   },
   openGraph: {
     type: "website",
