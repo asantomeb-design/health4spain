@@ -1,0 +1,787 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================
+   HEALTH4SPAIN - Modern Minimalist Design
+   Estilo: Ultra minimalista, 80% espacio blanco
+   Colores: Negro, Blanco, Azul claro acento (#3bbdda), Azul (#293f92)
+   Tipografía: System fonts, protagonista del diseño
+   ============================================= */
+
+/* =============================================
+   CSS CUSTOM PROPERTIES - MINIMALIST
+   ============================================= */
+:root {
+  /* Colores minimalistas */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-accent: #3bbdda;
+  --color-blue: #293f92;
+  --color-blue-light: #f0f2f9;
+  --color-gray-light: #fafafa;
+  --color-gray-border: #e5e5e5;
+  --color-gray-text: #666666;
+  
+  /* Espaciado generoso (80% espacio blanco) */
+  --section-padding: 8rem;
+  --section-padding-mobile: 4rem;
+  
+  /* Sin bordes redondeados */
+  --radius: 0;
+}
+
+/* =============================================
+   BASE STYLES - MINIMALIST
+   ============================================= */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  color: var(--color-black);
+  line-height: 1.5;
+  background-color: var(--color-white);
+}
+
+/* Ocultar botón flotante cuando el formulario está activo */
+body.form-active .sticky-cta-mobile {
+  display: none;
+}
+
+/* Formulario activo: main se adapta al contenido, sin espacio blanco extra */
+body.form-active main {
+  min-height: auto !important;
+}
+
+/* Padding inferior en móvil para el botón flotante */
+@media (max-width: 767px) {
+  body main {
+    padding-bottom: 80px;
+  }
+  
+  /* No padding cuando el formulario está activo (botón oculto) */
+  body.form-active main {
+    padding-bottom: 0;
+  }
+
+  /* Página contacto: sin padding extra, sin espacio blanco antes del footer */
+  body.contacto-page main {
+    padding-bottom: 0;
+    min-height: auto !important;
+  }
+}
+
+/* Títulos: tipografía system, peso bold, spacing ajustado */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.1;
+  /* Color principal para todos los encabezados */
+  color: #293f92;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 1.875rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+@media (min-width: 768px) {
+  h1 { font-size: 3.5rem; }
+  h2 { font-size: 2.5rem; }
+  h3 { font-size: 2rem; }
+}
+
+/* =============================================
+   SECTION SPACING - CONDENSADO Y OPTIMIZADO
+   ============================================= */
+@layer components {
+  /* Sección estándar - reducido significativamente */
+  .section {
+    @apply py-8 md:py-16;
+  }
+  
+  /* Sección con fondo gris claro */
+  .section-alt {
+    @apply py-8 md:py-16 bg-gray-50;
+  }
+  
+  /* Sección con fondo azul claro */
+  .section-blue-light {
+    @apply py-8 md:py-16;
+    background: var(--color-blue-light);
+  }
+
+  /* Sección con fondo azul oscuro */
+  .section-blue-dark {
+    @apply py-8 md:py-16 text-white;
+    background: var(--color-blue);
+  }
+  
+  /* Container base */
+  .container-base {
+    @apply max-w-7xl mx-auto px-6 md:px-12;
+  }
+  
+  /* Container más estrecho */
+  .container-narrow {
+    @apply max-w-4xl mx-auto px-6 md:px-12;
+  }
+}
+
+/* =============================================
+   BUTTONS - MINIMALIST (solo bordes inferiores)
+   ============================================= */
+@layer components {
+  /* Botón minimal con borde inferior accent */
+  .btn-minimal {
+    @apply inline-block py-2 px-0 text-black font-semibold border-b-3 border-accent hover:border-b-4 transition-all duration-200;
+  }
+  
+  /* Botón minimal grande */
+  .btn-minimal-lg {
+    @apply btn-minimal text-lg md:text-xl py-3;
+  }
+  
+  /* Botón para fondo negro/azul oscuro */
+  .btn-minimal-white {
+    @apply inline-block py-2 px-0 text-white font-semibold border-b-3 border-accent hover:border-b-4 transition-all duration-200;
+  }
+  
+  /* Botón ghost minimalista */
+  .btn-ghost-minimal {
+    @apply inline-block py-2 px-4 text-black hover:opacity-50 transition-opacity duration-200;
+  }
+}
+
+/* =============================================
+   CARDS - MINIMALIST (sin sombras, solo bordes)
+   ============================================= */
+@layer components {
+  .card-minimal {
+    @apply bg-white border-t-3 border-accent pt-6;
+  }
+  
+  .card-minimal-hover {
+    @apply hover:opacity-70 transition-opacity duration-200 cursor-pointer;
+  }
+}
+
+/* =============================================
+   SERVICE LIST - MINIMALIST
+   ============================================= */
+@layer components {
+  .service-list-minimal {
+    @apply border-t border-gray-300;
+  }
+  
+  .service-item-minimal {
+    @apply py-6 md:py-8 border-b border-gray-300 grid grid-cols-[auto_1fr_auto] gap-6 md:gap-8 items-center;
+  }
+  
+  .service-number {
+    @apply text-2xl md:text-3xl font-bold text-accent;
+  }
+  
+  .service-arrow {
+    @apply text-base md:text-lg font-semibold text-gray-600;
+  }
+  
+  /* Override para service-item-minimal (/servicios): mismo tamaño que home */
+  .service-item-minimal .service-arrow {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666666;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    display: inline-block;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .service-item-minimal:hover .service-arrow {
+    color: var(--color-accent);
+  }
+  
+  /* En móvil, separación moderada cuando el layout es columna */
+  @media (max-width: 768px) {
+    .service-item-minimal .service-arrow {
+      margin-top: 1.25rem;
+      padding-top: 0.75rem;
+    }
+  }
+}
+
+/* =============================================
+   SERVICE GRID 2x2 - HOME
+   ============================================= */
+.service-grid-2x2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.service-card {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-top: 3px solid var(--color-accent);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.service-card .service-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 0.25rem;
+}
+
+.service-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.service-card p {
+  font-size: 1rem;
+  color: var(--color-gray-text);
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.service-card .service-arrow {
+  align-self: flex-end;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #666666;
+  transition: transform 0.2s ease;
+}
+
+.service-card:hover .service-arrow {
+  transform: translateX(4px);
+  color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  .service-grid-2x2 {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* =============================================
+   STATS SECTION - MINIMALIST (fondo negro)
+   ============================================= */
+@layer components {
+  .stats-minimal {
+    @apply bg-black text-white py-16 md:py-32;
+  }
+  
+  .stat-number {
+    @apply text-5xl md:text-7xl font-bold leading-none mb-2;
+  }
+  
+  .stat-label {
+    @apply text-sm uppercase tracking-widest text-gray-400;
+  }
+}
+
+/* =============================================
+   NAV - MINIMALIST
+   ============================================= */
+@layer components {
+  .nav-minimal {
+    @apply flex justify-between items-center py-8 md:py-12;
+  }
+  
+  .logo-minimal {
+    @apply text-xl md:text-2xl font-bold tracking-tight;
+  }
+  
+  .nav-links-minimal {
+    @apply flex gap-8 md:gap-12;
+  }
+  
+  .nav-link-minimal {
+    @apply text-sm md:text-base font-medium hover:opacity-50 transition-opacity duration-200;
+  }
+}
+
+/* =============================================
+   FORMS - MINIMALIST
+   ============================================= */
+input, textarea, select {
+  @apply transition-all duration-200;
+}
+
+input:focus, textarea:focus, select:focus {
+  @apply outline-none border-b-2 border-black;
+}
+
+@layer components {
+  .form-input-minimal {
+    @apply w-full px-0 py-3 border-0 border-b border-gray-300 focus:border-black transition-all duration-200 bg-transparent;
+  }
+  
+  .form-label-minimal {
+    @apply block text-sm font-medium text-black mb-2 uppercase tracking-wide;
+  }
+}
+
+/* =============================================
+   HERO SECTION CON IMAGEN DE FONDO
+   ============================================= */
+.hero-with-image {
+  position: relative;
+  min-height: 55vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 6%;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-gray-border);
+}
+
+.hero-with-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(41, 63, 146, 0.3) 100%);
+  pointer-events: none;
+}
+
+.hero-content-box {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  clip-path: polygon(0 0, calc(100% - 2rem) 0, 100% 2rem, 100% 100%, 0 100%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* Hero compacto: mitad de altura para subpáginas (servicios, destinos) */
+.hero-with-image.hero-compact {
+  min-height: 28vh;
+  padding: 3rem 6%;
+}
+
+@media (max-width: 768px) {
+  .hero-with-image {
+    min-height: 60vh;
+    padding: 3rem 5%;
+    background-position: center;
+  }
+
+  .hero-with-image.hero-compact {
+    min-height: auto;
+    padding: 2.5rem 5%;
+  }
+
+  .hero-content-box {
+    padding: 1.5rem 1.25rem;
+    clip-path: polygon(0 0, calc(100% - 1.25rem) 0, 100% 1.25rem, 100% 100%, 0 100%);
+    width: 100%;
+  }
+  
+  /* Ajustar estadísticas en hero móvil */
+  .hero-content-box h1 {
+    font-size: 2.25rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .hero-content-box p {
+    font-size: 0.95rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+  
+  .hero-content-box .text-4xl {
+    font-size: 1.75rem !important;
+  }
+  
+  .hero-content-box .text-3xl {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* =============================================
+   TRUST/NETWORK SECTION CON ICONOS
+   ============================================= */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 4rem auto 0;
+}
+
+.trust-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 2rem;
+  background: var(--color-white);
+  border: 2px solid var(--color-gray-border);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.trust-item:hover {
+  border-color: var(--color-blue);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(41, 63, 146, 0.1);
+}
+
+.trust-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--color-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.trust-number {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-blue);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.trust-label {
+  font-size: 1.05rem;
+  color: var(--color-gray-text);
+  font-weight: 500;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .trust-item {
+    padding: 2rem 1.5rem;
+  }
+
+  .trust-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+  }
+
+  .trust-number {
+    font-size: 2.75rem;
+  }
+
+  .trust-label {
+    font-size: 0.95rem;
+  }
+}
+
+/* =============================================
+   PROFILE CARDS CON HOVER MEJORADO
+   ============================================= */
+.profile-card {
+  background: white;
+  padding: 3rem 2.5rem;
+  border-top: 3px solid var(--color-accent);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: block;
+}
+
+.profile-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* =============================================
+   DESTINOS SECTION CON COLUMNAS
+   ============================================= */
+.destinos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.destinos-columnas > div > h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--color-accent);
+  color: var(--color-blue);
+  font-weight: 700;
+}
+
+.destinos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 2px solid var(--color-gray-border);
+}
+
+.destinos-lista a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.125rem 0.75rem;
+  border-bottom: 1px solid var(--color-gray-border);
+  text-decoration: none;
+  color: var(--color-black);
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  background: white;
+  min-height: 56px;
+}
+
+.destinos-lista a:hover {
+  color: var(--color-accent);
+  padding-left: 1.25rem;
+  background: var(--color-gray-light);
+}
+
+.destinos-lista a span {
+  font-size: 1.125rem;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+  color: var(--color-gray-text);
+}
+
+.destinos-lista a:hover span {
+  transform: translateX(4px);
+  color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  .destinos-columnas {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 0 1rem;
+  }
+  
+  .destinos-columnas > div > h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
+  
+  .destinos-lista a {
+    padding: 1.25rem 1rem;
+    font-size: 1.3rem;
+    min-height: 64px;
+    font-weight: 700;
+  }
+  
+  .destinos-lista a:hover {
+    padding-left: 1.5rem;
+  }
+  
+  .destinos-lista a span {
+    font-size: 1rem;
+    margin-left: 1rem;
+    font-weight: 600;
+  }
+}
+
+/* =============================================
+   TIMELINE / HOW IT WORKS
+   ============================================= */
+.timeline {
+  max-width: 1100px;
+  margin: 3rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+
+.timeline-item {
+  text-align: center;
+}
+
+.timeline-number {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 1.5rem;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .timeline {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .timeline-number {
+    font-size: 3rem;
+  }
+}
+
+/* =============================================
+   BANNER CTA CON BENEFITS
+   ============================================= */
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.benefit-icon {
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  flex-shrink: 0;
+  background: white;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+/* =============================================
+   BACK TO TOP BUTTON
+   ============================================= */
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  width: 56px;
+  height: 56px;
+  background: var(--color-blue);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(41, 63, 146, 0.3);
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 100;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  background: var(--color-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(59, 189, 218, 0.4);
+}
+
+/* En móvil: más alto z-index y posición ajustada */
+@media (max-width: 768px) {
+  .back-to-top {
+    width: 48px;
+    height: 48px;
+    bottom: 8rem;
+    left: 1.5rem;
+    font-size: 1.25rem;
+    z-index: 1000;
+  }
+}
+
+/* =============================================
+   UTILITIES - MINIMALIST
+   ============================================= */
+@layer utilities {
+  /* Filtro para convertir emojis a un solo color (azul corporativo #293f92) */
+  .emoji-blue {
+    filter: sepia(1) hue-rotate(190deg) saturate(5) brightness(0.6) contrast(1.2);
+  }
+  
+  /* Text balance para títulos */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Border utilities */
+  .border-b-3 {
+    border-bottom-width: 3px;
+  }
+  
+  .border-b-4 {
+    border-bottom-width: 4px;
+  }
+  
+  .border-t-3 {
+    border-top-width: 3px;
+  }
+  
+  .border-l-3 {
+    border-left-width: 3px;
+  }
+}
+
+/* =============================================
+   REDUCED MOTION
+   ============================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 768px) {
+  h1 { font-size: 2.25rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.35rem; }
+  
+  .service-item-minimal {
+    @apply grid-cols-1 gap-3;
+  }
+  
+  /* Padding para el botón fijo móvil */
+  main {
+    padding-bottom: 80px;
+  }
+}
