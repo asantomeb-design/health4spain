@@ -247,7 +247,6 @@ function Step3({ formData, updateFormData, errors, t }: StepProps) {
 }
 
 function Step4({ formData, updateFormData, errors, t }: StepProps) {
-  const presupuestoIds = Object.keys(t.presupuestos) as Array<keyof typeof t.presupuestos>;
   const urgenciaIds = Object.keys(t.urgencias) as Array<keyof typeof t.urgencias>;
 
   return (
@@ -257,26 +256,6 @@ function Step4({ formData, updateFormData, errors, t }: StepProps) {
         <p className="text-sm md:text-base text-[#6b7280]">{t.step4Subtitle}</p>
       </div>
       <div className="space-y-4">
-        <div>
-          <label className="block text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-2">{t.labelPresupuesto}</label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-            {presupuestoIds.map((id) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => updateFormData('presupuesto', id)}
-                className={`p-2.5 md:p-3 border-2 rounded-xl text-center transition-all duration-200 cursor-pointer ${
-                  formData.presupuesto === id
-                    ? 'border-[#1a56db] bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] shadow-[0_4px_12px_rgba(26,86,219,0.15)]'
-                    : 'border-gray-200 bg-white hover:border-[#1a56db] hover:bg-[#eff6ff]'
-                }`}
-              >
-                <span className={`text-xs md:text-sm block ${formData.presupuesto === id ? 'font-bold text-[#111827]' : 'font-semibold text-[#374151]'}`}>{t.presupuestos[id]}</span>
-              </button>
-            ))}
-          </div>
-          {errors.presupuesto && <p className="text-accent text-xs mt-1">{errors.presupuesto}</p>}
-        </div>
         <div>
           <label className="block text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-2">{t.labelUrgencia}</label>
           <div className="grid grid-cols-2 gap-2 mt-2">
@@ -419,7 +398,6 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
   };
 
   const validateBudget = (newErrors: Partial<Record<keyof FormData, string>>) => {
-    if (!formData.presupuesto) newErrors.presupuesto = t.errorPresupuesto;
     if (!formData.urgencia) newErrors.urgencia = t.errorUrgencia;
   };
 

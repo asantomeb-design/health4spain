@@ -26,7 +26,6 @@ interface FormData {
   mensaje: string;
 }
 
-const PRESUPUESTO_IDS = ['menos-5000', '5000-15000', '15000-30000', 'mas-30000', 'no-seguro'];
 const URGENCIA_IDS = ['esta-semana', 'este-mes', 'proximo-trimestre', 'solo-informacion'];
 
 export default function LandingFormEmbed({ 
@@ -292,26 +291,6 @@ export default function LandingFormEmbed({
               </svg>
               {tLanding.formBack}
             </button>
-
-            <div>
-              <label className="block text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-2">{t.labelPresupuesto}</label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-                {PRESUPUESTO_IDS.map((id) => (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => updateFormData('presupuesto', id)}
-                    className={`p-2.5 md:p-3 border-2 rounded-xl text-center transition-all duration-200 cursor-pointer ${
-                      formData.presupuesto === id
-                        ? 'border-[#1a56db] bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] shadow-[0_4px_12px_rgba(26,86,219,0.15)]'
-                        : 'border-gray-200 bg-white hover:border-[#1a56db] hover:bg-[#eff6ff]'
-                    }`}
-                  >
-                    <span className={`text-xs md:text-sm block ${formData.presupuesto === id ? 'font-bold text-[#111827]' : 'font-semibold text-[#374151]'}`}>{t.presupuestos[id as keyof typeof t.presupuestos]}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
 
             <div>
               <label className="block text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-2">{t.labelUrgencia}</label>
