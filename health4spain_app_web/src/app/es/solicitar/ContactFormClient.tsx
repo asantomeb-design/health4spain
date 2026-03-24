@@ -39,6 +39,13 @@ interface StepProps {
 
 const SERVICIO_IDS = ['seguros', 'abogados', 'inmobiliarias', 'gestorias'] as const;
 const SERVICIO_ICONS: Record<string, string> = { seguros: '🏥', abogados: '⚖️', inmobiliarias: '🏠', gestorias: '📋' };
+const SERVICIO_DESCRIPTIONS: Record<string, Record<string, string>> = {
+  es: { seguros: 'Cobertura médica privada', abogados: 'Extranjería, visados, arraigo', inmobiliarias: 'Compraventa y alquiler', gestorias: 'Trámites y documentación' },
+  en: { seguros: 'Private health coverage', abogados: 'Immigration, visas, residency', inmobiliarias: 'Buying and renting', gestorias: 'Paperwork and documentation' },
+  fr: { seguros: 'Couverture médicale privée', abogados: 'Immigration, visas, résidence', inmobiliarias: 'Achat et location', gestorias: 'Formalités et documentation' },
+  de: { seguros: 'Private Krankenversicherung', abogados: 'Einwanderung, Visa, Aufenthalt', inmobiliarias: 'Kauf und Miete', gestorias: 'Formalitäten und Dokumentation' },
+  pt: { seguros: 'Cobertura médica privada', abogados: 'Imigração, vistos, residência', inmobiliarias: 'Compra e aluguer', gestorias: 'Trâmites e documentação' },
+};
 
 const PRESUPUESTO_SCORES: Record<string, number> = {
   'menos-5000': 10, '5000-15000': 20, '15000-30000': 35, 'mas-30000': 50, 'no-seguro': 15,
@@ -48,7 +55,7 @@ const URGENCIA_SCORES: Record<string, number> = {
   'esta-semana': 30, 'este-mes': 20, 'proximo-trimestre': 10, 'solo-informacion': 5,
 };
 
-function Step1({ formData, updateFormData, errors, onAutoAdvance, t }: StepProps) {
+function Step1({ formData, updateFormData, errors, onAutoAdvance, t, locale }: StepProps & { locale?: Locale }) {
   const handleServicioClick = (servicioId: string) => {
     updateFormData('servicio', servicioId);
     if (onAutoAdvance) {
@@ -56,28 +63,29 @@ function Step1({ formData, updateFormData, errors, onAutoAdvance, t }: StepProps
     }
   };
 
+  const descs = SERVICIO_DESCRIPTIONS[locale || 'es'] || SERVICIO_DESCRIPTIONS['es'];
+
   return (
     <div className="space-y-3">
-      <div className="mb-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-1">{t.step1Title}</h2>
-        <p className="text-sm md:text-base text-gray-600">{t.step1Subtitle}</p>
+      <div className="mb-4">
+        <h2 className="text-xl md:text-2xl font-extrabold mb-1 text-[#111827]">{t.step1Title}</h2>
+        <p className="text-sm md:text-base text-[#6b7280]">{t.step1Subtitle}</p>
       </div>
-      <div className="space-y-2">
+      <div className="grid grid-cols-2 gap-3">
         {SERVICIO_IDS.map((id) => (
           <button
             key={id}
             type="button"
             onClick={() => handleServicioClick(id)}
-            className={`w-full p-3 md:p-4 border-2 rounded-lg text-left transition-all flex items-center justify-between ${
+            className={`p-4 md:p-5 border-2 rounded-xl text-center transition-all duration-200 cursor-pointer ${
               formData.servicio === id
-                ? 'border-black bg-gray-50'
-                : 'border-gray-200 hover:border-gray-400'
+                ? 'border-[#1a56db] bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] shadow-[0_4px_12px_rgba(26,86,219,0.15)]'
+                : 'border-gray-200 bg-white hover:border-[#1a56db] hover:bg-[#eff6ff]'
             }`}
           >
-            <span className="text-sm md:text-base font-semibold">{t.servicios[id]}</span>
-            {formData.servicio === id && (
-              <svg className="w-6 h-6 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-            )}
+            <div className="text-3xl md:text-4xl mb-2">{SERVICIO_ICONS[id]}</div>
+            <div className="font-bold text-sm md:text-base text-[#111827]">{t.servicios[id]}</div>
+            <div className="text-[0.72rem] md:text-xs text-[#6b7280] mt-1 leading-tight">{descs[id] || ''}</div>
           </button>
         ))}
       </div>
@@ -96,26 +104,24 @@ function Step2({ formData, updateFormData, errors, ciudades = [], onAutoAdvance,
 
   return (
     <div className="space-y-3">
-      <div className="mb-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-1">{t.step2Title}</h2>
-        <p className="text-sm md:text-base text-gray-600">{t.step2Subtitle}</p>
+      <div className="mb-4">
+        <h2 className="text-xl md:text-2xl font-extrabold mb-1 text-[#111827]">{t.step2Title}</h2>
+        <p className="text-sm md:text-base text-[#6b7280]">{t.step2Subtitle}</p>
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1.5 md:gap-2 max-h-[50vh] overflow-y-auto pr-2">
+      <div className="flex flex-wrap gap-2 max-h-[50vh] overflow-y-auto pr-2">
         {ciudades.map((ciudad) => (
           <button
             key={ciudad.id}
             type="button"
             onClick={() => handleCiudadClick(ciudad.id)}
-            className={`p-2 md:p-2.5 border rounded text-left text-xs md:text-sm transition-all ${
+            className={`px-3.5 py-2 border-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
               formData.ciudad_interes === ciudad.id
-                ? 'border-black bg-gray-50 font-semibold'
-                : 'border-gray-200 hover:border-gray-400'
+                ? 'border-[#1a56db] bg-[#1a56db] text-white'
+                : 'border-gray-200 bg-white text-[#374151] hover:border-[#1a56db] hover:text-[#1a56db]'
             }`}
           >
-            <span className="block truncate">{ciudad.label}</span>
-            {formData.ciudad_interes === ciudad.id && (
-              <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-            )}
+            <span>📍</span>
+            <span>{ciudad.label}</span>
           </button>
         ))}
       </div>
@@ -137,9 +143,9 @@ function Step3({ formData, updateFormData, errors, t }: StepProps) {
 
   return (
     <div className="space-y-3">
-      <div className="mb-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-1">{t.step3Title}</h2>
-        <p className="text-sm md:text-base text-gray-600">{t.step3Subtitle}</p>
+      <div className="mb-4">
+        <h2 className="text-xl md:text-2xl font-extrabold mb-1 text-[#111827]">{t.step3Title}</h2>
+        <p className="text-sm md:text-base text-[#6b7280]">{t.step3Subtitle}</p>
       </div>
       <div className="space-y-3">
         <div>
@@ -246,52 +252,46 @@ function Step4({ formData, updateFormData, errors, t }: StepProps) {
 
   return (
     <div className="space-y-3">
-      <div className="mb-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-1">{t.step4Title}</h2>
-        <p className="text-sm md:text-base text-gray-600">{t.step4Subtitle}</p>
+      <div className="mb-4">
+        <h2 className="text-xl md:text-2xl font-extrabold mb-1 text-[#111827]">{t.step4Title}</h2>
+        <p className="text-sm md:text-base text-[#6b7280]">{t.step4Subtitle}</p>
       </div>
-      <div className="space-y-3">
+      <div className="space-y-4">
         <div>
-          <label className="form-label-minimal mb-2">{t.labelPresupuesto}</label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5 md:gap-2 mt-2">
+          <label className="block text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-2">{t.labelPresupuesto}</label>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
             {presupuestoIds.map((id) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => updateFormData('presupuesto', id)}
-                className={`p-2 md:p-2.5 border rounded text-left transition-all ${
+                className={`p-2.5 md:p-3 border-2 rounded-xl text-center transition-all duration-200 cursor-pointer ${
                   formData.presupuesto === id
-                    ? 'border-black bg-gray-50 font-semibold'
-                    : 'border-gray-200 hover:border-gray-400'
+                    ? 'border-[#1a56db] bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] shadow-[0_4px_12px_rgba(26,86,219,0.15)]'
+                    : 'border-gray-200 bg-white hover:border-[#1a56db] hover:bg-[#eff6ff]'
                 }`}
               >
-                <span className="text-xs md:text-sm block">{t.presupuestos[id]}</span>
-                {formData.presupuesto === id && (
-                  <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                )}
+                <span className={`text-xs md:text-sm block ${formData.presupuesto === id ? 'font-bold text-[#111827]' : 'font-semibold text-[#374151]'}`}>{t.presupuestos[id]}</span>
               </button>
             ))}
           </div>
           {errors.presupuesto && <p className="text-accent text-xs mt-1">{errors.presupuesto}</p>}
         </div>
         <div>
-          <label className="form-label-minimal mb-2">{t.labelUrgencia}</label>
-          <div className="grid grid-cols-2 gap-1.5 md:gap-2 mt-2">
+          <label className="block text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-2">{t.labelUrgencia}</label>
+          <div className="grid grid-cols-2 gap-2 mt-2">
             {urgenciaIds.map((id) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => updateFormData('urgencia', id)}
-                className={`p-2 md:p-2.5 border rounded text-left transition-all ${
+                className={`p-2.5 md:p-3 border-2 rounded-xl text-center transition-all duration-200 cursor-pointer ${
                   formData.urgencia === id
-                    ? 'border-black bg-gray-50 font-semibold'
-                    : 'border-gray-200 hover:border-gray-400'
+                    ? 'border-[#1a56db] bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] shadow-[0_4px_12px_rgba(26,86,219,0.15)]'
+                    : 'border-gray-200 bg-white hover:border-[#1a56db] hover:bg-[#eff6ff]'
                 }`}
               >
-                <span className="text-xs md:text-sm block">{t.urgencias[id]}</span>
-                {formData.urgencia === id && (
-                  <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                )}
+                <span className={`text-xs md:text-sm block ${formData.urgencia === id ? 'font-bold text-[#111827]' : 'font-semibold text-[#374151]'}`}>{t.urgencias[id]}</span>
               </button>
             ))}
           </div>
@@ -552,14 +552,14 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
       }
     } else if (flowType === 'from-city') {
       switch (currentStep) {
-        case 1: return <Step1 {...common} onAutoAdvance={autoAdvanceToNextStep} />;
+        case 1: return <Step1 {...common} locale={locale} onAutoAdvance={autoAdvanceToNextStep} />;
         case 2: return <Step3 {...common} />;
         case 3: return <Step4 {...common} />;
         default: return null;
       }
     } else {
       switch (currentStep) {
-        case 1: return <Step1 {...common} onAutoAdvance={autoAdvanceToNextStep} />;
+        case 1: return <Step1 {...common} locale={locale} onAutoAdvance={autoAdvanceToNextStep} />;
         case 2: return <Step2 {...common} ciudades={ciudades} onAutoAdvance={autoAdvanceToNextStep} />;
         case 3: return <Step3 {...common} />;
         case 4: return <Step4 {...common} />;
@@ -572,8 +572,8 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
     <div className="py-4 md:py-10">
       <div className="container-narrow">
         <div className="mb-6">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-medium uppercase tracking-wider text-gray-600">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs font-bold uppercase tracking-[0.1em] text-[#1a56db]">
               {(() => {
                 if (flowType === 'from-service' && currentStep === 1) {
                   return `${t.eligeCiudadPaso} ${currentStep} / ${totalSteps}`;
@@ -584,16 +584,26 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
                 }
               })()}
             </span>
+            <div className="flex gap-1.5">
+              {Array.from({ length: totalSteps }, (_, i) => (
+                <div
+                  key={i}
+                  className={`w-8 h-1.5 rounded-full transition-all duration-300 ${
+                    i < currentStep ? 'bg-[#1a56db]' : 'bg-gray-200'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
           <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#3bbdda] transition-all duration-300"
+              className="h-full bg-[#1a56db] transition-all duration-300 rounded-full"
               style={{ width: `${(currentStep / totalSteps) * 100}%` }}
             />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 p-4 md:p-6 rounded-lg">
+        <div className="bg-white border border-gray-200 p-4 md:p-6 rounded-xl">
           {/* Banner de información preseleccionada - ahora EDITABLE */}
           {(formData.servicio || formData.ciudad_interes) && currentStep > 1 && (
             <div className="mb-4 p-2.5 bg-blue-50 border border-blue-200 rounded-lg">

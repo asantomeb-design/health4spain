@@ -8,20 +8,17 @@ import { getDictionary } from '@/lib/dictionaries';
 import type { Locale } from '@/lib/routes';
 import { buildAlternates } from '@/lib/seo';
 
-const locale: Locale = 'fr';
+const locale: Locale = 'de';
 const t = getDictionary(locale);
 
 export const metadata: Metadata = {
   title: t.contact.metaTitle,
   description: t.contact.metaDesc,
-  alternates: buildAlternates(locale, '/contact'),
+  alternates: buildAlternates(locale, '/kontakt'),
 };
 
 const CONTACT_INFO = {
   email: 'contacto@health4spain.com',
-  phone: '+34 912 345 678',
-  phoneDisplay: '912 345 678',
-  whatsapp: '34912345678',
 };
 
 export default function ContactPage() {
@@ -30,7 +27,7 @@ export default function ContactPage() {
       <ContactoPageMarker />
       <section className="hero-with-image hero-compact">
         <div className="absolute inset-0 z-0">
-          <Image src={HERO_IMAGES.contacto} alt="Contact Health4Spain" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-center" />
+          <Image src={HERO_IMAGES.contacto} alt="Kontakt Health4Spain" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-center" />
         </div>
         <div className="hero-content-box">
           <h1 className="mb-4" style={{ lineHeight: '0.95' }}>{t.contact.title}</h1>
@@ -45,7 +42,7 @@ export default function ContactPage() {
 
       <section className="section-alt">
         <div className="container-narrow">
-          <Breadcrumbs items={[{ label: t.common.breadcrumbHome, href: '/fr' }, { label: t.contact.title }]} />
+          <Breadcrumbs items={[{ label: t.common.breadcrumbHome, href: '/de' }, { label: t.contact.title }]} />
           <div className="bg-white border-t-3 border-accent p-8 mb-12">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">{t.contact.howContact}</h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-4">{t.contact.howContactDesc}</p>
@@ -58,21 +55,7 @@ export default function ContactPage() {
               <p className="text-sm text-gray-600">{t.contact.emailDesc}</p>
               <div className="mt-4 text-sm text-accent group-hover:translate-x-2 transition-transform inline-flex items-center gap-1">{t.contact.sendEmail} →</div>
             </a>
-            <a href={`tel:${CONTACT_INFO.phone}`} className="profile-card group hover:border-accent transition-all">
-              <div className="mb-4"><svg className="w-12 h-12 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg></div>
-              <h3 className="text-xl font-bold mb-2">{t.contact.phone}</h3>
-              <p className="text-accent text-lg mb-3">{CONTACT_INFO.phoneDisplay}</p>
-              <p className="text-sm text-gray-600">{t.contact.phoneDesc}</p>
-              <div className="mt-4 text-sm text-accent group-hover:translate-x-2 transition-transform inline-flex items-center gap-1">{t.contact.callNow} →</div>
-            </a>
-            <a href={`https://wa.me/${CONTACT_INFO.whatsapp}`} target="_blank" rel="noopener noreferrer" className="profile-card group hover:border-accent transition-all">
-              <div className="mb-4"><svg className="w-12 h-12 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg></div>
-              <h3 className="text-xl font-bold mb-2">{t.contact.whatsapp}</h3>
-              <p className="text-accent text-lg mb-3">{CONTACT_INFO.phoneDisplay}</p>
-              <p className="text-sm text-gray-600">{t.contact.whatsappDesc}</p>
-              <div className="mt-4 text-sm text-accent group-hover:translate-x-2 transition-transform inline-flex items-center gap-1">{t.contact.openChat} →</div>
-            </a>
-            <Link href="/fr/demande" className="profile-card group hover:border-accent transition-all">
+            <Link href="/de/anfrage" className="profile-card group hover:border-accent transition-all">
               <div className="mb-4"><svg className="w-12 h-12 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>
               <h3 className="text-xl font-bold mb-2">{t.contact.onlineForm}</h3>
               <p className="text-accent text-lg mb-3">{t.contact.structuredRequest}</p>
@@ -140,7 +123,7 @@ export default function ContactPage() {
         <div className="container-narrow pb-8 md:pb-12 text-center">
           <h2 className="mb-6" style={{ color: 'white' }}>{t.contact.needHelp}</h2>
           <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">{t.contact.needHelpDesc}</p>
-          <Link href="/fr/demande" className="btn-minimal-white">{t.contact.fillForm}</Link>
+          <Link href="/de/anfrage" className="btn-minimal-white">{t.contact.fillForm}</Link>
         </div>
       </section>
 

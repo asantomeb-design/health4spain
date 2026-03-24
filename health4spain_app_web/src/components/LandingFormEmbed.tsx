@@ -294,46 +294,40 @@ export default function LandingFormEmbed({
             </button>
 
             <div>
-              <label className="form-label-minimal mb-2">{t.labelPresupuesto}</label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5 md:gap-2 mt-2">
+              <label className="block text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-2">{t.labelPresupuesto}</label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
                 {PRESUPUESTO_IDS.map((id) => (
                   <button
                     key={id}
                     type="button"
                     onClick={() => updateFormData('presupuesto', id)}
-                    className={`p-2 md:p-2.5 border rounded text-left transition-all ${
+                    className={`p-2.5 md:p-3 border-2 rounded-xl text-center transition-all duration-200 cursor-pointer ${
                       formData.presupuesto === id
-                        ? 'border-black bg-gray-50 font-semibold'
-                        : 'border-gray-200 hover:border-gray-400'
+                        ? 'border-[#1a56db] bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] shadow-[0_4px_12px_rgba(26,86,219,0.15)]'
+                        : 'border-gray-200 bg-white hover:border-[#1a56db] hover:bg-[#eff6ff]'
                     }`}
                   >
-                    <span className="text-xs md:text-sm block">{t.presupuestos[id as keyof typeof t.presupuestos]}</span>
-                    {formData.presupuesto === id && (
-                      <svg className="w-4 h-4 text-accent shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                    )}
+                    <span className={`text-xs md:text-sm block ${formData.presupuesto === id ? 'font-bold text-[#111827]' : 'font-semibold text-[#374151]'}`}>{t.presupuestos[id as keyof typeof t.presupuestos]}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="form-label-minimal mb-2">{t.labelUrgencia}</label>
-              <div className="grid grid-cols-2 gap-1.5 md:gap-2 mt-2">
+              <label className="block text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-2">{t.labelUrgencia}</label>
+              <div className="grid grid-cols-2 gap-2 mt-2">
                 {URGENCIA_IDS.map((id) => (
                   <button
                     key={id}
                     type="button"
                     onClick={() => updateFormData('urgencia', id)}
-                    className={`p-2 md:p-2.5 border rounded text-left transition-all ${
+                    className={`p-2.5 md:p-3 border-2 rounded-xl text-center transition-all duration-200 cursor-pointer ${
                       formData.urgencia === id
-                        ? 'border-black bg-gray-50 font-semibold'
-                        : 'border-gray-200 hover:border-gray-400'
+                        ? 'border-[#1a56db] bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] shadow-[0_4px_12px_rgba(26,86,219,0.15)]'
+                        : 'border-gray-200 bg-white hover:border-[#1a56db] hover:bg-[#eff6ff]'
                     }`}
                   >
-                    <span className="text-xs md:text-sm block">{t.urgencias[id as keyof typeof t.urgencias]}</span>
-                    {formData.urgencia === id && (
-                      <svg className="w-4 h-4 text-accent shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                    )}
+                    <span className={`text-xs md:text-sm block ${formData.urgencia === id ? 'font-bold text-[#111827]' : 'font-semibold text-[#374151]'}`}>{t.urgencias[id as keyof typeof t.urgencias]}</span>
                   </button>
                 ))}
               </div>

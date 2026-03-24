@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha Torrevieja — Health4Spain</title>
+<style>
+  /* ===== TOKENS H4S (extraídos de la web real) ===== */
+  :root {
+    --h4s-blue:    #1a56db;
+    --h4s-dark:    #111827;
+    --h4s-gray:    #374151;
+    --h4s-muted:   #6b7280;
+    --h4s-light:   #f9fafb;
+    --h4s-border:  #e5e7eb;
+    --h4s-green:   #059669;
+    --h4s-orange:  #d97706;
+    --h4s-red:     #dc2626;
+    --h4s-teal:    #0891b2;
+    --radius:      12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+         background: #fff; color: var(--h4s-gray); line-height: 1.6; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--h4s-dark) 0%, #1e3a5f 100%);
+    color: #fff; padding: 60px 24px 50px; text-align: center;
+  }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 5px 14px; font-size: 13px; margin-bottom: 20px; }
+  .hero h1 { font-size: clamp(1.8em,4vw,2.8em); font-weight: 800;
+    margin-bottom: 12px; letter-spacing: -0.02em; }
+  .hero p { font-size: 1.1em; opacity: 0.8; max-width: 560px; margin: 0 auto 32px; }
+  .hero-stats { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 1.8em; font-weight: 800; color: #fff; }
+  .stat-label { font-size: 0.78em; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ===== LAYOUT ===== */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+  section { padding: 48px 0; border-bottom: 1px solid var(--h4s-border); }
+
+  /* ===== SECTION HEADERS ===== */
+  .section-label { font-size: 0.75em; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--h4s-blue); margin-bottom: 8px; }
+  .section-title { font-size: 1.5em; font-weight: 800; color: var(--h4s-dark);
+    margin-bottom: 6px; }
+  .section-sub { color: var(--h4s-muted); font-size: 0.92em; margin-bottom: 28px; }
+
+  /* ===== 4 PERFILES — SELECTOR INTERACTIVO ===== */
+  .profiles-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+    margin-bottom: 28px; }
+  .profile-card {
+    border: 2px solid var(--h4s-border); border-radius: var(--radius);
+    padding: 16px 12px; text-align: center; cursor: pointer;
+    transition: all 0.2s ease; background: #fff;
+  }
+  .profile-card:hover { border-color: var(--h4s-blue); background: #eff6ff; }
+  .profile-card.active { border-color: var(--h4s-blue);
+    background: linear-gradient(135deg,#eff6ff,#dbeafe); box-shadow: 0 4px 12px rgba(26,86,219,0.15); }
+  .profile-card .emoji { font-size: 2em; margin-bottom: 8px; }
+  .profile-card .p-name { font-weight: 700; font-size: 0.88em; color: var(--h4s-dark); }
+  .profile-card .p-age { font-size: 0.75em; color: var(--h4s-blue); font-weight: 600; margin-top: 2px; }
+  .profile-card .p-desc { font-size: 0.72em; color: var(--h4s-muted); margin-top: 4px; line-height: 1.4; }
+
+  /* ===== RESULTADO PERFIL DINÁMICO ===== */
+  .profile-result { display: none; }
+  .profile-result.show { display: block; }
+
+  .result-hero {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border: 1px solid #bfdbfe; border-radius: var(--radius);
+    padding: 24px; margin-bottom: 20px;
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .result-icon { font-size: 2.5em; flex-shrink: 0; }
+  .result-title { font-size: 1.15em; font-weight: 800; color: var(--h4s-dark); margin-bottom: 4px; }
+  .result-desc { font-size: 0.88em; color: var(--h4s-gray); }
+
+  /* steps */
+  .roadmap { display: flex; flex-direction: column; gap: 0; position: relative; }
+  .roadmap::before { content: ''; position: absolute; left: 19px; top: 20px;
+    bottom: 20px; width: 2px; background: #dbeafe; }
+  .step { display: flex; gap: 16px; padding: 12px 0; position: relative; }
+  .step-dot { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85em; font-weight: 800; background: var(--h4s-blue); color: #fff;
+    position: relative; z-index: 1; }
+  .step-dot.done { background: var(--h4s-green); }
+  .step-dot.warn { background: var(--h4s-orange); }
+  .step-content { padding-top: 6px; flex: 1; }
+  .step-title { font-weight: 700; color: var(--h4s-dark); font-size: 0.92em; }
+  .step-detail { font-size: 0.82em; color: var(--h4s-muted); margin-top: 2px; }
+
+  /* servicios activados */
+  .services-active { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .svc-card {
+    border: 1px solid var(--h4s-border); border-radius: 10px;
+    padding: 14px; display: flex; align-items: flex-start; gap: 10px;
+    transition: all 0.2s;
+  }
+  .svc-card:hover { border-color: var(--h4s-blue); background: #f8faff; }
+  .svc-card.priority { border-color: var(--h4s-blue); background: #eff6ff; }
+  .svc-badge { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+  .svc-badge.blue { background: #dbeafe; }
+  .svc-badge.green { background: #d1fae5; }
+  .svc-badge.orange { background: #fef3c7; }
+  .svc-badge.purple { background: #ede9fe; }
+  .svc-name { font-weight: 700; font-size: 0.88em; color: var(--h4s-dark); }
+  .svc-sub { font-size: 0.76em; color: var(--h4s-muted); margin-top: 2px; }
+  .svc-tag { font-size: 0.68em; font-weight: 700; padding: 2px 7px;
+    border-radius: 8px; margin-top: 4px; display: inline-block; }
+  .svc-tag.prio { background: #dbeafe; color: #1e40af; }
+  .svc-tag.rec  { background: #d1fae5; color: #065f46; }
+  .svc-tag.opt  { background: #f3f4f6; color: #6b7280; }
+
+  /* ===== SELECTOR NACIONALIDAD ===== */
+  .nat-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .nat-btn {
+    border: 2px solid var(--h4s-border); border-radius: 20px;
+    padding: 6px 14px; font-size: 0.82em; cursor: pointer; background: #fff;
+    transition: all 0.18s; display: flex; align-items: center; gap: 5px;
+    font-weight: 600; color: var(--h4s-gray);
+  }
+  .nat-btn:hover { border-color: var(--h4s-blue); color: var(--h4s-blue); }
+  .nat-btn.active { border-color: var(--h4s-blue); background: var(--h4s-blue); color: #fff; }
+
+  /* nat result */
+  .nat-result { display: none; }
+  .nat-result.show { display: block; }
+  .nat-box { background: var(--h4s-light); border: 1px solid var(--h4s-border);
+    border-radius: var(--radius); padding: 20px; }
+  .nat-title { font-weight: 700; font-size: 1em; color: var(--h4s-dark); margin-bottom: 12px; }
+  .nat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .nat-item { display: flex; gap: 8px; align-items: flex-start; font-size: 0.83em; }
+  .nat-item .ni-icon { width: 22px; height: 22px; border-radius: 50%; background: #dbeafe;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 0.8em; margin-top: 1px; }
+  .ni-label { font-weight: 600; color: var(--h4s-dark); }
+  .ni-val { color: var(--h4s-muted); font-size: 0.92em; }
+
+  /* ===== DATA TABLE: COMUNIDADES ===== */
+  .comm-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+  .comm-table th { background: var(--h4s-dark); color: #fff; padding: 10px 12px;
+    text-align: left; font-weight: 600; }
+  .comm-table td { padding: 10px 12px; border-bottom: 1px solid var(--h4s-border);
+    vertical-align: top; }
+  .comm-table tr:hover td { background: var(--h4s-light); }
+  .bar { height: 6px; border-radius: 3px; background: #dbeafe; overflow: hidden; margin-top: 5px; }
+  .bar-fill { height: 100%; border-radius: 3px; background: var(--h4s-blue); }
+
+  /* ===== CTA ===== */
+  .cta-section {
+    background: linear-gradient(135deg, var(--h4s-dark) 0%, #1e3a5f 100%);
+    color: #fff; padding: 48px 24px; text-align: center; border-radius: var(--radius);
+    margin: 32px 0;
+  }
+  .cta-section h3 { font-size: 1.5em; font-weight: 800; margin-bottom: 10px; }
+  .cta-section p { opacity: 0.75; margin-bottom: 24px; }
+  .btn-primary { display: inline-block; background: var(--h4s-blue); color: #fff;
+    padding: 13px 28px; border-radius: 8px; font-weight: 700; text-decoration: none;
+    font-size: 0.95em; transition: background 0.2s; border: none; cursor: pointer; }
+  .btn-primary:hover { background: #1e40af; }
+  .btn-secondary { display: inline-block; background: rgba(255,255,255,0.12);
+    color: #fff; border: 1px solid rgba(255,255,255,0.3);
+    padding: 13px 28px; border-radius: 8px; font-weight: 700; font-size: 0.95em;
+    text-decoration: none; margin-left: 10px; cursor: pointer; transition: background 0.2s; }
+  .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width: 640px) {
+    .profiles-grid { grid-template-columns: 1fr 1fr; }
+    .services-active { grid-template-columns: 1fr; }
+    .nat-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-badge">🌊 Alicante · Costa Blanca Sur</div>
+    <h1>Vivir en Torrevieja como extranjero</h1>
+    <p>La ciudad española con mayor porcentaje de residentes extranjeros. Tu guía personalizada según tu perfil y origen.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">52%</div><div class="stat-label">Población extranjera</div></div>
+      <div class="stat"><div class="stat-num">106K</div><div class="stat-label">Habitantes</div></div>
+      <div class="stat"><div class="stat-num">+80</div><div class="stat-label">Nacionalidades</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Idiomas de atención</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- BLOQUE 1: TU PERFIL -->
+<section>
+  <div class="section-label">Paso 1 · Personaliza tu guía</div>
+  <div class="section-title">¿Cuál es tu situación?</div>
+  <div class="section-sub">Selecciona tu perfil y activamos los servicios y el roadmap que necesitas en Torrevieja.</div>
+
+  <div class="profiles-grid">
+    <div class="profile-card" onclick="selectProfile('estudiante')" id="card-estudiante">
+      <div class="emoji">🎓</div>
+      <div class="p-name">Estudiante</div>
+      <div class="p-age">18–34 años</div>
+      <div class="p-desc">Visado estudiante, homologación, trabajo parcial</div>
+    </div>
+    <div class="profile-card" onclick="selectProfile('trabajador')" id="card-trabajador">
+      <div class="emoji">💼</div>
+      <div class="p-name">Trabajador</div>
+      <div class="p-age">22–49 años</div>
+      <div class="p-desc">Empleo, arraigo, reagrupación familiar</div>
+    </div>
+    <div class="profile-card" onclick="selectProfile('prejubilado')" id="card-prejubilado">
+      <div class="emoji">🏡</div>
+      <div class="p-name">Pre-jubilado</div>
+      <div class="p-age">50–59 años</div>
+      <div class="p-desc">Segunda residencia, retiro activo, inversión</div>
+    </div>
+    <div class="profile-card" onclick="selectProfile('jubilado')" id="card-jubilado">
+      <div class="emoji">☀️</div>
+      <div class="p-name">Jubilado</div>
+      <div class="p-age">60–70+ años</div>
+      <div class="p-desc">Visado no lucrativo, sanidad privada, asentamiento</div>
+    </div>
+  </div>
+
+  <!-- RESULTADOS DINÁMICOS POR PERFIL -->
+
+  <!-- ESTUDIANTE -->
+  <div class="profile-result" id="result-estudiante">
+    <div class="result-hero">
+      <div class="result-icon">🎓</div>
+      <div>
+        <div class="result-title">Estudiante en Torrevieja — Tu roadmap de llegada</div>
+        <div class="result-desc">Torrevieja tiene una comunidad joven activa en hostelería y servicios. Ideal si buscas trabajo parcial mientras estudias en Alicante o Elche (30 min). Comunidad angloparlante muy arraigada.</div>
+      </div>
+    </div>
+    <div class="roadmap">
+      <div class="step"><div class="step-dot">1</div><div class="step-content"><div class="step-title">Antes de llegar — Visado de estudiante</div><div class="step-detail">Solicita en el consulado español de tu país. Necesitas: matrícula + seguro médico privado obligatorio + justificante de recursos.</div></div></div>
+      <div class="step"><div class="step-dot">2</div><div class="step-content"><div class="step-title">Semana 1 — Empadronamiento</div><div class="step-detail">Obligatorio en el Ayuntamiento de Torrevieja. Necesitas contrato de alquiler o carta del propietario. Imprescindible para todo lo demás.</div></div></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-content"><div class="step-title">Semana 2 — TIE (Tarjeta de Identidad de Extranjero)</div><div class="step-detail">Cita en la Comisaría de Alicante. Lleva: pasaporte, visado, empadronamiento, matrícula, seguro y fotos.</div></div></div>
+      <div class="step"><div class="step-dot warn">4</div><div class="step-content"><div class="step-title">Mes 1–2 — Cuenta bancaria + NIE activo</div><div class="step-detail">Necesario para domiciliar nóminas y alquiler. Bancos recomendados con servicio en inglés: CaixaBank, Sabadell.</div></div></div>
+      <div class="step"><div class="step-dot">5</div><div class="step-content"><div class="step-title">Trabajo parcial — Hasta 30h/semana permitidas</div><div class="step-detail">Hostelería y servicios son los sectores dominantes. Hablar inglés es una ventaja enorme en Torrevieja (52% extranjeros).</div></div></div>
+      <div class="step"><div class="step-dot done">✓</div><div class="step-content"><div class="step-title">Renovación anual del visado</div><div class="step-detail">Antes de que caduque: matrícula renovada + seguro médico + recursos económicos justificados.</div></div></div>
+    </div>
+    <div class="section-label" style="margin-top:24px;">Servicios prioritarios para tu perfil</div>
+    <div class="services-active">
+      <div class="svc-card priority"><div class="svc-badge blue">⚖️</div><div><div class="svc-name">Abogado de extranjería</div><div class="svc-sub">Visado estudiante, TIE, renovaciones</div><span class="svc-tag prio">🔴 Prioritario</span></div></div>
+      <div class="svc-card priority"><div class="svc-badge green">🏥</div><div><div class="svc-name">Seguro médico privado</div><div class="svc-sub">Obligatorio para el visado. Desde 35€/mes</div><span class="svc-tag prio">🔴 Obligatorio</span></div></div>
+      <div class="svc-card"><div class="svc-badge orange">🏠</div><div><div class="svc-name">Inmobiliaria local</div><div class="svc-sub">Habitaciones y pisos compartidos, contratos en inglés</div><span class="svc-tag rec">✅ Recomendado</span></div></div>
+      <div class="svc-card"><div class="svc-badge purple">📋</div><div><div class="svc-name">Gestoría administrativa</div><div class="svc-sub">Empadronamiento, NIE, apertura bancaria</div><span class="svc-tag rec">✅ Recomendado</span></div></div>
+    </div>
+  </div>
+
+  <!-- TRABAJADOR -->
+  <div class="profile-result" id="result-trabajador">
+    <div class="result-hero">
+      <div class="result-icon">💼</div>
+      <div>
+        <div class="result-title">Trabajador en Torrevieja — Tu roadmap laboral</div>
+        <div class="result-desc">Hostelería, comercio, servicios inmobiliarios y construcción son los sectores dominantes. Alta demanda de perfiles bilingües inglés/español. Comunidad eslava muy activa en inmobiliario y negocios.</div>
+      </div>
+    </div>
+    <div class="roadmap">
+      <div class="step"><div class="step-dot">1</div><div class="step-content"><div class="step-title">Oferta de trabajo o arraigo</div><div class="step-detail">Si tienes oferta laboral: visado de trabajo desde el consulado. Si llevas 3 años en España: solicita arraigo laboral o social.</div></div></div>
+      <div class="step"><div class="step-dot">2</div><div class="step-content"><div class="step-title">Empadronamiento en Torrevieja</div><div class="step-detail">Imprescindible. Contrato de alquiler o carta del propietario. Abre el acceso a sanidad pública, escuelas y trámites.</div></div></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-content"><div class="step-title">Alta en la Seguridad Social</div><div class="step-detail">Tu empresa lo gestiona al contratar. Si eres autónomo, alta en RETA desde el primer día.</div></div></div>
+      <div class="step"><div class="step-dot warn">4</div><div class="step-content"><div class="step-title">Reagrupación familiar (si aplica)</div><div class="step-detail">Requiere contrato laboral estable + vivienda adecuada + ingresos mínimos. Plazo: 4–8 meses. Abogado recomendado.</div></div></div>
+      <div class="step"><div class="step-dot">5</div><div class="step-content"><div class="step-title">Renovación de permisos cada 1–2 años</div><div class="step-detail">Renovar permiso de trabajo y residencia. Fundamental no caducar. Gestoría o abogado de extranjería.</div></div></div>
+      <div class="step"><div class="step-dot done">✓</div><div class="step-content"><div class="step-title">Residencia permanente a los 5 años</div><div class="step-detail">Tras 5 años de residencia legal continuada. Sin restricciones laborales. Acceso a servicios completos.</div></div></div>
+    </div>
+    <div class="section-label" style="margin-top:24px;">Servicios prioritarios para tu perfil</div>
+    <div class="services-active">
+      <div class="svc-card priority"><div class="svc-badge blue">⚖️</div><div><div class="svc-name">Abogado laboral / extranjería</div><div class="svc-sub">Arraigo, permisos, reagrupación familiar</div><span class="svc-tag prio">🔴 Prioritario</span></div></div>
+      <div class="svc-card priority"><div class="svc-badge purple">📋</div><div><div class="svc-name">Gestoría</div><div class="svc-sub">Alta autónomo, declaraciones, trámites</div><span class="svc-tag prio">🔴 Prioritario</span></div></div>
+      <div class="svc-card"><div class="svc-badge green">🏥</div><div><div class="svc-name">Seguro médico</div><div class="svc-sub">Complementario a la SS pública</div><span class="svc-tag rec">✅ Recomendado</span></div></div>
+      <div class="svc-card"><div class="svc-badge orange">🏠</div><div><div class="svc-name">Inmobiliaria</div><div class="svc-sub">Alquiler estable, contratos legales</div><span class="svc-tag rec">✅ Recomendado</span></div></div>
+    </div>
+  </div>
+
+  <!-- PRE-JUBILADO -->
+  <div class="profile-result" id="result-prejubilado">
+    <div class="result-hero">
+      <div class="result-icon">🏡</div>
+      <div>
+        <div class="result-title">Pre-jubilado en Torrevieja — Tu roadmap de segunda residencia</div>
+        <div class="result-desc">Perfil dominante en Torrevieja. Britnicos y alemanes 50–59 años con vivienda en propiedad, trabajo remoto o parcial y alta demanda de servicios médicos especializados y asesoría patrimonial.</div>
+      </div>
+    </div>
+    <div class="roadmap">
+      <div class="step"><div class="step-dot">1</div><div class="step-content"><div class="step-title">Visado de residencia no lucrativa</div><div class="step-detail">Ingresos demostrables (mínimo ~2.400€/mes) + seguro médico privado sin copago + antecedentes penales. Desde el consulado de tu país.</div></div></div>
+      <div class="step"><div class="step-dot">2</div><div class="step-content"><div class="step-title">Compra o alquiler de vivienda</div><div class="step-detail">Inmobiliarias especializadas en extranjeros con atención en inglés/alemán. Proceso completo en 4–8 semanas.</div></div></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-content"><div class="step-title">NIE + Empadronamiento + TIE</div><div class="step-detail">Obligatorio si resides más de 90 días. Abogado o gestoría lo gestionan en 2–3 semanas.</div></div></div>
+      <div class="step"><div class="step-dot warn">4</div><div class="step-content"><div class="step-title">Planificación fiscal internacional</div><div class="step-detail">Residencia fiscal española vs. tu país. Convenios de doble imposición. Asesor fiscal especializado en expatriados.</div></div></div>
+      <div class="step"><div class="step-dot">5</div><div class="step-content"><div class="step-title">Seguro médico privado completo</div><div class="step-detail">Cobertura hospitalaria sin copago obligatoria para el visado. Recomendado: DKV, Sanitas, Adeslas. Desde 80€/mes.</div></div></div>
+      <div class="step"><div class="step-dot done">✓</div><div class="step-content"><div class="step-title">Renovación bienal del permiso</div><div class="step-detail">Cada 2 años: demostrar ingresos estables y seguro médico vigente. Proceso sencillo con gestoría.</div></div></div>
+    </div>
+    <div class="section-label" style="margin-top:24px;">Servicios prioritarios para tu perfil</div>
+    <div class="services-active">
+      <div class="svc-card priority"><div class="svc-badge green">🏥</div><div><div class="svc-name">Seguro médico privado</div><div class="svc-sub">Sin copago, cobertura hospitalaria total</div><span class="svc-tag prio">🔴 Obligatorio visado</span></div></div>
+      <div class="svc-card priority"><div class="svc-badge orange">🏠</div><div><div class="svc-name">Inmobiliaria especializada</div><div class="svc-sub">Compraventa para extranjeros, NIE, notaría</div><span class="svc-tag prio">🔴 Prioritario</span></div></div>
+      <div class="svc-card"><div class="svc-badge blue">⚖️</div><div><div class="svc-name">Abogado fiscal/patrimonial</div><div class="svc-sub">Doble imposición, herencias, Golden Visa</div><span class="svc-tag rec">✅ Recomendado</span></div></div>
+      <div class="svc-card"><div class="svc-badge purple">📋</div><div><div class="svc-name">Gestoría integral</div><div class="svc-sub">NIE, TIE, empadronamiento, gestión anual</div><span class="svc-tag rec">✅ Recomendado</span></div></div>
+    </div>
+  </div>
+
+  <!-- JUBILADO -->
+  <div class="profile-result" id="result-jubilado">
+    <div class="result-hero">
+      <div class="result-icon">☀️</div>
+      <div>
+        <div class="result-title">Jubilado en Torrevieja — Tu guía de asentamiento definitivo</div>
+        <div class="result-desc">El perfil más establecido en Torrevieja. Jubilados británicos, alemanes y rusos con pensiones del norte de Europa. Alta demanda de sanidad privada, cuidados domiciliarios y servicios en tu idioma.</div>
+      </div>
+    </div>
+    <div class="roadmap">
+      <div class="step"><div class="step-dot">1</div><div class="step-content"><div class="step-title">Visado de residencia no lucrativa</div><div class="step-detail">Pensión demostrable + seguro médico sin copago + antecedentes penales. Proceso desde el consulado: 1–3 meses.</div></div></div>
+      <div class="step"><div class="step-dot">2</div><div class="step-content"><div class="step-title">Vivienda: compra o alquiler largo plazo</div><div class="step-detail">Mercado con amplia oferta para jubilados europeos. Urbanizaciones con servicios. Inmobiliaria bilingüe imprescindible.</div></div></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-content"><div class="step-title">Empadronamiento + TIE + NIE</div><div class="step-detail">Gestoría lo gestiona en 2–3 semanas. Da acceso a servicios municipales y sanitarios.</div></div></div>
+      <div class="step"><div class="step-dot warn">4</div><div class="step-content"><div class="step-title">⚠️ Coordinación de pensión extranjera</div><div class="step-detail">Declarar pensión en España. Posibles beneficios fiscales. Asesor fiscal especializado en pensionistas extranjeros.</div></div></div>
+      <div class="step"><div class="step-dot">5</div><div class="step-content"><div class="step-title">Seguro médico completo + especialidades</div><div class="step-detail">Fisioterapia, cardiología, farmacia, transporte sanitario. Clínicas privadas con atención en inglés/alemán/ruso en Torrevieja.</div></div></div>
+      <div class="step"><div class="step-dot done">✓</div><div class="step-content"><div class="step-title">Red de apoyo local en tu idioma</div><div class="step-detail">Asociaciones británicas, alemanas y rusas muy activas en Torrevieja. Clave para integración y calidad de vida.</div></div></div>
+    </div>
+    <div class="section-label" style="margin-top:24px;">Servicios prioritarios para tu perfil</div>
+    <div class="services-active">
+      <div class="svc-card priority"><div class="svc-badge green">🏥</div><div><div class="svc-name">Seguro médico senior</div><div class="svc-sub">Cobertura completa, domicilio, especialidades</div><span class="svc-tag prio">🔴 Obligatorio</span></div></div>
+      <div class="svc-card priority"><div class="svc-badge orange">🏠</div><div><div class="svc-name">Inmobiliaria bilingüe</div><div class="svc-sub">Compraventa, gestión de rentals, comunidades</div><span class="svc-tag prio">🔴 Prioritario</span></div></div>
+      <div class="svc-card"><div class="svc-badge blue">⚖️</div><div><div class="svc-name">Abogado: herencias y pensiones</div><div class="svc-sub">Testamento español, doble imposición</div><span class="svc-tag rec">✅ Recomendado</span></div></div>
+      <div class="svc-card"><div class="svc-badge purple">📋</div><div><div class="svc-name">Gestoría anual</div><div class="svc-sub">Declaración renta, renovaciones TIE</div><span class="svc-tag opt">Opcional</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOQUE 2: NACIONALIDAD -->
+<section>
+  <div class="section-label">Paso 2 · Opcional</div>
+  <div class="section-title">¿De dónde eres?</div>
+  <div class="section-sub">Cada comunidad tiene necesidades y oportunidades distintas en Torrevieja. Selecciona para ver lo específico de tu situación.</div>
+
+  <div class="nat-selector">
+    <button class="nat-btn" onclick="selectNat('britanico')" id="nat-britanico">🇬🇧 Británico · 14.4%</button>
+    <button class="nat-btn" onclick="selectNat('aleman')" id="nat-aleman">🇩🇪 Alemán · 8%</button>
+    <button class="nat-btn" onclick="selectNat('eslavo')" id="nat-eslavo">🇷🇺 Ruso/Ucraniano · 9.6%</button>
+    <button class="nat-btn" onclick="selectNat('marroqui')" id="nat-marroqui">🇲🇦 Marroquí · 5%</button>
+    <button class="nat-btn" onclick="selectNat('latino')" id="nat-latino">🇨🇴 Colombiano/Latino · 2.4%</button>
+    <button class="nat-btn" onclick="selectNat('otro')" id="nat-otro">🌍 Otra nacionalidad</button>
+  </div>
+
+  <div class="nat-result" id="nat-britanico-result">
+    <div class="nat-box">
+      <div class="nat-title">🇬🇧 Comunidad Británica en Torrevieja — Lo que debes saber</div>
+      <div class="nat-grid">
+        <div class="nat-item"><div class="ni-icon">⚠️</div><div><div class="ni-label">Post-Brexit</div><div class="ni-val">Ya no aplica libre circulación. Necesitas visado o TIE. Abogado de extranjería imprescindible.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🏥</div><div><div class="ni-label">Sanidad</div><div class="ni-val">Seguro médico privado obligatorio si no trabajas en España. EHIC ya no cubre estancias largas.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">💰</div><div><div class="ni-label">Pensiones UK</div><div class="ni-val">Se cobran en España. Declarar en Hacienda española si resides +183 días/año. Convenio fiscal UK-España.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🏠</div><div><div class="ni-label">Vivienda</div><div class="ni-val">Gran oferta de segunda mano en urbanizaciones anglófonas. Muchos vecinos compatriotas. Agentes en inglés disponibles.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">👥</div><div><div class="ni-label">Comunidad</div><div class="ni-val">Una de las más grandes. Asociaciones, pubs, clubs de golf, iglesias anglicanas, periódicos en inglés locales.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">📋</div><div><div class="ni-label">Trámite clave</div><div class="ni-val">Solicitar TIE como ciudadano de tercer país. Proceso diferente a antes del Brexit. Abogado recomendado.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nat-result" id="nat-aleman-result">
+    <div class="nat-box">
+      <div class="nat-title">🇩🇪 Comunidad Alemana en Torrevieja — Lo que debes saber</div>
+      <div class="nat-grid">
+        <div class="nat-item"><div class="ni-icon">✅</div><div><div class="ni-label">Libre circulación UE</div><div class="ni-val">Como ciudadano UE puedes residir libremente. Solo necesitas registrarte si te quedas más de 3 meses.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🏥</div><div><div class="ni-label">Sanidad</div><div class="ni-val">Tarjeta sanitaria europea válida temporalmente. Para residencia larga: seguro privado o alta en S.S. española.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">💼</div><div><div class="ni-label">Negocios</div><div class="ni-val">Perfil muy emprendedor. Consultoras, servicios inmobiliarios premium y teletrabajo de alto valor.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">💰</div><div><div class="ni-label">Fiscalidad</div><div class="ni-val">Convenio de doble imposición España-Alemania. Declarar en Hacienda española tras 183 días. Asesor fiscal necesario.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🏠</div><div><div class="ni-label">Vivienda</div><div class="ni-val">Demanda alta de calidad premium. Agentes inmobiliarios con atención en alemán disponibles en Torrevieja.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">👥</div><div><div class="ni-label">Comunidad</div><div class="ni-val">Asociaciones alemanas activas, restaurantes, clubs sociales, médicos que hablan alemán.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nat-result" id="nat-eslavo-result">
+    <div class="nat-box">
+      <div class="nat-title">🇷🇺 Comunidad Rusa/Ucraniana en Torrevieja — Lo que debes saber</div>
+      <div class="nat-grid">
+        <div class="nat-item"><div class="ni-icon">⚠️</div><div><div class="ni-label">Visados complejos</div><div class="ni-val">Ciudadanos rusos: visado Schengen requerido y restricciones actuales. Ucranianos UE: protección temporal activa.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🏠</div><div><div class="ni-label">Inversión inmobiliaria</div><div class="ni-val">Comunidad históricamente muy activa en compraventa. Agentes rusos y ucranianos establecidos en la ciudad.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">💼</div><div><div class="ni-label">Negocios</div><div class="ni-val">E-commerce internacional, servicios de belleza, comercio, asesoría de negocios para compatriotas.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">💰</div><div><div class="ni-label">Banca</div><div class="ni-val">Apertura de cuentas bancarias con restricciones para ciudadanos rusos. Gestoría especializada imprescindible.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">👥</div><div><div class="ni-label">Comunidad</div><div class="ni-val">Una de las más grandes de España. Tiendas, restaurantes rusos, médicos rusohablantes, iglesia ortodoxa.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">📋</div><div><div class="ni-label">Trámite clave</div><div class="ni-val">Abogado de extranjería especializado en ciudadanos de terceros países no UE. Proceso largo pero viable.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nat-result" id="nat-marroqui-result">
+    <div class="nat-box">
+      <div class="nat-title">🇲🇦 Comunidad Marroquí en Torrevieja — Lo que debes saber</div>
+      <div class="nat-grid">
+        <div class="nat-item"><div class="ni-icon">💼</div><div><div class="ni-label">Empleo dominante</div><div class="ni-val">Hostelería, construcción, limpieza, comercio. Alta demanda en temporada alta y servicios de mantenimiento.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">📋</div><div><div class="ni-label">Arraigo social/laboral</div><div class="ni-val">Tras 3 años en España: vía para regularizar situación. Abogado de extranjería clave.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🏠</div><div><div class="ni-label">Vivienda</div><div class="ni-val">Alquiler asequible en zonas interiores de Torrevieja. Mercado activo para perfil trabajador.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">👨‍👩‍👧</div><div><div class="ni-label">Reagrupación familiar</div><div class="ni-val">Posible tras 1 año de residencia legal + contrato laboral estable + vivienda. Proceso: 6–12 meses.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">👥</div><div><div class="ni-label">Comunidad</div><div class="ni-val">5ta comunidad de Torrevieja. Mezquita, comercios halal, redes de compatriotas bien establecidas.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">📋</div><div><div class="ni-label">Trámite clave</div><div class="ni-val">Permiso de trabajo + residencia. Renovaciones cada 1 año inicialmente. Gestoría + abogado recomendados.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nat-result" id="nat-latino-result">
+    <div class="nat-box">
+      <div class="nat-title">🇨🇴 Comunidad Colombiana/Latina en Torrevieja — Lo que debes saber</div>
+      <div class="nat-grid">
+        <div class="nat-item"><div class="ni-icon">💼</div><div><div class="ni-label">Sectores de oportunidad</div><div class="ni-val">Hostelería, cuidados, limpieza, comercio, call center. Fuerte demanda de español profesional.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🇪🇸</div><div><div class="ni-label">Ventaja lingüística</div><div class="ni-val">El español es un activo enorme en Torrevieja con 80+ nacionalidades. Mediadores culturales muy demandados.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">📋</div><div><div class="ni-label">Arraigo y regularización</div><div class="ni-val">Vías de regularización claras. Arraigo laboral, social o familiar según situación. Abogado de extranjería.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🎓</div><div><div class="ni-label">Homologación de títulos</div><div class="ni-val">Proceso largo (6–18 meses) pero esencial para trabajar en profesiones reguladas. Abogado especializado.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">💰</div><div><div class="ni-label">Emprendimiento</div><div class="ni-val">Alta tendencia a autónomos en servicios. Gestoría de inicio de actividad desde 0 disponible.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">👥</div><div><div class="ni-label">Comunidad</div><div class="ni-val">Muy integrada socialmente. Redes de apoyo, asociaciones latinoamericanas, fácil acceso a compatriotas.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nat-result" id="nat-otro-result">
+    <div class="nat-box">
+      <div class="nat-title">🌍 Otra nacionalidad — Puntos de partida</div>
+      <div class="nat-grid">
+        <div class="nat-item"><div class="ni-icon">🇪🇺</div><div><div class="ni-label">Si eres ciudadano UE</div><div class="ni-val">Libre circulación. Solo registro si +3 meses. Proceso sencillo con gestoría.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">🌍</div><div><div class="ni-label">Si eres extracomunitario</div><div class="ni-val">Visado según situación (trabajo, estudio, retiro, inversión). Abogado de extranjería es el primer paso.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">📋</div><div><div class="ni-label">Primer trámite siempre</div><div class="ni-val">NIE + Empadronamiento. Sin esto no puedes abrir cuenta, alquilar ni acceder a servicios.</div></div></div>
+        <div class="nat-item"><div class="ni-icon">💬</div><div><div class="ni-label">Cuéntanos tu caso</div><div class="ni-val">Cada situación es única. Contacta con nuestros expertos y te orientamos sin coste.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOQUE 3: COMUNIDADES DATA -->
+<section>
+  <div class="section-label">Datos · Torrevieja</div>
+  <div class="section-title">¿Quién vive aquí?</div>
+  <div class="section-sub">Las 5 principales comunidades extranjeras. 52% de la población total son residentes de fuera de España.</div>
+  <table class="comm-table">
+    <thead><tr><th>Comunidad</th><th>% sobre total</th><th>Perfil dominante</th><th>Servicios más demandados</th></tr></thead>
+    <tbody>
+      <tr><td>🇬🇧 Británicos</td><td>14.4%<div class="bar"><div class="bar-fill" style="width:100%"></div></div></td><td>Retiro y jubilación</td><td>Seguro médico · Abogado post-Brexit · Inmobiliaria</td></tr>
+      <tr><td>🇷🇺 Rusos/Ucranianos</td><td>9.6%<div class="bar"><div class="bar-fill" style="width:67%"></div></div></td><td>Inversión inmobiliaria</td><td>Abogado extranjería · Gestoría fiscal · Inmobiliaria</td></tr>
+      <tr><td>🇩🇪 Alemanes</td><td>8%<div class="bar"><div class="bar-fill" style="width:55%"></div></div></td><td>Segunda residencia + teletrabajo</td><td>Seguro médico · Asesor fiscal · Inmobiliaria premium</td></tr>
+      <tr><td>🇲🇦 Marroquíes</td><td>5%<div class="bar"><div class="bar-fill" style="width:35%"></div></div></td><td>Trabajadores servicios</td><td>Abogado extranjería · Gestoría · Reagrupación familiar</td></tr>
+      <tr><td>🇨🇴 Colombianos</td><td>2.4%<div class="bar"><div class="bar-fill" style="width:17%"></div></div></td><td>Trabajadores y emprendedores</td><td>Arraigo · Homologación títulos · Autónomo</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-section">
+  <h3>¿Listo para instalarte en Torrevieja?</h3>
+  <p>Cuéntanos tu perfil y te conectamos con los profesionales verificados que necesitas.<br>Sin coste. Respuesta en menos de 24 horas.</p>
+  <a href="#" class="btn-primary">Empezar ahora →</a>
+  <a href="#" class="btn-secondary">💬 WhatsApp directo</a>
+</div>
+
+</div><!-- /container -->
+
+<script>
+function selectProfile(id) {
+  // reset cards
+  document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.profile-result').forEach(r => r.classList.remove('show'));
+  // activate
+  document.getElementById('card-' + id).classList.add('active');
+  document.getElementById('result-' + id).classList.add('show');
+  // scroll suave al resultado
+  setTimeout(() => {
+    document.getElementById('result-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+function selectNat(id) {
+  document.querySelectorAll('.nat-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nat-result').forEach(r => r.classList.remove('show'));
+  document.getElementById('nat-' + id).classList.add('active');
+  document.getElementById('nat-' + id + '-result').classList.add('show');
+}
+</script>
+</body>
+</html>
