@@ -10,6 +10,22 @@ import type { Lead } from '@/lib/types';
 /** Misma forma que `GHLWebhookExtras` en gohighlevel (evita import circular). */
 export type GhlWebhookExtrasInput = { ciudadServicioNombre?: string };
 
+/** Payload de etiquetas ES para webhook GHL y custom fields API (mismo origen que `request` ES). */
+export interface GhlWebhookSpanishFields {
+  servicio_es: string;
+  presupuesto_es: string;
+  urgencia_es: string;
+  idioma_preferido_es: string;
+  dispositivo_es: string | null;
+  tipo_ruta_es: string;
+  status_es: string;
+  ciudad_servicio_espana_nombre: string | null;
+  /** País tal como en formularios (lista `PAISES` ya en español). */
+  pais_origen_es: string | null;
+  /** Fecha legible para workflows GHL (p. ej. merge en emails). */
+  fecha_nacimiento_legible_es: string | null;
+}
+
 const STATUS_ES: Record<string, string> = {
   nuevo: 'Nuevo',
   contactado: 'Contactado',
@@ -32,25 +48,29 @@ function requestEs() {
   return getDictionary('es').request;
 }
 
-export function servicioEs(slug: string): string {
-  if (slug === 'otro') return 'Otro servicio';
+export function servicioEs(slug: string | undefined | null): string {
+  const id = (slug ?? '').trim();
+  if (!id) return 'No indicado';
+  if (id === 'otro') return 'Otro servicio';
   const s = requestEs().servicios as Record<string, string>;
-  return s[slug] ?? slug;
+  return s[id] ?? id;
 }
 
 export function presupuestoEs(key: string | undefined | null): string | null {
-  if (key == null || key === '') return null;
+  const k = (key ?? '').trim();
+  if (!k) return null;
   const p = requestEs().presupuestos as Record<string, string>;
-  return p[key] ?? null;
+  return p[k] ?? null;
 }
 
-export function urgenciaEs(key: string | undefined | null): string | null {
-  if (key == null || key === '') return null;
-  if (key === 'no_especificado') return 'No especificado';
+/** Siempre texto en español para GHL (nunca null por urgencia vacía). */
+export function urgenciaEs(key: string | undefined | null): string {
+  const k = (key ?? '').trim();
+  if (k === '' || k === 'no_especificado') return 'No especificado';
   const u = requestEs().urgencias as Record<string, string>;
-  if (u[key]) return u[key];
-  if (URGENCIA_LEGACY_ES[key]) return URGENCIA_LEGACY_ES[key];
-  return key;
+  if (u[k]) return u[k];
+  if (URGENCIA_LEGACY_ES[k]) return URGENCIA_LEGACY_ES[k];
+  return k;
 }
 
 export function idiomaPreferidoEs(code: string | undefined): string {
@@ -79,6 +99,14 @@ export function statusEs(status: string): string {
   return STATUS_ES[status] ?? status;
 }
 
+function fechaNacimientoLegibleEs(iso: string | undefined | null): string | null {
+  const s = (iso ?? '').trim();
+  if (!s) return null;
+  const d = new Date(s);
+  if (Number.isNaN(d.getTime())) return null;
+  return new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+}
+
 async function ciudadNombreDesdeSlug(slug: string): Promise<string | null> {
   if (!slug || slug === 'otra') return null;
   try {
@@ -101,16 +129,7 @@ async function ciudadNombreDesdeSlug(slug: string): Promise<string | null> {
 export async function buildGhlWebhookSpanishFields(
   lead: Lead,
   extras?: GhlWebhookExtrasInput
-): Promise<{
-  servicio_es: string;
-  presupuesto_es: string | null;
-  urgencia_es: string | null;
-  idioma_preferido_es: string;
-  dispositivo_es: string | null;
-  tipo_ruta_es: string;
-  status_es: string;
-  ciudad_servicio_espana_nombre: string | null;
-}> {
+): Promise<GhlWebhookSpanishFields> {
   const esSalud = lead.servicio === 'seguros';
   let ciudadNombre = extras?.ciudadServicioNombre?.trim() || null;
   if (!ciudadNombre && lead.ciudad === 'otra') {
@@ -123,14 +142,20 @@ export async function buildGhlWebhookSpanishFields(
     ciudadNombre = lead.ciudad;
   }
 
+  const presupuestoRaw = (lead.presupuesto ?? '').trim();
+
   return {
     servicio_es: servicioEs(lead.servicio),
-    presupuesto_es: presupuestoEs(lead.presupuesto),
+    presupuesto_es: presupuestoRaw
+      ? presupuestoEs(presupuestoRaw) ?? presupuestoRaw
+      : 'No especificado',
     urgencia_es: urgenciaEs(lead.urgencia),
     idioma_preferido_es: idiomaPreferidoEs(lead.idioma_preferido),
     dispositivo_es: dispositivoEs(lead.dispositivo),
     tipo_ruta_es: tipoRutaEs(esSalud),
     status_es: statusEs(lead.status),
     ciudad_servicio_espana_nombre: ciudadNombre,
+    pais_origen_es: lead.pais_origen?.trim() || null,
+    fecha_nacimiento_legible_es: fechaNacimientoLegibleEs(lead.fecha_nacimiento),
   };
 }

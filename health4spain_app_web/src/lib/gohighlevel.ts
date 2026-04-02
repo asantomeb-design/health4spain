@@ -9,7 +9,14 @@
  */
 
 import type { Lead } from '@/lib/types';
-import { buildGhlWebhookSpanishFields } from '@/lib/ghl-spanish-labels';
+import {
+  buildGhlWebhookSpanishFields,
+  idiomaPreferidoEs,
+  presupuestoEs,
+  servicioEs,
+  urgenciaEs,
+  type GhlWebhookSpanishFields,
+} from '@/lib/ghl-spanish-labels';
 
 const GHL_API_BASE = 'https://services.leadconnectorhq.com';
 
@@ -95,7 +102,10 @@ function normalizeGhlPhone(codigoPais: string | undefined, telefono: string): st
  * La API v2 de GHL espera customFields como { id, value } (UUID del campo en la sub-cuenta).
  * Ver GHL_CUSTOM_FIELD_IDS en .env.example. Sin ese mapa no enviamos customFields para no romper el upsert.
  */
-function buildGhlCustomFields(lead: GHLContactPayload): { id: string; value: string }[] {
+function buildGhlCustomFields(
+  lead: GHLContactPayload,
+  spanish?: GhlWebhookSpanishFields | null
+): { id: string; value: string }[] {
   const raw = process.env.GHL_CUSTOM_FIELD_IDS?.trim();
   if (!raw) return [];
 
@@ -107,14 +117,23 @@ function buildGhlCustomFields(lead: GHLContactPayload): { id: string; value: str
     return [];
   }
 
+  const ciudadInteres =
+    spanish?.ciudad_servicio_espana_nombre?.trim() || lead.ciudad;
+  const presupuestoSlug = lead.presupuesto?.trim();
+  const presupuestoValor =
+    presupuestoSlug != null && presupuestoSlug !== ''
+      ? spanish?.presupuesto_es ?? presupuestoEs(presupuestoSlug) ?? presupuestoSlug
+      : undefined;
+
   const values: Record<CustomFieldInternalKey, string | undefined> = {
-    ciudad_interes: lead.ciudad,
+    ciudad_interes: ciudadInteres,
     ciudad_origen: lead.ciudad_origen,
     pais_origen: lead.pais_origen,
-    servicio_solicitado: lead.servicio,
-    presupuesto: lead.presupuesto,
-    urgencia: lead.urgencia,
-    idioma_preferido: lead.idioma_preferido || 'es',
+    servicio_solicitado: spanish?.servicio_es ?? servicioEs(lead.servicio),
+    presupuesto: presupuestoValor,
+    urgencia: spanish?.urgencia_es ?? urgenciaEs(lead.urgencia ?? ''),
+    idioma_preferido:
+      spanish?.idioma_preferido_es ?? idiomaPreferidoEs(lead.idioma_preferido),
     landing_page: lead.landing_page,
     utm_campaign: lead.utm_campaign,
     lead_score: lead.score != null ? String(lead.score) : undefined,
@@ -137,7 +156,20 @@ function buildGhlCustomFields(lead: GHLContactPayload): { id: string; value: str
  * Crea un contacto en GoHighLevel.
  * Si el contacto ya existe (mismo email), GHL lo actualiza automáticamente (upsert).
  */
-export async function createGHLContact(lead: GHLContactPayload): Promise<void> {
+function esAltaUrgencia(urgencia: string | undefined): boolean {
+  const u = (urgencia ?? '').trim();
+  return (
+    u === 'esta-semana' ||
+    u === 'este-mes' ||
+    u === 'esta_semana' ||
+    u === 'este_mes'
+  );
+}
+
+export async function createGHLContact(
+  lead: GHLContactPayload,
+  spanishFields?: GhlWebhookSpanishFields | null
+): Promise<void> {
   const apiKey = process.env.GHL_PRIVATE_TOKEN;
   const locationId = process.env.GHL_LOCATION_ID;
 
@@ -150,11 +182,11 @@ export async function createGHLContact(lead: GHLContactPayload): Promise<void> {
   const tags: string[] = ['web-lead', 'health4spain'];
   if (lead.servicio && SERVICIO_TAGS[lead.servicio]) tags.push(SERVICIO_TAGS[lead.servicio]);
   if (lead.perfil && PERFIL_TAGS[lead.perfil]) tags.push(PERFIL_TAGS[lead.perfil]);
-  if (lead.urgencia === 'esta-semana' || lead.urgencia === 'este-mes') tags.push('alta-urgencia');
+  if (esAltaUrgencia(lead.urgencia)) tags.push('alta-urgencia');
 
   const { firstName, lastName } = splitNombreCompleto(lead.nombre);
   const phone = normalizeGhlPhone(lead.codigo_pais, lead.telefono);
-  const customFields = buildGhlCustomFields(lead);
+  const customFields = buildGhlCustomFields(lead, spanishFields);
 
   const payload: Record<string, unknown> = {
     locationId,
@@ -212,6 +244,8 @@ export async function createGHLContact(lead: GHLContactPayload): Promise<void> {
 export interface GHLWebhookExtras {
   /** Nombre legible de la ciudad/zona donde quiere el servicio (paso 1), p. ej. "Alicante". */
   ciudadServicioNombre?: string;
+  /** Si ya se calculó en `/api/leads`, evita repetir consulta y mantiene mismos textos que la API. */
+  spanishFields?: GhlWebhookSpanishFields;
 }
 
 /**
@@ -221,7 +255,7 @@ export interface GHLWebhookExtras {
  * Claves recomendadas en el flujo GHL:
  * - Campo estándar **City** → `{{inboundWebhookRequest.ciudad_origen}}` (ciudad de procedencia del usuario).
  * - Custom **¿Dónde en España?** → `{{inboundWebhookRequest.ciudad_servicio_espana_nombre}}` (nombre en español; slug en `ciudad_servicio_espana`).
- * - Textos en español para GHL (sin flujos de traducción): `servicio_es`, `urgencia_es`, `presupuesto_es`, `idioma_preferido_es`, `dispositivo_es`, `tipo_ruta_es`, `status_es`.
+ * - Textos en español para GHL (sin flujos de traducción): `servicio_es`, `urgencia_es`, `presupuesto_es`, `idioma_preferido_es`, `dispositivo_es`, `tipo_ruta_es`, `status_es`, `pais_origen_es`, `fecha_nacimiento_legible_es`.
  */
 export async function sendLeadToGHLIncomingWebhook(
   lead: Lead,
@@ -240,7 +274,8 @@ export async function sendLeadToGHLIncomingWebhook(
   const { firstName, lastName } = splitNombreCompleto(lead.nombre);
 
   const ciudadServicioSlug = lead.ciudad;
-  const spanish = await buildGhlWebhookSpanishFields(lead, extras);
+  const spanish =
+    extras?.spanishFields ?? (await buildGhlWebhookSpanishFields(lead, extras));
 
   const payload = {
     /** Ayuda en GHL si quieres ramificar: `salud` solo si servicio es seguros; si no, `otros`. */

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, handleSupabaseError } from '@/lib/supabase';
 import { validateAdminAuth } from '@/lib/auth';
 import { Lead } from '@/lib/types';
+import { buildGhlWebhookSpanishFields } from '@/lib/ghl-spanish-labels';
 import { createGHLContact, sendLeadToGHLIncomingWebhook } from '@/lib/gohighlevel';
 
 // POST /api/leads - Crear nuevo lead (endpoint público)
@@ -18,6 +19,15 @@ export async function POST(request: NextRequest) {
     if (missingFields.length > 0) {
       return NextResponse.json(
         { success: false, error: `Faltan campos requeridos: ${missingFields.join(', ')}` },
+        { status: 400 }
+      );
+    }
+
+    const servicioNorm = String(body.servicio ?? '').trim();
+    const ciudadNorm = String(ciudad ?? '').trim();
+    if (!servicioNorm || !ciudadNorm) {
+      return NextResponse.json(
+        { success: false, error: 'Servicio o ciudad no válidos' },
         { status: 400 }
       );
     }
@@ -39,7 +49,7 @@ export async function POST(request: NextRequest) {
       .from('leads')
       .select('id')
       .eq('email', body.email)
-      .eq('servicio', body.servicio)
+      .eq('servicio', servicioNorm)
       .gte('created_at', oneHourAgo)
       .single();
     
@@ -59,18 +69,19 @@ export async function POST(request: NextRequest) {
       : (body.telefono || '').trim();
 
     // Crear lead
+    const urgenciaNorm = String(body.urgencia ?? '').trim();
     const newLead: Partial<Lead> = {
       nombre: body.nombre.trim(),
       email: body.email.toLowerCase().trim(),
       codigo_pais: body.codigo_pais || undefined,
       telefono: telefonoValor,
       fecha_nacimiento: body.fecha_nacimiento || undefined,
-      servicio: body.servicio,
-      ciudad: ciudad,
+      servicio: servicioNorm,
+      ciudad: ciudadNorm,
       pais_origen: body.pais_origen || undefined,
       ciudad_origen: body.ciudad_origen || undefined,
       presupuesto: body.presupuesto || undefined,
-      urgencia: body.urgencia || 'no_especificado',
+      urgencia: urgenciaNorm || 'no_especificado',
       idioma_preferido: body.idioma_preferido || 'es',
       mensaje: body.mensaje?.trim() || undefined,
       landing_page: body.landing_page || '',
@@ -94,36 +105,50 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(handleSupabaseError(error), { status: 500 });
     }
     
-    // Enviar lead a GoHighLevel CRM (fire-and-forget, no bloquea la respuesta)
-    createGHLContact({
-      nombre: data.nombre,
-      email: data.email,
-      telefono: data.telefono,
-      codigo_pais: data.codigo_pais,
-      ciudad: data.ciudad,
-      ciudad_origen: data.ciudad_origen,
-      pais_origen: data.pais_origen,
-      fecha_nacimiento: data.fecha_nacimiento,
-      servicio: data.servicio,
-      presupuesto: data.presupuesto,
-      urgencia: data.urgencia,
-      idioma_preferido: data.idioma_preferido,
-      mensaje: data.mensaje,
-      landing_page: data.landing_page,
-      utm_source: data.utm_source,
-      utm_medium: data.utm_medium,
-      utm_campaign: data.utm_campaign,
-      score: data.score,
-    }).catch(err => console.error('[GHL] Error fire-and-forget:', err));
-
     const ciudadServicioNombre =
       typeof body.ciudad_servicio_espana_nombre === 'string'
         ? body.ciudad_servicio_espana_nombre.trim()
         : '';
 
-    sendLeadToGHLIncomingWebhook(data as Lead, {
+    const leadRow = data as Lead;
+    const ghlExtras = {
       ciudadServicioNombre: ciudadServicioNombre || undefined,
-    }).catch(err => console.error('[GHL Webhook] Error fire-and-forget:', err));
+    };
+
+    // GHL: una sola derivación ES (slugs → etiquetas `request` español) para API + webhook; no bloquea el 201.
+    buildGhlWebhookSpanishFields(leadRow, ghlExtras)
+      .then((ghlSpanish) =>
+        Promise.all([
+          createGHLContact(
+            {
+              nombre: data.nombre,
+              email: data.email,
+              telefono: data.telefono,
+              codigo_pais: data.codigo_pais,
+              ciudad: data.ciudad,
+              ciudad_origen: data.ciudad_origen,
+              pais_origen: data.pais_origen,
+              fecha_nacimiento: data.fecha_nacimiento,
+              servicio: data.servicio,
+              presupuesto: data.presupuesto,
+              urgencia: data.urgencia,
+              idioma_preferido: data.idioma_preferido,
+              mensaje: data.mensaje,
+              landing_page: data.landing_page,
+              utm_source: data.utm_source,
+              utm_medium: data.utm_medium,
+              utm_campaign: data.utm_campaign,
+              score: data.score,
+            },
+            ghlSpanish
+          ),
+          sendLeadToGHLIncomingWebhook(leadRow, {
+            ...ghlExtras,
+            spanishFields: ghlSpanish,
+          }),
+        ])
+      )
+      .catch((err) => console.error('[GHL] Error preparando/enviando lead:', err));
     
     return NextResponse.json({
       success: true,

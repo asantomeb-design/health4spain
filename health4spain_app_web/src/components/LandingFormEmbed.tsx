@@ -79,6 +79,10 @@ export default function LandingFormEmbed({
       if (!formData.pais_origen) newErrors.pais_origen = t.errorPais;
     }
 
+    if (step === 2) {
+      if (!formData.urgencia) newErrors.urgencia = t.errorUrgencia;
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -311,6 +315,7 @@ export default function LandingFormEmbed({
                   </button>
                 ))}
               </div>
+              {errors.urgencia && <p className="text-accent text-sm mt-2">{errors.urgencia}</p>}
             </div>
 
             <div>
