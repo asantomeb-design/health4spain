@@ -37,7 +37,9 @@ export interface GHLContactPayload {
   telefono: string;
   codigo_pais?: string;
   ciudad?: string;
+  ciudad_origen?: string;
   pais_origen?: string;
+  fecha_nacimiento?: string;
   servicio?: string;
   perfil?: string;
   presupuesto?: string;
@@ -49,6 +51,88 @@ export interface GHLContactPayload {
   utm_medium?: string;
   utm_campaign?: string;
   score?: number;
+}
+
+/** Nombres internos → valor del lead (para GHL_CUSTOM_FIELD_IDS). */
+const CUSTOM_FIELD_VALUE_KEYS = [
+  'ciudad_interes',
+  'ciudad_origen',
+  'pais_origen',
+  'servicio_solicitado',
+  'presupuesto',
+  'urgencia',
+  'idioma_preferido',
+  'landing_page',
+  'utm_campaign',
+  'lead_score',
+  'mensaje',
+  'fecha_nacimiento',
+] as const;
+
+type CustomFieldInternalKey = (typeof CUSTOM_FIELD_VALUE_KEYS)[number];
+
+function splitNombreCompleto(nombre: string): { firstName: string; lastName: string } {
+  const parts = nombre.trim().split(/\s+/).filter(Boolean);
+  const firstName = parts[0] || nombre.trim() || 'Lead';
+  const lastName = parts.slice(1).join(' ');
+  return { firstName, lastName };
+}
+
+/** E.164: código país numérico + número nacional en dígitos. */
+function normalizeGhlPhone(codigoPais: string | undefined, telefono: string): string {
+  const raw = (telefono || '').trim();
+  if (!raw) return '';
+  if (raw.startsWith('+')) {
+    const rest = raw.slice(1).replace(/\D/g, '');
+    return rest ? `+${rest}` : '';
+  }
+  const national = raw.replace(/\D/g, '');
+  if (!national) return '';
+  const cc = (codigoPais || '').replace(/\D/g, '');
+  if (cc) return `+${cc}${national}`;
+  return `+${national}`;
+}
+
+/**
+ * La API v2 de GHL espera customFields como { id, value } (UUID del campo en la sub-cuenta).
+ * Ver GHL_CUSTOM_FIELD_IDS en .env.example. Sin ese mapa no enviamos customFields para no romper el upsert.
+ */
+function buildGhlCustomFields(lead: GHLContactPayload): { id: string; value: string }[] {
+  const raw = process.env.GHL_CUSTOM_FIELD_IDS?.trim();
+  if (!raw) return [];
+
+  let idMap: Record<string, string>;
+  try {
+    idMap = JSON.parse(raw) as Record<string, string>;
+  } catch {
+    console.warn('[GHL] GHL_CUSTOM_FIELD_IDS no es JSON válido; se omiten custom fields.');
+    return [];
+  }
+
+  const values: Record<CustomFieldInternalKey, string | undefined> = {
+    ciudad_interes: lead.ciudad,
+    ciudad_origen: lead.ciudad_origen,
+    pais_origen: lead.pais_origen,
+    servicio_solicitado: lead.servicio,
+    presupuesto: lead.presupuesto,
+    urgencia: lead.urgencia,
+    idioma_preferido: lead.idioma_preferido || 'es',
+    landing_page: lead.landing_page,
+    utm_campaign: lead.utm_campaign,
+    lead_score: lead.score != null ? String(lead.score) : undefined,
+    mensaje: lead.mensaje,
+    fecha_nacimiento: lead.fecha_nacimiento,
+  };
+
+  const out: { id: string; value: string }[] = [];
+  for (const key of CUSTOM_FIELD_VALUE_KEYS) {
+    const id = idMap[key];
+    const v = values[key];
+    if (id && v != null && String(v).trim() !== '') {
+      out.push({ id, value: String(v).trim() });
+    }
+  }
+  return out;
 }
 
 /**
@@ -70,17 +154,11 @@ export async function createGHLContact(lead: GHLContactPayload): Promise<void> {
   if (lead.perfil && PERFIL_TAGS[lead.perfil]) tags.push(PERFIL_TAGS[lead.perfil]);
   if (lead.urgencia === 'esta-semana' || lead.urgencia === 'este-mes') tags.push('alta-urgencia');
 
-  // Separar nombre y apellido (GHL los quiere por separado)
-  const nameParts = lead.nombre.trim().split(' ');
-  const firstName = nameParts[0] || lead.nombre;
-  const lastName = nameParts.slice(1).join(' ') || '';
+  const { firstName, lastName } = splitNombreCompleto(lead.nombre);
+  const phone = normalizeGhlPhone(lead.codigo_pais, lead.telefono);
+  const customFields = buildGhlCustomFields(lead);
 
-  // Teléfono: añadir código de país si viene separado
-  const phone = lead.codigo_pais
-    ? `+${lead.codigo_pais}${lead.telefono}`
-    : lead.telefono;
-
-  const payload = {
+  const payload: Record<string, unknown> = {
     locationId,
     firstName,
     lastName,
@@ -88,27 +166,17 @@ export async function createGHLContact(lead: GHLContactPayload): Promise<void> {
     phone,
     tags,
     source: lead.utm_source || 'web-organico',
-
-    // Campos personalizados (customFields) - deben existir en tu cuenta GHL
-    // Si no los tienes creados, puedes comentar los que no necesites.
-    customFields: [
-      { key: 'ciudad_interes', field_value: lead.ciudad || '' },
-      { key: 'pais_origen', field_value: lead.pais_origen || '' },
-      { key: 'servicio_solicitado', field_value: lead.servicio || '' },
-      { key: 'presupuesto', field_value: lead.presupuesto || '' },
-      { key: 'urgencia', field_value: lead.urgencia || '' },
-      { key: 'idioma_preferido', field_value: lead.idioma_preferido || 'es' },
-      { key: 'landing_page', field_value: lead.landing_page || '' },
-      { key: 'utm_campaign', field_value: lead.utm_campaign || '' },
-      { key: 'lead_score', field_value: String(lead.score || '') },
-      { key: 'mensaje', field_value: lead.mensaje || '' },
-    ].filter(cf => cf.field_value !== ''), // No enviar campos vacíos
-
-    // UTM como campos estándar de GHL
     ...(lead.utm_source && { utmSource: lead.utm_source }),
     ...(lead.utm_medium && { utmMedium: lead.utm_medium }),
     ...(lead.utm_campaign && { utmCampaign: lead.utm_campaign }),
   };
+
+  if (lead.ciudad) payload.city = lead.ciudad;
+  if (lead.pais_origen && /^[A-Za-z]{2}$/.test(lead.pais_origen)) {
+    payload.country = lead.pais_origen.toUpperCase();
+  }
+  if (lead.fecha_nacimiento) payload.dateOfBirth = lead.fecha_nacimiento;
+  if (customFields.length > 0) payload.customFields = customFields;
 
   try {
     const response = await fetch(`${GHL_API_BASE}/contacts/upsert`, {
@@ -161,19 +229,23 @@ export async function sendLeadToGHLIncomingWebhook(lead: Lead): Promise<void> {
     return;
   }
 
-  const telefonoCompleto = lead.codigo_pais
-    ? `+${lead.codigo_pais}${lead.telefono}`
-    : lead.telefono;
+  const telefonoCompleto = normalizeGhlPhone(lead.codigo_pais, lead.telefono);
+  const { firstName, lastName } = splitNombreCompleto(lead.nombre);
 
   const payload = {
     tipo_ruta: esSalud ? 'salud' : 'otros',
     lead_id: lead.id,
     nombre: lead.nombre,
+    firstName,
+    lastName,
     email: lead.email,
     telefono: lead.telefono,
+    phone: telefonoCompleto,
     telefono_completo: telefonoCompleto,
     codigo_pais: lead.codigo_pais ?? null,
     fecha_nacimiento: lead.fecha_nacimiento ?? null,
+    /** Alias camelCase por si GHL solo sugiere claves “estilo inglés” en el mapeo */
+    dateOfBirth: lead.fecha_nacimiento ?? null,
     pais_origen: lead.pais_origen ?? null,
     ciudad_origen: lead.ciudad_origen ?? null,
     servicio: lead.servicio,
