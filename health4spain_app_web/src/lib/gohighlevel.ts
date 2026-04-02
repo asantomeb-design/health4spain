@@ -5,15 +5,12 @@
  * Crea o actualiza un contacto en GHL cada vez que llega un lead nuevo.
  * Usa la API v2 con autenticación por Private Integration Token.
  *
- * Webhooks entrantes (Workflows): GHL_INCOMING_WEBHOOK_SALUD / GHL_INCOMING_WEBHOOK_OTROS
+ * Webhook entrante (Workflows): GHL_INCOMING_WEBHOOK_SALUD — todos los leads (el JSON trae `servicio`).
  */
 
 import type { Lead } from '@/lib/types';
 
 const GHL_API_BASE = 'https://services.leadconnectorhq.com';
-
-/** Valores de `servicio` que van al webhook de seguros / salud (encuesta paso 1) */
-const SERVICIOS_WEBHOOK_SALUD = new Set<string>(['seguros']);
 
 // Mapa de servicios web → tags en GHL
 const SERVICIO_TAGS: Record<string, string> = {
@@ -218,7 +215,7 @@ export interface GHLWebhookExtras {
 
 /**
  * Envía el lead por POST JSON al webhook entrante de GHL correspondiente al servicio elegido.
- * URLs en servidor: GHL_INCOMING_WEBHOOK_SALUD (p. ej. seguros/salud) y GHL_INCOMING_WEBHOOK_OTROS (resto).
+ * URL en servidor: GHL_INCOMING_WEBHOOK_SALUD (único webhook; segmentar en GHL con `servicio` o `tipo_ruta`).
  *
  * Claves recomendadas en el flujo GHL:
  * - Campo estándar **City** → `{{inboundWebhookRequest.ciudad_origen}}` (ciudad de procedencia del usuario).
@@ -228,21 +225,14 @@ export async function sendLeadToGHLIncomingWebhook(
   lead: Lead,
   extras?: GHLWebhookExtras
 ): Promise<void> {
-  const urlSalud = process.env.GHL_INCOMING_WEBHOOK_SALUD?.trim();
-  const urlOtros = process.env.GHL_INCOMING_WEBHOOK_OTROS?.trim();
-
-  const esSalud = SERVICIOS_WEBHOOK_SALUD.has(lead.servicio);
-  const url = esSalud ? urlSalud : urlOtros;
+  const url = process.env.GHL_INCOMING_WEBHOOK_SALUD?.trim();
 
   if (!url) {
-    if (esSalud && !urlSalud) {
-      console.warn('[GHL Webhook] GHL_INCOMING_WEBHOOK_SALUD no configurada; se omite el envío.');
-    }
-    if (!esSalud && !urlOtros) {
-      console.warn('[GHL Webhook] GHL_INCOMING_WEBHOOK_OTROS no configurada; se omite el envío.');
-    }
+    console.warn('[GHL Webhook] GHL_INCOMING_WEBHOOK_SALUD no configurada; se omite el envío.');
     return;
   }
+
+  const esSalud = lead.servicio === 'seguros';
 
   const telefonoCompleto = normalizeGhlPhone(lead.codigo_pais, lead.telefono);
   const { firstName, lastName } = splitNombreCompleto(lead.nombre);
@@ -252,6 +242,7 @@ export async function sendLeadToGHLIncomingWebhook(
     extras?.ciudadServicioNombre?.trim() || null;
 
   const payload = {
+    /** Ayuda en GHL si quieres ramificar: `salud` solo si servicio es seguros; si no, `otros`. */
     tipo_ruta: esSalud ? 'salud' : 'otros',
     lead_id: lead.id,
     nombre: lead.nombre,
