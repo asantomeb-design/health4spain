@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, handleSupabaseError } from '@/lib/supabase';
 import { validateAdminAuth } from '@/lib/auth';
 import { Lead } from '@/lib/types';
-import { createGHLContact } from '@/lib/gohighlevel';
+import { createGHLContact, sendLeadToGHLIncomingWebhook } from '@/lib/gohighlevel';
 
 // POST /api/leads - Crear nuevo lead (endpoint público)
 export async function POST(request: NextRequest) {
@@ -113,6 +113,10 @@ export async function POST(request: NextRequest) {
       utm_campaign: data.utm_campaign,
       score: data.score,
     }).catch(err => console.error('[GHL] Error fire-and-forget:', err));
+
+    sendLeadToGHLIncomingWebhook(data as Lead).catch(err =>
+      console.error('[GHL Webhook] Error fire-and-forget:', err)
+    );
     
     return NextResponse.json({
       success: true,

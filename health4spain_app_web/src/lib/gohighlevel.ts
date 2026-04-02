@@ -4,9 +4,16 @@
  *
  * Crea o actualiza un contacto en GHL cada vez que llega un lead nuevo.
  * Usa la API v2 con autenticación por Private Integration Token.
+ *
+ * Webhooks entrantes (Workflows): GHL_INCOMING_WEBHOOK_SALUD / GHL_INCOMING_WEBHOOK_OTROS
  */
 
+import type { Lead } from '@/lib/types';
+
 const GHL_API_BASE = 'https://services.leadconnectorhq.com';
+
+/** Valores de `servicio` que van al webhook de seguros / salud (encuesta paso 1) */
+const SERVICIOS_WEBHOOK_SALUD = new Set<string>(['seguros']);
 
 // Mapa de servicios web → tags en GHL
 const SERVICIO_TAGS: Record<string, string> = {
@@ -130,5 +137,73 @@ export async function createGHLContact(lead: GHLContactPayload): Promise<void> {
   } catch (err) {
     // Nunca lanzar el error hacia arriba — que GHL falle no debe romper la web
     console.error('[GHL] Excepción al llamar a la API:', err);
+  }
+}
+
+/**
+ * Envía el lead por POST JSON al webhook entrante de GHL correspondiente al servicio elegido.
+ * URLs en servidor: GHL_INCOMING_WEBHOOK_SALUD (p. ej. seguros/salud) y GHL_INCOMING_WEBHOOK_OTROS (resto).
+ */
+export async function sendLeadToGHLIncomingWebhook(lead: Lead): Promise<void> {
+  const urlSalud = process.env.GHL_INCOMING_WEBHOOK_SALUD?.trim();
+  const urlOtros = process.env.GHL_INCOMING_WEBHOOK_OTROS?.trim();
+
+  const esSalud = SERVICIOS_WEBHOOK_SALUD.has(lead.servicio);
+  const url = esSalud ? urlSalud : urlOtros;
+
+  if (!url) {
+    if (esSalud && !urlSalud) {
+      console.warn('[GHL Webhook] GHL_INCOMING_WEBHOOK_SALUD no configurada; se omite el envío.');
+    }
+    if (!esSalud && !urlOtros) {
+      console.warn('[GHL Webhook] GHL_INCOMING_WEBHOOK_OTROS no configurada; se omite el envío.');
+    }
+    return;
+  }
+
+  const telefonoCompleto = lead.codigo_pais
+    ? `+${lead.codigo_pais}${lead.telefono}`
+    : lead.telefono;
+
+  const payload = {
+    tipo_ruta: esSalud ? 'salud' : 'otros',
+    lead_id: lead.id,
+    nombre: lead.nombre,
+    email: lead.email,
+    telefono: lead.telefono,
+    telefono_completo: telefonoCompleto,
+    codigo_pais: lead.codigo_pais ?? null,
+    fecha_nacimiento: lead.fecha_nacimiento ?? null,
+    pais_origen: lead.pais_origen ?? null,
+    ciudad_origen: lead.ciudad_origen ?? null,
+    servicio: lead.servicio,
+    ciudad: lead.ciudad,
+    presupuesto: lead.presupuesto ?? null,
+    urgencia: lead.urgencia,
+    idioma_preferido: lead.idioma_preferido,
+    mensaje: lead.mensaje ?? null,
+    landing_page: lead.landing_page,
+    utm_source: lead.utm_source ?? null,
+    utm_medium: lead.utm_medium ?? null,
+    utm_campaign: lead.utm_campaign ?? null,
+    dispositivo: lead.dispositivo ?? null,
+    score: lead.score ?? null,
+    status: lead.status,
+    created_at: lead.created_at,
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const snippet = (await response.text()).slice(0, 300);
+      console.error('[GHL Webhook] Respuesta no OK:', response.status, snippet);
+    }
+  } catch (err) {
+    console.error('[GHL Webhook] Error de red:', err);
   }
 }
