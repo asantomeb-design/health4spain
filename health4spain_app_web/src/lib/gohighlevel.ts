@@ -171,7 +171,9 @@ export async function createGHLContact(lead: GHLContactPayload): Promise<void> {
     ...(lead.utm_campaign && { utmCampaign: lead.utm_campaign }),
   };
 
-  if (lead.ciudad) payload.city = lead.ciudad;
+  // Campo estándar "City" en GHL = ciudad donde vive el contacto (paso 2), no la ciudad del servicio en España (paso 1).
+  const ciudadOrigen = lead.ciudad_origen?.trim();
+  if (ciudadOrigen) payload.city = ciudadOrigen;
   if (lead.pais_origen && /^[A-Za-z]{2}$/.test(lead.pais_origen)) {
     payload.country = lead.pais_origen.toUpperCase();
   }
@@ -208,11 +210,24 @@ export async function createGHLContact(lead: GHLContactPayload): Promise<void> {
   }
 }
 
+/** Datos solo para el webhook (no se guardan en Supabase salvo que el cliente los envíe en el POST). */
+export interface GHLWebhookExtras {
+  /** Nombre legible de la ciudad/zona donde quiere el servicio (paso 1), p. ej. "Alicante". */
+  ciudadServicioNombre?: string;
+}
+
 /**
  * Envía el lead por POST JSON al webhook entrante de GHL correspondiente al servicio elegido.
  * URLs en servidor: GHL_INCOMING_WEBHOOK_SALUD (p. ej. seguros/salud) y GHL_INCOMING_WEBHOOK_OTROS (resto).
+ *
+ * Claves recomendadas en el flujo GHL:
+ * - Campo estándar **City** → `{{inboundWebhookRequest.ciudad_origen}}` (ciudad de procedencia del usuario).
+ * - Custom **¿Dónde en España?** → `{{inboundWebhookRequest.ciudad_servicio_espana_nombre}}` o `ciudad_servicio_espana` (slug).
  */
-export async function sendLeadToGHLIncomingWebhook(lead: Lead): Promise<void> {
+export async function sendLeadToGHLIncomingWebhook(
+  lead: Lead,
+  extras?: GHLWebhookExtras
+): Promise<void> {
   const urlSalud = process.env.GHL_INCOMING_WEBHOOK_SALUD?.trim();
   const urlOtros = process.env.GHL_INCOMING_WEBHOOK_OTROS?.trim();
 
@@ -232,6 +247,10 @@ export async function sendLeadToGHLIncomingWebhook(lead: Lead): Promise<void> {
   const telefonoCompleto = normalizeGhlPhone(lead.codigo_pais, lead.telefono);
   const { firstName, lastName } = splitNombreCompleto(lead.nombre);
 
+  const ciudadServicioSlug = lead.ciudad;
+  const ciudadServicioNombre =
+    extras?.ciudadServicioNombre?.trim() || null;
+
   const payload = {
     tipo_ruta: esSalud ? 'salud' : 'otros',
     lead_id: lead.id,
@@ -247,9 +266,17 @@ export async function sendLeadToGHLIncomingWebhook(lead: Lead): Promise<void> {
     /** Alias camelCase por si GHL solo sugiere claves “estilo inglés” en el mapeo */
     dateOfBirth: lead.fecha_nacimiento ?? null,
     pais_origen: lead.pais_origen ?? null,
+    /** Ciudad donde vive / procedencia (paso 2 del formulario solicitar). */
     ciudad_origen: lead.ciudad_origen ?? null,
     servicio: lead.servicio,
-    ciudad: lead.ciudad,
+    /**
+     * Slug de la ciudad/zona en España donde quiere el servicio (paso 1).
+     * `ciudad` se mantiene por compatibilidad; preferir `ciudad_servicio_espana` en mapeos nuevos.
+     */
+    ciudad: ciudadServicioSlug,
+    ciudad_interes: ciudadServicioSlug,
+    ciudad_servicio_espana: ciudadServicioSlug,
+    ciudad_servicio_espana_nombre: ciudadServicioNombre,
     presupuesto: lead.presupuesto ?? null,
     urgencia: lead.urgencia,
     idioma_preferido: lead.idioma_preferido,

@@ -116,9 +116,14 @@ export async function POST(request: NextRequest) {
       score: data.score,
     }).catch(err => console.error('[GHL] Error fire-and-forget:', err));
 
-    sendLeadToGHLIncomingWebhook(data as Lead).catch(err =>
-      console.error('[GHL Webhook] Error fire-and-forget:', err)
-    );
+    const ciudadServicioNombre =
+      typeof body.ciudad_servicio_espana_nombre === 'string'
+        ? body.ciudad_servicio_espana_nombre.trim()
+        : '';
+
+    sendLeadToGHLIncomingWebhook(data as Lead, {
+      ciudadServicioNombre: ciudadServicioNombre || undefined,
+    }).catch(err => console.error('[GHL Webhook] Error fire-and-forget:', err));
     
     return NextResponse.json({
       success: true,

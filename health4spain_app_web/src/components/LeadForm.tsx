@@ -99,6 +99,8 @@ export default function LeadForm({
 
     const leadData = {
       ...formData,
+      ciudad_servicio_espana_nombre:
+        ciudades.find((c) => c.value === formData.ciudad)?.label || ciudad || '',
       landing_page: source || window.location.pathname,
       utm_source: new URLSearchParams(window.location.search).get('utm_source') || '',
       utm_medium: new URLSearchParams(window.location.search).get('utm_medium') || '',

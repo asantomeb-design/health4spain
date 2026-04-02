@@ -101,6 +101,7 @@ export default function LandingFormEmbed({
       const payload = {
         servicio: servicioSlug,
         ciudad: ciudadSlug,
+        ciudad_servicio_espana_nombre: ciudadNombre,
         ...formData,
         landing_page: typeof window !== 'undefined' ? window.location.href : '',
         utm_source: '',

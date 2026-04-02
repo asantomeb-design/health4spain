@@ -459,6 +459,8 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
           fecha_nacimiento: formData.fecha_nacimiento || undefined,
           servicio: formData.servicio,
           ciudad: formData.ciudad_interes,
+          ciudad_servicio_espana_nombre:
+            ciudades.find((c) => c.id === formData.ciudad_interes)?.label ?? '',
           presupuesto: formData.presupuesto,
           urgencia: formData.urgencia,
           mensaje: formData.mensaje,
