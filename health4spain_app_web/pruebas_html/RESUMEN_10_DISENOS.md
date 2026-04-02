@@ -116,3 +116,7 @@
 4. O puedo crear variaciones basadas en los que más te gusten
 
 **Nota:** Todos usan iconos/emojis, NO imágenes complejas. Todos son profesionales y modernos, sin el estilo "magazine editorial" que descartaste.
+
+---
+
+*Abril 2026: el sitio en producción está en `health4spain_app_web/` (leads + GHL documentados en el README del proyecto).*

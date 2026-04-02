@@ -27,3 +27,5 @@ Todas las rutas de logo apuntan al mismo archivo en `LOGO_PATHS` (siglas, vertic
 
 - `chat_ia_logo.jpg` — Avatar del widget de chat Mar-IA (`AIChatWidget.tsx`, ruta `/images/chat_ia_logo.jpg`).
 - `favicon.png` — Origen del favicon; en la raíz de `public/` se usan `favicon.ico`, `icon.png`, `apple-icon.png` y `manifest.json` para SEO e indexación.
+
+_Documentación alineada con el README del proyecto (abril 2026)._

@@ -2,6 +2,17 @@
 
 ---
 
+## 🆕 GoHighLevel + leads en español — 2 abril 2026
+
+- **CRM GHL**: Tras `POST /api/leads`, sincronización opcional por API v2 (upsert contacto) y **webhook entrante único** (`GHL_INCOMING_WEBHOOK_SALUD`).
+- **Español en GHL**: `ghl-spanish-labels.ts` — mismas etiquetas que el formulario ES (`getDictionary('es').request`) para servicio, presupuesto, urgencia, idioma, ciudad (catálogo), estado, dispositivo; campos `*_es` en el JSON del webhook (`pais_origen_es`, `fecha_nacimiento_legible_es`, etc.).
+- **Custom fields API**: valores en español cuando está configurado `GHL_CUSTOM_FIELD_IDS`.
+- **Admin**: `/administrator/leads` con acción eliminar.
+- **Formularios**: validación de urgencia en `LandingFormEmbed`; slugs unificados en los 5 idiomas.
+- **Documentación**: `.env.example`, README, ESTADO_PROYECTO, índices y este archivo actualizados.
+
+---
+
 ## 🆕 Logo unificado — 28 Febrero 2026
 
 - **Logo único**: Toda la web usa `h4s vertical color_recortado.webp` (header, footer, Open Graph, Twitter Cards, JSON-LD y meta SEO).
@@ -116,6 +127,7 @@
 | 12 Feb 2026 | Formulario embebido en landings | ~200 |
 | 14-18 Feb 2026 | Multi-idioma base (5 idiomas) | ~600 |
 | 19-24 Feb 2026 | Contenido ciudades completo + traducido | **644** |
+| 2 Abr 2026 | GHL + webhook español + admin leads | — |
 
 ---
 
@@ -132,6 +144,6 @@
 
 ---
 
-**Fecha de actualización:** 28 de Febrero 2026  
-**Estado:** ✅ MULTI-IDIOMA + SEO COMPLETO + PRODUCTION-READY  
-**Versión:** 3.0.1
+**Fecha de actualización:** 2 de abril de 2026  
+**Estado:** ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PRODUCTION-READY  
+**Versión:** 3.1.0

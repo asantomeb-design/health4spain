@@ -1,13 +1,15 @@
 # 📊 Estado del Proyecto Health4Spain
 
-**Fecha de última actualización:** 28 de Febrero 2026
+**Fecha de última actualización:** 2 de abril de 2026
 
 ---
 
-## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO COMPLETO + PRODUCTION-READY
+## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO + GHL/LEADS + PRODUCTION-READY
 
 ### 🎯 Hitos Alcanzados
 
+- ✅ **GoHighLevel integrado** (API upsert + webhook único `GHL_INCOMING_WEBHOOK_SALUD`): valores legibles en **español** en CRM aunque el lead venga de formulario EN/FR/DE/PT (`src/lib/ghl-spanish-labels.ts`, campos `*_es` en webhook y custom fields API).
+- ✅ **Panel admin** `/administrator/leads`: listado y eliminación de leads.
 - ✅ **5 idiomas completos** (ES, EN, FR, DE, PT) con páginas idénticas
 - ✅ **644 páginas estáticas** generadas en build
 - ✅ **19 ciudades con contenido exhaustivo** basado en guía de migración (14 secciones)
@@ -199,6 +201,10 @@ npm run check-landings
 - [ ] Onboarding primeros partners
 - [ ] Dashboard partners
 
+### Completado Recientemente (Abr 2026)
+- ✅ Integración CRM GoHighLevel (variables en `.env.example`; texto ES en API + webhook)
+- ✅ Validación y flujo de leads alineados (p. ej. urgencia en `LandingFormEmbed`)
+
 ### Completado Recientemente (Feb 2026)
 - ✅ Multi-idioma completo (5 idiomas)
 - ✅ Contenido ciudades con guía completa (14 secciones)
@@ -209,6 +215,6 @@ npm run check-landings
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA + SEO COMPLETO + PRODUCTION-READY  
-**Última actualización**: 28 de Febrero 2026  
-**Versión**: 3.0.0
+**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PRODUCTION-READY  
+**Última actualización**: 2 de abril de 2026  
+**Versión**: 3.1.0

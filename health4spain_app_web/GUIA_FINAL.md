@@ -162,5 +162,5 @@ Si algo falla:
 
 ---
 
-**Última actualización**: 28 de Febrero 2026
+**Última actualización**: 2 de abril de 2026
 **Estado**: Generación en curso (35-40 de 76 landing pages completadas)

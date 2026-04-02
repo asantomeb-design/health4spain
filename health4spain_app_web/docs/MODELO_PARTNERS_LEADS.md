@@ -1,7 +1,13 @@
 # 💼 Health4Spain - Modelo de Partners y Gestión de Leads
 
 > **Documento Técnico del Modelo de Negocio**  
-> Última actualización: Febrero 2026
+> Última actualización: abril de 2026
+
+---
+
+## ✅ Integración operativa (abril 2026)
+
+Los leads del sitio se guardan en **Supabase** (`leads`) y pueden enviarse a **GoHighLevel**: API de contactos (upsert) + **webhook entrante** con campos en español (`*_es`) para que el equipo trabaje en un solo idioma en el CRM. Panel interno: **`/administrator/leads`**. Detalle técnico: `README.md`, `.env.example`, `src/lib/gohighlevel.ts`.
 
 ---
 

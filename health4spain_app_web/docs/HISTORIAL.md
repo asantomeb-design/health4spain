@@ -1,5 +1,17 @@
 # Historial de Desarrollo - Health4Spain
 
+## Versión 3.1.0 (2 abril 2026)
+
+### GoHighLevel y leads en español
+
+- **Integración GHL**: Tras insertar en Supabase, `createGHLContact` (API v2 upsert) y `sendLeadToGHLIncomingWebhook` (URL `GHL_INCOMING_WEBHOOK_SALUD`) con una sola pasada de `buildGhlWebhookSpanishFields` (fire-and-forget desde `/api/leads`).
+- **Español en CRM**: Custom fields con etiquetas ES; webhook con `servicio_es`, `urgencia_es`, `presupuesto_es`, `ciudad_servicio_espana_nombre`, `pais_origen_es`, `fecha_nacimiento_legible_es`, etc.
+- **Admin**: `/administrator/leads` — eliminar leads.
+- **Código**: `src/lib/gohighlevel.ts`, `src/lib/ghl-spanish-labels.ts`, `src/app/api/leads/route.ts`.
+- **Config**: `.env.example` (variables y mapeo sugerido en GHL).
+
+---
+
 ## Versión 3.0.1 (28 Febrero 2026)
 
 ### Logo unificado

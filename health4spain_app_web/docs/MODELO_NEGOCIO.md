@@ -1,7 +1,7 @@
 # 💼 Health4Spain - Modelo de Negocio y Partners
 
 > **Documento Técnico del Modelo de Negocio**  
-> Última actualización: Febrero 2026
+> Última actualización: abril de 2026
 
 ---
 

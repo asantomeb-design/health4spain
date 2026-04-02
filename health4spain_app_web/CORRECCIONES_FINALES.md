@@ -158,3 +158,7 @@ Todos los archivos del proyecto ahora reflejan correctamente:
 - ✅ 76 landing pages totales (4 × 19)
 - ✅ Precio correcto: 1.498€ + IVA
 - ✅ Documentación completa y precisa
+
+---
+
+**Nota (abril 2026):** La integración con **GoHighLevel**, los campos en español para el CRM y el panel **`/administrator/leads`** están documentados en `README.md`, `RESUMEN_ACTUALIZACIONES.md` y `docs/HISTORIAL.md` (v3.1.0).

@@ -1,7 +1,9 @@
 # 🔍 Auditoría Completa - Health4Spain
 
-**Fecha:** 28 Febrero 2026  
+**Fecha:** 2 abril 2026  
 **Alcance:** Funcionamiento, flujo de datos, CTAs, servicios, documentación
+
+> **Nota:** Desde abril 2026, **GoHighLevel** está integrado (API + webhook único) con etiquetas en español para el CRM; **`/administrator/leads`** permite gestionar y eliminar leads. Algunas tablas de este documento pueden no reflejar el árbol de rutas multi-idioma más reciente.
 
 ---
 
@@ -37,7 +39,7 @@
 ### Admin (`/administrator/*`)
 
 - Layout propio, login Supabase Auth
-- Leads, blog, media, servicios, destinos, landings
+- Leads (listado y eliminación), chat IA, historial chat, blog, media, servicios, destinos, landings
 
 ---
 
@@ -52,7 +54,7 @@
 | `landing_pages` | 76 landings (servicio×ciudad) | R: servicios/[slug], destinos/[slug], sitemap |
 | `ciudades_contenido` | Contenido extendido ciudades | R: destinos/[slug] cuando es solo ciudad |
 | `blog_posts` | Artículos | R: blog, sitemap. W: admin |
-| `leads` | Solicitudes de contacto | R: admin. W: POST /api/leads |
+| `leads` | Solicitudes de contacto | R: admin. W: POST /api/leads (+ sync opcional GHL) |
 
 ### Datos estáticos (hardcodeados)
 

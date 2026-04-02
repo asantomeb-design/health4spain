@@ -1,7 +1,8 @@
 # 📝 Health4Spain - Estrategia de Blog y Contenidos
 
 > **Documento conceptual**  
-> El blog como motor de SEO y autoridad
+> El blog como motor de SEO y autoridad  
+> *(Abril 2026: para estado del producto y captación de leads/GHL, ver `README.md` en la raíz del proyecto.)*
 
 ---
 

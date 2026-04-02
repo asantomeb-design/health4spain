@@ -62,6 +62,17 @@ Debes configurar estas variables de entorno en tu proyecto de Vercel:
 | `RESEND_API_KEY` | `re_...` | API de Resend.com |
 | `NOTIFICATION_EMAIL` | `leads@health4spain.com` | Email para notificaciones |
 
+#### 📇 GoHighLevel CRM (Opcional, listo en código)
+
+| Variable | Descripción |
+|----------|-------------|
+| `GHL_PRIVATE_TOKEN` | Token de integración privada (scopes contacts) |
+| `GHL_LOCATION_ID` | Location ID de la sub-cuenta |
+| `GHL_INCOMING_WEBHOOK_SALUD` | URL del webhook entrante (un solo flujo para todos los servicios) |
+| `GHL_CUSTOM_FIELD_IDS` | JSON `{ "clave": "uuid-campo-ghl" }` — ver `.env.example` |
+
+Si el repo en GitHub incluye la carpeta padre, en Vercel el **Root Directory** debe ser `health4spain_app_web`.
+
 ---
 
 ## ⚙️ Configuración en Vercel
@@ -155,6 +166,7 @@ Asegúrate de que en Supabase tengas configurado:
 - [ ] Acceso al panel de administrador funcionando
 - [ ] Editor de blog funcionando
 - [ ] Formularios de leads funcionando
+- [ ] (Opcional) Variables GHL configuradas y contacto creado en workflow de prueba
 
 ---
 

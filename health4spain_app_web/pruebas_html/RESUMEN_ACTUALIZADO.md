@@ -139,3 +139,7 @@
 ---
 
 **TODOS LISTOS PARA ABRIR EN EL NAVEGADOR Y COMPARAR** 🚀
+
+---
+
+*Abril 2026: referencia de maquetas; producto actual → `../README.md`.*

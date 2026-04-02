@@ -1,5 +1,7 @@
 # Archivos a Eliminar Manualmente
 
+> **Abril 2026:** El producto en producción incluye leads + GHL; esta lista es de limpieza histórica, no afecta a esa integración.
+
 Los siguientes archivos/carpetas son obsoletos y pueden eliminarse:
 
 ```

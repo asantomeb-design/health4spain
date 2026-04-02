@@ -102,3 +102,7 @@
 - Hablar de **nacionalidades de origen** (UK, Marruecos, Ecuador, etc.)
 - Enfatizar que es **GRATUITO** para el usuario
 - Mencionar las **19 ciudades** reales donde operan
+
+---
+
+*Nota abril 2026: la aplicación Next.js vive en `health4spain_app_web/`; estos HTML son maquetas históricas. Estado del producto: ver `../README.md`.*

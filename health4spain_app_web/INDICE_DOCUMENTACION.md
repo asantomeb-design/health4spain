@@ -1,8 +1,8 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 28 de Febrero 2026  
-**Estado:** ✅ Multi-idioma (5) | SEO Completo | 644 Páginas | Production-Ready  
-**Versión:** 3.0.0
+**Fecha:** 2 de abril de 2026  
+**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | 644 páginas | Production-ready  
+**Versión:** 3.1.0
 
 ---
 
@@ -12,7 +12,7 @@
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
-| **[README.md](./README.md)** | 📘 Visión general, stack, arquitectura, multi-idioma | ✅ Actualizado |
+| **[README.md](./README.md)** | 📘 Visión general, stack, GHL/leads ES, multi-idioma | ✅ Actualizado |
 | **[ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md)** | 📊 Estado actual + hitos + números | ✅ Actualizado |
 | **[RESUMEN_ACTUALIZACIONES.md](./RESUMEN_ACTUALIZACIONES.md)** | 📝 Log de actualizaciones | ✅ Actualizado |
 
@@ -28,7 +28,7 @@
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
 | **[CONFIGURACION_COMPLETADA.md](./CONFIGURACION_COMPLETADA.md)** | 🔧 Setup del proyecto | 📖 Referencia |
-| **[CONFIGURACION_VERCEL.md](./CONFIGURACION_VERCEL.md)** | 🚀 Deploy en Vercel | 📖 Referencia |
+| **[CONFIGURACION_VERCEL.md](./CONFIGURACION_VERCEL.md)** | 🚀 Deploy en Vercel (+ vars GHL) | ✅ Actualizado |
 | **[GUIA_CONFIGURACION_SUPABASE.md](./GUIA_CONFIGURACION_SUPABASE.md)** | 🗄️ Setup Supabase | 📖 Referencia |
 
 ---
@@ -39,11 +39,11 @@
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
-| **[AUDITORIA.md](./docs/AUDITORIA.md)** | 🔍 Auditoría completa del sistema | ✅ Actualizado |
+| **[AUDITORIA.md](./docs/AUDITORIA.md)** | 🔍 Auditoría (incl. nota GHL/leads abr 2026) | ✅ Actualizado |
 | **[HISTORIAL.md](./docs/HISTORIAL.md)** | 📜 Historial de cambios | ✅ Actualizado |
 | **[SCRIPTS_LANDINGS.md](./docs/SCRIPTS_LANDINGS.md)** | 🤖 Scripts de generación | ✅ Actualizado |
 | **[MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md)** | 💰 Modelo de negocio | 📖 Referencia |
-| **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners y leads | 📖 Referencia |
+| **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners y leads (+ GHL operativo) | ✅ Actualizado |
 | **[ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md)** | ✍️ Estrategia SEO blog | 📖 Referencia |
 
 ### 📂 `/scripts`
@@ -76,6 +76,12 @@
 - **Config**: `/administrator/chat-ia` (estado on/off en BD, modelo, prompts, tablas de conocimiento)
 - **Historial**: `/administrator/chat-history`
 - **APIs**: `/api/chat`, `/api/chat/config`, `/api/chat/rate`
+
+### Leads y GoHighLevel (listo)
+- **Captura**: `POST /api/leads` → Supabase `leads` + (opcional) GHL API + webhook único
+- **Código**: `src/lib/gohighlevel.ts`, `src/lib/ghl-spanish-labels.ts`
+- **Admin**: `/administrator/leads` (listado y borrado)
+- **Env / mapeo**: `.env.example` (`GHL_PRIVATE_TOKEN`, `GHL_LOCATION_ID`, `GHL_INCOMING_WEBHOOK_SALUD`, `GHL_CUSTOM_FIELD_IDS`)
 
 ### Contenido de Ciudades
 
@@ -119,5 +125,5 @@
 
 ---
 
-**Última actualización:** 28 de Febrero 2026  
-**Versión:** 3.0.0
+**Última actualización:** 2 de abril de 2026  
+**Versión:** 3.1.0

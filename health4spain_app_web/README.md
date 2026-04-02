@@ -32,7 +32,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 
 76 landing pages SEO + blog multiidioma + páginas de destinos con contenido completo
 
-**✅ ESTADO**: Proyecto multi-idioma, SEO completo, production-ready (28 Feb 2026)
+**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM) + leads en español**, panel admin de leads, production-ready (2 Abr 2026)
 
 ---
 
@@ -207,6 +207,16 @@ npm run images:webp                                       # PNG → WebP
 
 ---
 
+## 📇 CRM GoHighLevel (GHL) y leads
+
+- **POST `/api/leads`**: guarda en Supabase (`leads`) y, si hay variables de entorno, sincroniza con GHL.
+- **API v2**: `createGHLContact` — upsert de contacto; custom fields con **texto en español** (servicio, urgencia, presupuesto, ciudad de interés, idioma) vía `src/lib/ghl-spanish-labels.ts` y `GHL_CUSTOM_FIELD_IDS` (JSON en `.env`).
+- **Webhook entrante único**: `GHL_INCOMING_WEBHOOK_SALUD` — payload con slugs técnicos y campos `*_es` (`servicio_es`, `urgencia_es`, `presupuesto_es`, `ciudad_servicio_espana_nombre`, `pais_origen_es`, `fecha_nacimiento_legible_es`, etc.) para workflows y merge tags **sin traducir en GHL**; el formulario puede estar en EN/FR/DE/PT.
+- **Admin**: `/administrator/leads` — listado y **eliminación** de leads (auth admin).
+- **Detalle**: variables y mapeo sugerido en `.env.example`.
+
+---
+
 ## 🎨 Diseño y UX
 
 - **Modern Minimalist**: Negro, blanco, acento azul (`#3bbdda`)
@@ -237,6 +247,12 @@ OPENAI_API_KEY=                    # Requerido para Chat Mar-IA y scripts de gen
 NEXT_PUBLIC_TINYMCE_API_KEY=
 NEXT_PUBLIC_WHATSAPP_NUMBER=34600000000
 NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
+
+# GoHighLevel (opcional — ver .env.example para mapeo de campos)
+# GHL_PRIVATE_TOKEN=
+# GHL_LOCATION_ID=
+# GHL_INCOMING_WEBHOOK_SALUD=
+# GHL_CUSTOM_FIELD_IDS={"ciudad_interes":"uuid-..."}
 ```
 
 ---
@@ -251,7 +267,7 @@ NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, PRODUCTION-READY  
-**Última actualización**: 28 de Febrero 2026  
+**Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, GHL + LEADS (ES), PRODUCTION-READY  
+**Última actualización**: 2 de abril de 2026  
 **Build**: 644 páginas estáticas  
 **Licencia**: Privado - Health4Spain © 2026

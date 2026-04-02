@@ -1,6 +1,6 @@
 # Configuración de Supabase para Health4Spain
 
-**Última actualización:** 28 Febrero 2026
+**Última actualización:** 2 abril 2026
 
 ---
 
@@ -37,7 +37,7 @@ En **SQL Editor**, ejecutar en orden:
 
 | Tabla | Descripción | Idiomas |
 |-------|-------------|---------|
-| `leads` | Leads capturados del formulario | - |
+| `leads` | Leads capturados (`POST /api/leads`); opcional envío a GoHighLevel | - |
 | `blog_posts` | Artículos de blog | `lang` (es/en/fr/de/pt) |
 | `landing_pages` | Landing pages SEO | `idioma` |
 | `ciudades_catalogo` | 19 ciudades base | - |

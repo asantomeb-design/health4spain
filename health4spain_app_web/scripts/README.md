@@ -4,13 +4,14 @@ Automatización de generación de contenido, traducción y mantenimiento.
 
 ---
 
-## ✅ ESTADO ACTUAL (28 Febrero 2026)
+## ✅ ESTADO ACTUAL (2 abril 2026)
 
 - ✅ **19 ciudades** con contenido completo (14 secciones basadas en guía migración)
 - ✅ **Contenido traducido** a EN/FR/DE/PT con OpenAI GPT-4o
 - ✅ **76 landing pages** generadas (4 servicios × 19 ciudades)
 - ✅ **Blog multiidioma** traducido
 - ✅ **644 páginas** en build final
+- ✅ **Leads → Supabase + GoHighLevel** (opcional): ver README raíz y `.env.example`
 
 ---
 
@@ -221,4 +222,4 @@ node scripts/translate-cities-content.js --force murcia
 
 ---
 
-**Última actualización:** 28 de Febrero 2026
+**Última actualización:** 2 de abril de 2026
