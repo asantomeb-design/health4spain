@@ -9,6 +9,7 @@
  */
 
 import type { Lead } from '@/lib/types';
+import { buildGhlWebhookSpanishFields } from '@/lib/ghl-spanish-labels';
 
 const GHL_API_BASE = 'https://services.leadconnectorhq.com';
 
@@ -219,7 +220,8 @@ export interface GHLWebhookExtras {
  *
  * Claves recomendadas en el flujo GHL:
  * - Campo estándar **City** → `{{inboundWebhookRequest.ciudad_origen}}` (ciudad de procedencia del usuario).
- * - Custom **¿Dónde en España?** → `{{inboundWebhookRequest.ciudad_servicio_espana_nombre}}` o `ciudad_servicio_espana` (slug).
+ * - Custom **¿Dónde en España?** → `{{inboundWebhookRequest.ciudad_servicio_espana_nombre}}` (nombre en español; slug en `ciudad_servicio_espana`).
+ * - Textos en español para GHL (sin flujos de traducción): `servicio_es`, `urgencia_es`, `presupuesto_es`, `idioma_preferido_es`, `dispositivo_es`, `tipo_ruta_es`, `status_es`.
  */
 export async function sendLeadToGHLIncomingWebhook(
   lead: Lead,
@@ -238,8 +240,7 @@ export async function sendLeadToGHLIncomingWebhook(
   const { firstName, lastName } = splitNombreCompleto(lead.nombre);
 
   const ciudadServicioSlug = lead.ciudad;
-  const ciudadServicioNombre =
-    extras?.ciudadServicioNombre?.trim() || null;
+  const spanish = await buildGhlWebhookSpanishFields(lead, extras);
 
   const payload = {
     /** Ayuda en GHL si quieres ramificar: `salud` solo si servicio es seguros; si no, `otros`. */
@@ -267,7 +268,6 @@ export async function sendLeadToGHLIncomingWebhook(
     ciudad: ciudadServicioSlug,
     ciudad_interes: ciudadServicioSlug,
     ciudad_servicio_espana: ciudadServicioSlug,
-    ciudad_servicio_espana_nombre: ciudadServicioNombre,
     presupuesto: lead.presupuesto ?? null,
     urgencia: lead.urgencia,
     idioma_preferido: lead.idioma_preferido,
@@ -280,6 +280,7 @@ export async function sendLeadToGHLIncomingWebhook(
     score: lead.score ?? null,
     status: lead.status,
     created_at: lead.created_at,
+    ...spanish,
   };
 
   try {
