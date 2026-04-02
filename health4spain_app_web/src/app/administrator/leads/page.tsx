@@ -115,6 +115,21 @@ export default function LeadsPage() {
     }
   };
 
+  const deleteLead = async (leadId: string) => {
+    if (!window.confirm('¿Eliminar este lead de forma permanente? Esta acción no se puede deshacer.')) {
+      return;
+    }
+    try {
+      const { error } = await supabase.from('leads').delete().eq('id', leadId);
+      if (error) throw error;
+      if (selectedLead?.id === leadId) setSelectedLead(null);
+      await fetchLeads();
+    } catch (error) {
+      console.error('Error deleting lead:', error);
+      alert('No se pudo eliminar el lead. Comprueba permisos o vuelve a iniciar sesión.');
+    }
+  };
+
   const formatTelefono = (lead: Lead) => {
     if (lead.codigo_pais) {
       return `${lead.codigo_pais} ${lead.telefono}`;
@@ -253,12 +268,22 @@ export default function LeadsPage() {
                       {new Date(lead.created_at).toLocaleDateString('es-ES')}
                     </td>
                     <td className="px-4 py-3">
-                      <button
-                        onClick={() => setSelectedLead(lead)}
-                        className="text-accent hover:text-accent-600 text-sm font-medium"
-                      >
-                        Ver
-                      </button>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedLead(lead)}
+                          className="text-accent hover:text-accent-600 text-sm font-medium"
+                        >
+                          Ver
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteLead(lead.id)}
+                          className="text-red-600 hover:text-red-800 text-sm font-medium"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -392,6 +417,16 @@ export default function LeadsPage() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              <div className="pt-2 border-t border-red-100">
+                <button
+                  type="button"
+                  onClick={() => deleteLead(selectedLead.id)}
+                  className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition"
+                >
+                  Eliminar lead
+                </button>
               </div>
 
               {/* Timestamps */}
