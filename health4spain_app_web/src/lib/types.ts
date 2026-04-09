@@ -188,7 +188,8 @@ export interface LandingPage {
   servicio_nombre: string;
   ciudad_slug: string;
   ciudad_nombre: string;
-  
+  provincia?: string | null;
+
   // SEO
   meta_title: string;
   meta_description: string;
