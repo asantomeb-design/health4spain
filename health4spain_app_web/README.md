@@ -28,11 +28,11 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 - 🇩🇪 Alemán (`/de/`)
 - 🇵🇹 Portugués (`/pt/`)
 
-### 4️⃣ **644 Páginas Estáticas**
+### 4️⃣ **176+ landing pages SEO + blog + destinos**
 
-76 landing pages SEO + blog multiidioma + páginas de destinos con contenido completo
+176+ landing pages SEO (76 servicio×ciudad + 100 visa no lucrativa) + blog multiidioma + páginas de destinos
 
-**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM) + leads en español**, panel admin de leads, production-ready (2 Abr 2026)
+**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM) + leads en español**, panel admin de leads, production-ready — **v3.2.0** (9 Abr 2026)
 
 ---
 
@@ -85,7 +85,7 @@ health4spain/
 │       ├── data.ts                 # Capa de datos compartida (locale-aware)
 │       ├── dictionaries.ts         # Traducciones UI (5 idiomas, 200+ claves)
 │       ├── routes.ts               # URLs traducidas por idioma
-│       ├── seo.tsx                 # SEO helpers (JSON-LD, OG, hreflang)
+│       ├── seo.tsx                 # SEO helpers (JSON-LD, OG, hreflang, Place, Service+areaServed)
 │       ├── services.ts             # RPCs traducidas
 │       └── ciudades.ts             # Funciones ciudades
 ├── scripts/
@@ -93,6 +93,7 @@ health4spain/
 │   ├── translate-cities-content.js    # Traductor ciudades (4 idiomas)
 │   ├── translate-all.js               # Traductor masivo (blog, landings)
 │   ├── generate-landings.ts           # Generador landing pages
+│   ├── generate-visa-no-lucrativa-landings.ts  # Generador landings visa no lucrativa
 │   └── generate-blog-posts.ts         # Generador blog
 ├── supabase/
 │   ├── schema.sql                     # Esquema principal
@@ -100,7 +101,9 @@ health4spain/
 │   ├── 09-expand-ciudades-contenido.sql  # Nuevas secciones guía
 │   ├── 10-expand-text-fields.sql         # Campos expandidos
 │   ├── 11-chatbot-config.sql             # Configuración Chat IA (singleton)
-│   └── 12-chat-messages.sql              # Historial conversaciones + ratings
+│   ├── 12-chat-messages.sql              # Historial conversaciones + ratings
+│   ├── 13-landing-visa-no-lucrativa.sql       # Landings visa no lucrativa ES+EN
+│   └── 14-landing-visa-no-lucrativa-de-fr-pt.sql  # Landings visa no lucrativa DE+FR+PT
 └── public/images/                      # chat_ia_logo.jpg (avatar Mar-IA), favicon, logos
 ```
 
@@ -141,7 +144,7 @@ Cada página de ciudad incluye **14 secciones**:
 
 ### SEO Implementado
 
-- ✅ **JSON-LD**: Organization, WebSite, BlogPosting, BreadcrumbList, FAQPage, Service
+- ✅ **JSON-LD**: Organization, WebSite, BlogPosting, BreadcrumbList, FAQPage, Service, Place
 - ✅ **Hreflang**: Alternates en todas las páginas (5 idiomas)
 - ✅ **Canonicals**: URL canónica por página
 - ✅ **Open Graph / Twitter Cards**: Metadata social completa
@@ -165,6 +168,7 @@ node scripts/translate-all.js                             # Blog + landings a 4 
 
 # Landing pages
 npm run generate-landings                                 # 76 landing pages
+npm run generate-visa-landings                            # 100 landings visa no lucrativa
 npm run check-landings                                    # Verificar estado
 
 # Blog
@@ -183,7 +187,7 @@ npm run images:webp                                       # PNG → WebP
 | Tabla | Registros | Descripción |
 |-------|-----------|-------------|
 | `ciudades_contenido` | 19 × 5 = 95 | Contenido completo ciudades (22 campos, 5 idiomas) |
-| `landing_pages` | 76+ | Landing pages SEO |
+| `landing_pages` | 176+ | Landing pages SEO |
 | `blog_posts` | 30+ × 5 | Artículos blog multiidioma |
 | `ciudades_catalogo` | 19 | Catálogo ciudades |
 | `servicios_catalogo` | 4 | Catálogo servicios |
@@ -245,7 +249,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_ADMIN_EMAILS=admin@health4spain.com
 OPENAI_API_KEY=                    # Requerido para Chat Mar-IA y scripts de generación
 NEXT_PUBLIC_TINYMCE_API_KEY=
-NEXT_PUBLIC_WHATSAPP_NUMBER=34600000000
+NEXT_PUBLIC_WHATSAPP_NUMBER=34644404562
 NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
 
 # GoHighLevel (opcional — ver .env.example para mapeo de campos)
@@ -268,6 +272,7 @@ NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
 ---
 
 **Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, GHL + LEADS (ES), PRODUCTION-READY  
-**Última actualización**: 2 de abril de 2026  
-**Build**: 644 páginas estáticas  
+**Última actualización**: 9 de abril de 2026  
+**Versión**: 3.2.0  
+**Build**: 748+ páginas estáticas (tras landings visa no lucrativa en BD)  
 **Licencia**: Privado - Health4Spain © 2026

@@ -1,6 +1,6 @@
 # Configuración de Supabase para Health4Spain
 
-**Última actualización:** 2 abril 2026
+**Última actualización:** 9 abril 2026
 
 ---
 
@@ -30,8 +30,10 @@ En **SQL Editor**, ejecutar en orden:
 | 10 | `10-expand-text-fields.sql` | Campos expandidos a TEXT (meta, coste_vida, etc.) |
 | 11 | `11-chatbot-config.sql` | Tabla `chatbot_config` (configuración Chat IA, singleton) |
 | 12 | `12-chat-messages.sql` | Tabla `chat_messages` (historial conversaciones + ratings) |
-| 13 | `rls-policies.sql` | Row Level Security |
-| 14 | `storage-policies.sql` | Políticas Storage |
+| 13 | `13-landing-visa-no-lucrativa.sql` | Landings visa no lucrativa ES+EN (2 madre + 38 ciudad) |
+| 14 | `14-landing-visa-no-lucrativa-de-fr-pt.sql` | Landings visa no lucrativa DE+FR+PT (3 madre + 57 ciudad) |
+| 15 | `rls-policies.sql` | Row Level Security |
+| 16 | `storage-policies.sql` | Políticas Storage |
 
 ## 3. Tablas Principales
 
@@ -39,7 +41,7 @@ En **SQL Editor**, ejecutar en orden:
 |-------|-------------|---------|
 | `leads` | Leads capturados (`POST /api/leads`); opcional envío a GoHighLevel | - |
 | `blog_posts` | Artículos de blog | `lang` (es/en/fr/de/pt) |
-| `landing_pages` | Landing pages SEO | `idioma` |
+| `landing_pages` | Landing pages SEO (76 servicio×ciudad + 100 visa no lucrativa) | `idioma` |
 | `ciudades_catalogo` | 19 ciudades base | - |
 | `servicios_catalogo` | 4 servicios base | - |
 | `ciudades_contenido` | Contenido completo ciudades (22 campos) | `idioma` |

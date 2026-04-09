@@ -1,8 +1,8 @@
 # 🎯 SCRIPTS DE LANDING PAGES - DOCUMENTACIÓN
 
-## ✅ ESTADO ACTUAL (2 abril 2026)
+## ✅ ESTADO ACTUAL (9 abril 2026)
 
-**76 landing pages generadas exitosamente** (4 servicios × 19 ciudades)
+**176+ landing pages generadas exitosamente** (76 servicio×ciudad + 100 visa no lucrativa)
 
 ---
 
@@ -158,6 +158,30 @@ npm run clean-auxiliary
 
 ---
 
+### 8. `generate-visa-no-lucrativa-landings.ts` - LANDINGS VISA NO LUCRATIVA
+
+**Archivo:** `scripts/generate-visa-no-lucrativa-landings.ts`
+
+**Comando:**
+```bash
+npm run generate-visa-landings
+```
+
+**Qué hace:**
+- ✅ Genera contenido IA para las 95 landings de ciudad "visa no lucrativa"
+- ✅ Prompts específicos por idioma (ES, EN, DE, FR, PT)
+- ✅ Usa OpenAI GPT-4o-mini
+- ✅ Upsert en `landing_pages`
+- ✅ Las 5 landing madre ya tienen contenido (insertadas por SQL)
+
+**Prerequisitos:**
+- Ejecutar `13-landing-visa-no-lucrativa.sql` (ES+EN)
+- Ejecutar `14-landing-visa-no-lucrativa-de-fr-pt.sql` (DE+FR+PT)
+
+**Coste estimado:** ~$0.30 (95 landings)
+
+---
+
 ## 🔍 Criterios de Validación
 
 Una landing page se considera **INCOMPLETA** si cumple uno o más de estos criterios:
@@ -209,6 +233,7 @@ npm run clean-auxiliary  # ✅ 222 registros eliminados
 | `list-all-landings` | **$0.00** | No |
 | `retry-landings` | ~$0.015 por landing | Sí, solo incompletas |
 | `generate-landings` (76) | **~$0.15-0.20** | Sí, todas |
+| `generate-visa-landings` (95) | **~$0.30** | Sí, visa no lucrativa |
 | `fix-missing-landing` (1) | **~$0.002** | Sí, 1 landing |
 
 **Total real del proyecto:** ~$0.17 USD (129,200 tokens)
@@ -221,6 +246,7 @@ npm run clean-auxiliary  # ✅ 222 registros eliminados
 {
   "scripts": {
     "generate-landings": "npx tsx scripts/generate-landings.ts",
+    "generate-visa-landings": "npx tsx scripts/generate-visa-no-lucrativa-landings.ts",
     "check-landings": "npx tsx scripts/check-landings.ts",
     "retry-landings": "npx tsx scripts/retry-landings.ts",
     "fix-database": "npx tsx scripts/fix-database.ts",
@@ -253,10 +279,11 @@ npm run clean-auxiliary  # ✅ 222 registros eliminados
 | Listar todas (gratis) | `npx tsx scripts/list-all-landings.ts` |
 | Regenerar incompletas | `npm run retry-landings` |
 | Generar todo | `npm run generate-landings` |
+| Generar visa no lucrativa | `npm run generate-visa-landings` |
 | Limpiar todo | `npm run clear-landings` |
 | Limpiar auxiliares | `npm run clean-auxiliary` |
 
 ---
 
-**Última actualización:** 2 de abril de 2026  
-**Estado:** ✅ 76/76 landing pages completadas
+**Última actualización:** 9 de abril de 2026  
+**Estado:** ✅ 176+ landing pages (76 servicio×ciudad + 100 visa no lucrativa)

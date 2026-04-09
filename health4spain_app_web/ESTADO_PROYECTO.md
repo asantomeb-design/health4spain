@@ -1,6 +1,6 @@
 # 📊 Estado del Proyecto Health4Spain
 
-**Fecha de última actualización:** 2 de abril de 2026
+**Fecha de última actualización:** 9 de abril de 2026
 
 ---
 
@@ -11,11 +11,16 @@
 - ✅ **GoHighLevel integrado** (API upsert + webhook único `GHL_INCOMING_WEBHOOK_SALUD`): valores legibles en **español** en CRM aunque el lead venga de formulario EN/FR/DE/PT (`src/lib/ghl-spanish-labels.ts`, campos `*_es` en webhook y custom fields API).
 - ✅ **Panel admin** `/administrator/leads`: listado y eliminación de leads.
 - ✅ **5 idiomas completos** (ES, EN, FR, DE, PT) con páginas idénticas
-- ✅ **644 páginas estáticas** generadas en build
+- ✅ **748+ páginas estáticas** generadas en build (tras landings visa no lucrativa en BD)
 - ✅ **19 ciudades con contenido exhaustivo** basado en guía de migración (14 secciones)
 - ✅ **Contenido ciudades traducido** a 4 idiomas con OpenAI GPT-4o
 - ✅ **SEO completo**: JSON-LD, hreflang, canonicals, OG, Twitter Cards, robots.txt
-- ✅ **76 landing pages SEO** (4 servicios × 19 ciudades)
+- ✅ **176+ landing pages SEO** (76 servicio×ciudad + 100 visa no lucrativa)
+- ✅ **100 landings "visa no lucrativa"** (5 madre + 95 ciudad) en 5 idiomas
+- ✅ **Schema JSON-LD extendido**: Place en destinos, Service+areaServed en landings
+- ✅ **Anti-canibalización SEO**: keyword "visa no lucrativa" exclusiva en landings dedicadas
+- ✅ **Contacto actualizado**: teléfono real +34 644 404 562 + WhatsApp en footer
+- ✅ **Blog styling**: estilos centralizados en globals.css (.blog-article-content)
 - ✅ **Blog multiidioma** con artículos traducidos
 - ✅ **Formulario embebido** en landings (conversión directa)
 - ✅ **Chat IA (Mar-IA)**: widget flotante, configurador en admin, historial y valoraciones, detección de idioma en dos agentes, contexto desde BD (servicios, ciudades, blog, landings); estado on/off persistido en BD y sin caché
@@ -33,7 +38,7 @@
 | 🇫🇷 FR | 1 | 1 + [slug] | 1 + 19 [slug] | 1 + 4 [slug] | 8 | ~130+ |
 | 🇩🇪 DE | 1 | 1 + [slug] | 1 + 19 [slug] | 1 + 4 [slug] | 8 | ~130+ |
 | 🇵🇹 PT | 1 | 1 + [slug] | 1 + 19 [slug] | 1 + 4 [slug] | 8 | ~130+ |
-| **Total build** | | | | | | **644** |
+| **Total build** | | | | | | **748+** |
 
 ### Contenido de Ciudades
 
@@ -101,7 +106,8 @@
 - ✅ **BlogPosting** - En artículos de blog
 - ✅ **BreadcrumbList** - En destinos y servicios dinámicos
 - ✅ **FAQPage** - En destinos y servicios con FAQs
-- ✅ **Service** - En páginas de servicios
+- ✅ **Service** - En páginas de servicios y landings servicio×ciudad (**areaServed**)
+- ✅ **Place** - En páginas de destinos (cityPlaceJsonLd)
 
 ### Técnico
 - ✅ `robots.txt` dinámico
@@ -120,7 +126,7 @@
 | Tabla | Registros | Idiomas |
 |-------|-----------|---------|
 | `ciudades_contenido` | 95 | 5 (es/en/fr/de/pt) |
-| `landing_pages` | 76+ | 5 |
+| `landing_pages` | 176+ | 5 |
 | `blog_posts` | 150+ | 5 |
 | `ciudades_catalogo` | 19 | - |
 | `servicios_catalogo` | 4 | - |
@@ -142,6 +148,8 @@
 7. `10-expand-text-fields.sql` - Campos TEXT expandidos
 8. `11-chatbot-config.sql` - Tabla configuración Chat IA
 9. `12-chat-messages.sql` - Tabla historial conversaciones
+10. `13-landing-visa-no-lucrativa.sql` - Landings visa no lucrativa ES+EN
+11. `14-landing-visa-no-lucrativa-de-fr-pt.sql` - Landings visa no lucrativa DE+FR+PT
 
 ---
 
@@ -155,6 +163,7 @@
 | `translate-cities-content.js` | Traducir ciudades a 4 idiomas | GPT-4o | ~$2.00 |
 | `translate-all.js` | Traducir blog + landings | GPT-4o | ~$1.50 |
 | `generate-landings.ts` | 76 landing pages | GPT-4o-mini | $0.20 |
+| `generate-visa-no-lucrativa-landings.ts` | 100 landings visa no lucrativa | — | — |
 | `generate-blog-posts.ts` | 30 artículos blog | GPT-4o-mini | $1.00 |
 
 ### Uso
@@ -173,6 +182,7 @@ node scripts/translate-all.js
 
 # Landing pages
 npm run generate-landings
+npm run generate-visa-landings
 npm run check-landings
 ```
 
@@ -181,7 +191,7 @@ npm run check-landings
 ## 📈 Performance
 
 ### Build
-- **644 páginas** generadas estáticamente
+- **748+ páginas** generadas estáticamente (tras landings visa no lucrativa en BD)
 - **Build time**: ~45 segundos
 - **0 errores**
 
@@ -201,6 +211,16 @@ npm run check-landings
 - [ ] Onboarding primeros partners
 - [ ] Dashboard partners
 
+### Completado Recientemente (Abr 2026 — SEO)
+- ✅ **Landings visa no lucrativa**: 100 filas en `landing_pages` (5 madre + 95 ciudad; SQL `13-landing-visa-no-lucrativa.sql` y `14-landing-visa-no-lucrativa-de-fr-pt.sql`)
+- ✅ **Script** `scripts/generate-visa-no-lucrativa-landings.ts` + `npm run generate-visa-landings`
+- ✅ **JSON-LD** en `src/lib/seo.tsx`: Place en destinos (`cityPlaceJsonLd`), Service con `areaServed` en landings servicio×ciudad (`localServiceJsonLd`)
+- ✅ **Anti-canibalización**: keyword "visa no lucrativa" retirada de `/servicios/seguros` y bloque seguros en destinos (`dictionaries.ts`); solo en landings dedicadas
+- ✅ **Contacto**: +34 644 404 562 y WhatsApp (`Footer.tsx`, `WhatsAppButton.tsx`, `constants.ts`, `LeadForm.tsx`)
+- ✅ **Blog**: estilos de artículos en `.blog-article-content` (`globals.css`), 5 idiomas
+- ✅ **Home ES**: meta description alineada con `dictionaries.ts` (sin "de salud")
+- ✅ **`landing_pages`**: ~176+ filas (76 originales + 100 visa no lucrativa)
+
 ### Completado Recientemente (Abr 2026)
 - ✅ Integración CRM GoHighLevel (variables en `.env.example`; texto ES en API + webhook)
 - ✅ Validación y flujo de leads alineados (p. ej. urgencia en `LandingFormEmbed`)
@@ -216,5 +236,5 @@ npm run check-landings
 ---
 
 **Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PRODUCTION-READY  
-**Última actualización**: 2 de abril de 2026  
-**Versión**: 3.1.0
+**Última actualización**: 9 de abril de 2026  
+**Versión**: 3.2.0

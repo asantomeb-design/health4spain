@@ -1,5 +1,20 @@
 # Historial de Desarrollo - Health4Spain
 
+## Versión 3.2.0 (9 abril 2026)
+
+### SEO: Landings visa no lucrativa + schemas + anti-canibalización
+
+- **100 landings "visa no lucrativa"**: 5 landing madre + 95 landings ciudad (19 ciudades × 5 idiomas). SQL: `13-landing-visa-no-lucrativa.sql`, `14-landing-visa-no-lucrativa-de-fr-pt.sql`.
+- **Script generación IA**: `scripts/generate-visa-no-lucrativa-landings.ts` + npm script `generate-visa-landings`.
+- **Schema JSON-LD extendido**: `cityPlaceJsonLd()` en destinos (Place con ciudad, provincia, población, % extranjeros) y `localServiceJsonLd()` en landings servicio×ciudad (Service con areaServed local).
+- **Anti-canibalización**: keyword "visa no lucrativa" eliminada de `/servicios/seguros` y bloque seguros en destinos (`dictionaries.ts`) — ahora solo en las landings dedicadas.
+- **Contacto real**: Teléfono +34 644 404 562 + WhatsApp en footer. Actualizado en `Footer.tsx`, `WhatsAppButton.tsx`, `constants.ts`, `LeadForm.tsx`.
+- **Blog styling**: Estilos artículos centralizados en `.blog-article-content` (`globals.css`) con jerarquía H2/H3/H4, spacing, listas, tablas, blockquotes.
+- **Home ES**: Meta description alineada con `dictionaries.ts`.
+- **Código**: `src/lib/seo.tsx` (2 funciones nuevas), `src/lib/dictionaries.ts` (bloque seguros genérico), `src/app/globals.css`, 5 idiomas × servicios + destinos + blog.
+
+---
+
 ## Versión 3.1.0 (2 abril 2026)
 
 ### GoHighLevel y leads en español

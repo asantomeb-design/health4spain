@@ -4,11 +4,11 @@ Automatización de generación de contenido, traducción y mantenimiento.
 
 ---
 
-## ✅ ESTADO ACTUAL (2 abril 2026)
+## ✅ ESTADO ACTUAL (9 abril 2026)
 
 - ✅ **19 ciudades** con contenido completo (14 secciones basadas en guía migración)
 - ✅ **Contenido traducido** a EN/FR/DE/PT con OpenAI GPT-4o
-- ✅ **76 landing pages** generadas (4 servicios × 19 ciudades)
+- ✅ **176+ landing pages** generadas (76 servicio×ciudad + 100 visa no lucrativa)
 - ✅ **Blog multiidioma** traducido
 - ✅ **644 páginas** en build final
 - ✅ **Leads → Supabase + GoHighLevel** (opcional): ver README raíz y `.env.example`
@@ -140,6 +140,28 @@ npm run retry-landings                       # Regenerar incompletas
 
 ---
 
+## 📍 generate-visa-no-lucrativa-landings.ts
+
+Genera contenido IA para las 95 landings de ciudad "visa no lucrativa" (5 idiomas × 19 ciudades).
+
+### Uso
+
+```bash
+npm run generate-visa-landings
+```
+
+### Prerequisitos
+
+Ejecutar antes los SQLs que insertan las filas placeholder:
+- `supabase/13-landing-visa-no-lucrativa.sql` (ES+EN)
+- `supabase/14-landing-visa-no-lucrativa-de-fr-pt.sql` (DE+FR+PT)
+
+Las 5 landing madre ya incluyen contenido completo en el SQL.
+
+**Modelo**: GPT-4o-mini | **Coste**: ~$0.30 (95 landings)
+
+---
+
 ## ✍️ generate-blog-posts.ts
 
 Genera 30 artículos de blog en español.
@@ -172,8 +194,9 @@ npx ts-node scripts/test-supabase.ts
 | `translate-cities-content.js` | GPT-4o | 76 traducciones | ~$2.00 |
 | `translate-all.js` | GPT-4o | Blog + landings × 4 idiomas | ~$1.50 |
 | `generate-landings.ts` | GPT-4o-mini | 76 landing pages | $0.20 |
+| `generate-visa-no-lucrativa-landings.ts` | GPT-4o-mini | 95 landings visa no lucrativa | ~$0.30 |
 | `generate-blog-posts.ts` | GPT-4o-mini | 30 blog posts | $1.00 |
-| **TOTAL** | | | **~$5.13** |
+| **TOTAL** | | | **~$5.43** |
 
 ---
 
@@ -206,6 +229,7 @@ supabase/10-expand-text-fields.sql
 2. `node scripts/generate-city-content-full.js --all` (contenido ciudades ES)
 3. `node scripts/translate-cities-content.js --force` (traducir ciudades)
 4. `npm run generate-landings` (76 landings)
+4b. `npm run generate-visa-landings` (95 landings visa no lucrativa)
 5. `npm run generate-blog` (30 blog posts)
 6. `node scripts/translate-all.js` (traducir blog + landings)
 7. `npm run build` → Verificar 644 páginas
@@ -222,4 +246,4 @@ node scripts/translate-cities-content.js --force murcia
 
 ---
 
-**Última actualización:** 2 de abril de 2026
+**Última actualización:** 9 de abril de 2026

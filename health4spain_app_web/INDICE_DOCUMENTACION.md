@@ -1,8 +1,8 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 2 de abril de 2026  
-**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | 644 páginas | Production-ready  
-**Versión:** 3.1.0
+**Fecha:** 9 de abril de 2026  
+**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | 744+ páginas | 176+ landings SEO | Production-ready  
+**Versión:** 3.2.0
 
 ---
 
@@ -15,6 +15,7 @@
 | **[README.md](./README.md)** | 📘 Visión general, stack, GHL/leads ES, multi-idioma | ✅ Actualizado |
 | **[ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md)** | 📊 Estado actual + hitos + números | ✅ Actualizado |
 | **[RESUMEN_ACTUALIZACIONES.md](./RESUMEN_ACTUALIZACIONES.md)** | 📝 Log de actualizaciones | ✅ Actualizado |
+| **[guion-cambios-cliente.txt](./guion-cambios-cliente.txt)** | 📝 Guion cambios cliente | ✅ Actualizado |
 
 ### 📋 Guías
 
@@ -55,6 +56,7 @@
 | `translate-cities-content.js` | 🌐 Traductor ciudades (EN/FR/DE/PT) | ✅ Nuevo |
 | `translate-all.js` | 🔄 Traductor masivo (blog + landings) | ✅ Actualizado |
 | `generate-landings.ts` | 📄 Generador landing pages | ✅ Operativo |
+| `generate-visa-no-lucrativa-landings.ts` | 📄 Landings visa no lucrativa (IA) | ✅ Operativo |
 | `generate-blog-posts.ts` | ✍️ Generador blog | ✅ Operativo |
 
 ### 📂 `/supabase`
@@ -66,6 +68,8 @@
 | `10-expand-text-fields.sql` | Campos expandidos a TEXT | ✅ Ejecutado |
 | `11-chatbot-config.sql` | Configuración Chat IA (singleton) | ✅ Ejecutado |
 | `12-chat-messages.sql` | Historial conversaciones + ratings | ✅ Ejecutado |
+| `13-landing-visa-no-lucrativa.sql` | Landings visa no lucrativa ES+EN | ✅ Ejecutado |
+| `14-landing-visa-no-lucrativa-de-fr-pt.sql` | Landings visa no lucrativa DE+FR+PT | ✅ Ejecutado |
 
 ---
 
@@ -105,7 +109,7 @@
 
 ### Deploy
 
-1. `npm run build` (verifica 644 páginas, 0 errores)
+1. `npm run build` (verifica 744+ páginas, 0 errores)
 2. `git push` → Vercel autodeploy
 
 ---
@@ -114,16 +118,16 @@
 
 | Métrica | Valor |
 |---------|-------|
-| Páginas estáticas | 644 |
+| Páginas estáticas | 744+ |
 | Idiomas | 5 (ES, EN, FR, DE, PT) |
 | Ciudades | 19 |
 | Secciones por ciudad | 14 |
 | Claves traducción UI | 200+ |
-| Landing pages SEO | 76 |
+| Landing pages SEO | 176+ |
 | Artículos blog | 30+ × 5 idiomas |
 | Tablas Supabase | 11+ (incl. chatbot_config, chat_messages) |
 
 ---
 
-**Última actualización:** 2 de abril de 2026  
-**Versión:** 3.1.0
+**Última actualización:** 9 de abril de 2026  
+**Versión:** 3.2.0

@@ -2,6 +2,39 @@
 
 ---
 
+## 🆕 SEO: Landings visa no lucrativa + schemas + contacto + blog — 9 abril 2026
+
+### 1. **100 Landings "Visa No Lucrativa"**
+- 5 landing pages madre (1 por idioma) con contenido completo
+- 95 landing pages por ciudad (19 ciudades × 5 idiomas) con meta SEO
+- SQLs: `13-landing-visa-no-lucrativa.sql` (ES+EN), `14-landing-visa-no-lucrativa-de-fr-pt.sql` (DE+FR+PT)
+- Script IA: `generate-visa-no-lucrativa-landings.ts` + npm `generate-visa-landings`
+
+### 2. **Schema JSON-LD Extendido**
+- `cityPlaceJsonLd()`: Schema Place en 19 destinos × 5 idiomas
+- `localServiceJsonLd()`: Schema Service con areaServed local en landings servicio×ciudad
+- Total schemas: Organization, WebSite, BlogPosting, BreadcrumbList, FAQPage, Service, Place
+
+### 3. **Anti-Canibalización SEO**
+- Keyword "visa no lucrativa" eliminada de /servicios/seguros (5 idiomas)
+- Eliminada del bloque seguros en destinos (dictionaries.ts, 5 idiomas)
+- Ahora exclusiva en landings dedicadas /servicios/seguro-salud-visa-no-lucrativa*
+
+### 4. **Contacto y Footer**
+- Teléfono real: +34 644 404 562 (antes placeholder)
+- WhatsApp añadido en footer (enlace wa.me)
+- Actualizado en Footer.tsx, WhatsAppButton.tsx, constants.ts, LeadForm.tsx
+
+### 5. **Blog Styling**
+- Estilos centralizados en `.blog-article-content` (globals.css)
+- Jerarquía visual: H2 (2.25rem + borde), H3 (1.75rem), H4 (1.25rem)
+- Spacing, listas con marcadores accent, tablas, blockquotes
+
+### 6. **Home ES Meta**
+- Description alineada con dictionaries.ts (sin "de salud")
+
+---
+
 ## 🆕 GoHighLevel + leads en español — 2 abril 2026
 
 - **CRM GHL**: Tras `POST /api/leads`, sincronización opcional por API v2 (upsert contacto) y **webhook entrante único** (`GHL_INCOMING_WEBHOOK_SALUD`).
@@ -128,6 +161,7 @@
 | 14-18 Feb 2026 | Multi-idioma base (5 idiomas) | ~600 |
 | 19-24 Feb 2026 | Contenido ciudades completo + traducido | **644** |
 | 2 Abr 2026 | GHL + webhook español + admin leads | — |
+| 9 Abr 2026 | SEO visa no lucrativa + schemas + contacto + blog | — |
 
 ---
 
@@ -136,14 +170,15 @@
 | Concepto | Modelo | Coste |
 |----------|--------|-------|
 | 76 landing pages | GPT-4o-mini | $0.20 |
+| 100 landings visa no lucrativa | GPT-4o-mini | ~$0.30 |
 | 30 blog posts | GPT-4o-mini | $1.00 |
 | 19 ciudades contenido completo | GPT-4o | $0.43 |
 | 76 traducciones ciudades | GPT-4o | ~$2.00 |
 | Traducciones blog + landings | GPT-4o | ~$1.50 |
-| **TOTAL** | | **~$5.13** |
+| **TOTAL** | | **~$5.43** |
 
 ---
 
-**Fecha de actualización:** 2 de abril de 2026  
+**Fecha de actualización:** 9 de abril de 2026  
 **Estado:** ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PRODUCTION-READY  
-**Versión:** 3.1.0
+**Versión:** 3.2.0
