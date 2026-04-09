@@ -14,7 +14,7 @@ import { getLandingBySlug, getCiudadContenido as getCiudadContenidoData, getCiud
 import type { Locale } from '@/lib/routes';
 import { getDictionary } from '@/lib/dictionaries';
 import { ROUTES } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, breadcrumbJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
+import { buildDynamicAlternates, buildOpenGraph, buildTwitter, breadcrumbJsonLd, faqPageJsonLd, cityPlaceJsonLd, JsonLd } from '@/lib/seo';
 
 const LOCALE: Locale = 'es';
 const t = getDictionary(LOCALE);
@@ -487,6 +487,15 @@ async function CityView({
   return (
     <>
       <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
+      <JsonLd data={cityPlaceJsonLd({
+        name: ciudadData.nombre,
+        slug,
+        provincia: ciudadData.provincia,
+        comunidad: ciudadData.comunidad,
+        poblacion: ciudadData.poblacion,
+        porcentajeExtranjeros: ciudadData.porcentaje_extranjeros,
+        locale: LOCALE,
+      })} />
       {contenidoDB.faqs && contenidoDB.faqs.length > 0 && (
         <JsonLd data={faqPageJsonLd(contenidoDB.faqs.map((f: any) => ({ question: f.pregunta, answer: f.respuesta })))} />
       )}
@@ -650,6 +659,35 @@ async function CityView({
                   <p className="text-gray-600 leading-relaxed whitespace-pre-line">{contenidoDB.coste_vida_utilidades}</p>
                 </div>
               )}
+
+              <div className="bg-white border-t-3 border-accent p-8">
+                <h2 className="mb-6 text-xl sm:text-2xl md:text-3xl">
+                  {t.landingUI.insuranceBlockTitle} {ciudadData.nombre}
+                </h2>
+                <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                  {t.landingUI.insuranceBlockDesc}
+                </p>
+                <div className="space-y-3 mb-8">
+                  <div className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    <span className="text-gray-700">{t.landingUI.insuranceBlockBullet1}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    <span className="text-gray-700">{t.landingUI.insuranceBlockBullet2}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    <span className="text-gray-700">{t.landingUI.insuranceBlockBullet3}</span>
+                  </div>
+                </div>
+                <Link
+                  href={`/${LOCALE}/${r.services}/seguros-${slug}`}
+                  className="btn-minimal inline-flex items-center gap-2"
+                >
+                  {t.landingUI.insuranceBlockCTA} →
+                </Link>
+              </div>
 
               {contenidoDB.primeros_30_dias && contenidoDB.primeros_30_dias.length > 0 && (
                 <div>
@@ -1040,7 +1078,7 @@ function CityViewBasic({
             )}
           </div>
 
-          <div className="bg-white border-t-3 border-accent p-8 max-w-2xl mx-auto">
+          <div className="bg-white border-t-3 border-accent p-8 max-w-2xl mx-auto mb-12">
             <h3 className="text-2xl font-bold mb-4">
               {t.landingUI.personalizedInfo} {ciudadData.nombre}?
             </h3>
@@ -1049,6 +1087,32 @@ function CityViewBasic({
             </p>
             <Link href={`/${LOCALE}/${r.request}?ciudad=${slug}`} className="btn-minimal-lg">
               {t.landingUI.requestFreeAdvice}
+            </Link>
+          </div>
+
+          <div className="bg-white border-t-3 border-accent p-8 max-w-2xl mx-auto text-left">
+            <h3 className="text-2xl font-bold mb-4">
+              {t.landingUI.insuranceBlockTitle} {ciudadData.nombre}
+            </h3>
+            <p className="text-gray-600 mb-6">
+              {t.landingUI.insuranceBlockDesc}
+            </p>
+            <div className="space-y-2 mb-6">
+              <div className="flex items-center gap-2 text-gray-700 text-sm">
+                <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                {t.landingUI.insuranceBlockBullet1}
+              </div>
+              <div className="flex items-center gap-2 text-gray-700 text-sm">
+                <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                {t.landingUI.insuranceBlockBullet2}
+              </div>
+              <div className="flex items-center gap-2 text-gray-700 text-sm">
+                <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                {t.landingUI.insuranceBlockBullet3}
+              </div>
+            </div>
+            <Link href={`/${LOCALE}/${r.services}/seguros-${slug}`} className="btn-minimal inline-flex items-center gap-2">
+              {t.landingUI.insuranceBlockCTA} →
             </Link>
           </div>
         </div>

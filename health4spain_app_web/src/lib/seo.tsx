@@ -203,6 +203,94 @@ export function serviceJsonLd(opts: {
   };
 }
 
+// ── Place schema for city destination pages ─────────────────────────────
+
+export function cityPlaceJsonLd(opts: {
+  name: string;
+  slug: string;
+  provincia: string;
+  comunidad?: string;
+  poblacion?: number;
+  porcentajeExtranjeros?: number;
+  locale: Locale;
+}) {
+  const url = `${BASE_URL}/${opts.locale}/${ROUTES[opts.locale].destinations}/${opts.slug}`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Place',
+    name: opts.name,
+    url,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: opts.name,
+      addressRegion: opts.provincia,
+      addressCountry: 'ES',
+    },
+    containedInPlace: {
+      '@type': 'AdministrativeArea',
+      name: opts.comunidad || opts.provincia,
+      containedInPlace: {
+        '@type': 'Country',
+        name: 'Spain',
+      },
+    },
+    ...(opts.poblacion && {
+      additionalProperty: [
+        ...(opts.poblacion ? [{
+          '@type': 'PropertyValue',
+          name: 'Population',
+          value: opts.poblacion,
+        }] : []),
+        ...(opts.porcentajeExtranjeros ? [{
+          '@type': 'PropertyValue',
+          name: 'Foreign population percentage',
+          value: `${opts.porcentajeExtranjeros}%`,
+        }] : []),
+      ],
+    }),
+  };
+}
+
+// ── Service schema with city-level areaServed ───────────────────────────
+
+export function localServiceJsonLd(opts: {
+  name: string;
+  description: string;
+  url: string;
+  locale: Locale;
+  cityName?: string;
+  provincia?: string;
+}) {
+  const areaServed = opts.cityName
+    ? {
+        '@type': 'City' as const,
+        name: opts.cityName,
+        ...(opts.provincia && {
+          containedInPlace: {
+            '@type': 'AdministrativeArea' as const,
+            name: opts.provincia,
+            containedInPlace: { '@type': 'Country' as const, name: 'Spain' },
+          },
+        }),
+      }
+    : { '@type': 'Country' as const, name: 'Spain' };
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: opts.name,
+    description: opts.description,
+    url: opts.url.startsWith('http') ? opts.url : `${BASE_URL}${opts.url}`,
+    provider: {
+      '@type': 'Organization',
+      name: 'Health4Spain',
+      url: BASE_URL,
+    },
+    areaServed,
+    availableLanguage: ['Spanish', 'English', 'French', 'German', 'Portuguese'],
+  };
+}
+
 // ── Helper to render JSON-LD as script tag ──────────────────────────────
 
 export function JsonLd({ data }: { data: Record<string, unknown> | null }) {

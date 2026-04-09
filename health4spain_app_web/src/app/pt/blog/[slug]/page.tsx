@@ -98,7 +98,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </div>
       <div className="container-narrow">
-        <div className="prose prose-lg max-w-none prose-headings:text-[#293f92] prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-accent" dangerouslySetInnerHTML={{ __html: post.content }} />
+        <div className="prose prose-lg max-w-none blog-article-content" dangerouslySetInnerHTML={{ __html: post.content }} />
         <div className="mt-16 p-10 bg-gray-50 border-l-4 border-accent">
           <h3 className="text-2xl font-bold mb-4">{t.blog.needHelp}</h3>
           <p className="text-gray-600 mb-6 leading-relaxed">{t.blog.needHelpDesc}</p>

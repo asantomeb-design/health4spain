@@ -9,7 +9,7 @@ import { getLandingBySlug, getActiveLandingSlugs } from '@/lib/data';
 import { getDictionary } from '@/lib/dictionaries';
 import { ROUTES } from '@/lib/routes';
 import type { Locale } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
+import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, localServiceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
 
 const LOCALE: Locale = 'de';
 const t = getDictionary(LOCALE);
@@ -31,9 +31,13 @@ const SERVICIOS_DATA: Record<string, {
 }> = {
   'seguros': {
     titulo: 'Krankenversicherung',
-    subtitulo: 'Umfassender medizinischer Schutz für Ausländer in Spanien',
-    descripcion: 'Das spanische Gesundheitssystem gehört zu den besten der Welt, aber als Ausländer benötigen Sie eine private Versicherung, um ohne Wartezeiten darauf zugreifen zu können. Wir verbinden Sie mit den besten Versicherern, die auf internationale Einwohner zugeschnittene Policen anbieten.',
+    subtitulo: 'Private Krankenversicherung für Ausländer und Einwohner in Spanien',
+    descripcion: 'Finden Sie die beste private Krankenversicherung in Spanien als Ausländer. Wir vergleichen die führenden Versicherer, um Ihnen Policen ohne Zuzahlung, mit voller Deckung und anerkannt für Aufenthaltsverfahren anzubieten. Wir verbinden Sie mit den besten Optionen für Ihre Situation.',
     beneficios: [
+      {
+        titulo: 'Anerkannt für Aufenthaltsverfahren',
+        descripcion: 'Policen, die alle Einwanderungsanforderungen erfüllen: keine Zuzahlungen, volle Deckung, von Konsulaten akzeptiert.',
+      },
       {
         titulo: 'Sofortiger Schutz',
         descripcion: 'Keine Wartezeiten. Zugang zu Arztbesuchen und Notfällen ab dem ersten Tag.',
@@ -53,12 +57,16 @@ const SERVICIOS_DATA: Record<string, {
     ],
     faqs: [
       {
+        pregunta: 'Welche Versicherung brauche ich als Ausländer in Spanien?',
+        respuesta: 'Als Ausländer in Spanien benötigen Sie eine private Krankenversicherung ohne Zuzahlungen mit Volldeckung. Sie muss von einem spanischen Versicherer ausgestellt sein und während Ihres gesamten Aufenthalts gültig bleiben. Wir helfen Ihnen, Optionen zu vergleichen und die richtige Police zu finden.',
+      },
+      {
         pregunta: 'Brauche ich eine private Versicherung, wenn ich eine Europäische Krankenversicherungskarte habe?',
         respuesta: 'Die EHIC deckt nur Notfälle und vorübergehende Aufenthalte ab. Einwohner benötigen eine private Versicherung oder eine Sondervereinbarung mit der Sozialversicherung.',
       },
       {
         pregunta: 'Kann ich eine Versicherung ohne NIE abschließen?',
-        respuesta: 'Ja, einige Versicherer erlauben den Abschluss mit Reisepass, während Sie Ihre NIE bearbeiten.',
+        respuesta: 'Ja, einige Versicherer erlauben den Abschluss mit Reisepass, während Sie Ihre NIE bearbeiten. Dies ist üblich bei Ausländern, die ihre Formalitäten aus ihrem Heimatland heraus beginnen.',
       },
       {
         pregunta: 'Werden Vorerkrankungen abgedeckt?',
@@ -437,6 +445,14 @@ function LandingPageView({ landing }: { landing: LandingPage }) {
   
   return (
     <>
+      <JsonLd data={localServiceJsonLd({
+        name: landing.hero_title,
+        description: landing.meta_description,
+        url: `/${LOCALE}/${r.services}/${landing.slug}`,
+        locale: LOCALE,
+        cityName: landing.ciudad_nombre || undefined,
+        provincia: landing.provincia || undefined,
+      })} />
       {landing.faqs && landing.faqs.length > 0 && (
         <JsonLd data={faqPageJsonLd(landing.faqs.map(f => ({ question: f.question, answer: f.answer })))} />
       )}

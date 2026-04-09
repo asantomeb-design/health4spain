@@ -340,7 +340,7 @@ export default function LeadForm({
                 value={formData.telefono}
                 onChange={handleChange}
                 required
-                placeholder="+34 600 000 000"
+                placeholder="+34 644 404 562"
                 className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-gray-200 rounded-lg focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none"
               />
             </div>

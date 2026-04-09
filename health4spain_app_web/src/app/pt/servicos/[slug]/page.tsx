@@ -9,7 +9,7 @@ import { getLandingBySlug, getActiveLandingSlugs } from '@/lib/data';
 import { getDictionary } from '@/lib/dictionaries';
 import { ROUTES } from '@/lib/routes';
 import type { Locale } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
+import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, localServiceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
 
 const LOCALE: Locale = 'pt';
 const t = getDictionary(LOCALE);
@@ -31,9 +31,13 @@ const SERVICIOS_DATA: Record<string, {
 }> = {
   'seguros': {
     titulo: 'Seguro de Saúde',
-    subtitulo: 'Cobertura médica completa para estrangeiros em Espanha',
-    descripcion: 'O sistema de saúde espanhol é um dos melhores do mundo, mas como estrangeiro precisa de um seguro privado para aceder sem listas de espera. Conectamos com as melhores seguradoras que oferecem apólices adaptadas a residentes internacionais.',
+    subtitulo: 'Seguro de saúde privado para estrangeiros e residentes em Espanha',
+    descripcion: 'Encontre o melhor seguro de saúde privado em Espanha como estrangeiro. Comparamos as principais seguradoras para oferecer apólices sem co-pagamentos, com cobertura completa e aceites para trâmites de residência. Conectamos com as melhores opções adaptadas à sua situação.',
     beneficios: [
+      {
+        titulo: 'Aceite para trâmites de residência',
+        descripcion: 'Apólices que cumprem todos os requisitos de imigração: sem co-pagamentos, cobertura completa, aceites por consulados.',
+      },
       {
         titulo: 'Cobertura imediata',
         descripcion: 'Sem períodos de carência. Acesso a consultas e urgências desde o primeiro dia.',
@@ -53,12 +57,16 @@ const SERVICIOS_DATA: Record<string, {
     ],
     faqs: [
       {
+        pregunta: 'Que tipo de seguro preciso como estrangeiro em Espanha?',
+        respuesta: 'Como estrangeiro em Espanha precisa de um seguro de saúde privado sem co-pagamentos com cobertura completa. Deve ser emitido por uma seguradora espanhola e manter-se válido durante toda a sua estadia. Ajudamos a comparar opções e encontrar a apólice adequada.',
+      },
+      {
         pregunta: 'Preciso de seguro privado se tenho o Cartão Europeu de Saúde?',
         respuesta: 'O CESD só cobre urgências e estadias temporárias. Os residentes precisam de seguro privado ou de um convénio especial com a Segurança Social.',
       },
       {
         pregunta: 'Posso contratar seguro sem NIE?',
-        respuesta: 'Sim, algumas seguradoras permitem a subscrição com passaporte enquanto trata do seu NIE.',
+        respuesta: 'Sim, algumas seguradoras permitem a subscrição com passaporte enquanto trata do seu NIE. É comum para estrangeiros que iniciam os seus trâmites a partir do seu país de origem.',
       },
       {
         pregunta: 'Cobrem condições pré-existentes?',
@@ -437,6 +445,14 @@ function LandingPageView({ landing }: { landing: LandingPage }) {
   
   return (
     <>
+      <JsonLd data={localServiceJsonLd({
+        name: landing.hero_title,
+        description: landing.meta_description,
+        url: `/${LOCALE}/${r.services}/${landing.slug}`,
+        locale: LOCALE,
+        cityName: landing.ciudad_nombre || undefined,
+        provincia: landing.provincia || undefined,
+      })} />
       {landing.faqs && landing.faqs.length > 0 && (
         <JsonLd data={faqPageJsonLd(landing.faqs.map(f => ({ question: f.question, answer: f.answer })))} />
       )}

@@ -9,7 +9,7 @@ import { getLandingBySlug, getActiveLandingSlugs } from '@/lib/data';
 import { getDictionary } from '@/lib/dictionaries';
 import { ROUTES } from '@/lib/routes';
 import type { Locale } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
+import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, localServiceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
 
 const LOCALE: Locale = 'en';
 const t = getDictionary(LOCALE);
@@ -31,9 +31,13 @@ const SERVICIOS_DATA: Record<string, {
 }> = {
   'seguros': {
     titulo: 'Health Insurance',
-    subtitulo: 'Complete medical coverage for foreigners in Spain',
-    descripcion: 'The Spanish healthcare system is one of the best in the world, but as a foreigner you need private insurance to access it without waiting lists. We connect you with the best insurers offering policies tailored to international residents.',
+    subtitulo: 'Private health insurance for foreigners and residents in Spain',
+    descripcion: 'Find the best private health insurance in Spain as a foreigner. We compare leading insurers to offer you policies with no co-pays, full coverage and accepted for residency paperwork. We connect you with the best options tailored to your situation.',
     beneficios: [
+      {
+        titulo: 'Accepted for residency paperwork',
+        descripcion: 'Policies that meet all immigration requirements: no co-pays, full coverage, accepted by consulates.',
+      },
       {
         titulo: 'Immediate coverage',
         descripcion: 'No waiting periods. Access to consultations and emergencies from day one.',
@@ -53,12 +57,16 @@ const SERVICIOS_DATA: Record<string, {
     ],
     faqs: [
       {
+        pregunta: 'What type of insurance do I need as a foreigner in Spain?',
+        respuesta: 'As a foreigner in Spain you need private health insurance with no co-pays and full coverage. It must be issued by a Spanish insurer and remain valid throughout your stay. We help you compare options and find the right policy.',
+      },
+      {
         pregunta: 'Do I need private insurance if I have a European Health Card?',
         respuesta: 'The EHIC only covers emergencies and temporary stays. Residents need private insurance or a special agreement with Social Security.',
       },
       {
         pregunta: 'Can I get insurance without a NIE?',
-        respuesta: 'Yes, some insurers allow you to sign up with your passport while you process your NIE.',
+        respuesta: 'Yes, some insurers allow you to sign up with your passport while you process your NIE. This is common for foreigners starting their paperwork from their home country.',
       },
       {
         pregunta: 'Do they cover pre-existing conditions?',
@@ -437,6 +445,14 @@ function LandingPageView({ landing }: { landing: LandingPage }) {
   
   return (
     <>
+      <JsonLd data={localServiceJsonLd({
+        name: landing.hero_title,
+        description: landing.meta_description,
+        url: `/${LOCALE}/${r.services}/${landing.slug}`,
+        locale: LOCALE,
+        cityName: landing.ciudad_nombre || undefined,
+        provincia: landing.provincia || undefined,
+      })} />
       {landing.faqs && landing.faqs.length > 0 && (
         <JsonLd data={faqPageJsonLd(landing.faqs.map(f => ({ question: f.question, answer: f.answer })))} />
       )}

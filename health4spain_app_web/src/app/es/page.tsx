@@ -7,7 +7,7 @@ import { organizationJsonLd, websiteJsonLd, JsonLd, buildAlternates } from '@/li
 const LOCALE = 'es' as const;
 
 export const metadata: Metadata = {
-  title: 'Health4Spain - España Simplificado para Extranjeros',
+  title: 'Health4Spain — Seguros, Abogados y Servicios para Extranjeros en España',
   description: 'Conectamos extranjeros con profesionales verificados: abogados, seguros, inmobiliarias y gestorías. 150+ profesionales en 19 ciudades. Sin coste para ti.',
   alternates: buildAlternates(LOCALE, ''),
 };

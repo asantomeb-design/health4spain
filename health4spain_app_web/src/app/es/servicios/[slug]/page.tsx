@@ -9,7 +9,7 @@ import { getLandingBySlug, getActiveLandingSlugs } from '@/lib/data';
 import { getDictionary } from '@/lib/dictionaries';
 import { ROUTES } from '@/lib/routes';
 import type { Locale } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
+import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, localServiceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
 
 const LOCALE: Locale = 'es';
 const t = getDictionary(LOCALE);
@@ -31,9 +31,13 @@ const SERVICIOS_DATA: Record<string, {
 }> = {
   'seguros': {
     titulo: 'Seguros de Salud',
-    subtitulo: 'Cobertura médica completa para extranjeros en España',
-    descripcion: 'El sistema sanitario español es de los mejores del mundo, pero como extranjero necesitas un seguro privado para acceder a él sin esperas. Te conectamos con las mejores aseguradoras que ofrecen pólizas adaptadas a residentes internacionales.',
+    subtitulo: 'Seguro médico privado para extranjeros y residentes en España',
+    descripcion: 'Encuentra el mejor seguro de salud privado en España como extranjero. Comparamos las principales aseguradoras para ofrecerte pólizas sin copagos, con cobertura completa y aceptadas para trámites de residencia. Te conectamos con las mejores opciones adaptadas a tu situación.',
     beneficios: [
+      {
+        titulo: 'Aceptado para trámites de residencia',
+        descripcion: 'Pólizas que cumplen todos los requisitos de extranjería: sin copagos, cobertura completa y aceptadas por consulados.',
+      },
       {
         titulo: 'Cobertura inmediata',
         descripcion: 'Sin períodos de carencia. Acceso a consultas y urgencias desde el primer día.',
@@ -53,12 +57,16 @@ const SERVICIOS_DATA: Record<string, {
     ],
     faqs: [
       {
+        pregunta: '¿Qué tipo de seguro necesito como extranjero en España?',
+        respuesta: 'Como extranjero en España necesitas un seguro de salud privado sin copagos y con cobertura completa. Debe estar emitido por una aseguradora española y ser válido durante toda tu estancia. Te ayudamos a comparar opciones y encontrar la póliza adecuada.',
+      },
+      {
         pregunta: '¿Necesito seguro privado si tengo tarjeta sanitaria europea?',
         respuesta: 'La TSE solo cubre urgencias y situaciones temporales. Para residentes es imprescindible un seguro privado o el convenio especial con la Seguridad Social.',
       },
       {
         pregunta: '¿Puedo contratar seguro sin NIE?',
-        respuesta: 'Sí, algunas aseguradoras permiten contratar con pasaporte mientras tramitas tu NIE.',
+        respuesta: 'Sí, algunas aseguradoras permiten contratar con pasaporte mientras tramitas tu NIE. Es habitual para extranjeros que están iniciando sus trámites desde su país de origen.',
       },
       {
         pregunta: '¿Cubren preexistencias?',
@@ -437,6 +445,14 @@ function LandingPageView({ landing }: { landing: LandingPage }) {
   
   return (
     <>
+      <JsonLd data={localServiceJsonLd({
+        name: landing.hero_title,
+        description: landing.meta_description,
+        url: `/${LOCALE}/${r.services}/${landing.slug}`,
+        locale: LOCALE,
+        cityName: landing.ciudad_nombre || undefined,
+        provincia: landing.provincia || undefined,
+      })} />
       {landing.faqs && landing.faqs.length > 0 && (
         <JsonLd data={faqPageJsonLd(landing.faqs.map(f => ({ question: f.question, answer: f.answer })))} />
       )}

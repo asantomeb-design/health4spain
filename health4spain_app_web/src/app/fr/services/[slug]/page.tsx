@@ -9,7 +9,7 @@ import { getLandingBySlug, getActiveLandingSlugs } from '@/lib/data';
 import { getDictionary } from '@/lib/dictionaries';
 import { ROUTES } from '@/lib/routes';
 import type { Locale } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
+import { buildDynamicAlternates, buildOpenGraph, buildTwitter, serviceJsonLd, localServiceJsonLd, faqPageJsonLd, JsonLd } from '@/lib/seo';
 
 const LOCALE: Locale = 'fr';
 const t = getDictionary(LOCALE);
@@ -31,9 +31,13 @@ const SERVICIOS_DATA: Record<string, {
 }> = {
   'seguros': {
     titulo: 'Assurance Santé',
-    subtitulo: 'Couverture médicale complète pour les étrangers en Espagne',
-    descripcion: 'Le système de santé espagnol est l\'un des meilleurs au monde, mais en tant qu\'étranger, vous avez besoin d\'une assurance privée pour y accéder sans attente. Nous vous mettons en relation avec les meilleurs assureurs proposant des polices adaptées aux résidents internationaux.',
+    subtitulo: 'Assurance santé privée pour étrangers et résidents en Espagne',
+    descripcion: 'Trouvez la meilleure assurance santé privée en Espagne en tant qu\'étranger. Nous comparons les principaux assureurs pour vous proposer des polices sans franchise, avec couverture complète et acceptées pour les démarches de résidence. Nous vous connectons aux meilleures options adaptées à votre situation.',
     beneficios: [
+      {
+        titulo: 'Acceptée pour les démarches de résidence',
+        descripcion: 'Polices conformes à toutes les exigences d\'immigration : sans franchise, couverture complète, acceptées par les consulats.',
+      },
       {
         titulo: 'Couverture immédiate',
         descripcion: 'Pas de délai de carence. Accès aux consultations et urgences dès le premier jour.',
@@ -53,12 +57,16 @@ const SERVICIOS_DATA: Record<string, {
     ],
     faqs: [
       {
+        pregunta: 'Quel type d\'assurance faut-il en tant qu\'étranger en Espagne ?',
+        respuesta: 'En tant qu\'étranger en Espagne, vous avez besoin d\'une assurance santé privée sans franchise avec couverture complète. Elle doit être émise par un assureur espagnol et rester valide pendant toute la durée de votre séjour. Nous vous aidons à comparer les options et à trouver la bonne police.',
+      },
+      {
         pregunta: 'Ai-je besoin d\'une assurance privée si j\'ai la carte européenne d\'assurance maladie ?',
         respuesta: 'La CEAM ne couvre que les urgences et les séjours temporaires. Les résidents ont besoin d\'une assurance privée ou d\'une convention spéciale avec la Sécurité Sociale.',
       },
       {
         pregunta: 'Puis-je souscrire une assurance sans NIE ?',
-        respuesta: 'Oui, certains assureurs permettent de souscrire avec un passeport pendant que vous traitez votre NIE.',
+        respuesta: 'Oui, certains assureurs permettent de souscrire avec un passeport pendant que vous traitez votre NIE. C\'est courant pour les étrangers qui commencent leurs démarches depuis leur pays d\'origine.',
       },
       {
         pregunta: 'Couvrent-ils les conditions préexistantes ?',
@@ -437,6 +445,14 @@ function LandingPageView({ landing }: { landing: LandingPage }) {
   
   return (
     <>
+      <JsonLd data={localServiceJsonLd({
+        name: landing.hero_title,
+        description: landing.meta_description,
+        url: `/${LOCALE}/${r.services}/${landing.slug}`,
+        locale: LOCALE,
+        cityName: landing.ciudad_nombre || undefined,
+        provincia: landing.provincia || undefined,
+      })} />
       {landing.faqs && landing.faqs.length > 0 && (
         <JsonLd data={faqPageJsonLd(landing.faqs.map(f => ({ question: f.question, answer: f.answer })))} />
       )}
