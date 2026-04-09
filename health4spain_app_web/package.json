@@ -25,7 +25,8 @@
     "regenerate-inmobiliarias-landings": "npx tsx scripts/regenerate-inmobiliarias-landings.ts",
     "regenerate-seguros-landings": "npx tsx scripts/regenerate-seguros-landings.ts",
     "generate-visa-landings": "npx tsx scripts/generate-visa-no-lucrativa-landings.ts",
-    "images:webp": "npx tsx scripts/convert-images-to-webp.ts"
+    "images:webp": "npx tsx scripts/convert-images-to-webp.ts",
+    "clean-blog-content": "npx tsx scripts/clean-blog-posts-content.ts"
   },
   "dependencies": {
     "@next/third-parties": "^16.1.6",
