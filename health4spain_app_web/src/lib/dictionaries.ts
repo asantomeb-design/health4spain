@@ -94,6 +94,7 @@ const es = {
     cookies: 'Cookies',
     followUs: 'Síguenos',
     rights: 'Todos los derechos reservados.',
+    copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.',
     madeIn: 'Hecho con ❤️ en España',
   },
   stickyCta: {
@@ -162,7 +163,7 @@ const es = {
     metaDesc: 'Conectamos personas que sueñan con vivir en España con profesionales verificados: abogados, seguros, inmobiliarias y gestorías. Conoce nuestra misión.',
     title: 'Nosotros',
     subtitle: 'Conectamos a personas que sueñan con vivir en España con profesionales verificados que hacen ese sueño realidad.',
-    intro: 'Cada año, miles de personas deciden establecerse en España. El proceso puede ser complejo: seguros de salud, visados, búsqueda de vivienda, trámites administrativos. Health4Spain existe para hacer este proceso más sencillo, conectándote con profesionales verificados que hablan tu idioma y entienden tus necesidades específicas.',
+    intro: 'Cada año, miles de personas deciden establecerse en España. El proceso puede ser complejo: seguros de salud, visados, búsqueda de vivienda, trámites administrativos. Health4Spain es una marca de COASEMED S.L. y existe para hacer este proceso más sencillo, conectándote con profesionales verificados que hablan tu idioma y entienden tus necesidades específicas.',
     mission: 'Misión',
     missionDesc: 'Simplificar el proceso de establecerse en España conectando personas con profesionales adecuados.',
     vision: 'Visión',
@@ -559,6 +560,7 @@ const en: typeof es = {
     cookies: 'Cookies',
     followUs: 'Follow Us',
     rights: 'All rights reserved.',
+    copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.',
     madeIn: 'Made with ❤️ in Spain',
   },
   stickyCta: {
@@ -627,7 +629,7 @@ const en: typeof es = {
     metaDesc: 'We connect people who dream of living in Spain with verified professionals: lawyers, insurance, real estate and admin services. Learn about our mission.',
     title: 'About Us',
     subtitle: 'We connect people who dream of living in Spain with verified professionals who make that dream a reality.',
-    intro: 'Every year, thousands of people decide to settle in Spain. The process can be complex: health insurance, visas, finding a home, administrative procedures. Health4Spain exists to make this process simpler, connecting you with verified professionals who speak your language and understand your specific needs.',
+    intro: 'Every year, thousands of people decide to settle in Spain. The process can be complex: health insurance, visas, finding a home, administrative procedures. Health4Spain is a brand of COASEMED S.L. and exists to make this process simpler, connecting you with verified professionals who speak your language and understand your specific needs.',
     mission: 'Mission',
     missionDesc: 'Simplify the process of settling in Spain by connecting people with the right professionals.',
     vision: 'Vision',
@@ -958,7 +960,7 @@ const fr: typeof es = {
   },
   services: { insurance: 'Assurance Santé', insuranceDesc: 'Polices obligatoires pour visas et permis de séjour', lawyers: 'Avocats', lawyersDesc: 'Famille, civil, travail, immigration et plus', realEstate: 'Immobilier', realEstateDesc: 'Agents spécialisés pour les étrangers', admin: 'Services Administratifs', adminDesc: 'Enregistrement et gestion administrative' },
   audiences: { retirees: 'Retraités', retireesDesc: 'Retraite sur la Costa Blanca/Sol. Visa non lucratif, assurance maladie.', workers: 'Travailleurs', workersDesc: 'Emploi dans l\'agro/industrie. Permis de travail et regroupement familial.', investors: 'Investisseurs', investorsDesc: 'Golden Visa. Investissement immobilier dans des zones premium.', students: 'Étudiants', studentsDesc: 'Visa étudiant. Validation de diplômes.' },
-  footer: { description: 'Votre pont vers les services essentiels pour votre vie en Espagne. Nous connectons les personnes avec des professionnels vérifiés : assurances, avocats, immobilier et services administratifs.', services: 'Services', mainDestinations: 'Destinations Principales', viewAllDestinations: 'Voir toutes les destinations', company: 'Entreprise', aboutUs: 'À propos', legal: 'Légal', privacy: 'Confidentialité', terms: 'Conditions', cookies: 'Cookies', followUs: 'Suivez-nous', rights: 'Tous droits réservés.', madeIn: 'Fait avec ❤️ en Espagne' },
+  footer: { description: 'Votre pont vers les services essentiels pour votre vie en Espagne. Nous connectons les personnes avec des professionnels vérifiés : assurances, avocats, immobilier et services administratifs.', services: 'Services', mainDestinations: 'Destinations Principales', viewAllDestinations: 'Voir toutes les destinations', company: 'Entreprise', aboutUs: 'À propos', legal: 'Légal', privacy: 'Confidentialité', terms: 'Conditions', cookies: 'Cookies', followUs: 'Suivez-nous', rights: 'Tous droits réservés.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Fait avec ❤️ en Espagne' },
   stickyCta: { text: 'Demander des informations gratuites', subtext: 'Sans engagement · Réponse en 24h' },
   contact: {
     metaTitle: 'Contact | Health4Spain', metaDesc: 'Contactez Health4Spain.',
@@ -992,7 +994,7 @@ const fr: typeof es = {
   about: {
     metaTitle: 'À Propos - Health4Spain', metaDesc: 'Découvrez notre mission.',
     title: 'À Propos', subtitle: 'Nous connectons les personnes qui rêvent de vivre en Espagne avec des professionnels vérifiés.',
-    intro: 'Chaque année, des milliers de personnes décident de s\'installer en Espagne. Le processus peut être complexe. Health4Spain existe pour simplifier ce processus.',
+    intro: 'Chaque année, des milliers de personnes décident de s\'installer en Espagne. Le processus peut être complexe. Health4Spain est une marque de COASEMED S.L. et existe pour simplifier ce processus.',
     mission: 'Mission', missionDesc: 'Simplifier le processus d\'installation en Espagne.', vision: 'Vision', visionDesc: 'Être la plateforme de référence pour les étrangers.', values: 'Valeurs', valuesDesc: 'Transparence, qualité, confiance et service exceptionnel.',
     howWeWork: 'Comment Nous Travaillons', howWeWorkSubtitle: 'Pour vous et pour les professionnels',
     forYou: 'Pour Vous (Utilisateur)', forYouItems: ['100% Gratuit', 'Matching Personnalisé', 'Vous Décidez', 'Sans Engagement'],
@@ -1132,7 +1134,7 @@ const de: typeof es = {
   },
   services: { insurance: 'Krankenversicherung', insuranceDesc: 'Pflichtversicherungen für Visa und Aufenthaltsgenehmigungen', lawyers: 'Anwälte', lawyersDesc: 'Familien-, Zivil-, Arbeits- und Ausländerrecht', realEstate: 'Immobilien', realEstateDesc: 'Auf Ausländer spezialisierte Makler', admin: 'Verwaltungsdienste', adminDesc: 'Anmeldung und Verwaltung' },
   audiences: { retirees: 'Rentner', retireesDesc: 'Ruhestand an der Costa Blanca/Sol. Nicht-lukratives Visum, Krankenversicherung.', workers: 'Arbeitnehmer', workersDesc: 'Beschäftigung in der Landwirtschaft/Industrie. Arbeitserlaubnis und Familienzusammenführung.', investors: 'Investoren', investorsDesc: 'Golden Visa. Immobilieninvestition in Premium-Gebieten.', students: 'Studenten', studentsDesc: 'Studentenvisum. Anerkennung von Abschlüssen.' },
-  footer: { description: 'Ihre Brücke zu wesentlichen Dienstleistungen für Ihr Leben in Spanien.', services: 'Dienstleistungen', mainDestinations: 'Hauptreiseziele', viewAllDestinations: 'Alle Reiseziele anzeigen', company: 'Unternehmen', aboutUs: 'Über uns', legal: 'Rechtliches', privacy: 'Datenschutz', terms: 'AGB', cookies: 'Cookies', followUs: 'Folgen Sie uns', rights: 'Alle Rechte vorbehalten.', madeIn: 'Mit ❤️ in Spanien gemacht' },
+  footer: { description: 'Ihre Brücke zu wesentlichen Dienstleistungen für Ihr Leben in Spanien.', services: 'Dienstleistungen', mainDestinations: 'Hauptreiseziele', viewAllDestinations: 'Alle Reiseziele anzeigen', company: 'Unternehmen', aboutUs: 'Über uns', legal: 'Rechtliches', privacy: 'Datenschutz', terms: 'AGB', cookies: 'Cookies', followUs: 'Folgen Sie uns', rights: 'Alle Rechte vorbehalten.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Mit ❤️ in Spanien gemacht' },
   stickyCta: { text: 'Kostenlose Informationen anfordern', subtext: 'Ohne Verpflichtung · Antwort in 24h' },
   contact: {
     metaTitle: 'Kontakt | Health4Spain', metaDesc: 'Kontaktieren Sie Health4Spain.',
@@ -1166,7 +1168,7 @@ const de: typeof es = {
   about: {
     metaTitle: 'Über Uns - Health4Spain', metaDesc: 'Erfahren Sie mehr über unsere Mission.',
     title: 'Über Uns', subtitle: 'Wir verbinden Menschen, die davon träumen, in Spanien zu leben, mit verifizierten Fachleuten.',
-    intro: 'Jedes Jahr entscheiden sich Tausende von Menschen, sich in Spanien niederzulassen. Der Prozess kann komplex sein. Health4Spain existiert, um diesen Prozess zu vereinfachen.',
+    intro: 'Jedes Jahr entscheiden sich Tausende von Menschen, sich in Spanien niederzulassen. Der Prozess kann komplex sein. Health4Spain ist eine Marke der COASEMED S.L. und existiert, um diesen Prozess zu vereinfachen.',
     mission: 'Mission', missionDesc: 'Den Prozess der Ansiedlung in Spanien vereinfachen.', vision: 'Vision', visionDesc: 'Die Referenzplattform für Ausländer sein.', values: 'Werte', valuesDesc: 'Transparenz, Qualität, Vertrauen und herausragender Service.',
     howWeWork: 'Wie Wir Arbeiten', howWeWorkSubtitle: 'Für Sie und für die Fachleute',
     forYou: 'Für Sie (Nutzer)', forYouItems: ['100% Kostenlos', 'Personalisiertes Matching', 'Sie Entscheiden', 'Ohne Verpflichtung'],
@@ -1306,7 +1308,7 @@ const pt: typeof es = {
   },
   services: { insurance: 'Seguro de Saúde', insuranceDesc: 'Apólices obrigatórias para vistos e autorizações de residência', lawyers: 'Advogados', lawyersDesc: 'Família, civil, trabalho, imigração e mais', realEstate: 'Imobiliárias', realEstateDesc: 'Agentes especializados em estrangeiros', admin: 'Assessorias', adminDesc: 'Registo e gestão administrativa' },
   audiences: { retirees: 'Reformados', retireesDesc: 'Reforma na Costa Blanca/Sol. Visto não lucrativo, seguro de saúde.', workers: 'Trabalhadores', workersDesc: 'Emprego na agro/indústria. Autorização de trabalho e reagrupamento familiar.', investors: 'Investidores', investorsDesc: 'Golden Visa. Investimento imobiliário em zonas premium.', students: 'Estudantes', studentsDesc: 'Visto de estudante. Validação de diplomas.' },
-  footer: { description: 'A sua ponte para os serviços essenciais para a sua vida em Espanha.', services: 'Serviços', mainDestinations: 'Destinos Principais', viewAllDestinations: 'Ver todos os destinos', company: 'Empresa', aboutUs: 'Sobre Nós', legal: 'Legal', privacy: 'Privacidade', terms: 'Termos', cookies: 'Cookies', followUs: 'Siga-nos', rights: 'Todos os direitos reservados.', madeIn: 'Feito com ❤️ em Espanha' },
+  footer: { description: 'A sua ponte para os serviços essenciais para a sua vida em Espanha.', services: 'Serviços', mainDestinations: 'Destinos Principais', viewAllDestinations: 'Ver todos os destinos', company: 'Empresa', aboutUs: 'Sobre Nós', legal: 'Legal', privacy: 'Privacidade', terms: 'Termos', cookies: 'Cookies', followUs: 'Siga-nos', rights: 'Todos os direitos reservados.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Feito com ❤️ em Espanha' },
   stickyCta: { text: 'Solicitar informação gratuita', subtext: 'Sem compromisso · Resposta em 24h' },
   contact: {
     metaTitle: 'Contacto | Health4Spain', metaDesc: 'Contacte a Health4Spain.',
@@ -1340,7 +1342,7 @@ const pt: typeof es = {
   about: {
     metaTitle: 'Sobre Nós - Health4Spain', metaDesc: 'Conheça a nossa missão.',
     title: 'Sobre Nós', subtitle: 'Conectamos pessoas que sonham viver em Espanha com profissionais verificados.',
-    intro: 'Todos os anos, milhares de pessoas decidem estabelecer-se em Espanha. O processo pode ser complexo. A Health4Spain existe para simplificar este processo.',
+    intro: 'Todos os anos, milhares de pessoas decidem estabelecer-se em Espanha. O processo pode ser complexo. A Health4Spain é uma marca da COASEMED S.L. e existe para simplificar este processo.',
     mission: 'Missão', missionDesc: 'Simplificar o processo de estabelecimento em Espanha.', vision: 'Visão', visionDesc: 'Ser a plataforma de referência para estrangeiros.', values: 'Valores', valuesDesc: 'Transparência, qualidade, confiança e serviço excecional.',
     howWeWork: 'Como Trabalhamos', howWeWorkSubtitle: 'Para si e para os profissionais',
     forYou: 'Para Si (Utilizador)', forYouItems: ['100% Gratuito', 'Matching Personalizado', 'Você Decide', 'Sem Compromisso'],

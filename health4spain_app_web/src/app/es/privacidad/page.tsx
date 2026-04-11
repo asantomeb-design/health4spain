@@ -26,7 +26,7 @@ export default function PrivacidadPage() {
           <section>
             <h2 className="mb-6 text-2xl font-bold">1. Responsable del Tratamiento</h2>
             <p className="text-gray-700 leading-relaxed">
-              Health4Spain es el responsable del tratamiento de tus datos personales. 
+              <strong>COASEMED S.L.</strong> es el responsable del tratamiento de tus datos personales en relación con este sitio web y los servicios prestados bajo la marca comercial Health4Spain.
               Nos comprometemos a proteger tu privacidad y garantizar el uso seguro de tu información personal.
             </p>
           </section>

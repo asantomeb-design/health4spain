@@ -22,6 +22,10 @@ export default function TerminosPage() {
             <strong>{t.terms.lastUpdate}:</strong> Enero 2026
         </p>
 
+        <p className="text-gray-700 leading-relaxed mb-12">
+          Health4Spain es una marca comercial de <strong>COASEMED S.L.</strong>
+        </p>
+
         <div className="space-y-12">
           <section>
             <h2 className="mb-6 text-2xl font-bold">1. Aceptación de los Términos</h2>

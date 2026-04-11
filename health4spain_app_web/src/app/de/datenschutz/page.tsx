@@ -26,7 +26,7 @@ export default function DatenschutzPage() {
           <section>
             <h2 className="mb-6 text-2xl font-bold">1. Verantwortlicher</h2>
             <p className="text-gray-700 leading-relaxed">
-              Health4Spain ist der Verantwortliche für Ihre personenbezogenen Daten. Wir verpflichten uns, Ihre Privatsphäre zu schützen und die sichere Nutzung Ihrer persönlichen Daten zu gewährleisten.
+              Die <strong>COASEMED S.L.</strong> ist der Verantwortliche für die Verarbeitung Ihrer personenbezogenen Daten im Zusammenhang mit dieser Website und den Dienstleistungen unter der Marke Health4Spain. Wir verpflichten uns, Ihre Privatsphäre zu schützen und die sichere Nutzung Ihrer persönlichen Daten zu gewährleisten.
             </p>
           </section>
 

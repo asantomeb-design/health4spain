@@ -26,7 +26,8 @@ export default function PrivacyPage() {
           <section>
             <h2 className="mb-6 text-2xl font-bold">1. Data Controller</h2>
             <p className="text-gray-700 leading-relaxed">
-              Health4Spain is the data controller for your personal data. We are committed to protecting your privacy and ensuring the safe use of your personal information.
+              <strong>COASEMED S.L.</strong> is the data controller for your personal data in connection with this website and the services provided under the Health4Spain brand.
+              We are committed to protecting your privacy and ensuring the safe use of your personal information.
             </p>
           </section>
 

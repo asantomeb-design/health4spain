@@ -61,9 +61,9 @@ export default function SobreNosotrosPage() {
         <div className="container-narrow">
           <div className="bg-white border-t-3 border-accent p-8 mb-16">
             <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-              Cada año, miles de personas deciden establecerse en España. El proceso puede ser complejo: 
-              seguros de salud, visados, búsqueda de vivienda, trámites administrativos. Health4Spain existe 
-              para hacer este proceso más sencillo, conectándote con profesionales verificados que hablan tu idioma 
+              Cada año, miles de personas deciden establecerse en España. El proceso puede ser complejo:
+              seguros de salud, visados, búsqueda de vivienda, trámites administrativos. Health4Spain es una marca de COASEMED S.L. y existe
+              para hacer este proceso más sencillo, conectándote con profesionales verificados que hablan tu idioma
               y entienden tus necesidades específicas.
             </p>
           </div>

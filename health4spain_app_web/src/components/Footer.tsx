@@ -153,7 +153,7 @@ export default async function Footer({ locale = 'es' }: FooterProps) {
 
         <div className="py-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="stat-label text-center md:text-left">
-            © {new Date().getFullYear()} Health4Spain. {t.footer.rights}
+            {t.footer.copyrightLine.replace('{year}', String(new Date().getFullYear()))}
           </p>
           <div className="flex items-center gap-6 text-sm text-gray-500">
             <span>🇪🇸 {t.footer.madeIn}</span>
