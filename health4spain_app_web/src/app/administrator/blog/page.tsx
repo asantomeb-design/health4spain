@@ -37,16 +37,43 @@ const categoryLabels: Record<string, string> = {
   testimonios: 'Testimonios',
 };
 
+type SortKey = 'title' | 'category' | 'status' | 'views' | 'created_at' | 'published_at';
+type SortDirection = 'asc' | 'desc';
+
 export default function BlogListPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortKey, setSortKey] = useState<SortKey>('created_at');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
   useEffect(() => {
     fetchPosts();
   }, [filterStatus, filterCategory]);
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      // Para texto arrancamos en asc (A→Z); para números y fechas en desc (más reciente/alto primero)
+      const textKeys: SortKey[] = ['title', 'category', 'status'];
+      setSortDirection(textKeys.includes(key) ? 'asc' : 'desc');
+    }
+  };
+
+  const SortIndicator = ({ columnKey }: { columnKey: SortKey }) => {
+    if (sortKey !== columnKey) {
+      return <span className="ml-1 text-gray-300">↕</span>;
+    }
+    return (
+      <span className="ml-1 text-gray-700">
+        {sortDirection === 'asc' ? '▲' : '▼'}
+      </span>
+    );
+  };
 
   const fetchPosts = async () => {
     setLoading(true);
@@ -88,14 +115,46 @@ export default function BlogListPage() {
     }
   };
 
-  const filteredPosts = posts.filter(post => {
-    if (!searchTerm) return true;
-    const term = searchTerm.toLowerCase();
-    return (
-      post.title.toLowerCase().includes(term) ||
-      post.slug.toLowerCase().includes(term)
-    );
-  });
+  const filteredPosts = posts
+    .filter(post => {
+      if (!searchTerm) return true;
+      const term = searchTerm.toLowerCase();
+      return (
+        post.title.toLowerCase().includes(term) ||
+        post.slug.toLowerCase().includes(term)
+      );
+    })
+    .slice()
+    .sort((a, b) => {
+      const dir = sortDirection === 'asc' ? 1 : -1;
+
+      const getValue = (post: BlogPost): string | number => {
+        switch (sortKey) {
+          case 'title':
+            return post.title?.toLowerCase() || '';
+          case 'category':
+            return (categoryLabels[post.category] || post.category || '').toLowerCase();
+          case 'status':
+            return (statusLabels[post.status] || post.status || '').toLowerCase();
+          case 'views':
+            return post.views || 0;
+          case 'created_at':
+            return post.created_at ? new Date(post.created_at).getTime() : 0;
+          case 'published_at':
+            return post.published_at ? new Date(post.published_at).getTime() : 0;
+          default:
+            return '';
+        }
+      };
+
+      const va = getValue(a);
+      const vb = getValue(b);
+
+      if (typeof va === 'number' && typeof vb === 'number') {
+        return (va - vb) * dir;
+      }
+      return String(va).localeCompare(String(vb), 'es', { sensitivity: 'base' }) * dir;
+    });
 
   return (
     <div className="p-8">
@@ -161,12 +220,60 @@ export default function BlogListPage() {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Título</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoría</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vistas</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Creado</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Publicado</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <button
+                    onClick={() => handleSort('title')}
+                    className="flex items-center hover:text-gray-900 uppercase"
+                  >
+                    Título
+                    <SortIndicator columnKey="title" />
+                  </button>
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <button
+                    onClick={() => handleSort('category')}
+                    className="flex items-center hover:text-gray-900 uppercase"
+                  >
+                    Categoría
+                    <SortIndicator columnKey="category" />
+                  </button>
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <button
+                    onClick={() => handleSort('status')}
+                    className="flex items-center hover:text-gray-900 uppercase"
+                  >
+                    Estado
+                    <SortIndicator columnKey="status" />
+                  </button>
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <button
+                    onClick={() => handleSort('views')}
+                    className="flex items-center hover:text-gray-900 uppercase"
+                  >
+                    Vistas
+                    <SortIndicator columnKey="views" />
+                  </button>
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <button
+                    onClick={() => handleSort('created_at')}
+                    className="flex items-center hover:text-gray-900 uppercase"
+                  >
+                    Creado
+                    <SortIndicator columnKey="created_at" />
+                  </button>
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <button
+                    onClick={() => handleSort('published_at')}
+                    className="flex items-center hover:text-gray-900 uppercase"
+                  >
+                    Publicado
+                    <SortIndicator columnKey="published_at" />
+                  </button>
+                </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
               </tr>
             </thead>
