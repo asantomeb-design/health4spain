@@ -74,11 +74,13 @@ export async function getCiudadCatalogo(ciudadSlug: string) {
 
 export async function getBlogPosts(locale: Locale) {
   try {
+    const nowIso = new Date().toISOString();
     const { data, error } = await supabase
       .from('blog_posts')
       .select('slug, title, excerpt, category, published_at, featured_image, views')
       .eq('status', 'published')
       .eq('lang', locale)
+      .lte('published_at', nowIso)
       .order('published_at', { ascending: false });
 
     if (error) return [];
@@ -90,11 +92,13 @@ export async function getBlogPosts(locale: Locale) {
 
 export async function getPopularBlogPosts(locale: Locale, limit = 5) {
   try {
+    const nowIso = new Date().toISOString();
     const { data, error } = await supabase
       .from('blog_posts')
       .select('slug, title, excerpt, category, published_at, views, featured_image')
       .eq('status', 'published')
       .eq('lang', locale)
+      .lte('published_at', nowIso)
       .order('views', { ascending: false })
       .limit(limit);
 
@@ -107,12 +111,14 @@ export async function getPopularBlogPosts(locale: Locale, limit = 5) {
 
 export async function getBlogPost(slug: string, locale: Locale) {
   try {
+    const nowIso = new Date().toISOString();
     const { data, error } = await supabase
       .from('blog_posts')
       .select('*')
       .eq('slug', slug)
       .eq('status', 'published')
       .eq('lang', locale)
+      .lte('published_at', nowIso)
       .single();
 
     if (error || !data) return null;
@@ -131,12 +137,14 @@ export async function getBlogPost(slug: string, locale: Locale) {
 
 export async function getBlogPostMeta(slug: string, locale: Locale) {
   try {
+    const nowIso = new Date().toISOString();
     const { data, error } = await supabase
       .from('blog_posts')
       .select('title, excerpt, category, published_at, featured_image')
       .eq('slug', slug)
       .eq('status', 'published')
       .eq('lang', locale)
+      .lte('published_at', nowIso)
       .single();
     return error || !data ? null : data;
   } catch {
@@ -146,6 +154,7 @@ export async function getBlogPostMeta(slug: string, locale: Locale) {
 
 export async function getRelatedBlogPosts(category: string, currentSlug: string, locale: Locale, limit = 2) {
   try {
+    const nowIso = new Date().toISOString();
     const { data, error } = await supabase
       .from('blog_posts')
       .select('slug, title, category, featured_image')
@@ -153,6 +162,7 @@ export async function getRelatedBlogPosts(category: string, currentSlug: string,
       .eq('lang', locale)
       .eq('category', category)
       .neq('slug', currentSlug)
+      .lte('published_at', nowIso)
       .limit(limit);
 
     if (error) return [];
@@ -164,11 +174,13 @@ export async function getRelatedBlogPosts(category: string, currentSlug: string,
 
 export async function getBlogSlugs(locale: Locale) {
   try {
+    const nowIso = new Date().toISOString();
     const { data } = await supabase
       .from('blog_posts')
       .select('slug')
       .eq('status', 'published')
-      .eq('lang', locale);
+      .eq('lang', locale)
+      .lte('published_at', nowIso);
     return data?.map(p => p.slug) || [];
   } catch {
     return [];

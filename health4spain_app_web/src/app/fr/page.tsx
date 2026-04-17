@@ -66,6 +66,7 @@ export default function HomePage() {
         <div className="hero-content-box">
           <Image src={LOGO_PATHS.vertical} alt="Health 4 Spain" height={100} width={150} className="h-20 md:h-24 w-auto mb-5" priority fetchPriority="high" />
           <h1 className="mb-6" style={{ lineHeight: '0.95' }} dangerouslySetInnerHTML={{ __html: t.home.heroTitle.replace('\n', '<br />') }} />
+          <h2 className="sr-only">{t.home.brandH2}</h2>
           <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">{t.home.heroSubtitle}</p>
           <div className="flex gap-6 md:gap-10 mb-8 pt-6 border-t border-gray-300">
             <div><div className="text-3xl md:text-4xl font-bold text-accent mb-2">150+</div><div className="text-xs uppercase tracking-widest text-gray-500">{t.home.professionals}</div></div>

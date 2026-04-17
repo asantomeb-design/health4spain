@@ -54,7 +54,7 @@ export default function BlogListPage() {
       let query = supabase
         .from('blog_posts')
         .select('id, slug, title, excerpt, category, status, views, published_at, created_at, updated_at')
-        .order('updated_at', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (filterStatus) query = query.eq('status', filterStatus);
       if (filterCategory) query = query.eq('category', filterCategory);
@@ -165,20 +165,21 @@ export default function BlogListPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoría</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vistas</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actualizado</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Creado</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Publicado</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center">
+                  <td colSpan={7} className="px-4 py-8 text-center">
                     <div className="w-6 h-6 border-2 border-[accent] border-t-transparent rounded-full animate-spin mx-auto"></div>
                   </td>
                 </tr>
               ) : filteredPosts.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
                     No hay posts todavía
                   </td>
                 </tr>
@@ -203,7 +204,14 @@ export default function BlogListPage() {
                       {post.views || 0}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-500">
-                      {new Date(post.updated_at).toLocaleDateString('es-ES')}
+                      {post.created_at
+                        ? new Date(post.created_at).toLocaleDateString('es-ES')
+                        : '—'}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-500">
+                      {post.published_at
+                        ? new Date(post.published_at).toLocaleDateString('es-ES')
+                        : <span className="text-gray-400 italic">sin publicar</span>}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">

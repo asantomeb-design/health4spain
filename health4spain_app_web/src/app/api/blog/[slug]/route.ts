@@ -19,6 +19,8 @@ export async function GET(
       .select('*')
       .eq('slug', slug)
       .eq('lang', lang)
+      .eq('status', 'published')
+      .lte('published_at', new Date().toISOString())
       .single();
     
     if (error) {

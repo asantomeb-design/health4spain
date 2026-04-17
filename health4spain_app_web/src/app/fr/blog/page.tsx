@@ -9,7 +9,9 @@ import { buildAlternates } from '@/lib/seo';
 const LOCALE: Locale = 'fr';
 const t = getDictionary(LOCALE);
 
-export const revalidate = 3600;
+// Sin cache ISR: permite que los posts programados a futuro
+// y las retro-publicaciones se reflejen al instante en el público.
+export const revalidate = 0;
 export const metadata: Metadata = {
   title: t.blog.metaTitle,
   description: t.blog.metaDesc,

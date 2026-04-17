@@ -40,7 +40,7 @@ export default function ContactoPage() {
         </div>
         <div className="hero-content-box">
           <h1 className="mb-4" style={{ lineHeight: '0.95' }}>
-            Contacto
+            Contacta con Health4Spain
           </h1>
           <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-2xl">
             Estamos aquí para ayudarte. Cuéntanos qué necesitas y te conectamos 

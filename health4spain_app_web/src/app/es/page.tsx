@@ -167,6 +167,9 @@ export default function HomePage() {
           <h1 className="mb-6" style={{ lineHeight: '0.95' }}>
             España.<br />Simplificado.
           </h1>
+          <h2 className="sr-only">
+            Health4Spain — Servicios y profesionales verificados para extranjeros en España
+          </h2>
           <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">
             Conexiones directas con profesionales verificados para extranjeros. 
             Seguros, abogados, inmobiliarias, gestorías. Sin complicaciones.

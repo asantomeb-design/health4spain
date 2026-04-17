@@ -44,6 +44,35 @@ const emptyPost: BlogPost = {
   lang: 'es',
 };
 
+// Helpers para <input type="datetime-local">
+const toLocalInput = (iso?: string | null): string => {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
+const fromLocalInput = (val: string): string | null => {
+  if (!val) return null;
+  const d = new Date(val);
+  if (isNaN(d.getTime())) return null;
+  return d.toISOString();
+};
+
+const formatDateTime = (iso?: string | null): string => {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '—';
+  return d.toLocaleString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+
 const categories = [
   { value: 'guias', label: 'Guías' },
   { value: 'tramites', label: 'Trámites' },
@@ -67,6 +96,13 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
   useEffect(() => {
     if (!isNew) {
       fetchPost();
+    } else {
+      const now = new Date().toISOString();
+      setPost(prev => ({
+        ...prev,
+        created_at: now,
+        published_at: now,
+      }));
     }
   }, [isNew, params.slug]);
 
@@ -138,18 +174,23 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
     setSaving(true);
     try {
       const tags = tagsInput.split(',').map(t => t.trim()).filter(Boolean);
-      const postData = {
+      const nowIso = new Date().toISOString();
+      const finalStatus = publish ? 'published' : post.status;
+
+      const postData: BlogPost = {
         ...post,
         tags,
-        status: publish ? 'published' : post.status,
+        status: finalStatus,
         meta_title: post.meta_title || post.title,
         meta_description: post.meta_description || post.excerpt,
-        updated_at: new Date().toISOString(),
-        ...(publish && post.status !== 'published' ? { published_at: new Date().toISOString() } : {}),
+        updated_at: nowIso,
+        created_at: post.created_at || nowIso,
+        published_at:
+          post.published_at ||
+          (finalStatus === 'published' ? nowIso : undefined),
       };
 
       if (isNew) {
-        postData.created_at = new Date().toISOString();
         const { error } = await supabase.from('blog_posts').insert(postData);
         if (error) throw error;
       } else {
@@ -341,6 +382,41 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
                 <option key={cat.value} value={cat.value}>{cat.label}</option>
               ))}
             </select>
+          </div>
+
+          {/* Fechas */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <h3 className="text-sm font-medium text-gray-700 mb-4">Fechas</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Fecha de creación</label>
+                <input
+                  type="datetime-local"
+                  value={toLocalInput(post.created_at)}
+                  onChange={(e) => setPost(prev => ({ ...prev, created_at: fromLocalInput(e.target.value) || undefined }))}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[accent] focus:border-transparent outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Fecha de publicación</label>
+                <input
+                  type="datetime-local"
+                  value={toLocalInput(post.published_at)}
+                  onChange={(e) => setPost(prev => ({ ...prev, published_at: fromLocalInput(e.target.value) || undefined }))}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[accent] focus:border-transparent outline-none"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Puede ser anterior (retro-datar) o posterior (programar) a la fecha de creación.
+                </p>
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Última modificación</label>
+                <div className="px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-600">
+                  {formatDateTime(post.updated_at)}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">Se actualiza automáticamente al guardar.</p>
+              </div>
+            </div>
           </div>
 
           {/* Featured Image */}

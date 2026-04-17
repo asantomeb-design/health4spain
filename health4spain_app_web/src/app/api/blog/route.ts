@@ -24,7 +24,13 @@ export async function GET(request: NextRequest) {
       .eq('lang', lang)
       .eq('status', status)
       .order('published_at', { ascending: false });
-    
+
+    // Si pedimos posts "published" desde el público, ocultamos los programados
+    // a futuro (published_at > ahora) para que queden en stand-by hasta su fecha.
+    if (status === 'published') {
+      query = query.lte('published_at', new Date().toISOString());
+    }
+
     // Filtros opcionales
     if (category) {
       query = query.eq('category', category);

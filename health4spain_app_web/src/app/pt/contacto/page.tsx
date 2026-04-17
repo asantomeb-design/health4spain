@@ -30,7 +30,7 @@ export default function ContactPage() {
           <Image src={HERO_IMAGES.contacto} alt="Contacto Health4Spain" fill priority fetchPriority="high" sizes="100vw" className="object-cover object-center" />
         </div>
         <div className="hero-content-box">
-          <h1 className="mb-4" style={{ lineHeight: '0.95' }}>{t.contact.title}</h1>
+          <h1 className="mb-4" style={{ lineHeight: '0.95' }}>{t.contact.heroTitle}</h1>
           <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-2xl">{t.contact.subtitle}</p>
           <div className="flex gap-6 md:gap-8 mb-6 pt-4 border-t border-gray-300">
             <div><div className="text-3xl md:text-4xl font-bold text-accent mb-1">24h</div><div className="text-xs uppercase tracking-widest text-gray-500">{t.contact.response}</div></div>

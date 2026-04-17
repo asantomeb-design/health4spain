@@ -7,7 +7,8 @@ import { buildDynamicAlternates, buildOpenGraph, buildTwitter, blogPostingJsonLd
 
 const LOCALE: Locale = 'es';
 
-export const revalidate = 3600;
+// Sin cache ISR: los posts programados aparecen al instante en cuanto llega su fecha.
+export const revalidate = 0;
 
 // Mapeo de categorías
 const categoryLabels: Record<string, string> = {

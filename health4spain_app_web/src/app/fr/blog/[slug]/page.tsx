@@ -9,7 +9,8 @@ import { buildDynamicAlternates, buildOpenGraph, buildTwitter, blogPostingJsonLd
 const LOCALE: Locale = 'fr';
 const t = getDictionary(LOCALE);
 
-export const revalidate = 3600;
+// Sin cache ISR: los posts programados aparecen al instante en cuanto llega su fecha.
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   const { getBlogSlugs } = await import('@/lib/data');
