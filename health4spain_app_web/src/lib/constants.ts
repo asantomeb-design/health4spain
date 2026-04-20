@@ -27,8 +27,8 @@ export const SITE_CONFIG = {
   tagline: 'Tu nueva vida en España',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.health4spain.com',
   email: 'info@health4spain.com',
-  phone: '+34 644 404 562',
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '34644404562',
+  phone: '+34 614 404 562',
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '34614404562',
 };
 
 // Idiomas soportados

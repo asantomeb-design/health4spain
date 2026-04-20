@@ -71,7 +71,7 @@ const CONTENT = {
 };
 
 export default function WhatsAppButton({ 
-  phoneNumber = '34644404562',
+  phoneNumber = '34614404562',
   lang = 'es'
 }: WhatsAppButtonProps) {
   const [isOpen, setIsOpen] = useState(false);

@@ -249,7 +249,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_ADMIN_EMAILS=admin@health4spain.com
 OPENAI_API_KEY=                    # Requerido para Chat Mar-IA y scripts de generación
 NEXT_PUBLIC_TINYMCE_API_KEY=
-NEXT_PUBLIC_WHATSAPP_NUMBER=34644404562
+NEXT_PUBLIC_WHATSAPP_NUMBER=34614404562
 NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
 
 # GoHighLevel (opcional — ver .env.example para mapeo de campos)
