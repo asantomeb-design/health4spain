@@ -43,11 +43,14 @@ export function buildDynamicAlternates(
 }
 
 // ── Blog portada / cover image resolver ────────────────────────────────
-// Mantener sincronizado con el fallback visual usado en las páginas de blog.
+// IMPORTANTE: este mapeo debe coincidir EXACTAMENTE con el `categoryImages`
+// que usan las páginas del blog (listado y artículo). Si se añade/quita una
+// categoría aquí, hay que replicarlo allí (o las páginas deben pasar a usar
+// este mismo helper). Así el OG/Twitter siempre muestra la misma portada
+// que ve el usuario en la web.
 export const BLOG_CATEGORY_IMAGES: Record<string, string> = {
   'guias-ciudad': 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=1200',
   'procedimientos': 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200',
-  'tramites': 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200',
   'salud': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200',
   'finanzas': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200',
   'vida-espana': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200',
