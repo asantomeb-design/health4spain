@@ -42,6 +42,31 @@ export function buildDynamicAlternates(
   };
 }
 
+// ── Blog portada / cover image resolver ────────────────────────────────
+// Mantener sincronizado con el fallback visual usado en las páginas de blog.
+export const BLOG_CATEGORY_IMAGES: Record<string, string> = {
+  'guias-ciudad': 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=1200',
+  'procedimientos': 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200',
+  'tramites': 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200',
+  'salud': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200',
+  'finanzas': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200',
+  'vida-espana': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200',
+};
+
+/**
+ * Devuelve la URL absoluta de la portada (OG image) de un post.
+ * Mismo fallback que usa la página del artículo para la imagen de cabecera:
+ *   featured_image → imagen por categoría → vida-espana.
+ */
+export function resolveBlogImage(featuredImage?: string | null, category?: string | null): string {
+  const pick =
+    (featuredImage && featuredImage.trim()) ||
+    (category && BLOG_CATEGORY_IMAGES[category]) ||
+    BLOG_CATEGORY_IMAGES['vida-espana'];
+  if (/^https?:\/\//i.test(pick)) return pick;
+  return `${BASE_URL}${pick.startsWith('/') ? '' : '/'}${pick}`;
+}
+
 // ── Open Graph helpers ──────────────────────────────────────────────────
 
 export function buildOpenGraph(locale: Locale, opts: {

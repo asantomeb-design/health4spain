@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { supabase } from '@/lib/supabase';
 import { getDictionary } from '@/lib/dictionaries';
 import type { Locale } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, blogPostingJsonLd, JsonLd } from '@/lib/seo';
+import { buildDynamicAlternates, buildOpenGraph, buildTwitter, blogPostingJsonLd, JsonLd, resolveBlogImage } from '@/lib/seo';
 
 const locale: Locale = 'pt';
 const t = getDictionary(locale);
@@ -32,12 +32,13 @@ async function getRelatedPosts(category: string, currentSlug: string) {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const { data } = await supabase.from('blog_posts').select('title, excerpt, published_at, featured_image').eq('slug', slug).eq('status', 'published').eq('lang', 'pt').single();
+  const { data } = await supabase.from('blog_posts').select('title, excerpt, category, published_at, featured_image').eq('slug', slug).eq('status', 'published').eq('lang', 'pt').single();
   if (!data) return { title: t.blog.articleNotFound };
   
   const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.health4spain.com';
   const description = data.excerpt?.slice(0, 155) || '';
-  
+  const ogImage = resolveBlogImage(data.featured_image, data.category);
+
   return {
     title: `${data.title} | Health4Spain Blog`,
     description,
@@ -48,12 +49,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       url: `${BASE}/${locale}/blog/${slug}`,
       type: 'article',
       publishedTime: data.published_at,
-      image: data.featured_image,
+      image: ogImage,
     }),
     twitter: buildTwitter({
       title: data.title,
       description,
-      image: data.featured_image,
+      image: ogImage,
     }),
   };
 }
@@ -70,7 +71,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     title: post.title,
     description: post.excerpt,
     url: `/${locale}/blog/${post.slug}`,
-    image: post.featured_image,
+    image: resolveBlogImage(post.featured_image, post.category),
     publishedAt: post.published_at,
     author: post.author_name || 'Health4Spain',
     locale: locale,

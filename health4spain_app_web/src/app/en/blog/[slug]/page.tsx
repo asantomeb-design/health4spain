@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { getBlogPost as fetchBlogPost, getBlogPostMeta as fetchBlogPostMeta, getRelatedBlogPosts } from '@/lib/data';
 import { getDictionary } from '@/lib/dictionaries';
 import type { Locale } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, blogPostingJsonLd, JsonLd } from '@/lib/seo';
+import { buildDynamicAlternates, buildOpenGraph, buildTwitter, blogPostingJsonLd, JsonLd, resolveBlogImage } from '@/lib/seo';
 
 const LOCALE: Locale = 'en';
 const t = getDictionary(LOCALE);
@@ -25,7 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   
   const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.health4spain.com';
   const description = post.excerpt?.slice(0, 155) || '';
-  
+  const ogImage = resolveBlogImage(post.featured_image, post.category);
+
   return {
     title: `${post.title} | Health4Spain Blog`,
     description,
@@ -36,12 +37,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       url: `${BASE}/${LOCALE}/blog/${slug}`,
       type: 'article',
       publishedTime: post.published_at,
-      image: post.featured_image,
+      image: ogImage,
     }),
     twitter: buildTwitter({
       title: post.title,
       description,
-      image: post.featured_image,
+      image: ogImage,
     }),
   };
 }
@@ -58,7 +59,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     title: post.title,
     description: post.excerpt,
     url: `/${LOCALE}/blog/${post.slug}`,
-    image: post.featured_image,
+    image: resolveBlogImage(post.featured_image, post.category),
     publishedAt: post.published_at,
     author: post.author_name || 'Health4Spain',
     locale: LOCALE,
