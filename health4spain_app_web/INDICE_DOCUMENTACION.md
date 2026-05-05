@@ -1,8 +1,8 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 9 de abril de 2026  
-**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | 744+ páginas | 176+ landings SEO | Production-ready  
-**Versión:** 3.2.0
+**Fecha:** 5 de mayo de 2026  
+**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | Partners Fase 1 | 708+ páginas | 176+ landings SEO | Production-ready  
+**Versión:** 3.3.0
 
 ---
 
@@ -12,7 +12,7 @@
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
-| **[README.md](./README.md)** | 📘 Visión general, stack, GHL/leads ES, multi-idioma | ✅ Actualizado |
+| **[README.md](./README.md)** | 📘 Visión general, stack, GHL/leads ES (webhook único + decisión cuenta única), multi-idioma | ✅ Actualizado |
 | **[ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md)** | 📊 Estado actual + hitos + números | ✅ Actualizado |
 | **[RESUMEN_ACTUALIZACIONES.md](./RESUMEN_ACTUALIZACIONES.md)** | 📝 Log de actualizaciones | ✅ Actualizado |
 | **[guion-cambios-cliente.txt](./guion-cambios-cliente.txt)** | 📝 Guion cambios cliente | ✅ Actualizado |
@@ -29,7 +29,7 @@
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
 | **[CONFIGURACION_COMPLETADA.md](./CONFIGURACION_COMPLETADA.md)** | 🔧 Setup del proyecto | 📖 Referencia |
-| **[CONFIGURACION_VERCEL.md](./CONFIGURACION_VERCEL.md)** | 🚀 Deploy en Vercel (+ vars GHL) | ✅ Actualizado |
+| **[CONFIGURACION_VERCEL.md](./CONFIGURACION_VERCEL.md)** | 🚀 Deploy en Vercel (+ vars GHL alineadas con README) | ✅ Actualizado |
 | **[GUIA_CONFIGURACION_SUPABASE.md](./GUIA_CONFIGURACION_SUPABASE.md)** | 🗄️ Setup Supabase | 📖 Referencia |
 
 ---
@@ -44,7 +44,8 @@
 | **[HISTORIAL.md](./docs/HISTORIAL.md)** | 📜 Historial de cambios | ✅ Actualizado |
 | **[SCRIPTS_LANDINGS.md](./docs/SCRIPTS_LANDINGS.md)** | 🤖 Scripts de generación | ✅ Actualizado |
 | **[MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md)** | 💰 Modelo de negocio | 📖 Referencia |
-| **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners y leads (+ GHL operativo) | ✅ Actualizado |
+| **[PARTNERS_FASE1_CAPTACION.md](./docs/PARTNERS_FASE1_CAPTACION.md)** | 🤝 Partners Fase 1: captación + cualificación + magic link + Founding (BD, APIs, planes, ciudades→tier, ROI, operativa closer) | ✅ Nuevo |
+| **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners post-firma: asignación, panel partner activo, facturación (target/v2; GHL operativo) | 📖 Referencia (v2) |
 | **[ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md)** | ✍️ Estrategia SEO blog | 📖 Referencia |
 
 ### 📂 `/scripts`
@@ -70,6 +71,8 @@
 | `12-chat-messages.sql` | Historial conversaciones + ratings | ✅ Ejecutado |
 | `13-landing-visa-no-lucrativa.sql` | Landings visa no lucrativa ES+EN | ✅ Ejecutado |
 | `14-landing-visa-no-lucrativa-de-fr-pt.sql` | Landings visa no lucrativa DE+FR+PT | ✅ Ejecutado |
+| `15-ai-blog-config.sql` | Configuración asistente IA del blog | ✅ Ejecutado |
+| `16-partner-leads.sql` | Captación de partners B2B (Fase 1) | ✅ Nuevo |
 
 ---
 
@@ -82,10 +85,21 @@
 - **APIs**: `/api/chat`, `/api/chat/config`, `/api/chat/rate`
 
 ### Leads y GoHighLevel (listo)
-- **Captura**: `POST /api/leads` → Supabase `leads` + (opcional) GHL API + webhook único
+- **Captura**: `POST /api/leads` → Supabase `leads` + (opcional) GHL API + webhook único (`GHL_INCOMING_WEBHOOK_SALUD` = URL única para todos los leads)
+- **Producto**: una sola **location** GHL acordada con el cliente; segmentación con `servicio` / `tipo_ruta` en el JSON — ver **`README.md`** (CRM GHL + decisión definitiva)
 - **Código**: `src/lib/gohighlevel.ts`, `src/lib/ghl-spanish-labels.ts`
 - **Admin**: `/administrator/leads` (listado y borrado)
-- **Env / mapeo**: `.env.example` (`GHL_PRIVATE_TOKEN`, `GHL_LOCATION_ID`, `GHL_INCOMING_WEBHOOK_SALUD`, `GHL_CUSTOM_FIELD_IDS`)
+- **Env / mapeo**: `.env.example` (`GHL_PRIVATE_TOKEN`, `GHL_LOCATION_ID`, `GHL_INCOMING_WEBHOOK_SALUD`, `GHL_CUSTOM_FIELD_IDS`); deploy: **`CONFIGURACION_VERCEL.md`**
+
+### Partners (Fase 1 — captación B2B)
+- **Doc completo**: **[`docs/PARTNERS_FASE1_CAPTACION.md`](./docs/PARTNERS_FASE1_CAPTACION.md)** (BD, APIs, planes, ciudades→tier, ROI, operativa diaria del closer).
+- **Acceso 1 público**: `/es/partners` (landing + formulario sin precios), `/es/partners/gracias` (confirmación honesta).
+- **Acceso 2 privado** (magic link UUID, TTL 7d): `/es/partners/acceso?token=...` (calculadora ROI + selector multi-vertical + CTA contrato Founding), `/es/partners/acceso/contrato`.
+- **Admin**: `/administrator/partners` (listado paginado + filtros + modal con cualificar A/B/C → token al portapapeles, rechazar, regenerar, set_stage).
+- **APIs**: `POST/GET /api/partners/leads`, `POST /api/partners/qualify`, `GET /api/partners/access/[token]`, `POST /api/partners/contract-request`.
+- **Lógica de negocio**: `src/lib/partners.ts` — matriz Tier × Plan, 19 ciudades→tier, multi-vertical (0/10/30/40 +5pp Founding), zonas adicionales (50%, desde ESCALA), Founding (30% × 6m), `computeRoi()`.
+- **BD**: `supabase/16-partner-leads.sql` (tabla `partner_leads`, RLS deny all anon/authenticated, vista `admin_partner_leads_overview`).
+- **i18n**: `t.footer.forPartners` traducido en los 5 idiomas; clave `partners` reservada en `routes.ts`. En v0 solo se renderiza `/es/partners`; el footer de cualquier locale enlaza a esa URL.
 
 ### Contenido de Ciudades
 
@@ -118,16 +132,17 @@
 
 | Métrica | Valor |
 |---------|-------|
-| Páginas estáticas | 744+ |
+| Páginas estáticas | 708+ |
 | Idiomas | 5 (ES, EN, FR, DE, PT) |
 | Ciudades | 19 |
 | Secciones por ciudad | 14 |
 | Claves traducción UI | 200+ |
 | Landing pages SEO | 176+ |
 | Artículos blog | 30+ × 5 idiomas |
-| Tablas Supabase | 11+ (incl. chatbot_config, chat_messages) |
+| Tablas Supabase | 12+ (incl. chatbot_config, chat_messages, partner_leads) |
+| Endpoints API Partners | 4 (`leads`, `qualify`, `access/[token]`, `contract-request`) |
 
 ---
 
-**Última actualización:** 9 de abril de 2026  
-**Versión:** 3.2.0
+**Última actualización:** 5 de mayo de 2026  
+**Versión:** 3.3.0

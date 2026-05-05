@@ -24,6 +24,7 @@
 - **Admin**: `/administrator/leads` — eliminar leads.
 - **Código**: `src/lib/gohighlevel.ts`, `src/lib/ghl-spanish-labels.ts`, `src/app/api/leads/route.ts`.
 - **Config**: `.env.example` (variables y mapeo sugerido en GHL).
+- **Documentación abril 2026:** decisión de **una sola subcuenta** GHL (sin duplicar locations); segmentación en CRM vía `servicio`, `tipo_ruta` (`salud` \| `otros`) y workflows. Detalle en **`README.md`** (sección CRM GoHighLevel).
 
 ---
 

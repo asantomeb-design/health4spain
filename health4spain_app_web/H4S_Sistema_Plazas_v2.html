@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Health4Spain · Red de Partners España</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --n:#18253a;--n2:#0e3260;--c:#29abe2;--c2:#1a8bbf;--clt:#e8f6fc;
+  --g:#0a7c4e;--glt:#e6f7f0;--o:#e8943a;--olt:#fff3e0;
+  --r:#c0392b;--rlt:#fdecea;--amber:#f59e0b;--amberlt:#fef3c7;
+  --prox:#7c3aed;--proxlt:#ede9fe;
+  --bd:#dce7f1;--bg:#f5f7fb;--wh:#fff;--sl:#4a6080;--sl2:#8fa5bf;
+  --f:'Plus Jakarta Sans',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--bg);color:var(--n);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+#view-public,#view-form,#view-admin{display:none}
+#view-public.active,#view-form.active,#view-admin.active{display:block}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(10,124,78,.4)}60%{box-shadow:0 0 0 8px rgba(10,124,78,0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* TOPBAR */
+.topbar{background:var(--n);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:500}
+.tb-brand{display:flex;align-items:center;gap:8px;cursor:pointer}
+.tb-mark{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--c),var(--g));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.7rem;color:#fff}
+.tb-name{font-size:.85rem;font-weight:800;color:#fff;letter-spacing:-.2px}.tb-name b{color:var(--c)}
+.tb-right{display:flex;align-items:center;gap:5px}
+.tb-btn{padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.12);font-size:.67rem;font-weight:700;color:rgba(255,255,255,.55);background:transparent;cursor:pointer;font-family:var(--f);transition:.15s;white-space:nowrap}
+.tb-btn:hover{color:#fff;border-color:rgba(255,255,255,.3)}.tb-btn.active{background:var(--c);border-color:var(--c);color:var(--n)}
+.tb-sep{width:1px;height:16px;background:rgba(255,255,255,.1)}
+
+/* HERO */
+.hero{background:linear-gradient(155deg,#18253a 0%,#0e3260 50%,#1d4e89 100%);padding:60px 20px 52px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 78% 15%,rgba(41,171,226,.15),transparent),radial-gradient(ellipse 50% 40% at 8% 85%,rgba(10,124,78,.1),transparent)}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(41,171,226,.07) 1px,transparent 1px);background-size:32px 32px}
+.hi{position:relative;z-index:2;max-width:600px;margin:0 auto}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:30px;padding:4px 14px;font-size:.63rem;font-weight:700;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.09em;margin-bottom:20px}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite;flex-shrink:0}
+.hero h1{font-size:clamp(1.75rem,5.5vw,3rem);font-weight:900;color:#fff;letter-spacing:-.5px;line-height:1.07;margin-bottom:13px}
+.hero h1 em{color:var(--c);font-style:normal}
+.hero p{font-size:.9rem;color:rgba(255,255,255,.46);max-width:460px;margin:0 auto 28px;line-height:1.75}
+.hero-kpis{display:flex;justify-content:center;width:fit-content;margin:0 auto 16px;border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden}
+.hk{padding:13px 22px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}.hk:last-child{border:none}
+.hk-n{font-size:1.5rem;font-weight:900;color:var(--c);line-height:1}.hk-l{font-size:.57rem;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+.hero-ticker{font-size:.74rem;color:rgba(255,255,255,.38);display:flex;align-items:center;justify-content:center;gap:7px}
+.ticker-pulse{width:7px;height:7px;border-radius:50%;background:var(--g);animation:pulse 2s infinite;flex-shrink:0}
+
+/* HOW */
+.how{background:var(--wh);padding:36px 20px;border-bottom:1px solid var(--bd)}
+.how-inner{max-width:820px;margin:0 auto}
+.how-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--c2);text-align:center;margin-bottom:20px}
+.how-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:14px}
+.hstep{text-align:center;padding:0 6px}
+.hstep-ico{width:40px;height:40px;border-radius:12px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.hstep h3{font-size:.81rem;font-weight:800;margin-bottom:3px}.hstep p{font-size:.72rem;color:var(--sl);line-height:1.5}
+
+/* LEGEND */
+.legend-bar{background:var(--n);padding:10px 18px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center}
+.lg-item{display:flex;align-items:center;gap:6px;font-size:.67rem;color:rgba(255,255,255,.45);font-weight:600}
+.lg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* FILTERS */
+.filter-strip{background:var(--wh);border-bottom:1px solid var(--bd);padding:10px 16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;position:sticky;top:49px;z-index:400;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.fl{font-size:.59rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--sl2);flex-shrink:0}
+.fbtn{padding:4px 11px;border-radius:20px;border:1.5px solid var(--bd);font-size:.68rem;font-weight:700;color:var(--sl);background:var(--bg);cursor:pointer;font-family:var(--f);transition:.15s;white-space:nowrap}
+.fbtn:hover,.fbtn.on{border-color:var(--c);color:var(--c2);background:var(--clt)}
+.fsep{width:1px;height:14px;background:var(--bd);flex-shrink:0}
+.search-box{margin-left:auto;padding:5px 11px;border:1.5px solid var(--bd);border-radius:8px;font-size:.72rem;font-family:var(--f);color:var(--n);background:var(--bg);outline:none;width:155px;transition:.15s}
+.search-box:focus{border-color:var(--c)}.search-box::placeholder{color:var(--sl2)}
+
+/* ZONES */
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+@media(min-width:600px){.wrap{padding:0 24px}}
+.zone-section{padding:26px 0 0}.zone-section.hidden{display:none}
+.zone-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:9px;border-bottom:2px solid var(--bd)}
+.zone-ico{font-size:1.1rem;flex-shrink:0}
+.zone-hd-info{flex:1}.zone-hd-info h2{font-size:.93rem;font-weight:900;letter-spacing:-.2px}
+.zone-hd-info p{font-size:.71rem;color:var(--sl);margin-top:2px}
+.zone-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.zone-open{font-size:.67rem;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--clt);color:var(--c2);white-space:nowrap}
+.zone-prox{font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--proxlt);color:var(--prox)}
+
+/* PLAZA GRID */
+.plazas-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));padding-bottom:6px}
+
+/* PLAZA CARD */
+.plaza{border-radius:14px;border:1.5px solid var(--bd);background:var(--wh);overflow:hidden;transition:.2s;display:flex;flex-direction:column;position:relative}
+.plaza:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.09)}
+.plaza.hidden{display:none !important}
+.plaza.is-prox{border-color:rgba(124,58,237,.2);background:linear-gradient(160deg,rgba(124,58,237,.03),var(--wh))}
+.plaza.is-prox:hover{border-color:var(--prox);box-shadow:0 8px 24px rgba(124,58,237,.1)}
+.plaza.has-urgency{border-color:rgba(192,57,43,.25)}
+
+/* urgency ribbon */
+.urgency-ribbon{background:linear-gradient(90deg,rgba(192,57,43,.95),rgba(232,148,58,.95));padding:4px 14px;font-size:.59rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:5px}
+.urgency-ribbon span.blink{animation:blink 1.5s infinite}
+
+.plaza-top{padding:13px 14px 10px;display:flex;align-items:flex-start;gap:10px;flex:1}
+.svc-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.si-seg{background:var(--glt)}.si-abg{background:var(--clt)}.si-ges{background:#ede9fe}.si-inm{background:var(--olt)}
+.plaza-meta{flex:1;min-width:0}
+
+/* PATH — always H4S/Servicio/Idioma/Ciudad/Tier — NEVER partner name */
+.plaza-path{font-size:.59rem;font-weight:600;font-family:var(--fm);color:var(--sl2);margin-bottom:4px;display:flex;flex-wrap:wrap;align-items:center;gap:1px;line-height:1.75}
+.pp-root{color:var(--c2);font-weight:700}.pp-sep{color:var(--bd);margin:0 2px}
+.pp-svc{color:var(--n2);font-weight:700}.pp-lang{color:#7c3aed;font-weight:700}
+.pp-city{color:var(--g);font-weight:700}.pp-tier{color:var(--sl2)}
+
+.plaza-title{font-size:.83rem;font-weight:800;letter-spacing:-.2px;margin-bottom:2px;line-height:1.3}
+.plaza-sub{font-size:.71rem;color:var(--sl);line-height:1.4}
+
+.plaza-price-row{margin-top:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.plaza-price{font-family:var(--fm);font-size:.73rem;font-weight:600;color:var(--g)}
+.plaza-roi{font-size:.63rem;color:var(--sl)}
+
+.plaza-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.pd-open{background:var(--g);box-shadow:0 0 0 3px var(--glt)}
+.pd-nego{background:var(--amber);box-shadow:0 0 0 3px var(--amberlt)}
+.pd-taken{background:var(--r);box-shadow:0 0 0 3px var(--rlt)}
+.pd-prox{background:var(--prox);box-shadow:0 0 0 3px var(--proxlt)}
+
+.plaza-footer{padding:8px 14px;background:var(--bg);border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.plaza-langs{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
+.lt{font-size:.59rem;font-weight:700;padding:2px 6px;border-radius:4px;border:1px solid transparent}
+.lt-en{background:rgba(41,171,226,.1);border-color:rgba(41,171,226,.2);color:var(--c2)}
+.lt-de{background:rgba(180,130,0,.1);border-color:rgba(180,130,0,.2);color:#7a5500}
+.lt-es{background:rgba(10,124,78,.1);border-color:rgba(10,124,78,.2);color:var(--g)}
+.lt-fr{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.2);color:#5b21b6}
+.lt-ar{background:rgba(192,57,43,.1);border-color:rgba(192,57,43,.2);color:var(--r)}
+.lt-ru{background:rgba(74,96,128,.1);border-color:rgba(74,96,128,.2);color:var(--sl)}
+.lt-pt{background:rgba(220,80,60,.1);border-color:rgba(220,80,60,.2);color:#9a2a1a}
+.tm{font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:4px;border:1px solid transparent;margin-left:2px}
+.tm-a{background:var(--clt);color:var(--c2);border-color:rgba(41,171,226,.2)}
+.tm-b{background:var(--glt);color:var(--g);border-color:rgba(10,124,78,.2)}
+.tm-c{background:var(--olt);color:#9a4d00;border-color:rgba(232,148,58,.2)}
+
+.plaza-cta{padding:5px 13px;border-radius:8px;font-size:.69rem;font-weight:800;cursor:pointer;font-family:var(--f);border:none;transition:.15s;white-space:nowrap}
+.pcta-open{background:var(--g);color:#fff}.pcta-open:hover{background:#0b6843}
+.pcta-nego{background:var(--amberlt);color:#7a5500;pointer-events:none;font-size:.63rem}
+.pcta-taken{background:var(--bg);color:var(--sl2);pointer-events:none;font-size:.63rem;border:1px solid var(--bd)}
+.pcta-prox{background:var(--proxlt);color:var(--prox)}.pcta-prox:hover{background:var(--prox);color:#fff}
+
+/* interested counter */
+.interested{font-size:.63rem;color:var(--sl2);display:flex;align-items:center;gap:4px}
+.interested-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0}
+
+/* EXPANSION BANNER */
+.expansion-banner{background:linear-gradient(135deg,var(--n),var(--n2));border-radius:18px;padding:28px 26px;margin:32px 0 40px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:relative;overflow:hidden}
+.expansion-banner::before{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(41,171,226,.1),transparent 70%)}
+.eb-text{flex:1;min-width:200px;position:relative;z-index:2}
+.eb-text h3{font-size:.95rem;font-weight:900;color:#fff;margin-bottom:5px;letter-spacing:-.2px}
+.eb-text p{font-size:.78rem;color:rgba(255,255,255,.42);line-height:1.65}
+.eb-btn{flex-shrink:0;padding:11px 22px;background:var(--c);color:var(--n);font-weight:800;font-size:.83rem;border-radius:10px;border:none;cursor:pointer;font-family:var(--f);transition:.15s;position:relative;z-index:2}
+.eb-btn:hover{background:#3dbfee}
+
+/* FORM */
+.form-wrap{max-width:540px;margin:36px auto;padding:0 20px 60px}
+.form-back{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--sl);cursor:pointer;margin-bottom:20px;background:none;border:none;font-family:var(--f);padding:0}
+.form-back:hover{color:var(--c2)}
+.form-card{background:var(--wh);border-radius:20px;border:1.5px solid var(--bd);overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.07)}
+.form-hd{background:linear-gradient(135deg,var(--n),var(--n2));padding:22px 24px 18px}
+.form-hd-path{font-family:var(--fm);font-size:.6rem;color:rgba(255,255,255,.35);margin-bottom:7px;word-break:break-all}
+.form-hd h2{font-size:1.05rem;font-weight:900;color:#fff;margin-bottom:5px;letter-spacing:-.3px}
+.form-hd p{font-size:.77rem;color:rgba(255,255,255,.44);line-height:1.65}
+.form-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.fc{padding:4px 10px;border-radius:7px;font-size:.7rem;font-weight:700}
+.fc-svc{background:rgba(41,171,226,.2);color:var(--c)}
+.fc-lang{background:rgba(124,58,237,.2);color:#a78bfa}
+.fc-city{background:rgba(10,124,78,.2);color:#6ee7b7}
+.fc-tier{background:rgba(232,148,58,.2);color:#fcd34d}
+.fc-prox{background:rgba(109,40,217,.2);color:#c4b5fd}
+.fc-price{background:rgba(10,124,78,.2);color:#6ee7b7}
+.form-body{padding:22px}
+.frow{margin-bottom:14px}
+.flabel{font-size:.7rem;font-weight:700;color:var(--sl);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;display:block}
+.finput,.fselect,.ftextarea{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-family:var(--f);font-size:.83rem;color:var(--n);background:var(--bg);outline:none;transition:.15s;-webkit-appearance:none}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:var(--c);background:var(--wh)}
+.ftextarea{resize:vertical;min-height:76px}
+.frow-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-submit{width:100%;padding:13px;background:var(--c);color:var(--n);font-family:var(--f);font-size:.9rem;font-weight:800;border:none;border-radius:12px;cursor:pointer;transition:.15s;margin-top:6px}
+.form-submit:hover{background:#3dbfee}
+.form-note{font-size:.7rem;color:var(--sl);text-align:center;margin-top:9px;line-height:1.6}
+.form-ok{display:none;text-align:center;padding:36px 24px}
+.form-ok.show{display:block}
+.form-ok-ico{font-size:2.5rem;margin-bottom:12px}
+.form-ok h3{font-size:1rem;font-weight:900;margin-bottom:6px}
+.form-ok p{font-size:.81rem;color:var(--sl);line-height:1.7;margin-bottom:18px}
+.form-ok-back{padding:9px 22px;background:var(--n);color:#fff;border:none;border-radius:10px;font-family:var(--f);font-size:.82rem;font-weight:700;cursor:pointer}
+
+/* ADMIN LOGIN */
+.admin-login-wrap{max-width:340px;margin:60px auto;background:var(--wh);border-radius:20px;border:1.5px solid var(--bd);padding:32px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.07)}
+.al-ico{font-size:1.8rem;margin-bottom:10px}
+.admin-login-wrap h2{font-size:.98rem;font-weight:800;margin-bottom:4px}
+.admin-login-wrap p{font-size:.77rem;color:var(--sl);margin-bottom:20px;line-height:1.5}
+.pin-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+.pin-inp{width:48px;height:54px;border:2px solid var(--bd);border-radius:10px;text-align:center;font-size:1.3rem;font-weight:700;font-family:var(--fm);color:var(--n);background:var(--bg);outline:none;transition:.15s}
+.pin-inp:focus{border-color:var(--c)}
+.pin-btn{width:100%;padding:12px;background:var(--n);color:#fff;font-family:var(--f);font-size:.87rem;font-weight:800;border:none;border-radius:10px;cursor:pointer;transition:.15s}
+.pin-btn:hover{background:var(--n2)}
+.pin-err{font-size:.73rem;color:var(--r);margin-top:8px;display:none}
+
+/* ADMIN PANEL */
+.admin-panel{display:none}.admin-panel.show{display:block}
+.admin-strip{background:var(--n);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:2px solid var(--c)}
+.as-left h2{font-size:.87rem;font-weight:800;color:#fff;margin-bottom:1px}.as-left p{font-size:.65rem;color:rgba(255,255,255,.32)}
+.as-right{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.admin-kpi-bar{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px;background:var(--wh);border-bottom:1px solid var(--bd);max-width:1100px;margin:0 auto}
+.ak{flex:1;min-width:100px;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;position:relative;overflow:hidden}
+.ak::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.ak-c::before{background:var(--c)}.ak-g::before{background:var(--g)}.ak-o::before{background:var(--o)}.ak-r::before{background:var(--r)}.ak-p::before{background:var(--prox)}
+.ak-n{font-size:1.5rem;font-weight:900;line-height:1;margin-bottom:2px}
+.ak-c .ak-n{color:var(--c2)}.ak-g .ak-n{color:var(--g)}.ak-o .ak-n{color:var(--o)}.ak-r .ak-n{color:var(--r)}.ak-p .ak-n{color:var(--prox)}
+.ak-l{font-size:.61rem;color:var(--sl);text-transform:uppercase;letter-spacing:.07em}
+
+.req-section{max-width:1100px;margin:16px auto;padding:0 20px}
+.sec-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--sl);padding-bottom:8px;border-bottom:1px solid var(--bd);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.req-badge{background:var(--rlt);color:var(--r);font-size:.61rem;font-weight:700;padding:1px 7px;border-radius:5px}
+.req-list{display:flex;flex-direction:column;gap:7px}
+.req-card{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:13px 16px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;transition:.15s}
+.req-card.is-new{border-color:var(--c);background:var(--clt)}
+.req-info{flex:1;min-width:180px}
+.req-name{font-size:.84rem;font-weight:800;margin-bottom:1px}
+.req-detail{font-size:.71rem;color:var(--sl);line-height:1.55}
+.req-path{font-family:var(--fm);font-size:.61rem;color:var(--c2);margin-top:3px}
+.req-actions{display:flex;gap:5px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.rbtn{padding:5px 12px;border-radius:8px;font-size:.69rem;font-weight:800;cursor:pointer;font-family:var(--f);border:none;transition:.15s;white-space:nowrap}
+.rb-call{background:var(--g);color:#fff}.rb-call:hover{background:#0b6843}
+.rb-assign{background:var(--clt);color:var(--c2);border:1px solid rgba(41,171,226,.2)}.rb-assign:hover{background:var(--c);color:#fff}
+.rb-del{background:var(--bg);color:var(--sl);border:1px solid var(--bd)}.rb-del:hover{background:var(--rlt);color:var(--r)}
+
+.admin-table-wrap{max-width:1100px;margin:16px auto 0;padding:0 20px 60px;overflow-x:auto}
+.admin-table{width:100%;border-collapse:collapse;font-size:.76rem;min-width:760px}
+.admin-table th{background:var(--n);color:rgba(255,255,255,.65);padding:8px 11px;text-align:left;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+.admin-table td{padding:9px 11px;border-bottom:1px solid var(--bd);vertical-align:middle;line-height:1.4}
+.admin-table tr:hover td{background:var(--clt)}
+.admin-table tr.is-prox td{opacity:.65}
+.at-path{font-family:var(--fm);font-size:.64rem;display:flex;flex-wrap:wrap;gap:1px;align-items:center;line-height:1.7}
+.at-root{color:var(--c2);font-weight:700}.at-sep{color:var(--bd);margin:0 2px}.at-svc{color:var(--n2);font-weight:700}.at-lang{color:#7c3aed;font-weight:700}.at-city{color:var(--g);font-weight:700}.at-tier{color:var(--sl)}
+.partner-name{font-size:.79rem;font-weight:700;color:var(--n)}.partner-name small{display:block;font-size:.67rem;font-weight:400;color:var(--sl);margin-top:1px}
+.partner-none{color:var(--sl2);font-style:italic;font-size:.72rem}
+.st-sel{padding:4px 8px;border:1.5px solid var(--bd);border-radius:7px;font-family:var(--f);font-size:.71rem;font-weight:700;color:var(--n);background:var(--bg);cursor:pointer;outline:none;-webkit-appearance:none;transition:.15s}
+.st-open{border-color:var(--g);color:var(--g);background:var(--glt)}.st-nego{border-color:var(--amber);color:#7a5500;background:var(--amberlt)}.st-taken{border-color:var(--r);color:var(--r);background:var(--rlt)}.st-prox{border-color:var(--prox);color:var(--prox);background:var(--proxlt)}
+.note-inp{padding:5px 9px;border:1.5px solid var(--bd);border-radius:7px;font-family:var(--f);font-size:.71rem;color:var(--n);background:var(--bg);outline:none;width:155px;transition:.15s}.note-inp:focus{border-color:var(--c)}
+.save-btn{padding:4px 10px;border:none;border-radius:7px;background:var(--n);color:#fff;font-family:var(--f);font-size:.66rem;font-weight:700;cursor:pointer;transition:.15s;white-space:nowrap}.save-btn:hover{background:var(--n2)}.save-btn.saved{background:var(--g)}
+.bxs{font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:5px;display:inline-block;white-space:nowrap}
+.bxs-g{background:var(--glt);color:var(--g)}.bxs-r{background:var(--rlt);color:var(--r)}.bxs-c{background:var(--clt);color:var(--c2)}
+
+footer{background:var(--n);padding:18px 20px;text-align:center;font-size:.67rem;color:rgba(255,255,255,.2)}
+footer b{color:rgba(255,255,255,.35)}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="tb-brand" onclick="showView('public')">
+    <div class="tb-mark">H4</div>
+    <span class="tb-name">Health<b>4</b>Spain</span>
+  </div>
+  <div class="tb-right">
+    <button class="tb-btn active" id="btn-public" onclick="showView('public')">Red de Partners</button>
+    <div class="tb-sep"></div>
+    <button class="tb-btn" id="btn-admin" onclick="showView('admin')">⚙ Supervisión</button>
+  </div>
+</nav>
+
+<!-- ══════════ CAPA 1: PÚBLICA ══════════ -->
+<div id="view-public" class="active">
+
+<div class="hero">
+  <div class="hi">
+    <div class="hero-chip"><span class="chip-dot"></span>Red activa · España 2026</div>
+    <h1>Plazas exclusivas para<br>profesionales que atienden <em>expatriados</em></h1>
+    <p>Un solo partner por ciudad, servicio e idioma. El lead llega cualificado en su idioma — tú solo cierras. Sin captación. Sin llamadas en frío.</p>
+    <div class="hero-kpis">
+      <div class="hk"><div class="hk-n" id="kpi-open">—</div><div class="hk-l">Plazas libres</div></div>
+      <div class="hk"><div class="hk-n" id="kpi-cities">—</div><div class="hk-l">Ciudades</div></div>
+      <div class="hk"><div class="hk-n">5</div><div class="hk-l">Idiomas</div></div>
+      <div class="hk"><div class="hk-n">4</div><div class="hk-l">Servicios</div></div>
+    </div>
+    <div class="hero-ticker"><span class="ticker-pulse"></span><span id="hero-ticker-text">Cargando actividad…</span></div>
+  </div>
+</div>
+
+<div class="how">
+  <div class="how-inner">
+    <div class="how-title">Cómo funciona la red</div>
+    <div class="how-steps">
+      <div class="hstep"><div class="hstep-ico" style="background:var(--clt)">🗺️</div><h3>Elige tu plaza</h3><p>Ciudad + servicio + idioma. Plaza exclusiva. Verde = libre ahora mismo.</p></div>
+      <div class="hstep"><div class="hstep-ico" style="background:var(--glt)">📋</div><h3>Solicita acceso</h3><p>2 minutos de formulario. Te llamamos en menos de 24h para confirmar.</p></div>
+      <div class="hstep"><div class="hstep-ico" style="background:var(--olt)">🤖</div><h3>Mar-IA trabaja</h3><p>Cualifica el lead en su idioma y te lo entrega con ficha completa vía WhatsApp.</p></div>
+      <div class="hstep"><div class="hstep-ico" style="background:#ede9fe">💼</div><h3>Tú solo cierras</h3><p>Sin marketing ni coordinación. Solo apareces a la reunión con el cliente preparado.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="legend-bar">
+  <div class="lg-item"><div class="lg-dot" style="background:var(--g);box-shadow:0 0 0 3px rgba(10,124,78,.3)"></div>Plaza libre</div>
+  <div class="lg-item"><div class="lg-dot" style="background:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,.3)"></div>En negociación</div>
+  <div class="lg-item"><div class="lg-dot" style="background:var(--r);box-shadow:0 0 0 3px rgba(192,57,43,.3)"></div>Ocupada</div>
+  <div class="lg-item"><div class="lg-dot" style="background:var(--prox);box-shadow:0 0 0 3px rgba(124,58,237,.3)"></div>Próximamente · Sé el primero</div>
+</div>
+
+<div class="filter-strip">
+  <span class="fl">Ver</span>
+  <button class="fbtn on" id="f-all" onclick="setFilter('zona','all',this)">Todas</button>
+  <button class="fbtn" onclick="setFilter('zona','activa',this)">✅ Activas</button>
+  <button class="fbtn" onclick="setFilter('zona','expansion',this)">🔜 Expansión</button>
+  <div class="fsep"></div>
+  <span class="fl">Servicio</span>
+  <button class="fbtn" onclick="setFilter('svc','Seguro',this)">🏥 Seguro</button>
+  <button class="fbtn" onclick="setFilter('svc','Abogado',this)">⚖️ Abogado</button>
+  <button class="fbtn" onclick="setFilter('svc','Gestoría',this)">📋 Gestoría</button>
+  <button class="fbtn" onclick="setFilter('svc','Inmobiliaria',this)">🏠 Inmobiliaria</button>
+  <div class="fsep"></div>
+  <span class="fl">Idioma</span>
+  <button class="fbtn" onclick="setFilter('lang','EN',this)">EN</button>
+  <button class="fbtn" onclick="setFilter('lang','DE',this)">DE</button>
+  <button class="fbtn" onclick="setFilter('lang','AR',this)">AR</button>
+  <input class="search-box" id="pub-search" placeholder="🔍 Buscar ciudad…" oninput="applyFilters()">
+</div>
+
+<div class="wrap">
+  <div id="public-zones"></div>
+  <div class="expansion-banner">
+    <div class="eb-text">
+      <h3>¿Tu ciudad no está en el mapa?</h3>
+      <p>Si atiendes expatriados en una zona no listada, cuéntanoslo. Evaluamos la demanda y, si tiene sentido, abrimos la plaza en exclusiva para ti antes que para nadie.</p>
+    </div>
+    <button class="eb-btn" onclick="openCustomForm()">Proponer mi ciudad →</button>
+  </div>
+</div>
+
+</div><!-- /view-public -->
+
+<!-- ══════════ CAPA 2: FORMULARIO ══════════ -->
+<div id="view-form">
+<div class="form-wrap">
+  <button class="form-back" onclick="showView('public')">← Volver al mapa</button>
+  <div class="form-card">
+    <div class="form-hd">
+      <div class="form-hd-path" id="fpath">Health4Spain / — / — / — / —</div>
+      <h2 id="ftitle">Solicitar plaza</h2>
+      <p id="fdesc">Cuéntanos quién eres. Te llamamos en menos de 24h para confirmar disponibilidad.</p>
+      <div class="form-chips" id="fchips"></div>
+    </div>
+    <div id="form-body" class="form-body">
+      <div class="frow-2">
+        <div class="frow"><label class="flabel">Nombre *</label><input class="finput" id="f-nombre" placeholder="Tu nombre"></div>
+        <div class="frow"><label class="flabel">Apellidos *</label><input class="finput" id="f-apell" placeholder="Apellidos"></div>
+      </div>
+      <div class="frow"><label class="flabel">Despacho / Empresa *</label><input class="finput" id="f-empresa" placeholder="Nombre comercial"></div>
+      <div class="frow-2">
+        <div class="frow"><label class="flabel">Teléfono *</label><input class="finput" id="f-tel" placeholder="+34 6xx xxx xxx" type="tel"></div>
+        <div class="frow"><label class="flabel">Email *</label><input class="finput" id="f-email" placeholder="tu@email.com" type="email"></div>
+      </div>
+      <div class="frow"><label class="flabel">Idiomas que atiendes</label><input class="finput" id="f-idiomas" placeholder="Ej: inglés, alemán, español"></div>
+      <div class="frow" id="frow-custom" style="display:none"><label class="flabel">¿En qué ciudad y servicio? *</label><input class="finput" id="f-custom" placeholder="Ej: Abogado en Valencia, inglés"></div>
+      <div class="frow"><label class="flabel">Cuéntanos algo más (opcional)</label><textarea class="ftextarea" id="f-nota" placeholder="Años de experiencia, volumen actual con extranjeros, dudas…"></textarea></div>
+      <button class="form-submit" onclick="submitForm()">Solicitar plaza →</button>
+      <p class="form-note">Sin spam. Sin compromiso. Solo te contactamos para gestionar tu solicitud.</p>
+    </div>
+    <div class="form-ok" id="form-ok">
+      <div class="form-ok-ico">✅</div>
+      <h3>Solicitud recibida</h3>
+      <p id="form-ok-msg">Hemos registrado tu interés.<br>Te llamamos en menos de <strong>24 horas</strong> en horario laboral.</p>
+      <button class="form-ok-back" onclick="showView('public')">← Volver al mapa</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ CAPA 3: PANEL INTERNO ══════════ -->
+<div id="view-admin">
+
+  <div class="admin-login-wrap" id="admin-login">
+    <div class="al-ico">🔒</div>
+    <h2>Panel de Supervisión</h2>
+    <p>Acceso restringido. Introduce el PIN para continuar.</p>
+    <div class="pin-row">
+      <input class="pin-inp" id="p1" maxlength="1" type="password" oninput="movePin(this,'p2')">
+      <input class="pin-inp" id="p2" maxlength="1" type="password" oninput="movePin(this,'p3')">
+      <input class="pin-inp" id="p3" maxlength="1" type="password" oninput="movePin(this,'p4')">
+      <input class="pin-inp" id="p4" maxlength="1" type="password" oninput="tryPin()">
+    </div>
+    <button class="pin-btn" onclick="tryPin()">Entrar al panel</button>
+    <p class="pin-err" id="pin-err">PIN incorrecto. Inténtalo de nuevo.</p>
+  </div>
+
+  <div class="admin-panel" id="admin-panel">
+    <div class="admin-strip">
+      <div class="as-left">
+        <h2>⚙ Panel de Supervisión · Health4Spain</h2>
+        <p>Vista interna — los partners NO ven nombres asignados ni este panel</p>
+      </div>
+      <div class="as-right">
+        <span class="bxs bxs-r">🔒 Confidencial</span>
+        <button class="tb-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
+        <button class="tb-btn" onclick="logOut()">Salir</button>
+      </div>
+    </div>
+    <div class="admin-kpi-bar" id="admin-kpis"></div>
+    <div class="req-section">
+      <div class="sec-title">Solicitudes entrantes de partners <span class="req-badge" id="req-cnt">0 nuevas</span></div>
+      <div class="req-list" id="req-list"><p style="font-size:.77rem;color:var(--sl)">No hay solicitudes pendientes.</p></div>
+    </div>
+    <div class="admin-table-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <div class="sec-title" style="border:none;margin:0;padding:0">Mapa completo · todas las plazas</div>
+        <input class="search-box" style="width:200px" placeholder="🔍 Filtrar…" oninput="searchAdmin(this.value)">
+      </div>
+      <table class="admin-table" id="admin-table">
+        <thead><tr>
+          <th>Ruta pública</th>
+          <th>Partner asignado (interno)</th>
+          <th>Contacto</th>
+          <th>Estado</th>
+          <th>Notas internas</th>
+          <th>Guardar</th>
+        </tr></thead>
+        <tbody id="admin-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /view-admin -->
+
+<footer><b>Health4Spain · COASEMED S.L.</b> · adolfo@health4spain.com · Sistema de Plazas v2.0 · 2026</footer>
+
+<script>
+// ── PIN (cambiar antes de publicar) ──────────────────────
+const ADMIN_PIN = '1234';
+
+// ── DATOS COMPLETOS ──────────────────────────────────────
+// zona: 'activa' = operativa | 'expansion' = próximamente
+// interested: número de profesionales que han preguntado (urgencia dinámica)
+const DATA = [
+  // ─────────── LEVANTE · COSTA BLANCA (ACTIVA) ───────────
+  {id:'A01',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Seguro',     langs:['EN','DE'],city:'Torrevieja',    pct:'52%',perfil:'Jubilado EU · Visa No Lucrativa · Nómada',       status:'open', interested:4, price:'390€/mes',roi:'Amortizas con 1 póliza ASISA',partner:'',email:'',tel:'',note:''},
+  {id:'A02',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Seguro',     langs:['DE'],     city:'Calpe',         pct:'54%',perfil:'Alemán/Austriaco · Retiro · Patrimonio',          status:'open', interested:3, price:'390€/mes',roi:'Mercado alemán exclusivo',  partner:'',email:'',tel:'',note:''},
+  {id:'A03',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Seguro',     langs:['EN'],     city:'Benidorm',      pct:'41%',perfil:'Británico · Segunda residencia',                  status:'open', interested:2, price:'390€/mes',roi:'Alta demanda estacional',   partner:'',email:'',tel:'',note:''},
+  {id:'A04',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Abogado',    langs:['EN','DE'],city:'Torrevieja',    pct:'52%',perfil:'Golden Visa · No Lucrativa · NIE',                status:'nego', interested:5, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'En conversación activa'},
+  {id:'A05',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Abogado',    langs:['DE'],     city:'Calpe',         pct:'54%',perfil:'Patrimonio · Herencia · Retiro alemán',           status:'open', interested:2, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'A06',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Abogado',    langs:['EN'],     city:'Alicante',      pct:'38%',perfil:'Golden Visa · Emprendedor · NIE',                 status:'open', interested:3, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'A07',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Abogado',    langs:['EN'],     city:'Benidorm',      pct:'41%',perfil:'No Lucrativa · Reagrupación UK',                  status:'open', interested:1, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'A08',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Gestoría',   langs:['EN','DE'],city:'Torrevieja',    pct:'52%',perfil:'NIE · Empadronamiento · Fiscal',                  status:'open', interested:3, price:'390€/mes',roi:'Amortizas con 1 expediente',partner:'',email:'',tel:'',note:''},
+  {id:'A09',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Gestoría',   langs:['EN'],     city:'Orihuela Costa',pct:'48%',perfil:'Jubilado EU · Inversor · TIE',                    status:'taken',interested:0, price:'390€/mes',roi:'',                         partner:'Gestoría Martínez & Soto',email:'info@martinez-soto.es',tel:'+34 966 000 001',note:'Alta 15/01/2026'},
+  {id:'A10',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Gestoría',   langs:['DE'],     city:'Calpe',         pct:'54%',perfil:'Fiscal alemán · Modelo 720 · Autónomo',           status:'open', interested:2, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'A11',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Inmobiliaria',langs:['EN'],    city:'Torrevieja',    pct:'52%',perfil:'Compra residencia · Retiro europeo',               status:'open', interested:4, price:'390€/mes',roi:'Amortizas con media operación',partner:'',email:'',tel:'',note:''},
+  {id:'A12',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Inmobiliaria',langs:['DE'],    city:'Calpe',         pct:'54%',perfil:'Villa lujo · Retiro alemán · Segunda residencia',  status:'taken',interested:0, price:'390€/mes',roi:'',                         partner:'Costa Blanca Homes GmbH',email:'info@cbhomes.es',tel:'+34 965 000 002',note:'Alta 03/02/2026'},
+  {id:'A13',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Inmobiliaria',langs:['EN'],    city:'Benidorm',      pct:'41%',perfil:'Segunda residencia · Alquiler',                   status:'open', interested:2, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'A14',zona:'activa',tier:'A',region:'Levante · Costa Blanca',svc:'Inmobiliaria',langs:['DE'],    city:'Jávea',         pct:'49%',perfil:'Retiro alemán · Villas',                          status:'open', interested:3, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  // ─────────── MURCIA · LEVANTE SUR (ACTIVA) ───────────
+  {id:'B01',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Seguro',     langs:['ES','AR'],city:'Murcia ciudad', pct:'18%',perfil:'Trabajador · Estudiante UMU',                      status:'open', interested:2, price:'290€/mes',roi:'Amortizas con 2 pólizas',   partner:'',email:'',tel:'',note:''},
+  {id:'B02',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Seguro',     langs:['EN'],     city:'San Javier',    pct:'22%',perfil:'Expat zona aeronáutica · Retiro',                  status:'open', interested:1, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'B03',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Abogado',    langs:['ES','AR'],city:'Murcia ciudad', pct:'18%',perfil:'Arraigo · Reagrupación · NIE laboral',             status:'open', interested:3, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'B04',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Abogado',    langs:['ES'],     city:'Cartagena',     pct:'16%',perfil:'Trabajador · Reagrupación familiar',               status:'open', interested:1, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'B05',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Abogado',    langs:['ES'],     city:'Elche',         pct:'22%',perfil:'Latinoamericano · Arraigo social',                 status:'open', interested:2, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'B06',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Gestoría',   langs:['ES','AR'],city:'Murcia ciudad', pct:'18%',perfil:'NIE · TIE · Autónomo extranjero',                  status:'open', interested:2, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'B07',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Gestoría',   langs:['ES'],     city:'Cartagena',     pct:'16%',perfil:'NIE · Arraigo · Reagrupación',                     status:'open', interested:1, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'B08',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Inmobiliaria',langs:['EN'],    city:'Los Alcázares', pct:'24%',perfil:'Segunda residencia · Retiro europeo',               status:'open', interested:2, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'B09',zona:'activa',tier:'B',region:'Murcia · Levante Sur',  svc:'Inmobiliaria',langs:['EN'],    city:'Mazarrón',      pct:'19%',perfil:'Retiro europeo · Compra primera vivienda',          status:'open', interested:1, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  // ─────────── MURCIA INTERIOR TIER C (ACTIVA) ───────────
+  {id:'C01',zona:'activa',tier:'C',region:'Murcia interior',       svc:'Abogado',    langs:['ES','AR'],city:'Lorca',         pct:'15%',perfil:'Trabajador agrícola · Arraigo social',             status:'open', interested:1, price:'190€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'C02',zona:'activa',tier:'C',region:'Murcia interior',       svc:'Gestoría',   langs:['ES','AR'],city:'Torre Pacheco', pct:'28%',perfil:'Trabajador · Reagrupación familiar',               status:'open', interested:2, price:'190€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'C03',zona:'activa',tier:'C',region:'Murcia interior',       svc:'Gestoría',   langs:['ES'],     city:'Molina de Segura',pct:'12%',perfil:'Trabajador · Arraigo social',                    status:'open', interested:0, price:'190€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  {id:'C04',zona:'activa',tier:'C',region:'Murcia interior',       svc:'Abogado',    langs:['ES'],     city:'San Pedro Pinatar',pct:'14%',perfil:'Trabajador · NIE · Reagrupación',               status:'open', interested:1, price:'190€/mes',roi:'',                         partner:'',email:'',tel:'',note:''},
+  // ─────────── CANARIAS (EXPANSIÓN Q3 2026) ───────────
+  {id:'E01',zona:'expansion',tier:'A',region:'Canarias',           svc:'Seguro',     langs:['EN','DE'],city:'Tenerife Sur',  pct:'35%',perfil:'Jubilado EU · Visa No Lucrativa',                  status:'prox', interested:6, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  {id:'E02',zona:'expansion',tier:'A',region:'Canarias',           svc:'Abogado',    langs:['EN'],     city:'Tenerife Sur',  pct:'35%',perfil:'Golden Visa · No Lucrativa · NIE',                 status:'prox', interested:4, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  {id:'E03',zona:'expansion',tier:'A',region:'Canarias',           svc:'Inmobiliaria',langs:['EN','DE'],city:'Tenerife Sur', pct:'35%',perfil:'Compra residencia · Retiro europeo',               status:'prox', interested:5, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  {id:'E04',zona:'expansion',tier:'B',region:'Canarias',           svc:'Seguro',     langs:['EN'],     city:'Gran Canaria',  pct:'28%',perfil:'Nómada digital · Expat tech',                      status:'prox', interested:3, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  {id:'E05',zona:'expansion',tier:'B',region:'Canarias',           svc:'Gestoría',   langs:['EN'],     city:'Gran Canaria',  pct:'28%',perfil:'Nómada · Autónomo · Beckham Law',                  status:'prox', interested:2, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  // ─────────── ANDALUCÍA (EXPANSIÓN Q2 2026) ───────────
+  {id:'E06',zona:'expansion',tier:'A',region:'Andalucía · Costa del Sol',svc:'Seguro',langs:['EN'],   city:'Marbella',      pct:'42%',perfil:'Golden Visa · Jubilado EU · Lujo',                  status:'prox', interested:7, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  {id:'E07',zona:'expansion',tier:'A',region:'Andalucía · Costa del Sol',svc:'Abogado',langs:['EN','RU'],city:'Marbella',   pct:'42%',perfil:'Golden Visa · Herencia · Lujo',                    status:'prox', interested:5, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  {id:'E08',zona:'expansion',tier:'A',region:'Andalucía · Costa del Sol',svc:'Inmobiliaria',langs:['EN','RU'],city:'Marbella',pct:'42%',perfil:'Compra lujo · Golden Visa · Inversión',          status:'prox', interested:8, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  {id:'E09',zona:'expansion',tier:'B',region:'Andalucía · Costa del Sol',svc:'Seguro',langs:['EN'],   city:'Málaga ciudad', pct:'18%',perfil:'Nómada digital · Expat joven',                      status:'prox', interested:4, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  {id:'E10',zona:'expansion',tier:'B',region:'Andalucía · Costa del Sol',svc:'Abogado',langs:['EN'],  city:'Málaga ciudad', pct:'18%',perfil:'Nómada · Visa digital · Startup',                   status:'prox', interested:3, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  {id:'E11',zona:'expansion',tier:'B',region:'Andalucía · Costa del Sol',svc:'Inmobiliaria',langs:['EN'],city:'Málaga ciudad',pct:'18%',perfil:'Compra · Alquiler larga estancia',                status:'prox', interested:3, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  // ─────────── BALEARES (EXPANSIÓN Q3 2026) ───────────
+  {id:'E12',zona:'expansion',tier:'A',region:'Baleares',           svc:'Seguro',     langs:['EN','DE'],city:'Mallorca',      pct:'30%',perfil:'Jubilado EU · Retiro premium',                      status:'prox', interested:4, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  {id:'E13',zona:'expansion',tier:'A',region:'Baleares',           svc:'Inmobiliaria',langs:['EN','DE'],city:'Mallorca',    pct:'30%',perfil:'Lujo · Inversión · Retiro',                          status:'prox', interested:5, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  {id:'E14',zona:'expansion',tier:'A',region:'Baleares',           svc:'Abogado',    langs:['EN','DE'],city:'Mallorca',      pct:'30%',perfil:'Golden Visa · Patrimonio · Herencia',               status:'prox', interested:3, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  {id:'E15',zona:'expansion',tier:'B',region:'Baleares',           svc:'Seguro',     langs:['EN'],     city:'Ibiza',         pct:'25%',perfil:'Nómada · Retiro · Lujo',                            status:'prox', interested:3, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q3 2026'},
+  // ─────────── MADRID (EXPANSIÓN Q4 2026) ───────────
+  {id:'E16',zona:'expansion',tier:'A',region:'Madrid',             svc:'Seguro',     langs:['EN','FR'],city:'Madrid',        pct:'14%',perfil:'Expat corporativo · Golden Visa',                   status:'prox', interested:6, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+  {id:'E17',zona:'expansion',tier:'A',region:'Madrid',             svc:'Abogado',    langs:['EN','FR'],city:'Madrid',        pct:'14%',perfil:'Golden Visa · Inversión · Empresa',                 status:'prox', interested:5, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+  {id:'E18',zona:'expansion',tier:'A',region:'Madrid',             svc:'Gestoría',   langs:['EN'],     city:'Madrid',        pct:'14%',perfil:'Nómada · Beckham Law · Autónomo',                   status:'prox', interested:4, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+  {id:'E19',zona:'expansion',tier:'A',region:'Madrid',             svc:'Inmobiliaria',langs:['EN','FR'],city:'Madrid',       pct:'14%',perfil:'Alquiler larga estancia · Compra inversión',        status:'prox', interested:4, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+  // ─────────── CATALUÑA (EXPANSIÓN Q4 2026) ───────────
+  {id:'E20',zona:'expansion',tier:'A',region:'Cataluña',           svc:'Seguro',     langs:['EN','FR'],city:'Barcelona',     pct:'20%',perfil:'Nómada digital · Expat corporativo',               status:'prox', interested:7, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+  {id:'E21',zona:'expansion',tier:'A',region:'Cataluña',           svc:'Abogado',    langs:['EN'],     city:'Barcelona',     pct:'20%',perfil:'Golden Visa · Empresa · Inversión',                 status:'prox', interested:5, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+  {id:'E22',zona:'expansion',tier:'B',region:'Cataluña',           svc:'Inmobiliaria',langs:['EN','FR'],city:'Sitges',       pct:'22%',perfil:'Segunda residencia · Retiro europeo',               status:'prox', interested:3, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+  // ─────────── VALENCIA (EXPANSIÓN Q2 2026) ───────────
+  {id:'E23',zona:'expansion',tier:'B',region:'Valencia · Interior', svc:'Seguro',    langs:['EN'],     city:'Valencia ciudad',pct:'12%',perfil:'Nómada · Expat universitario',                    status:'prox', interested:4, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  {id:'E24',zona:'expansion',tier:'B',region:'Valencia · Interior', svc:'Abogado',   langs:['EN'],     city:'Valencia ciudad',pct:'12%',perfil:'NIE · Residencia · Empresa',                      status:'prox', interested:3, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  {id:'E25',zona:'expansion',tier:'A',region:'Valencia · Interior', svc:'Inmobiliaria',langs:['EN','DE'],city:'Gandia',     pct:'38%',perfil:'Segunda residencia alemana · Retiro',                status:'prox', interested:2, price:'390€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q2 2026'},
+  // ─────────── GALICIA / NORTE (EXPANSIÓN Q4 2026) ───────────
+  {id:'E26',zona:'expansion',tier:'B',region:'Galicia · Norte',    svc:'Seguro',     langs:['EN','PT'],city:'Vigo',          pct:'8%', perfil:'Retornado · Portugués · Expat',                      status:'prox', interested:1, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+  {id:'E27',zona:'expansion',tier:'B',region:'Galicia · Norte',    svc:'Abogado',    langs:['EN','PT'],city:'A Coruña',      pct:'7%', perfil:'Retornado · Latinoamericano · EU',                   status:'prox', interested:1, price:'290€/mes',roi:'',                         partner:'',email:'',tel:'',note:'Apertura Q4 2026'},
+];
+
+let REQUESTS = [];
+let activeFilters = {zona:'all', svc:'all', lang:'all'};
+let currentPlaza = null;
+
+window.onload = () => {
+  renderPublic();
+  updateHeroKpis();
+  updateTicker();
+};
+
+// ── RENDER PUBLIC ────────────────────────────────────────
+function renderPublic() {
+  const container = document.getElementById('public-zones');
+  container.innerHTML = '';
+  const regions = {};
+  DATA.forEach(p => {
+    if (!regions[p.region]) regions[p.region] = [];
+    regions[p.region].push(p);
+  });
+  Object.entries(regions).forEach(([region, plazas]) => {
+    const isExp = plazas[0].zona === 'expansion';
+    const secId = 'sec-' + region.replace(/[^a-z0-9]/gi,'_');
+    const gridId = 'grid-' + region.replace(/[^a-z0-9]/gi,'_');
+    const openCount = plazas.filter(p=>p.status==='open').length;
+    const sec = document.createElement('div');
+    sec.className = 'zone-section';
+    sec.dataset.zona = plazas[0].zona;
+    sec.id = secId;
+    sec.innerHTML = `
+      <div class="zone-hd">
+        <span class="zone-ico">${isExp ? '🔜' : '📍'}</span>
+        <div class="zone-hd-info">
+          <h2>${region}</h2>
+          <p>${isExp
+            ? 'Zona en apertura · Reserva tu plaza antes de que se abra · '+plazas[0].note
+            : openCount + ' plaza' + (openCount!==1?'s':'') + ' disponible' + (openCount!==1?'s':'') + ' ahora mismo'}</p>
+        </div>
+        <div class="zone-right">
+          ${isExp
+            ? `<span class="zone-prox">🔜 ${plazas[0].note||'Próximamente'}</span>`
+            : openCount > 0
+              ? `<span class="zone-open">${openCount} libre${openCount!==1?'s':''}</span>`
+              : `<span class="zone-open" style="background:var(--rlt);color:var(--r)">Todas ocupadas</span>`}
+        </div>
+      </div>
+      <div class="plazas-grid" id="${gridId}"></div>
+    `;
+    container.appendChild(sec);
+    const grid = document.getElementById(gridId);
+    plazas.forEach(p => grid.appendChild(buildCard(p)));
+  });
+  applyFilters();
+}
+
+function buildCard(p) {
+  const card = document.createElement('div');
+  const isProx = p.status === 'prox';
+  const hasUrgency = p.status === 'open' && p.interested >= 3;
+  card.className = `plaza${isProx?' is-prox':''}${hasUrgency?' has-urgency':''}`;
+  card.dataset.id = p.id;
+  card.dataset.zona = p.zona;
+  card.dataset.svc = p.svc;
+  card.dataset.langs = p.langs.join(',');
+  card.dataset.city = p.city.toLowerCase();
+
+  const svcIco = {Seguro:'🏥',Abogado:'⚖️',Gestoría:'📋',Inmobiliaria:'🏠'}[p.svc]||'📌';
+  const svcCls = {Seguro:'si-seg',Abogado:'si-abg',Gestoría:'si-ges',Inmobiliaria:'si-inm'}[p.svc];
+  const dotCls = {open:'pd-open',nego:'pd-nego',taken:'pd-taken',prox:'pd-prox'}[p.status];
+  const tierCls = {A:'tm-a',B:'tm-b',C:'tm-c'}[p.tier];
+  const ctaCls  = {open:'pcta-open',nego:'pcta-nego',taken:'pcta-taken',prox:'pcta-prox'}[p.status];
+  const ctaTxt  = {open:'Quiero esta plaza →',nego:'En negociación',taken:'Plaza ocupada',prox:'Sé el primero →'}[p.status];
+  const langsHtml = p.langs.map(l=>`<span class="lt lt-${l.toLowerCase()}">${l}</span>`).join('');
+
+  let urgencyHtml = '';
+  if (hasUrgency) {
+    urgencyHtml = `<div class="urgency-ribbon"><span class="blink">●</span> ${p.interested} profesionales interesados en esta plaza</div>`;
+  } else if (isProx && p.interested > 0) {
+    urgencyHtml = `<div class="urgency-ribbon" style="background:linear-gradient(90deg,rgba(124,58,237,.9),rgba(109,40,217,.9))"><span class="blink">●</span> ${p.interested} en lista de espera</div>`;
+  }
+
+  let priceHtml = '';
+  if (p.status === 'open' && p.price) {
+    priceHtml = `<div class="plaza-price-row">
+      <span class="plaza-price">desde ${p.price}</span>
+      ${p.roi ? `<span class="plaza-roi">· ${p.roi}</span>` : ''}
+    </div>`;
+  }
+
+  let intHtml = '';
+  if (p.status === 'open' && p.interested > 0 && p.interested < 3) {
+    intHtml = `<div class="interested"><span class="interested-dot"></span>${p.interested} profesional${p.interested!==1?'es':''} ha preguntado</div>`;
+  }
+
+  card.innerHTML = `
+    ${urgencyHtml}
+    <div class="plaza-top">
+      <div class="svc-ico ${svcCls}">${svcIco}</div>
+      <div class="plaza-meta">
+        <div class="plaza-path">
+          <span class="pp-root">Health4Spain</span><span class="pp-sep">/</span>
+          <span class="pp-svc">${p.svc}</span><span class="pp-sep">/</span>
+          <span class="pp-lang">${p.langs.join('+')}</span><span class="pp-sep">/</span>
+          <span class="pp-city">${p.city}</span><span class="pp-sep">/</span>
+          <span class="pp-tier">Tier ${p.tier}</span>
+        </div>
+        <div class="plaza-title">${p.svc} · ${p.city}</div>
+        <div class="plaza-sub">${p.perfil}</div>
+        ${priceHtml}
+      </div>
+      <div class="plaza-dot ${dotCls}"></div>
+    </div>
+    <div class="plaza-footer">
+      <div class="plaza-langs">${langsHtml}<span class="tm ${tierCls}" style="margin-left:3px">Tier ${p.tier} · ${p.pct}</span></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        ${intHtml}
+        <button class="plaza-cta ${ctaCls}" onclick="handleCTA('${p.id}')">${ctaTxt}</button>
+      </div>
+    </div>
+  `;
+  return card;
+}
+
+function handleCTA(id) {
+  const p = DATA.find(x=>x.id===id);
+  if (!p || p.status==='taken'||p.status==='nego') return;
+  openForm(p);
+}
+
+function updateHeroKpis() {
+  document.getElementById('kpi-open').textContent = DATA.filter(p=>p.status==='open').length;
+  const cities = [...new Set(DATA.map(p=>p.city))].length;
+  document.getElementById('kpi-cities').textContent = cities;
+}
+
+function updateTicker() {
+  const msgs = [
+    'Actividad en tiempo real · Plazas actualizadas hoy',
+    DATA.filter(p=>p.status==='taken').length + ' plazas ya ocupadas por partners activos',
+    DATA.filter(p=>p.interested>=3).length + ' plazas con alta demanda registrada',
+    'Última solicitud recibida hace menos de 24h',
+  ];
+  let i = 0;
+  const el = document.getElementById('hero-ticker-text');
+  if(el){el.textContent=msgs[0];setInterval(()=>{i=(i+1)%msgs.length;el.textContent=msgs[i];},4000);}
+}
+
+// ── FILTERS ─────────────────────────────────────────────
+function setFilter(type, value, btn) {
+  activeFilters[type] = activeFilters[type]===value ? 'all' : value;
+  // reset all buttons of same type
+  document.querySelectorAll(`[onclick*="setFilter('${type}'"]`).forEach(b=>b.classList.remove('on'));
+  if (activeFilters[type]==='all') document.getElementById('f-all').classList.add('on');
+  else { btn.classList.add('on'); document.getElementById('f-all').classList.remove('on'); }
+  applyFilters();
+}
+
+function applyFilters() {
+  const search = (document.getElementById('pub-search')||{}).value?.toLowerCase()||'';
+  document.querySelectorAll('.plaza').forEach(card => {
+    const p = DATA.find(x=>x.id===card.dataset.id);
+    if(!p) return;
+    let show = true;
+    if (activeFilters.zona!=='all' && p.zona!==activeFilters.zona) show=false;
+    if (activeFilters.svc!=='all' && p.svc!==activeFilters.svc) show=false;
+    if (activeFilters.lang!=='all' && !p.langs.includes(activeFilters.lang)) show=false;
+    if (search && !p.city.toLowerCase().includes(search) && !p.region.toLowerCase().includes(search) && !p.svc.toLowerCase().includes(search)) show=false;
+    card.classList.toggle('hidden', !show);
+  });
+  document.querySelectorAll('.zone-section').forEach(sec => {
+    const visible = sec.querySelectorAll('.plaza:not(.hidden)').length;
+    sec.classList.toggle('hidden', visible===0);
+  });
+}
+
+// ── FORM ─────────────────────────────────────────────────
+function openForm(p) {
+  currentPlaza = p;
+  const isProx = p?.status==='prox';
+  const isCustom = !p;
+  document.getElementById('fpath').textContent = p
+    ? `Health4Spain / ${p.svc} / ${p.langs.join('+')} / ${p.city} / Tier ${p.tier}`
+    : 'Health4Spain / Nueva ciudad · Propuesta';
+  document.getElementById('ftitle').textContent = isProx
+    ? `Reservar plaza · ${p.city} (próximamente)`
+    : p ? `Solicitar plaza · ${p.svc} en ${p.city}` : 'Proponer mi ciudad';
+  document.getElementById('fdesc').textContent = isProx
+    ? 'Esta plaza abrirá próximamente. Déjanos tus datos y serás el primero en ser contactado cuando esté disponible.'
+    : p ? `${p.interested>0?p.interested+' profesionales han preguntado por esta plaza. ':''}Cuéntanos quién eres — te llamamos en menos de 24h.`
+      : 'Si atiendes expatriados en una zona no listada, cuéntanoslo. Evaluamos la demanda y te llamamos.';
+  const chips = document.getElementById('fchips');
+  chips.innerHTML = p ? `
+    <span class="fc fc-svc">${p.svc}</span>
+    <span class="fc fc-lang">${p.langs.join(' · ')}</span>
+    <span class="fc fc-city">📍 ${p.city}</span>
+    <span class="fc fc-tier">Tier ${p.tier}</span>
+    ${p.price?`<span class="fc fc-price">desde ${p.price}</span>`:''}
+    ${isProx?'<span class="fc fc-prox">🔜 Próximamente</span>':''}
+  ` : '';
+  document.getElementById('frow-custom').style.display = isCustom ? 'block' : 'none';
+  document.getElementById('form-body').style.display = 'block';
+  document.getElementById('form-ok').classList.remove('show');
+  ['f-nombre','f-apell','f-empresa','f-tel','f-email','f-idiomas','f-nota','f-custom'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  showView('form');
+}
+
+function openCustomForm(){ openForm(null); }
+
+function submitForm() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const tel    = document.getElementById('f-tel').value.trim();
+  const email  = document.getElementById('f-email').value.trim();
+  if (!nombre||!tel||!email) { alert('Por favor rellena nombre, teléfono y email.'); return; }
+  const req = {
+    id:'R'+Date.now(),
+    nombre: nombre+' '+document.getElementById('f-apell').value.trim(),
+    empresa: document.getElementById('f-empresa').value.trim(),
+    tel, email,
+    idiomas: document.getElementById('f-idiomas').value,
+    plazaId: currentPlaza?.id||'custom',
+    path: currentPlaza
+      ? `Health4Spain / ${currentPlaza.svc} / ${currentPlaza.langs.join('+')} / ${currentPlaza.city} / Tier ${currentPlaza.tier}`
+      : 'Propuesta: '+document.getElementById('f-custom').value,
+    nota: document.getElementById('f-nota').value,
+    fecha: new Date().toISOString().split('T')[0],
+    leido: false,
+  };
+  REQUESTS.unshift(req);
+  // Increment interested counter
+  if (currentPlaza) {
+    const p = DATA.find(x=>x.id===currentPlaza.id);
+    if(p) p.interested++;
+  }
+  document.getElementById('form-ok-msg').innerHTML = currentPlaza
+    ? `Tu solicitud para <strong>${currentPlaza.svc} · ${currentPlaza.city}</strong> ha sido registrada.<br>Te llamamos en menos de <strong>24 horas</strong>.`
+    : 'Tu propuesta ha sido registrada.<br>Te llamamos en menos de <strong>48 horas</strong>.';
+  document.getElementById('form-body').style.display = 'none';
+  document.getElementById('form-ok').classList.add('show');
+}
+
+// ── ADMIN ─────────────────────────────────────────────────
+function movePin(el, nextId) {
+  if (el.value.length===1) {
+    const next=document.getElementById(nextId);
+    if(next) next.focus();
+  }
+}
+
+function tryPin() {
+  const pin=['p1','p2','p3','p4'].map(id=>document.getElementById(id).value).join('');
+  if (pin===ADMIN_PIN) {
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-panel').classList.add('show');
+    renderAdmin();
+  } else if (pin.length===4) {
+    document.getElementById('pin-err').style.display='block';
+    ['p1','p2','p3','p4'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('p1').focus();
+    setTimeout(()=>document.getElementById('pin-err').style.display='none',2000);
+  }
+}
+
+function logOut() {
+  document.getElementById('admin-login').style.display='block';
+  document.getElementById('admin-panel').classList.remove('show');
+  ['p1','p2','p3','p4'].forEach(id=>document.getElementById(id).value='');
+  showView('public');
+}
+
+function renderAdmin() {
+  // KPIs
+  const open=DATA.filter(p=>p.status==='open').length;
+  const nego=DATA.filter(p=>p.status==='nego').length;
+  const taken=DATA.filter(p=>p.status==='taken').length;
+  const prox=DATA.filter(p=>p.status==='prox').length;
+  const newR=REQUESTS.filter(r=>!r.leido).length;
+  document.getElementById('admin-kpis').innerHTML=`
+    <div class="ak ak-g"><div class="ak-n">${open}</div><div class="ak-l">Plazas libres</div></div>
+    <div class="ak ak-o"><div class="ak-n">${nego}</div><div class="ak-l">En negociación</div></div>
+    <div class="ak ak-r"><div class="ak-n">${taken}</div><div class="ak-l">Ocupadas</div></div>
+    <div class="ak ak-p"><div class="ak-n">${prox}</div><div class="ak-l">Próximamente</div></div>
+    <div class="ak ak-c"><div class="ak-n">${newR}</div><div class="ak-l">Solicitudes nuevas</div></div>
+    <div class="ak ak-c"><div class="ak-n">${DATA.length}</div><div class="ak-l">Plazas totales</div></div>
+  `;
+  // Requests
+  document.getElementById('req-cnt').textContent = REQUESTS.filter(r=>!r.leido).length+' nuevas';
+  const rl=document.getElementById('req-list');
+  if(!REQUESTS.length){ rl.innerHTML='<p style="font-size:.77rem;color:var(--sl)">No hay solicitudes.</p>'; }
+  else {
+    rl.innerHTML=REQUESTS.map(r=>`
+      <div class="req-card ${!r.leido?'is-new':''}" id="req-${r.id}">
+        <div class="req-info">
+          <div class="req-name">${r.nombre} <span style="font-size:.68rem;font-weight:400;color:var(--sl)">· ${r.empresa||'—'}</span></div>
+          <div class="req-detail">📞 ${r.tel} &nbsp;·&nbsp; ✉ ${r.email}${r.idiomas?' &nbsp;·&nbsp; 🌐 '+r.idiomas:''}</div>
+          ${r.nota?`<div class="req-detail">💬 ${r.nota}</div>`:''}
+          <div class="req-path">${r.path}</div>
+          <div style="font-size:.62rem;color:var(--sl2);margin-top:3px">Recibido: ${r.fecha}</div>
+        </div>
+        <div class="req-actions">
+          <a href="tel:${r.tel}" class="rbtn rb-call">📞 Llamar</a>
+          <button class="rbtn rb-assign" onclick="assignReq('${r.id}')">✅ Asignar plaza</button>
+          <button class="rbtn rb-del" onclick="delReq('${r.id}')">🗑</button>
+        </div>
+      </div>
+    `).join('');
+    REQUESTS.forEach(r=>{
+      const el=document.getElementById('req-'+r.id);
+      if(el) el.addEventListener('mouseenter',()=>{ r.leido=true; renderAdmin(); });
+    });
+  }
+  // Table
+  const tbody=document.getElementById('admin-tbody');
+  tbody.innerHTML=DATA.map(p=>{
+    const stCls={open:'st-open',nego:'st-nego',taken:'st-taken',prox:'st-prox'}[p.status];
+    const stOpts=['open','nego','taken','prox'].map(s=>`<option value="${s}" ${p.status===s?'selected':''}>${{open:'🟢 Libre',nego:'🟡 Negociación',taken:'🔴 Ocupada',prox:'🟣 Próximamente'}[s]}</option>`).join('');
+    return `<tr class="${p.status==='prox'?'is-prox':''}" data-id="${p.id}">
+      <td>
+        <div class="at-path">
+          <span class="at-root">H4S</span><span class="at-sep">/</span>
+          <span class="at-svc">${p.svc}</span><span class="at-sep">/</span>
+          <span class="at-lang">${p.langs.join('+')}</span><span class="at-sep">/</span>
+          <span class="at-city">${p.city}</span><span class="at-sep">/</span>
+          <span class="at-tier">T${p.tier}</span>
+        </div>
+        <div style="font-size:.66rem;color:var(--sl);margin-top:2px">${p.region} · ${p.pct} · ${p.interested} interesados</div>
+      </td>
+      <td>${p.partner?`<div class="partner-name">${p.partner}<small>${p.email||'—'}</small></div>`:`<span class="partner-none">Sin asignar</span>`}</td>
+      <td style="font-size:.72rem;color:var(--sl)">${p.tel||'—'}</td>
+      <td><select class="st-sel ${stCls}" onchange="updStatus('${p.id}',this)">${stOpts}</select></td>
+      <td><input class="note-inp" value="${p.note}" placeholder="Nota interna…" onchange="updNote('${p.id}',this.value)"></td>
+      <td><button class="save-btn" id="save-${p.id}" onclick="saveRow('${p.id}')">Guardar</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function assignReq(id) {
+  const req=REQUESTS.find(r=>r.id===id);
+  if(!req) return;
+  if(req.plazaId==='custom'){alert('Plaza personalizada — gestionar manualmente.');return;}
+  const p=DATA.find(x=>x.id===req.plazaId);
+  if(!p){alert('Plaza no encontrada en el sistema.');return;}
+  p.status='taken'; p.partner=req.nombre+' · '+req.empresa; p.email=req.email; p.tel=req.tel;
+  REQUESTS=REQUESTS.filter(r=>r.id!==id);
+  renderPublic(); renderAdmin(); updateHeroKpis();
+  alert(`✅ Plaza ${req.plazaId} asignada a ${req.nombre}.`);
+}
+
+function delReq(id){ if(confirm('¿Eliminar solicitud?')){ REQUESTS=REQUESTS.filter(r=>r.id!==id); renderAdmin(); } }
+function updStatus(id,sel){ const p=DATA.find(x=>x.id===id); if(p){p.status=sel.value; sel.className='st-sel '+{open:'st-open',nego:'st-nego',taken:'st-taken',prox:'st-prox'}[sel.value];} }
+function updNote(id,val){ const p=DATA.find(x=>x.id===id); if(p) p.note=val; }
+function saveRow(id){
+  const btn=document.getElementById('save-'+id);
+  btn.textContent='✅ Guardado'; btn.classList.add('saved');
+  renderPublic(); updateHeroKpis();
+  setTimeout(()=>{ btn.textContent='Guardar'; btn.classList.remove('saved'); },2000);
+}
+function searchAdmin(v){
+  const q=v.toLowerCase();
+  document.querySelectorAll('#admin-tbody tr').forEach(row=>{
+    const p=DATA.find(x=>x.id===row.dataset.id);
+    if(!p) return;
+    const match=[p.city,p.svc,p.langs.join(''),p.partner,p.region].some(s=>s.toLowerCase().includes(q));
+    row.style.display=match?'':'none';
+  });
+}
+function exportCSV(){
+  const h=['ID','Zona','Tier','Region','Servicio','Idiomas','Ciudad','%Extran','Interesados','Status','Partner','Email','Tel','Precio','Nota'];
+  const rows=DATA.map(p=>[p.id,p.zona,p.tier,p.region,p.svc,p.langs.join('+'),p.city,p.pct,p.interested,p.status,p.partner,p.email,p.tel,p.price,p.note].map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(','));
+  const csv=[h.join(','),...rows].join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='H4S_Plazas_'+new Date().toISOString().split('T')[0]+'.csv'; a.click();
+}
+
+// ── VIEWS ────────────────────────────────────────────────
+function showView(v){
+  ['public','form','admin'].forEach(x=>{
+    document.getElementById('view-'+x).classList.toggle('active',x===v);
+    const b=document.getElementById('btn-'+x); if(b) b.classList.toggle('active',x===v);
+  });
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

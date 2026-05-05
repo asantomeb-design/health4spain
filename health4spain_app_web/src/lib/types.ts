@@ -19,12 +19,13 @@ export interface BlogPost {
   meta_description?: string;
   
   // Multiidioma
-  lang: 'es' | 'en' | 'de' | 'fr';
+  lang: 'es' | 'en' | 'de' | 'fr' | 'pt';
   translations?: {
     es?: string;
     en?: string;
     de?: string;
     fr?: string;
+    pt?: string;
   };
   
   // Autor
@@ -148,36 +149,176 @@ export type LeadStatus =
   | 'perdido'
   | 'descartado';
 
-// Tipos para Partners
+// =============================================
+// Tipos para Partners (post-firma · v1.5)
+// =============================================
+// Esta interfaz representa al partner ya activo con contrato firmado y
+// recibiendo leads. En v0 NO se utiliza todavía: el ciclo del candidato
+// (formulario → cualificación → selección de contrato) vive en
+// `PartnerLead` (más abajo). Cuando un PartnerLead firma manualmente,
+// se creará una fila en `partners` (esquema futuro) con los datos
+// finales y se mantendrá la trazabilidad cruzada.
 export interface Partner {
   id: string;
-  
+
   nombre_comercial: string;
   razon_social: string;
   cif: string;
-  
+
   email: string;
   telefono: string;
   direccion?: string;
   ciudad: string;
-  
+
   tipo_servicio: string[];
   ciudades_cobertura: string[];
   idiomas: string[];
-  
+
   status: 'activo' | 'inactivo' | 'pendiente';
   verificado: boolean;
-  
+
   leads_max_mes?: number;
   leads_actuales_mes?: number;
   precio_lead?: number;
-  
+
   leads_totales?: number;
   leads_convertidos?: number;
   rating?: number;
-  
+
   created_at: string;
   updated_at: string;
+}
+
+// =============================================
+// Tipos para Partner Leads (candidato a partner · v0)
+// =============================================
+// Una fila por solicitud entrante desde la web pública (Acceso 1).
+// Acumula todo el ciclo: formulario, cualificación, token de acceso al
+// panel privado (Acceso 2), y selección de contrato Founding.
+
+export type PartnerService = 'seguros' | 'abogados' | 'inmobiliarias' | 'gestorias';
+
+export type PartnerPlan = 'ACTIVA' | 'CRECE' | 'ESCALA' | 'LIDERA';
+
+export type PartnerTier = 'A' | 'B' | 'C';
+
+export type PartnerCarteraPct =
+  | 'menos_10'
+  | '10_30'
+  | '30_60'
+  | 'mas_60';
+
+export type PartnerLeadStage =
+  | 'solicitud_recibida'
+  | 'en_revision'
+  | 'llamada_agendada'
+  | 'cualificado'
+  | 'rechazado'
+  | 'contrato_solicitado'
+  | 'contratado'
+  | 'baja';
+
+export type PartnerCualificacionTipo = 'A' | 'B' | 'C';
+
+export interface PartnerLead {
+  id: string;
+
+  // Datos de contacto (formulario)
+  nombre: string;
+  empresa: string;
+  email: string;
+  telefono: string;
+
+  // Perfil profesional
+  servicio: PartnerService;
+  ciudad_principal: string;
+  ciudad_es_estrategica: boolean;
+  anos_ejerciendo?: number | null;
+  pct_cartera_extranjera?: PartnerCarteraPct | null;
+  idiomas: string[];
+  about?: string | null;
+
+  // Tracking
+  source: string;
+  landing_page?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  ip_address?: string | null;
+  user_agent?: string | null;
+
+  // Cualificación
+  stage: PartnerLeadStage;
+  cualificacion_tipo?: PartnerCualificacionTipo | null;
+  cualificacion_notas?: string | null;
+  cualificado_por_email?: string | null;
+  cualificado_at?: string | null;
+
+  // Token de acceso (Acceso 2)
+  access_token?: string | null;
+  access_token_expires_at?: string | null;
+  access_first_seen_at?: string | null;
+  access_last_seen_at?: string | null;
+
+  // Selección "Solicitar contrato Founding"
+  contract_plan?: PartnerPlan | null;
+  contract_tier?: PartnerTier | null;
+  contract_verticales?: string[] | null;
+  contract_zonas_adicionales?: string[] | null;
+  contract_founding: boolean;
+  contract_notes?: string | null;
+  contract_requested_at?: string | null;
+
+  // Firma y onboarding
+  signed_at?: string | null;
+  setup_started_at?: string | null;
+  first_lead_delivered_at?: string | null;
+
+  // Privacidad
+  privacy_accepted: boolean;
+  privacy_accepted_at?: string | null;
+
+  created_at: string;
+  updated_at: string;
+}
+
+// Subconjunto de campos que el formulario público (Acceso 1) envía al backend.
+export interface PartnerLeadFormPayload {
+  nombre: string;
+  empresa: string;
+  email: string;
+  telefono: string;
+  servicio: PartnerService;
+  ciudad_principal: string;
+  anos_ejerciendo?: number;
+  pct_cartera_extranjera?: PartnerCarteraPct;
+  idiomas?: string[];
+  about?: string;
+  privacy_accepted: boolean;
+  // Tracking opcional
+  landing_page?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+}
+
+// Datos que la API expone al cliente cuando valida el token (Acceso 2).
+// Nunca se devuelve PII completa salvo lo imprescindible para personalizar.
+export interface PartnerAccessPublicData {
+  id: string;
+  first_name: string;
+  empresa: string;
+  servicio: PartnerService;
+  ciudad_principal: string;
+  ciudad_es_estrategica: boolean;
+  tier_sugerido: PartnerTier;
+  founding_disponible: boolean;
+  // Si ya solicitó contrato: traer la selección para hidratar el panel
+  contract_plan?: PartnerPlan | null;
+  contract_verticales?: string[] | null;
+  contract_zonas_adicionales?: string[] | null;
+  contract_founding: boolean;
+  contract_requested_at?: string | null;
 }
 
 // Tipos para Landing Pages (columnas de landing_pages en Supabase)

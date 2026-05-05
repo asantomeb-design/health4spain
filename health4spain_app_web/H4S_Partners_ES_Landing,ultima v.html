@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Health4Spain · Más clientes expatriados, sin esfuerzo comercial</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --n:#18253a;--n2:#0e3260;--n3:#1d4e89;
+  --c:#29abe2;--c2:#1a8bbf;--clt:#e8f6fc;
+  --g:#0a7c4e;--glt:#e6f7f0;--gwa:#25d366;--twa:#128c7e;
+  --o:#e8943a;--olt:#fff3e0;
+  --sl:#4a6080;--sl2:#8fa5bf;
+  --bd:#dce7f1;--bg:#f5f7fb;--wh:#fff;
+  --f:'Plus Jakarta Sans',system-ui,sans-serif;
+  --fm:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--f);background:var(--bg);color:var(--n);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,.5)}60%{box-shadow:0 0 0 9px rgba(41,171,226,0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes msgIn{from{opacity:0;transform:translateY(7px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(0) rotate(-6deg)}75%{transform:scale(1.06) rotate(1deg)}100%{transform:none}}
+
+.w{max-width:900px;margin:0 auto;padding:0 18px}
+@media(min-width:560px){.w{padding:0 28px}}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:30px;padding:4px 13px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.cc{background:rgba(41,171,226,.12);border:1px solid rgba(41,171,226,.28);color:var(--c2)}
+.cw{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.5)}
+.cg{background:var(--glt);border:1px solid #a9dfbf;color:var(--g)}
+
+/* ─── HERO ─────────────────────────────────────────── */
+.hero{
+  background:linear-gradient(155deg,#18253a 0%,#0e3260 52%,#1d4e89 100%);
+  position:relative;overflow:hidden;
+  padding:68px 0 80px;
+  min-height:100svh;display:flex;align-items:center;
+}
+.hero-mesh{position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 55% at 82% 15%,rgba(41,171,226,.15),transparent),
+    radial-gradient(ellipse 55% 45% at 8% 88%,rgba(10,124,78,.1),transparent);
+}
+.hero-dots{position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(41,171,226,.08) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.hi{position:relative;z-index:2;width:100%}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:32px;animation:fadeIn .6s both}
+.brand-mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--c),var(--g));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;color:#fff;box-shadow:0 6px 18px rgba(41,171,226,.4)}
+.brand-name{font-size:1.2rem;font-weight:800;color:#fff;letter-spacing:-.3px}
+.brand-name b{color:var(--c)}
+.hero-ey{margin-bottom:18px;animation:fadeUp .6s .08s both}
+.hero-ey .chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--c);animation:pulse 2s infinite}
+h1.hh{font-size:clamp(1.9rem,6vw,3.2rem);font-weight:900;color:#fff;line-height:1.08;letter-spacing:-1.5px;margin-bottom:16px;animation:fadeUp .6s .15s both}
+h1.hh .c1{color:var(--c)}
+h1.hh .c2{color:var(--gwa)}
+.hp{font-size:clamp(.9rem,2.5vw,1.02rem);color:rgba(255,255,255,.52);max-width:460px;line-height:1.78;margin-bottom:36px;animation:fadeUp .6s .22s both}
+.hkpis{display:flex;gap:0;flex-wrap:wrap;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;animation:fadeUp .6s .3s both;width:fit-content}
+.kpi{padding:14px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.kpi:last-child{border:none}
+.kpi-n{font-size:1.6rem;font-weight:900;color:var(--c);line-height:1}
+.kpi-l{font-size:.6rem;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
+.hero-btn{margin-top:28px;animation:fadeUp .6s .38s both}
+.hero-btn a{display:inline-flex;align-items:center;gap:8px;background:var(--c);color:var(--n);border-radius:10px;padding:12px 22px;font-weight:800;font-size:.9rem;text-decoration:none;transition:.15s;box-shadow:0 6px 20px rgba(41,171,226,.38)}
+.hero-btn a:hover{background:#3dbfee;transform:translateY(-1px)}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;animation:fadeIn 1s 1.2s both}
+.scroll-hint span{font-size:.58rem;color:rgba(255,255,255,.18);text-transform:uppercase;letter-spacing:.1em}
+.chev{width:16px;height:16px;border-right:2px solid rgba(255,255,255,.15);border-bottom:2px solid rgba(255,255,255,.15);transform:rotate(45deg);animation:float 2s ease infinite}
+
+/* ─── POSICIONAMIENTO ──────────────────────────────── */
+.pos{background:var(--wh);padding:68px 0}
+.two{display:grid;gap:36px;align-items:start}
+@media(min-width:680px){.two{grid-template-columns:1fr 1fr;gap:52px}}
+.sec-lbl{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--c2);margin-bottom:10px}
+h2.sec-h{font-size:clamp(1.4rem,3.5vw,1.9rem);font-weight:900;letter-spacing:-.4px;line-height:1.15;margin-bottom:14px}
+.sec-p{font-size:.92rem;color:var(--sl);line-height:1.78;margin-bottom:12px}
+.quote-box{background:var(--clt);border-left:3px solid var(--c);border-radius:0 12px 12px 0;padding:13px 17px;font-size:.88rem;color:var(--n2);line-height:1.65;margin-top:18px;font-style:italic}
+.quote-box strong{font-style:normal;color:var(--c2)}
+.pillars{display:flex;flex-direction:column;gap:10px}
+.pill-row{display:flex;align-items:flex-start;gap:13px;padding:15px;border:1.5px solid var(--bd);border-radius:14px;transition:.18s}
+.pill-row:hover{border-color:var(--c);box-shadow:0 5px 18px rgba(41,171,226,.08)}
+.pill-ico{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+.ico-c{background:var(--clt)} .ico-g{background:var(--glt)} .ico-o{background:var(--olt)}
+.pill-txt h3{font-size:.85rem;font-weight:700;margin-bottom:3px}
+.pill-txt p{font-size:.78rem;color:var(--sl);line-height:1.5}
+
+/* ─── TIPOS ────────────────────────────────────────── */
+.types{background:var(--n);padding:68px 0}
+.types-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px}
+@media(min-width:620px){.types-g{grid-template-columns:repeat(4,1fr)}}
+.tc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:20px 14px;text-align:center;transition:.2s}
+.tc:hover{background:rgba(41,171,226,.08);border-color:rgba(41,171,226,.25);transform:translateY(-3px)}
+.tc-em{font-size:1.9rem;margin-bottom:9px;display:block}
+.tc-n{font-size:.86rem;font-weight:700;color:#fff;margin-bottom:4px}
+.tc-d{font-size:.72rem;color:rgba(255,255,255,.36);line-height:1.45}
+.tc-b{display:inline-block;margin-top:7px;background:rgba(41,171,226,.18);color:var(--c);border-radius:6px;padding:2px 7px;font-size:.6rem;font-weight:700;letter-spacing:.04em}
+
+/* ─── JOURNEY / WHATSAPP ───────────────────────────── */
+.journey{background:var(--bg);padding:68px 0}
+.journey h2,.journey .sec-p{text-align:center}
+.journey .sec-p{max-width:500px;margin:0 auto 44px}
+.ph-outer{display:flex;justify-content:center;margin-bottom:56px}
+.ph{width:min(308px,86vw);background:#1c1c1e;border-radius:38px;padding:9px;box-shadow:0 28px 64px rgba(13,27,46,.22),0 0 0 1px rgba(255,255,255,.05)}
+.ph-scr{border-radius:30px;overflow:hidden}
+.ph-bar{height:30px;background:#1c1c1e;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.ph-bar span{font-size:.58rem;color:rgba(255,255,255,.45);font-family:var(--fm)}
+.wa-top{background:var(--twa);padding:9px 13px;display:flex;align-items:center;gap:9px}
+.wa-back{color:rgba(255,255,255,.65);font-size:1rem}
+.wa-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--c),var(--g));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0}
+.wa-cn{font-size:.78rem;font-weight:700;color:#fff}
+.wa-cs{font-size:.62rem;color:rgba(255,255,255,.52)}
+.wa-chat{background:#e5ddd5;padding:9px 7px;display:flex;flex-direction:column;gap:6px}
+.wa-day{text-align:center;margin:2px 0}
+.wa-day span{background:rgba(0,0,0,.14);color:#fff;border-radius:7px;padding:2px 9px;font-size:.6rem}
+.wm{max-width:83%;padding:8px 10px;border-radius:8px;font-size:.74rem;line-height:1.55;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.wm.i{background:#fff;align-self:flex-start;border-radius:0 8px 8px 8px;animation:msgIn .4s ease both}
+.wm.o{background:#dcf8c6;align-self:flex-end;border-radius:8px 8px 0 8px;animation:msgIn .3s ease both}
+.wm-fr{font-size:.62rem;font-weight:700;color:var(--twa);margin-bottom:3px}
+.wm-t{font-size:.57rem;color:rgba(0,0,0,.27);text-align:right;margin-top:3px}
+.slot-c{background:linear-gradient(135deg,var(--n),var(--n2));border-radius:9px;padding:10px;margin-top:4px}
+.slot-ct{font-size:.62rem;font-weight:700;color:var(--c);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+.slot{display:flex;align-items:center;gap:6px;padding:6px 7px;border-radius:6px;margin-bottom:4px;font-size:.7rem;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.09)}
+.slot:last-child{margin:0}
+.slot.pk{background:rgba(37,211,102,.11);border-color:rgba(37,211,102,.28);color:#fff}
+.slot .si{font-size:.8rem;flex-shrink:0}
+.slot .sl2{flex:1;line-height:1.3}
+.slot .sb{font-size:.57rem;background:rgba(37,211,102,.2);color:var(--gwa);border-radius:4px;padding:1px 5px;font-weight:700}
+.sum-c{background:linear-gradient(135deg,var(--n),var(--n2));border-radius:9px;padding:10px;margin-top:4px}
+.sum-ct{font-size:.62rem;font-weight:700;color:var(--c);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.svc{display:flex;align-items:flex-start;gap:6px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:.7rem;color:rgba(255,255,255,.7);line-height:1.4}
+.svc:last-child{border:none}
+.svc-dot{width:4px;height:4px;border-radius:50%;background:var(--c);flex-shrink:0;margin-top:4px}
+.svc-ok{font-size:.58rem;background:rgba(37,211,102,.18);color:var(--gwa);border-radius:4px;padding:1px 5px;font-weight:700;white-space:nowrap}
+.svc-d{font-size:.58rem;background:rgba(41,171,226,.18);color:var(--c);border-radius:4px;padding:1px 5px;font-weight:700;white-space:nowrap}
+
+/* ─── FLOW STEPS ───────────────────────────────────── */
+.flow{background:var(--wh);padding:68px 0}
+.flow-steps{display:flex;flex-direction:column}
+.fs{display:grid;grid-template-columns:48px 1fr;gap:0}
+.fs-l{display:flex;flex-direction:column;align-items:center}
+.fs-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;color:#fff;flex-shrink:0;z-index:2;box-shadow:0 3px 12px rgba(0,0,0,.14)}
+.fs-line{width:2px;flex:1;min-height:14px;margin:0 auto;border-radius:1px}
+.fs-r{padding:2px 0 32px 16px}
+.fs-ph{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.fs-ti{font-size:.95rem;font-weight:800;letter-spacing:-.3px;margin-bottom:5px;line-height:1.25}
+.fs-tm{font-size:.64rem;font-weight:700;padding:2px 9px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;margin-bottom:9px}
+.fs-de{font-size:.84rem;color:var(--sl);line-height:1.68;margin-bottom:10px}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.t{display:inline-flex;align-items:center;gap:4px;border-radius:7px;padding:4px 9px;font-size:.72rem;font-weight:600}
+.tc2{background:var(--clt);color:var(--c2)}
+.tg{background:var(--glt);color:#066e45}
+.to{background:var(--olt);color:#9a4d00}
+.tn{background:#eef2f8;color:var(--n)}
+
+/* step themes */
+.so .fs-dot{background:linear-gradient(135deg,#e8943a,#f5b74f)}.so .fs-line{background:linear-gradient(#f5b74f,#fff3e0 90%)}.so .fs-ph{color:#9a4d00}.so .fs-tm{background:#fff3e0;color:#9a4d00}
+.sb .fs-dot{background:linear-gradient(135deg,#0e3260,#29abe2)}.sb .fs-line{background:linear-gradient(#29abe2,var(--clt) 90%)}.sb .fs-ph{color:var(--n2)}.sb .fs-tm{background:var(--clt);color:var(--c2)}
+.sp .fs-dot{background:linear-gradient(135deg,#5b21b6,#8b5cf6)}.sp .fs-line{background:linear-gradient(#8b5cf6,#ede9fe 90%)}.sp .fs-ph{color:#5b21b6}.sp .fs-tm{background:#ede9fe;color:#5b21b6}
+.sn .fs-dot{background:linear-gradient(135deg,#18253a,#1d4e89)}.sn .fs-line{background:linear-gradient(#1d4e89,var(--clt) 90%)}.sn .fs-ph{color:var(--n)}.sn .fs-tm{background:#eef2f8;color:var(--n)}
+.sg .fs-dot{background:linear-gradient(135deg,#065f46,#10b981)}.sg .fs-line{background:linear-gradient(#10b981,var(--glt) 90%)}.sg .fs-ph{color:#065f46}.sg .fs-tm{background:var(--glt);color:#065f46}
+.sgo .fs-dot{background:linear-gradient(135deg,#92400e,#f59e0b)}.sgo .fs-line{background:linear-gradient(#f59e0b,#fef3c7 90%)}.sgo .fs-ph{color:#92400e}.sgo .fs-tm{background:#fef3c7;color:#92400e}
+.sw .fs-dot{background:linear-gradient(135deg,#0a7c4e,#29abe2);animation:pop .5s .3s both}.sw .fs-ph{color:var(--g)}.sw .fs-tm{background:var(--glt);color:var(--g)}
+
+/* agenda box */
+.ag-box{background:linear-gradient(135deg,var(--n),var(--n2));border-radius:14px;padding:18px;margin-top:12px;position:relative;overflow:hidden}
+.ag-box::after{content:'';position:absolute;top:-25px;right:-25px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(41,171,226,.12),transparent 70%)}
+.ag-top{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--c);margin-bottom:12px}
+.ag-cols{display:grid;gap:9px}
+@media(min-width:480px){.ag-cols{grid-template-columns:1fr 1fr}}
+.ag-p{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:11px}
+.ag-p.lit{border-color:rgba(41,171,226,.28);background:rgba(41,171,226,.07)}
+.ap-n{font-size:.76rem;font-weight:700;color:#fff;margin-bottom:1px}
+.ap-t{font-size:.62rem;color:rgba(255,255,255,.36);margin-bottom:8px}
+.ap-sl{background:rgba(255,255,255,.06);border-radius:7px;padding:7px 9px}
+.ap-d{font-size:.72rem;color:var(--c);font-weight:700;margin-bottom:2px}
+.ap-dt{font-size:.66rem;color:rgba(255,255,255,.46);line-height:1.4}
+.ap-cf{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:.65rem;color:var(--gwa);font-weight:600}
+.ap-ck{width:12px;height:12px;border-radius:50%;background:var(--gwa);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.52rem;flex-shrink:0}
+.ag-note{background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.16);border-radius:9px;padding:9px 12px;margin-top:10px;font-size:.75rem;color:rgba(255,255,255,.65);line-height:1.55;display:flex;align-items:flex-start;gap:7px}
+
+/* ─── BENEFICIOS ───────────────────────────────────── */
+.bene{background:var(--bg);padding:68px 0}
+.bene-g{display:grid;gap:12px;margin-top:32px}
+@media(min-width:580px){.bene-g{grid-template-columns:1fr 1fr}}
+.bc{background:var(--wh);border:1.5px solid var(--bd);border-radius:18px;padding:22px;position:relative;overflow:hidden;transition:.2s}
+.bc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c),var(--g))}
+.bc:hover{border-color:var(--c);box-shadow:0 8px 28px rgba(41,171,226,.1);transform:translateY(-2px)}
+.bc-ico{font-size:1.7rem;margin-bottom:11px}
+.bc-ti{font-size:.93rem;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+.bc-de{font-size:.83rem;color:var(--sl);line-height:1.67}
+.bc-mt{display:inline-flex;align-items:center;background:var(--clt);color:var(--c2);border-radius:7px;padding:4px 10px;font-size:.72rem;font-weight:700;margin-top:11px}
+
+/* ─── RESULTADO ────────────────────────────────────── */
+.res{background:var(--n);padding:68px 0}
+.res-g{display:grid;gap:10px;margin-bottom:20px}
+@media(min-width:560px){.res-g{grid-template-columns:repeat(3,1fr)}}
+.rc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:22px;text-align:center}
+.rc-n{font-size:2.2rem;font-weight:900;line-height:1;margin-bottom:4px}
+.rc-l{font-size:.64rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.rc-d{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.55}
+.cc2 .rc-n{color:var(--c)}.cg2 .rc-n{color:var(--gwa)}.cgo .rc-n{color:#fbbf24}
+.stats-row{display:grid;gap:14px;background:rgba(41,171,226,.07);border:1px solid rgba(41,171,226,.16);border-radius:14px;padding:20px}
+@media(min-width:560px){.stats-row{grid-template-columns:repeat(3,1fr)}}
+.sr-n{font-size:1.65rem;font-weight:900;color:var(--c);margin-bottom:3px}
+.sr-l{font-size:.64rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em;line-height:1.4}
+
+/* ─── CTA ──────────────────────────────────────────── */
+.cta{background:var(--bg);padding:68px 0}
+.cta-box{background:linear-gradient(135deg,var(--n) 0%,var(--n2) 100%);border-radius:24px;padding:44px 24px;text-align:center;position:relative;overflow:hidden}
+@media(min-width:560px){.cta-box{padding:60px 52px}}
+.cta-box::before{content:'';position:absolute;top:-70px;right:-70px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(41,171,226,.13),transparent 70%)}
+.cta-box::after{content:'';position:absolute;bottom:-50px;left:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(10,124,78,.1),transparent 70%)}
+.cta-box h2{font-size:clamp(1.45rem,4vw,2.1rem);font-weight:900;color:#fff;letter-spacing:-.4px;margin-bottom:11px;position:relative;z-index:2;line-height:1.15}
+.cta-box p{font-size:.9rem;color:rgba(255,255,255,.42);max-width:460px;margin:0 auto 28px;line-height:1.7;position:relative;z-index:2}
+.cta-tg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:28px;position:relative;z-index:2}
+@media(min-width:480px){.cta-tg{grid-template-columns:repeat(4,1fr)}}
+.cta-t{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:11px;padding:15px 10px;text-align:center;transition:.18s}
+.cta-t:hover{background:rgba(41,171,226,.1);border-color:rgba(41,171,226,.22)}
+.cta-t-em{font-size:1.55rem;margin-bottom:5px}
+.cta-t-n{font-size:.76rem;font-weight:700;color:#fff;margin-bottom:2px}
+.cta-t-s{font-size:.65rem;color:rgba(255,255,255,.35)}
+.excl{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:11px;padding:11px 18px;font-size:.82rem;color:rgba(255,255,255,.65);margin-bottom:24px;position:relative;z-index:2}
+.excl b{color:var(--c)}
+.contact{font-size:.83rem;color:rgba(255,255,255,.35);position:relative;z-index:2}
+.contact a{color:var(--c);text-decoration:none;font-weight:600}
+.contact a:hover{text-decoration:underline}
+
+footer{background:#090e18;padding:22px;text-align:center;font-size:.7rem;color:rgba(255,255,255,.18)}
+footer b{color:rgba(255,255,255,.32)}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-dots"></div>
+  <div class="w hi">
+
+    <div class="brand">
+      <div class="brand-mark">H4</div>
+      <div class="brand-name">Health<b>4</b>Spain</div>
+    </div>
+
+    <div class="hero-ey"><span class="chip cc">Red de Partners · 2026</span></div>
+
+    <h1 class="hh">
+      Expatriados que buscan<br>
+      <span class="c1">tu servicio.</span><br>
+      <span class="c2">Nosotros los llevamos a ti.</span>
+    </h1>
+
+    <p class="hp">Captamos la demanda de expatriados en España, la cualificamos por IA en su idioma, y te la entregamos con la cita ya agendada en tu calendario. Sin llamadas en frío. Sin coordinación manual.</p>
+
+    <div class="hkpis">
+      <div class="kpi"><div class="kpi-n">47h</div><div class="kpi-l">Del anuncio a cierre</div></div>
+      <div class="kpi"><div class="kpi-n">&lt;8min</div><div class="kpi-l">Lead a tu agenda</div></div>
+      <div class="kpi"><div class="kpi-n">5</div><div class="kpi-l">Idiomas</div></div>
+      <div class="kpi"><div class="kpi-n">19+</div><div class="kpi-l">Ciudades</div></div>
+    </div>
+
+    <div class="hero-btn"><a href="mailto:adolfo@health4spain.com">Quiero ser partner →</a></div>
+
+  </div>
+  <div class="scroll-hint"><span>Descubrir</span><div class="chev"></div></div>
+</section>
+
+<!-- POSICIONAMIENTO -->
+<section class="pos">
+  <div class="w">
+    <div class="two">
+      <div>
+        <div class="sec-lbl">Qué somos</div>
+        <h2 class="sec-h">No somos un portal de leads.<br>Somos tu infraestructura de captación digital.</h2>
+        <p class="sec-p">El expatriado que necesita tu servicio existe — está buscando en Google, viendo Instagram, preguntando en WhatsApp. El problema no es la demanda. Es que no te encuentra a ti primero.</p>
+        <p class="sec-p">Health4Spain captura esa demanda, la cualifica con inteligencia artificial y te la entrega con la reunión fijada en tu agenda. Sin que tú muevas un dedo.</p>
+        <div class="quote-box"><strong>Nuestra definición:</strong> somos el partner tecnológico invisible detrás de tu negocio. Tú pones el talento y el servicio. Nosotros ponemos el tráfico, la IA y la automatización.</div>
+      </div>
+      <div class="pillars">
+        <div class="pill-row">
+          <div class="pill-ico ico-o">📣</div>
+          <div class="pill-txt">
+            <h3>Captación digital — nosotros invertimos</h3>
+            <p>Campañas Meta y Google segmentadas por ciudad, idioma y perfil de expatriado. El gasto publicitario corre por nuestra cuenta.</p>
+          </div>
+        </div>
+        <div class="pill-row">
+          <div class="pill-ico ico-c">🤖</div>
+          <div class="pill-txt">
+            <h3>Cualificación por IA en tiempo real</h3>
+            <p>El bot Mar-IA filtra, pregunta y clasifica cada lead en su propio idioma antes de que lo toque ningún humano.</p>
+          </div>
+        </div>
+        <div class="pill-row">
+          <div class="pill-ico ico-g">📅</div>
+          <div class="pill-txt">
+            <h3>La cita llega a tu Google Calendar</h3>
+            <p>El cliente elige su propio slot entre tus huecos reales. La confirmación aparece automáticamente en tu agenda.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPOS DE PARTNER -->
+<section class="types">
+  <div class="w">
+    <div class="sec-lbl" style="color:var(--c);text-align:center">Para quién</div>
+    <h2 class="sec-h" style="color:#fff;text-align:center;margin-bottom:7px">Cualquier profesional que atienda expatriados</h2>
+    <p style="text-align:center;color:rgba(255,255,255,.38);font-size:.9rem;max-width:440px;margin:0 auto">Si tu cliente objetivo viene de fuera de España, este es tu canal de captación digital.</p>
+    <div class="types-g">
+      <div class="tc"><span class="tc-em">⚖️</span><div class="tc-n">Despacho de Abogados</div><div class="tc-d">Extranjería · visados · compraventa · herencias</div></div>
+      <div class="tc"><span class="tc-em">📋</span><div class="tc-n">Gestoría / Asesoría</div><div class="tc-d">NIE · empadronamiento · autónomos · fiscal</div></div>
+      <div class="tc"><span class="tc-em">🏠</span><div class="tc-n">Inmobiliaria</div><div class="tc-d">Compra · alquiler · inversión · Golden Visa</div></div>
+      <div class="tc"><span class="tc-em">🛡️</span><div class="tc-n">Agente / Correduría de Seguros</div><div class="tc-d">ASISA · Sanitas · DKV · Caser · y otras</div><div class="tc-b">Nuevo</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASO REAL · WHATSAPP -->
+<section class="journey">
+  <div class="w">
+    <div class="sec-lbl" style="display:block;text-align:center">Caso real</div>
+    <h2 class="sec-h" style="text-align:center;margin-bottom:10px">Así llega Margaret.<br>Paso a paso, en tiempo real.</h2>
+    <p class="sec-p">Margaret, 58 años, jubilada británica en Tenerife. Necesita seguro médico, visa de no lucrativa y quiere comprar una vivienda de 350.000€. Ve nuestro anuncio un martes a las 10:15h.</p>
+
+    <div class="ph-outer">
+      <div class="ph">
+        <div class="ph-scr">
+          <div class="ph-bar"><span>9:41</span><span>●●●</span></div>
+          <div class="wa-top">
+            <span class="wa-back">‹</span>
+            <div class="wa-av">M</div>
+            <div style="flex:1"><div class="wa-cn">Health4Spain · Mar-IA</div><div class="wa-cs">online</div></div>
+            <span style="color:rgba(255,255,255,.55);font-size:.85rem">📞 ⋮</span>
+          </div>
+          <div class="wa-chat">
+            <div class="wa-day"><span>Tuesday · 10:26 AM</span></div>
+
+            <div class="wm i" style="animation-delay:.1s">
+              <div class="wm-fr">Mar-IA · Health4Spain</div>
+              Hi Margaret! 👋 I'm Mar-IA from Health4Spain. I can see you need health insurance, visa help and a property in Tenerife.<br><br>
+              Are you looking for a <strong>Non-Lucrative Visa</strong> 🏖️ or a <strong>Digital Nomad Visa</strong> 💻?
+              <div class="wm-t">10:26</div>
+            </div>
+
+            <div class="wm o" style="animation-delay:.3s">
+              Non-lucrative — I'm retired 🙂
+              <div class="wm-t">10:28 ✓✓</div>
+            </div>
+
+            <div class="wm i" style="animation-delay:.55s">
+              <div class="wm-fr">Mar-IA · Health4Spain</div>
+              Perfect! And for the property — <strong>rent or buy</strong>? Budget in mind?
+              <div class="wm-t">10:28</div>
+            </div>
+
+            <div class="wm o" style="animation-delay:.75s">
+              Buy — around €350,000 🏠
+              <div class="wm-t">10:29 ✓✓</div>
+            </div>
+
+            <div class="wm i" style="animation-delay:1s">
+              <div class="wm-fr">Mar-IA · Health4Spain</div>
+              Great! Based on your profile — <strong>ASISA ~€195/month</strong>, full cover, visa certificate included. Shall I book it?
+              <div class="wm-t">10:30</div>
+            </div>
+
+            <div class="wm o" style="animation-delay:1.2s">
+              Yes please! 👍
+              <div class="wm-t">10:31 ✓✓</div>
+            </div>
+
+            <div class="wm i" style="animation-delay:1.4s;max-width:88%">
+              <div class="wm-fr">Mar-IA · Health4Spain</div>
+              ✅ Insurance confirmed! Now checking your immigration lawyer's calendar in Tenerife… 🔍
+              <div class="slot-c">
+                <div class="slot-ct">📅 González &amp; Partners · EN lawyers</div>
+                <div class="slot"><span class="si">🌅</span><span class="sl2"><b style="color:#fff">Thu 10 Apr</b> · 10:00 AM</span></div>
+                <div class="slot"><span class="si">🌇</span><span class="sl2"><b style="color:#fff">Thu 10 Apr</b> · 4:00 PM</span></div>
+                <div class="slot"><span class="si">🌅</span><span class="sl2"><b style="color:#fff">Fri 11 Apr</b> · 10:00 AM</span></div>
+                <div class="slot"><span class="si">🌇</span><span class="sl2"><b style="color:#fff">Fri 11 Apr</b> · 5:00 PM</span></div>
+              </div>
+              Which works for you? 👆
+              <div class="wm-t">10:34</div>
+            </div>
+
+            <div class="wm o" style="animation-delay:1.65s">
+              Friday morning at 10, please! 🙌
+              <div class="wm-t">10:36 ✓✓</div>
+            </div>
+
+            <div class="wm i" style="animation-delay:1.85s;max-width:88%">
+              <div class="wm-fr">Mar-IA · Health4Spain</div>
+              ✅ Booked! Fri 11 Apr · 10:00 AM. Now checking the property agency… 🏠
+              <div class="slot-c">
+                <div class="slot-ct">🏠 Tenerife Homes EN · Buy ~€350k</div>
+                <div class="slot"><span class="si">🌅</span><span class="sl2"><b style="color:#fff">Thu 10 Apr</b> · 11:30 AM</span></div>
+                <div class="slot pk"><span class="si">🌇</span><span class="sl2"><b style="color:#fff">Fri 11 Apr</b> · 4:00 PM</span><span class="sb">chosen ✓</span></div>
+              </div>
+              <div class="wm-t">10:38</div>
+            </div>
+
+            <div class="wm o" style="animation-delay:2.1s">
+              Friday at 4 pm, perfect! 👍
+              <div class="wm-t">10:39 ✓✓</div>
+            </div>
+
+            <div class="wm i" style="animation-delay:2.3s;max-width:90%">
+              <div class="wm-fr">Mar-IA · Health4Spain</div>
+              All sorted Margaret! 🎉
+              <div class="sum-c">
+                <div class="sum-ct">🇬🇧 Your Health4Spain Package</div>
+                <div class="svc"><div class="svc-dot"></div><div>🏥 <b style="color:#fff">ASISA</b> €195/mo <span class="svc-ok">✓ active</span></div></div>
+                <div class="svc"><div class="svc-dot"></div><div>📋 <b style="color:#fff">Visa NL</b> · González &amp; Partners <span class="svc-d">Fri 11 · 10:00</span> <span class="svc-ok">✓</span></div></div>
+                <div class="svc"><div class="svc-dot"></div><div>🏠 <b style="color:#fff">Property</b> · Tenerife Homes <span class="svc-d">Fri 11 · 16:00</span> <span class="svc-ok">✓</span></div></div>
+              </div>
+              <div style="font-size:.68rem;color:rgba(0,0,0,.35);margin-top:5px">You chose your slots 🙌 Reminders 24h before each. All in English 🇬🇧</div>
+              <div class="wm-t">10:40</div>
+            </div>
+
+            <div class="wm o" style="animation-delay:2.55s">
+              This is incredible, thank you!! 🙏😊
+              <div class="wm-t">10:41 ✓✓</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLUJO PASO A PASO -->
+<section class="flow">
+  <div class="w">
+    <div class="sec-lbl">Entre bambalinas</div>
+    <h2 class="sec-h">Del anuncio a tu agenda<br>en menos de 8 minutos</h2>
+    <p class="sec-p" style="margin-bottom:36px">Todo automatizado. Sin llamadas en frío. Sin coordinación manual. Sin fricción.</p>
+
+    <div class="flow-steps">
+
+      <div class="fs so">
+        <div class="fs-l"><div class="fs-dot">📣</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Captación · Meta &amp; Google Ads</div>
+          <div class="fs-ti">El anuncio encuentra a Margaret</div>
+          <div class="fs-tm">⏱ T = 0 · Martes 10:15h</div>
+          <div class="fs-de">Anuncio segmentado por ciudad, nacionalidad, edad e intereses. Nosotros asumimos el coste publicitario. Margaret hace clic desde Instagram.</div>
+          <div class="tags"><span class="t to">💰 Publicidad a nuestro cargo</span><span class="t to">🎯 Ciudad + idioma + perfil</span></div>
+        </div>
+      </div>
+
+      <div class="fs sb">
+        <div class="fs-l"><div class="fs-dot">🌐</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Landing + Formulario · Web H4S</div>
+          <div class="fs-ti">Formulario completado en 90 segundos</div>
+          <div class="fs-tm">⏱ T + 1 min</div>
+          <div class="fs-de">Landing en inglés para Tenerife. Tres pasos: qué necesita → su situación → contacto. Los datos llegan a GHL en menos de un segundo.</div>
+          <div class="tags"><span class="t tc2">⚡ GHL en &lt;1 seg</span><span class="t tc2">📊 Meta Pixel activo</span></div>
+        </div>
+      </div>
+
+      <div class="fs sp">
+        <div class="fs-l"><div class="fs-dot">🤖</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Cualificación IA · Bot Mar-IA · WhatsApp</div>
+          <div class="fs-ti">Mar-IA profundiza en 6 minutos, sin humanos</div>
+          <div class="fs-tm">⏱ T + 2 min · Automático</div>
+          <div class="fs-de">El bot abre conversación en el idioma del lead. Detecta tipo de visa, presupuesto, urgencia. GHL registra 9 etiquetas automáticas. El lead queda clasificado y priorizado.</div>
+          <div class="tags"><span class="t tn">🤖 EN · DE · ES · PT · FR</span><span class="t tn">🏷️ 9 tags auto</span><span class="t tn">🚫 Filtra no interesados</span></div>
+        </div>
+      </div>
+
+      <div class="fs sn">
+        <div class="fs-l"><div class="fs-dot">⚡</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Smart Routing · GHL CRM</div>
+          <div class="fs-ti">El sistema te localiza y comprueba tu agenda en tiempo real</div>
+          <div class="fs-tm">⏱ T + 8 min · Sin intervención humana</div>
+          <div class="fs-de">GHL ejecuta las reglas de derivación: ciudad + idioma + servicio + disponibilidad real. Comprueba tu Google Calendar sincronizado y ofrece al cliente tus huecos reales para que elija su slot.</div>
+          <div class="tags"><span class="t tc2">📅 Tu agenda real en directo</span><span class="t tc2">🤝 El cliente elige</span><span class="t tc2">🔔 Push a ti al instante</span></div>
+
+          <div class="ag-box">
+            <div class="ag-top">Citas confirmadas automáticamente en ambos calendarios</div>
+            <div class="ag-cols">
+              <div class="ag-p lit">
+                <div class="ap-n">⚖️ González &amp; Partners</div>
+                <div class="ap-t">Abogados extranjería · Tenerife · EN</div>
+                <div class="ap-sl">
+                  <div class="ap-d">📅 Vie 11 Abr · 10:00 AM</div>
+                  <div class="ap-dt">Margaret Smith · UK · Visa NL · NIE pendiente</div>
+                  <div class="ap-cf"><div class="ap-ck">✓</div>En tu Google Calendar</div>
+                </div>
+              </div>
+              <div class="ag-p lit">
+                <div class="ap-n">🏠 Tenerife Homes EN</div>
+                <div class="ap-t">Inmobiliaria compra · Sur Tenerife · EN</div>
+                <div class="ap-sl">
+                  <div class="ap-d">📅 Vie 11 Abr · 4:00 PM</div>
+                  <div class="ap-dt">Margaret Smith · UK · Compra ~€350k</div>
+                  <div class="ap-cf"><div class="ap-ck">✓</div>En tu Google Calendar</div>
+                </div>
+              </div>
+            </div>
+            <div class="ag-note">
+              <span>📲</span>
+              <span>El partner recibe el <strong style="color:var(--gwa)">briefing completo del cliente</strong> por email + WhatsApp antes de la reunión. Recordatorio automático 24h antes de cada cita.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fs sg">
+        <div class="fs-l"><div class="fs-dot">📞</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Llamada del closer · Seguro</div>
+          <div class="fs-ti">Catheryn llama a Margaret — 12 min, sin cualificar</div>
+          <div class="fs-tm">⏱ T + 15 min · Número +34 visible</div>
+          <div class="fs-de">La comercial abre GHL, lee el briefing en 30 segundos y llama. Margaret ya sabe por qué la llaman. La llamada va directo al cierre del seguro y confirma las citas.</div>
+          <div class="tags"><span class="t tg">📋 Briefing completo antes de llamar</span><span class="t tg">🎙️ Llamada grabada en GHL</span></div>
+        </div>
+      </div>
+
+      <div class="fs sgo">
+        <div class="fs-l"><div class="fs-dot">📁</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Tu turno · Partner</div>
+          <div class="fs-ti">La reunión llega a tu agenda — solo tienes que aparecer preparado</div>
+          <div class="fs-tm">⏱ T + 8 min desde el formulario</div>
+          <div class="fs-de">Recibes un email + WhatsApp con el briefing del cliente: nombre, nacionalidad, idioma, necesidad, presupuesto y la cita confirmada. El cliente ya eligió su horario. No hay nada más que gestionar.</div>
+          <div class="tags"><span class="t to">✅ Solo tú en esa ciudad para ese servicio</span><span class="t to">📁 Briefing antes de la reunión</span></div>
+        </div>
+      </div>
+
+      <div class="fs sw">
+        <div class="fs-l"><div class="fs-dot">✓</div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Resultado · 47 horas después</div>
+          <div class="fs-ti">Tres profesionales cerraron. Margaret está instalada.</div>
+          <div class="fs-tm">⏱ T + 47 horas · 3 servicios activos</div>
+          <div class="fs-de">Póliza ASISA firmada. Proceso de visa iniciado. Visitas de propiedades programadas. GHL registra todo automáticamente. Cada partner cobró su servicio sin haber prospeccionado un solo cliente.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="bene">
+  <div class="w">
+    <div class="sec-lbl">Por qué funciona</div>
+    <h2 class="sec-h">Lo que cambia para ti como partner</h2>
+    <p class="sec-p" style="margin-bottom:0">Comparado con captación tradicional, cold calling o portales de leads genéricos.</p>
+    <div class="bene-g">
+      <div class="bc">
+        <div class="bc-ico">🎯</div>
+        <div class="bc-ti">El lead llega con la decisión casi tomada</div>
+        <div class="bc-de">Antes de que lo toques, rellenó un formulario, respondió al bot, confirmó su presupuesto y eligió una reunión contigo. No es un nombre en una lista — es una persona que quiere ser tu cliente.</div>
+        <div class="bc-mt">25–32% conversión vs 2% cold call</div>
+      </div>
+      <div class="bc">
+        <div class="bc-ico">📅</div>
+        <div class="bc-ti">El cliente elige su cita — la reunión llega sola</div>
+        <div class="bc-de">El sistema muestra tus huecos reales de agenda y el cliente elige el que le viene mejor. Tú no llamas, no persigues, no coordinas. La reunión aparece confirmada en tu Google Calendar.</div>
+        <div class="bc-mt">0 minutos de gestión administrativa</div>
+      </div>
+      <div class="bc">
+        <div class="bc-ico">🌍</div>
+        <div class="bc-ti">Sabemos el idioma antes de enviártelo</div>
+        <div class="bc-de">El bot cualifica en EN, DE, ES, PT o FR. Solo te derivamos el lead si puedes atenderle en su idioma. Llegáis a la reunión en el mismo idioma, sin sorpresas de última hora.</div>
+        <div class="bc-mt">EN · DE · ES · PT · FR disponibles</div>
+      </div>
+      <div class="bc">
+        <div class="bc-ico">🔒</div>
+        <div class="bc-ti">Exclusividad territorial por contrato</div>
+        <div class="bc-de">Un único partner por tipo de servicio y ciudad. Si eres el abogado de extranjería en Tenerife en H4S, todos los leads de abogado en Tenerife vienen a ti. Tu competencia no entra.</div>
+        <div class="bc-mt">1 partner · 1 servicio · 1 ciudad</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTADO -->
+<section class="res">
+  <div class="w">
+    <div class="sec-lbl" style="color:var(--c);text-align:center">Los números del caso Margaret</div>
+    <h2 class="sec-h" style="color:#fff;text-align:center;margin-bottom:8px">47h · 3 partners · 0 llamadas en frío</h2>
+    <p style="text-align:center;color:rgba(255,255,255,.38);font-size:.9rem;max-width:440px;margin:0 auto 32px">Un anuncio. Un lead cualificado por IA. Tres profesionales con nuevos clientes.</p>
+    <div class="res-g">
+      <div class="rc cc2"><div class="rc-n">22 min</div><div class="rc-l">Trabajo humano total</div><div class="rc-d">12 min llamada + 5 min cierre + 5 min CRM. El resto fue automatización.</div></div>
+      <div class="rc cg2"><div class="rc-n">3</div><div class="rc-l">Partners que cerraron</div><div class="rc-d">Seguro · abogado extranjería · agencia inmobiliaria. Todos con briefing y cita previa.</div></div>
+      <div class="rc cgo"><div class="rc-n">0€</div><div class="rc-l">Coste de prospección</div><div class="rc-d">Los partners no llamaron en frío, no coordinaron agendas. Solo aparecieron a la reunión.</div></div>
+    </div>
+    <div class="stats-row">
+      <div class="sb-item" style="text-align:center"><div class="sr-n">25–32%</div><div class="sr-l">Conversión leads cualificados por IA vs 2% cold call</div></div>
+      <div class="sb-item" style="text-align:center"><div class="sr-n">9×</div><div class="sr-l">Más conversión contactando en &lt;5 min · Harvard Business Review</div></div>
+      <div class="sb-item" style="text-align:center"><div class="sr-n">98%</div><div class="sr-l">Tasa apertura WhatsApp vs 21,5% email · mensaje leído, siempre</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="w">
+    <div class="cta-box">
+      <div class="sec-lbl" style="color:var(--c);margin-bottom:14px;position:relative;z-index:2">¿Quieres formar parte de la red?</div>
+      <h2>Una ciudad. Un profesional por servicio.<br>Exclusividad por contrato.</h2>
+      <p>Health4Spain trabaja con un único partner por tipo de servicio y ciudad. Incorporando partners ahora en Tenerife, Costa Blanca, Murcia, Málaga y Canarias.</p>
+      <div class="cta-tg">
+        <div class="cta-t"><div class="cta-t-em">⚖️</div><div class="cta-t-n">Abogados</div><div class="cta-t-s">Extranjería · Fiscal</div></div>
+        <div class="cta-t"><div class="cta-t-em">📋</div><div class="cta-t-n">Gestorías</div><div class="cta-t-s">NIE · Autónomos</div></div>
+        <div class="cta-t"><div class="cta-t-em">🏠</div><div class="cta-t-n">Inmobiliarias</div><div class="cta-t-s">Compra · Alquiler</div></div>
+        <div class="cta-t"><div class="cta-t-em">🛡️</div><div class="cta-t-n">Agentes de Seguros</div><div class="cta-t-s">ASISA · Sanitas · DKV · Caser</div></div>
+      </div>
+      <div class="excl">🔒 Exclusividad territorial · <b>Tu ciudad, solo tuya</b></div>
+      <div class="contact">¿Preguntas? Escríbenos a <a href="mailto:adolfo@health4spain.com">adolfo@health4spain.com</a></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>Health4Spain</b> · by COASEMED S.L. · health4spain.com · Red de Partners 2026 · Documento confidencial
+</footer>
+
+</body>
+</html>

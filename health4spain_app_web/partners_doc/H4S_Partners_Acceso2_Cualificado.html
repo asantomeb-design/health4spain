@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H4S Partners · Acceso completo · Tarifas, ROI y disponibilidad</title>
+<style>
+  :root {
+    --n: #18253a;
+    --n2: #0e3260;
+    --n3: #1d4e89;
+    --c: #29abe2;
+    --c2: #1a8bbf;
+    --clt: #e8f6fc;
+    --g: #0a7c4e;
+    --glt: #e6f7f0;
+    --o: #e8943a;
+    --olt: #fff3e0;
+    --p: #7c3aed;
+    --plt: #ede9fe;
+    --r: #c0392b;
+    --rlt: #fdecea;
+    --sl: #4a6080;
+    --sl2: #8fa5bf;
+    --bd: #dce7f1;
+    --bg: #f5f7fb;
+    --wh: #fff;
+    --f: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--f); background: var(--bg); color: var(--n); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header.head {
+    background: linear-gradient(155deg, var(--n) 0%, var(--n2) 60%, var(--n3) 100%);
+    color: var(--wh);
+    padding: 60px 24px 50px;
+  }
+  .head-inner { max-width: 1180px; margin: 0 auto; }
+  .auth-tag { display: inline-block; background: rgba(10,124,78,0.2); color: #5fd998; padding: 6px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; border: 1px solid rgba(10,124,78,0.4); }
+  .auth-tag::before { content: '🔓 '; }
+  h1.head-title { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; }
+  .head-sub { color: rgba(255,255,255,0.7); font-size: 1rem; }
+
+  /* Section nav */
+  .nav-tabs {
+    background: var(--wh);
+    border-bottom: 1.5px solid var(--bd);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .nav-tabs-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 18px 18px;
+    color: var(--sl);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-tab:hover { color: var(--n); }
+  .nav-tab.active { color: var(--c); border-bottom-color: var(--c); }
+
+  section { padding: 70px 0; }
+  section.alt { background: var(--wh); }
+
+  .sec-title { font-size: clamp(1.4rem, 2.5vw, 1.85rem); font-weight: 900; letter-spacing: -0.5px; color: var(--n); margin-bottom: 10px; }
+  .sec-title .num { color: var(--c); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; margin-right: 14px; text-transform: uppercase; }
+  .sec-sub { color: var(--sl); font-size: 1rem; margin-bottom: 36px; max-width: 800px; }
+
+  /* === ROI CALCULATOR === */
+  .roi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 30px;
+  }
+  .roi-panel {
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 18px;
+    padding: 28px;
+  }
+  .roi-panel h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--n);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--bd);
+  }
+  .input-group { margin-bottom: 22px; }
+  .input-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--n);
+    margin-bottom: 8px;
+  }
+  .input-label .val { color: var(--c); font-variant-numeric: tabular-nums; }
+  .input-help { font-size: 0.75rem; color: var(--sl); margin-bottom: 8px; font-style: italic; }
+  .input-select, .input-number {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--bd);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: var(--n);
+    background: var(--wh);
+    font-family: inherit;
+  }
+  .input-select:focus { outline: none; border-color: var(--c); }
+  .input-range {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 6px;
+    background: var(--bd);
+    border-radius: 3px;
+    outline: none;
+  }
+  .input-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    background: var(--c);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--wh);
+    box-shadow: 0 2px 6px rgba(41,171,226,0.4);
+  }
+  .input-range::-moz-range-thumb {
+    width: 22px; height: 22px;
+    background: var(--c);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--wh);
+  }
+  .plan-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .plan-btn {
+    padding: 12px 8px;
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .plan-btn:hover { border-color: var(--c); }
+  .plan-btn.active { border-color: var(--c); background: var(--clt); }
+  .plan-btn-name { font-weight: 800; color: var(--n); font-size: 0.85rem; letter-spacing: 0.5px; }
+  .plan-btn-price { font-size: 0.75rem; color: var(--sl); margin-top: 2px; }
+
+  /* ROI Output */
+  .roi-output {
+    background: linear-gradient(135deg, var(--n) 0%, var(--n3) 100%);
+    color: var(--wh);
+    border-radius: 18px;
+    padding: 30px 28px;
+  }
+  .roi-output h3 { color: var(--c); border-bottom-color: rgba(255,255,255,0.15); }
+  .kpi-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .kpi-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .kpi-card.green { background: rgba(10,124,78,0.2); border-color: rgba(95,217,152,0.3); }
+  .kpi-card.cyan { background: rgba(41,171,226,0.15); border-color: rgba(41,171,226,0.3); }
+  .kpi-card.gold { background: rgba(232,148,58,0.15); border-color: rgba(232,148,58,0.3); }
+  .kpi-val { font-size: 1.6rem; font-weight: 900; color: var(--wh); letter-spacing: -0.5px; }
+  .kpi-val small { font-size: 0.7rem; color: rgba(255,255,255,0.6); display: block; font-weight: normal; margin-top: 2px; }
+  .kpi-lbl { font-size: 0.7rem; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; font-weight: 600; }
+  .breakdown { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .br-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.88rem; color: rgba(255,255,255,0.85); border-bottom: 1px dashed rgba(255,255,255,0.1); }
+  .br-row.total { font-weight: 800; color: var(--wh); padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.2); border-bottom: none; }
+  .br-row .v { color: var(--wh); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .br-row.total .v { color: var(--c); font-size: 1.05rem; }
+
+  /* === ZONE SELECTOR === */
+  .zone-finder {
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 18px;
+    padding: 30px;
+    margin-top: 30px;
+  }
+  .zf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 22px; }
+  @media (max-width: 700px) { .zf-grid { grid-template-columns: 1fr; } }
+
+  .service-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .svc-btn {
+    padding: 14px 8px;
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 700;
+    color: var(--n);
+    font-size: 0.85rem;
+  }
+  .svc-btn:hover { border-color: var(--c); background: var(--clt); }
+  .svc-btn.active { background: var(--n); border-color: var(--n); color: var(--wh); }
+  .svc-icon { display: block; font-size: 1.4rem; margin-bottom: 4px; }
+
+  /* Result panel */
+  .result-zone {
+    margin-top: 28px;
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 26px;
+    display: none;
+  }
+  .result-zone.show { display: block; }
+  .result-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--bd);
+  }
+  .result-title-block h2 { color: var(--n); font-size: 1.4rem; font-weight: 900; letter-spacing: -0.3px; }
+  .result-title-block .sub { color: var(--sl); font-size: 0.88rem; margin-top: 4px; }
+  .tier-pill { padding: 7px 14px; border-radius: 999px; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+  .tier-pill.A { background: var(--c); color: var(--wh); }
+  .tier-pill.B { background: var(--p); color: var(--wh); }
+  .tier-pill.C { background: var(--o); color: var(--wh); }
+
+  .availability-bar {
+    background: var(--wh);
+    border-radius: 10px;
+    padding: 14px 18px;
+    border: 1px solid var(--bd);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .av-icon-b {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--wh);
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .av-icon-b.free { background: var(--g); }
+  .av-icon-b.shared { background: var(--o); }
+  .av-icon-b.locked { background: var(--n); }
+  .av-icon-b.unmapped { background: var(--p); }
+  /* Shared zone competition warning */
+  .competition-warn {
+    background: linear-gradient(135deg, var(--olt) 0%, #fff 100%);
+    border: 1px solid var(--o);
+    border-left: 4px solid var(--o);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0 22px;
+  }
+  .competition-warn h4 {
+    color: var(--n);
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .competition-warn h4::before { content: '⚠️ '; }
+  .competition-warn p {
+    color: var(--sl);
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .competition-warn b { color: var(--n); }
+  .av-text-b strong { display: block; color: var(--n); margin-bottom: 2px; }
+  .av-text-b span { color: var(--sl); font-size: 0.88rem; }
+
+  /* Plans display */
+  .plans-grid-priced {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 26px 0;
+  }
+  .plan-priced {
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 14px;
+    padding: 22px 16px;
+    text-align: center;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .plan-priced:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(41,171,226,0.1); }
+  .plan-priced.recommended { border: 2px solid var(--c); }
+  .plan-priced.recommended::before {
+    content: 'Recomendado';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--c);
+    color: var(--wh);
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .plan-priced.locked { opacity: 0.78; }
+  .plan-priced.elite {
+    border: 2px solid var(--n);
+    background: linear-gradient(180deg, #fff 0%, var(--clt) 100%);
+  }
+  .plan-priced.elite::before {
+    content: '🏆 Por trayectoria';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--n);
+    color: var(--c);
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+  }
+  .plan-tag-priced { font-size: 0.7rem; color: var(--sl); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; min-height: 22px; font-weight: 600; }
+  .plan-priced.elite .plan-tag-priced { color: var(--c); font-weight: 700; }
+  .plan-name-priced { font-size: 1.1rem; font-weight: 900; color: var(--n); letter-spacing: -0.3px; margin-bottom: 6px; }
+  .plan-price-num { font-size: 1.9rem; font-weight: 900; color: var(--n); line-height: 1; }
+  .plan-price-num small { font-size: 0.7rem; color: var(--sl); display: block; font-weight: normal; margin-top: 2px; }
+  .plan-volume-text { font-size: 0.82rem; color: var(--sl); font-style: italic; margin-top: 12px; }
+  .plan-cpl-text { font-size: 0.75rem; color: var(--c); font-weight: 700; margin-top: 4px; }
+  .plan-flag {
+    margin-top: 12px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+  }
+  .plan-flag.shared { background: var(--bd); color: var(--sl); }
+  .plan-flag.exclusive { background: var(--n); color: var(--c); }
+
+  /* Founding discount banner */
+  .founding-discount {
+    background: linear-gradient(135deg, var(--g) 0%, #086a42 100%);
+    color: var(--wh);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 22px 0;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(10,124,78,0.2);
+  }
+  .founding-discount strong { font-size: 1.05rem; font-weight: 800; }
+  .founding-discount p { font-size: 0.92rem; color: rgba(255,255,255,0.92); margin-top: 6px; }
+
+  /* Multi-zone block */
+  .multi-zone {
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 14px;
+    padding: 26px;
+    margin: 26px 0;
+  }
+  .multi-zone h3 { font-size: 1.05rem; font-weight: 800; color: var(--n); margin-bottom: 14px; }
+  .mz-cases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+  .mz-case {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 18px 16px;
+    border-left: 3px solid var(--c);
+  }
+  .mz-case h4 { font-size: 0.92rem; color: var(--n); font-weight: 800; margin-bottom: 8px; }
+  .mz-case p { font-size: 0.82rem; color: var(--sl); }
+  .mz-case b { color: var(--n); }
+
+  /* Zone influence card */
+  .infl-zone {
+    margin-top: 22px;
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-left: 4px solid var(--n);
+    border-radius: 0 12px 12px 0;
+    padding: 22px 26px;
+  }
+  .infl-zone .tag { color: var(--c); font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
+  .infl-zone h4 { font-size: 1.05rem; color: var(--n); margin-bottom: 8px; }
+  .infl-zone p { font-size: 0.9rem; color: var(--sl); margin-bottom: 8px; }
+  .infl-zone .members { font-size: 0.85rem; color: var(--n); margin-top: 10px; }
+  .infl-zone .members b { color: var(--c); }
+
+  /* Progression ladder */
+  .ladder-block { margin-top: 28px; padding: 22px 26px; background: linear-gradient(180deg, var(--clt) 0%, #fff 100%); border-radius: 14px; border-top: 3px solid var(--c); }
+  .ladder-block h4 { font-size: 0.85rem; color: var(--n); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 800; margin-bottom: 16px; }
+  .ladder-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .ladder-step-priced { background: var(--wh); border: 1px solid var(--bd); padding: 14px 10px; border-radius: 10px; text-align: center; position: relative; }
+  .ladder-step-priced.elite { border-color: var(--c); background: var(--clt); }
+  .ladder-step-priced::after { content: '→'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); color: var(--c); font-weight: 800; z-index: 2; }
+  .ladder-step-priced:last-child::after { content: ''; }
+  .ladder-name-p { font-weight: 800; color: var(--n); font-size: 0.92rem; }
+  .ladder-time-p { font-size: 0.7rem; color: var(--sl); text-transform: uppercase; letter-spacing: 0.7px; margin-top: 3px; }
+
+  /* CTA */
+  .cta-final { margin-top: 24px; padding: 28px 30px; background: var(--n); color: var(--wh); border-radius: 14px; text-align: center; }
+  .cta-final p { color: rgba(255,255,255,0.85); margin-bottom: 16px; }
+  .cta-btn {
+    display: inline-block;
+    background: var(--c);
+    color: var(--n);
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-weight: 800;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); background: #4cbeed; }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--sl); background: var(--bg); border-radius: 12px; border: 1px dashed var(--bd); font-style: italic; }
+  .empty-state strong { color: var(--n); display: block; margin-bottom: 6px; font-style: normal; }
+
+  /* Tablet · ≤ 1024px */
+  @media (max-width: 1024px) {
+    .wrap { padding: 0 20px; }
+    .nav-tabs-inner { padding: 0 16px; }
+    .roi-panel { padding: 22px 20px; }
+  }
+
+  /* Tablet portrait · ≤ 900px */
+  @media (max-width: 900px) {
+    .roi-grid { grid-template-columns: 1fr; gap: 18px; }
+    .plans-grid-priced { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .kpi-row { grid-template-columns: 1fr; gap: 10px; }
+    .ladder-row { grid-template-columns: repeat(2, 1fr); }
+    .ladder-row .ladder-step-priced::after { content: ''; }
+    .mz-cases { grid-template-columns: 1fr; }
+    .service-tabs { grid-template-columns: repeat(2, 1fr); }
+    .plan-buttons { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 50px 0; }
+    header.head { padding: 50px 20px 40px; }
+    h1.head-title { font-size: 1.6rem; letter-spacing: -0.5px; }
+    .head-sub { font-size: 0.92rem; }
+    .zone-finder { padding: 22px 20px; }
+    .result-zone { padding: 22px 18px; }
+    .roi-output { padding: 24px 20px; }
+  }
+
+  /* Mobile · ≤ 640px */
+  @media (max-width: 640px) {
+    .wrap { padding: 0 14px; }
+    /* Nav tabs scrollable */
+    .nav-tabs-inner { padding: 0 14px; gap: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .nav-tabs-inner::-webkit-scrollbar { display: none; }
+    .nav-tab { padding: 14px 12px; font-size: 0.82rem; }
+    /* Header */
+    header.head { padding: 40px 14px 36px; }
+    .auth-tag { font-size: 0.66rem; padding: 5px 11px; }
+    h1.head-title { font-size: 1.4rem; }
+    .head-sub { font-size: 0.88rem; }
+    /* Sections */
+    section { padding: 44px 0; }
+    .sec-title { font-size: 1.3rem; }
+    .sec-title .num { display: block; margin-bottom: 6px; margin-right: 0; font-size: 0.75rem; }
+    .sec-sub { font-size: 0.92rem; margin-bottom: 26px; }
+    /* ROI calculator */
+    .roi-panel, .roi-output { padding: 20px 18px; border-radius: 14px; }
+    .roi-panel h3, .roi-output h3 { font-size: 1rem; margin-bottom: 14px; }
+    .input-group { margin-bottom: 18px; }
+    .input-label { font-size: 0.78rem; }
+    .input-help { font-size: 0.72rem; }
+    .input-select, .input-number { padding: 13px 12px; font-size: 16px; min-height: 46px; }
+    .plan-buttons { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .plan-btn { padding: 14px 6px; min-height: 56px; }
+    .plan-btn-name { font-size: 0.82rem; }
+    .plan-btn-price { font-size: 0.72rem; }
+    .input-range { height: 8px; }
+    .input-range::-webkit-slider-thumb { width: 26px; height: 26px; }
+    /* KPI cards */
+    .kpi-card { padding: 18px 14px; }
+    .kpi-val { font-size: 1.5rem; }
+    .breakdown { padding-top: 16px; }
+    .br-row { font-size: 0.82rem; padding: 7px 0; }
+    .br-row.total { font-size: 0.92rem; }
+    /* Zone finder */
+    .zone-finder { padding: 18px 16px; border-radius: 14px; }
+    .zf-grid { grid-template-columns: 1fr; gap: 14px; }
+    .service-tabs { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .svc-btn { padding: 14px 6px; font-size: 0.78rem; min-height: 60px; }
+    .svc-icon { font-size: 1.2rem; margin-bottom: 2px; }
+    .result-zone { padding: 20px 16px; border-radius: 12px; }
+    .result-head { flex-direction: column; gap: 10px; padding-bottom: 12px; }
+    .result-title-block h2 { font-size: 1.15rem; }
+    .availability-bar { flex-direction: row; padding: 12px 14px; gap: 10px; }
+    .av-icon-b { width: 32px; height: 32px; font-size: 0.95rem; }
+    .av-text-b strong { font-size: 0.92rem; }
+    .av-text-b span { font-size: 0.82rem; }
+    /* Plans priced grid */
+    .plans-grid-priced { grid-template-columns: 1fr; gap: 14px; margin: 22px 0; }
+    .plan-priced { padding: 22px 18px; }
+    .plan-priced.elite::before, .plan-priced.recommended::before { font-size: 0.62rem; }
+    .plan-name-priced { font-size: 1.05rem; }
+    .plan-price-num { font-size: 1.7rem; }
+    /* Multi-zone */
+    .multi-zone { padding: 22px 18px; border-radius: 12px; }
+    .mz-cases { grid-template-columns: 1fr; gap: 12px; }
+    .mz-case { padding: 16px 14px; }
+    /* Founding discount banner */
+    .founding-discount { padding: 18px 20px; border-radius: 12px; margin: 18px 0; }
+    .founding-discount strong { font-size: 0.95rem; display: block; }
+    .founding-discount p { font-size: 0.85rem; }
+    /* Influence zone */
+    .infl-zone { padding: 18px 20px; }
+    .infl-zone h4 { font-size: 0.98rem; }
+    .infl-zone p { font-size: 0.85rem; }
+    /* Ladder */
+    .ladder-block { padding: 18px 18px; }
+    .ladder-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .ladder-step-priced { padding: 12px 8px; }
+    .ladder-step-priced::after { content: ''; }
+    .ladder-name-p { font-size: 0.85rem; }
+    .ladder-time-p { font-size: 0.65rem; }
+    /* Progression table */
+    table { font-size: 0.85rem; }
+    table th, table td { padding: 10px 10px !important; }
+    /* CTA */
+    .cta-final { padding: 24px 20px; border-radius: 12px; }
+    .cta-final h2 { font-size: 1.2rem; }
+    .cta-final p { font-size: 0.88rem; }
+    .cta-btn { padding: 14px 26px; font-size: 0.92rem; min-height: 48px; display: inline-flex; align-items: center; }
+    /* Touch targets */
+    button, a, input, select, textarea { min-height: 44px; }
+  }
+
+  /* Small mobile · ≤ 380px */
+  @media (max-width: 380px) {
+    h1.head-title { font-size: 1.25rem; }
+    .sec-title { font-size: 1.15rem; }
+    .kpi-val { font-size: 1.35rem; }
+    .plan-price-num { font-size: 1.5rem; }
+    .plan-buttons { grid-template-columns: 1fr; }
+    .service-tabs { grid-template-columns: 1fr; }
+  }
+
+  /* Touch device hover removal */
+  @media (hover: none) {
+    .plan-priced:hover, .plan-card:hover { transform: none; box-shadow: none; }
+    .cta-btn:hover { transform: none; }
+  }
+
+  /* Responsive table for progression */
+  @media (max-width: 540px) {
+    table thead { display: none; }
+    table, table tbody, table tr, table td { display: block; width: 100%; }
+    table tr { border-bottom: 2px solid var(--bd); padding: 14px 0; }
+    table td { padding: 6px 14px !important; border-bottom: none !important; }
+    table td:nth-child(1) { font-size: 0.92rem; padding-top: 14px !important; }
+    table td:nth-child(2)::before { content: '⏱ Tiempo: '; color: var(--sl); font-weight: 400; }
+    table td:nth-child(3)::before { content: '✓ Criterios: '; color: var(--sl); font-weight: 400; display: block; margin-top: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="head-inner">
+    <div class="auth-tag" id="authTag">Acceso completo · Founding Partner candidato</div>
+    <h1 class="head-title" id="welcomeHead">Tu acceso completo · Health4Spain Partners</h1>
+    <p class="head-sub" id="welcomeSub">Calcula tu ROI con tus números, consulta disponibilidad y tarifas detalladas en tu zona, y diseña tu progresión hasta Lidera.</p>
+    <div id="welcomeBadge" style="display:none; margin-top: 18px; padding: 14px 18px; background: rgba(10,124,78,0.18); border: 1px solid rgba(95,217,152,0.3); border-radius: 12px; max-width: 600px;">
+      <div style="font-size: 0.78rem; color: #5fd998; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px;">✓ Sesión validada</div>
+      <div style="font-size: 0.94rem; color: rgba(255,255,255,0.9); line-height: 1.5;" id="welcomeContext"></div>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-tabs">
+  <div class="nav-tabs-inner">
+    <a href="#roi" class="nav-tab active">📊 Calculadora ROI</a>
+    <a href="#zones" class="nav-tab">🗺️ Disponibilidad y tarifas</a>
+    <a href="#multi" class="nav-tab">🌐 Multizona</a>
+    <a href="#progression" class="nav-tab">🏆 Progresión</a>
+    <a href="#contract" class="nav-tab">✍️ Contrato</a>
+  </div>
+</nav>
+
+<!-- ============================================ -->
+<!-- ROI CALCULATOR -->
+<!-- ============================================ -->
+<section id="roi">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">01</span>Calculadora ROI · tus números</h2>
+    <p class="sec-sub">Introduce tus parámetros reales — perfil, ticket medio, tasa de cierre — y ve el ROI mensual y anual con cualquier plan H4S. Las cifras se actualizan en tiempo real.</p>
+
+    <div class="roi-grid">
+      <!-- INPUTS -->
+      <div class="roi-panel">
+        <h3>📝 Tus datos</h3>
+
+        <div class="input-group">
+          <div class="input-label"><span>Perfil profesional</span></div>
+          <select class="input-select" id="profile" onchange="updateProfileDefaults(); calc();">
+            <option value="seguros">Mediador seguros (salud · hogar · auto)</option>
+            <option value="abogado">Abogado (NIE · residencia · testamento)</option>
+            <option value="gestoria">Gestoría (fiscal · 720 · autónomo)</option>
+            <option value="inmobiliaria" selected>Inmobiliaria (alquiler · compra · hipoteca)</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label"><span>Tier de tu zona</span></div>
+          <div class="input-help">Determina el precio base. A = premium · B = media · C = en desarrollo</div>
+          <select class="input-select" id="tier" onchange="calc();">
+            <option value="A" selected>Tier A · Zona premium</option>
+            <option value="B">Tier B · Zona media</option>
+            <option value="C">Tier C · En desarrollo</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label"><span>Plan H4S</span></div>
+          <div class="plan-buttons" id="planButtons">
+            <button type="button" class="plan-btn" data-plan="ACTIVA" onclick="selectPlan(this); calc();"><div class="plan-btn-name">Activa</div><div class="plan-btn-price" id="pb-ACTIVA">195€</div></button>
+            <button type="button" class="plan-btn active" data-plan="CRECE" onclick="selectPlan(this); calc();"><div class="plan-btn-name">Crece</div><div class="plan-btn-price" id="pb-CRECE">390€</div></button>
+            <button type="button" class="plan-btn" data-plan="ESCALA" onclick="selectPlan(this); calc();"><div class="plan-btn-name">Escala</div><div class="plan-btn-price" id="pb-ESCALA">690€</div></button>
+            <button type="button" class="plan-btn" data-plan="LIDERA" onclick="selectPlan(this); calc();"><div class="plan-btn-name">Lidera</div><div class="plan-btn-price" id="pb-LIDERA">1.095€</div></button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label"><span>Leads/mes que esperas trabajar</span><span class="val" id="leadsVal">25</span></div>
+          <input type="range" min="5" max="100" value="25" class="input-range" id="leads" oninput="document.getElementById('leadsVal').textContent=this.value; calc();">
+        </div>
+
+        <div class="input-group">
+          <div class="input-label"><span>Tasa de cierre estimada</span><span class="val" id="cvrVal">20%</span></div>
+          <div class="input-help">% de leads que se convierten en cliente</div>
+          <input type="range" min="5" max="50" value="20" class="input-range" id="cvr" oninput="document.getElementById('cvrVal').textContent=this.value+'%'; calc();">
+        </div>
+
+        <div class="input-group">
+          <div class="input-label"><span>Ticket medio por operación cerrada</span><span class="val" id="ticketVal">2.500€</span></div>
+          <input type="range" min="100" max="15000" value="2500" step="100" class="input-range" id="ticket" oninput="document.getElementById('ticketVal').textContent=Number(this.value).toLocaleString('es-ES')+'€'; calc();">
+        </div>
+
+        <div class="input-group">
+          <div class="input-label"><span>Recurrencia anual del cliente</span><span class="val" id="recVal">1.0x</span></div>
+          <div class="input-help">Cuántas veces al año compra/contrata el mismo cliente</div>
+          <input type="range" min="1" max="5" value="1" step="0.1" class="input-range" id="rec" oninput="document.getElementById('recVal').textContent=parseFloat(this.value).toFixed(1)+'x'; calc();">
+        </div>
+      </div>
+
+      <!-- OUTPUTS -->
+      <div class="roi-output">
+        <h3>📈 Tu retorno con H4S</h3>
+
+        <div class="kpi-row">
+          <div class="kpi-card green">
+            <div class="kpi-val" id="kpiRevenue">5.000€<small>/mes</small></div>
+            <div class="kpi-lbl">Revenue/mes</div>
+          </div>
+          <div class="kpi-card cyan">
+            <div class="kpi-val" id="kpiCost">390€<small>/mes</small></div>
+            <div class="kpi-lbl">Coste H4S</div>
+          </div>
+          <div class="kpi-card gold">
+            <div class="kpi-val" id="kpiRoi">12,8x<small>retorno</small></div>
+            <div class="kpi-lbl">ROI</div>
+          </div>
+        </div>
+
+        <div class="breakdown">
+          <div class="br-row"><span>Operaciones cerradas/mes</span><span class="v" id="brOps">5,0</span></div>
+          <div class="br-row"><span>Revenue bruto/mes</span><span class="v" id="brRevMonth">5.000€</span></div>
+          <div class="br-row"><span>Revenue anual (con recurrencia)</span><span class="v" id="brRevYear">60.000€</span></div>
+          <div class="br-row"><span>Cuota H4S anual</span><span class="v" id="brHfsYear">4.680€</span></div>
+          <div class="br-row"><span>CPL extra (si excede leads base)</span><span class="v" id="brCpl">0€</span></div>
+          <div class="br-row total"><span>Margen neto anual</span><span class="v" id="brNet">55.320€</span></div>
+          <div class="br-row"><span>Payback (meses)</span><span class="v" id="brPayback">0,9</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- DISPONIBILIDAD -->
+<!-- ============================================ -->
+<section class="alt" id="zones">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">02</span>Disponibilidad y tarifas en tu zona</h2>
+    <p class="sec-sub">Selecciona tu servicio y tu ciudad para ver tarifas detalladas y tu zona de influencia. <b>Las plazas en planes Activa, Crece y Escala son compartidas</b> · pueden coexistir varios partners en la misma zona. La <b>exclusividad geográfica</b> solo aplica al plan Lidera (acceso por trayectoria). La condición de Founding Partner aplica un descuento adicional del 30% durante los primeros 6 meses.</p>
+
+    <div class="zone-finder">
+      <div class="zf-grid">
+        <div>
+          <div class="input-label" style="font-size: 0.8rem; margin-bottom: 10px;">¿Qué servicio prestas?</div>
+          <div class="service-tabs">
+            <button class="svc-btn" data-service="abogados" onclick="selectService(this); updateZone();"><span class="svc-icon">⚖️</span>Abogados</button>
+            <button class="svc-btn" data-service="gestoria" onclick="selectService(this); updateZone();"><span class="svc-icon">📋</span>Gestoría</button>
+            <button class="svc-btn active" data-service="inmobiliaria" onclick="selectService(this); updateZone();"><span class="svc-icon">🏠</span>Inmobiliaria</button>
+            <button class="svc-btn" data-service="seguros" onclick="selectService(this); updateZone();"><span class="svc-icon">🛡️</span>Seguros</button>
+          </div>
+        </div>
+        <div>
+          <div class="input-label" style="font-size: 0.8rem; margin-bottom: 10px;">¿En qué ciudad operas?</div>
+          <select class="input-select" id="citySelect" onchange="updateZone();">
+            <option value="">— Selecciona tu ciudad —</option>
+            <optgroup label="🏖️ Costa Blanca · Tier A">
+              <option value="cv_torrevieja" data-tier="A">Torrevieja</option>
+              <option value="cv_orihuela" data-tier="A">Orihuela / Orihuela Costa</option>
+              <option value="cv_calpe" data-tier="A">Calpe</option>
+              <option value="cv_javea" data-tier="A">Jávea / Xàbia</option>
+              <option value="cv_denia" data-tier="A">Denia</option>
+              <option value="cv_altea" data-tier="A">Altea</option>
+              <option value="cv_benidorm" data-tier="A">Benidorm</option>
+              <option value="cv_alfasdelpi" data-tier="A">L'Alfàs del Pi</option>
+              <option value="cv_santapola" data-tier="A">Santa Pola</option>
+              <option value="cv_pilar" data-tier="A">Pilar de la Horadada</option>
+            </optgroup>
+            <optgroup label="🏖️ Costa Blanca · Tier B">
+              <option value="cv_alicante" data-tier="B">Alicante capital</option>
+              <option value="cv_elche" data-tier="B">Elche</option>
+            </optgroup>
+            <optgroup label="🌴 Costa del Sol · Tier A">
+              <option value="an_marbella" data-tier="A">Marbella</option>
+              <option value="an_estepona" data-tier="A">Estepona</option>
+              <option value="an_fuengirola" data-tier="A">Fuengirola</option>
+              <option value="an_mijas" data-tier="A">Mijas</option>
+              <option value="an_torremolinos" data-tier="A">Torremolinos</option>
+              <option value="an_benalmadena" data-tier="A">Benalmádena</option>
+              <option value="an_nerja" data-tier="A">Nerja</option>
+              <option value="an_malaga_centro" data-tier="A">Málaga · Centro / Soho</option>
+            </optgroup>
+            <optgroup label="🌅 Murcia · Mar Menor / Costa Cálida">
+              <option value="mu_lamanga" data-tier="A">La Manga del Mar Menor</option>
+              <option value="mu_murcia" data-tier="B">Murcia capital</option>
+              <option value="mu_cartagena" data-tier="B">Cartagena</option>
+              <option value="mu_sanpedro" data-tier="B">San Pedro del Pinatar</option>
+              <option value="mu_sanjavier" data-tier="B">San Javier</option>
+              <option value="mu_torrepacheco" data-tier="B">Torre Pacheco</option>
+              <option value="mu_alcazares" data-tier="B">Los Alcázares</option>
+              <option value="mu_mazarron" data-tier="B">Mazarrón</option>
+            </optgroup>
+            <optgroup label="🏝️ Baleares">
+              <option value="ib_palma_centro" data-tier="A">Palma · Centro</option>
+              <option value="ib_calvia" data-tier="A">Calvià</option>
+              <option value="ib_eivissa" data-tier="A">Ibiza ciudad</option>
+              <option value="ib_mao" data-tier="A">Maó (Menorca)</option>
+            </optgroup>
+            <optgroup label="🌋 Canarias">
+              <option value="cn_adeje" data-tier="A">Adeje (Tenerife Sur)</option>
+              <option value="cn_arona" data-tier="A">Arona (Tenerife)</option>
+              <option value="cn_maspalomas" data-tier="A">Maspalomas (Gran Canaria)</option>
+              <option value="cn_laspalmas" data-tier="A">Las Palmas de G.C.</option>
+            </optgroup>
+            <optgroup label="🏛️ Cataluña · Costa Brava">
+              <option value="ct_lloret" data-tier="A">Lloret de Mar</option>
+              <option value="ct_roses" data-tier="A">Roses</option>
+              <option value="ct_begur" data-tier="A">Begur</option>
+              <option value="ct_barcelona_centro" data-tier="A">Barcelona · Centro</option>
+            </optgroup>
+            <optgroup label="🏔️ Madrid">
+              <option value="ma_madrid_centro" data-tier="A">Madrid · Centro / Salamanca</option>
+              <option value="ma_pozuelo" data-tier="A">Pozuelo de Alarcón</option>
+            </optgroup>
+            <optgroup label="📍 Otra">
+              <option value="otra" data-tier="C">Mi ciudad no aparece</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <div class="empty-state" id="zoneEmpty">
+        <strong>Selecciona servicio y ciudad</strong>
+        Verás los 4 planes con tarifas para tu tier, tu zona de influencia, si hay competencia activa en la zona y el descuento Founding Partner aplicable. Las zonas compartidas no bloquean tu entrada — solo Lidera bloquea.
+      </div>
+
+      <div class="result-zone" id="zoneResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- MULTI-ZONE + MULTI-VERTICAL -->
+<!-- ============================================ -->
+<section id="multi">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">03</span>Multi-zona y multi-vertical</h2>
+    <p class="sec-sub">Dos formas de ampliar tu cobertura en H4S: operar en varias <b>zonas</b> (multi-zona, desde Plan Escala) y operar en varias <b>verticales de servicio</b> dentro de tu misma zona (multi-vertical, desde día 1). Ambas con descuento sobre la cuota base.</p>
+
+    <!-- MULTI-VERTICAL · NUEVO -->
+    <div class="multi-zone" style="margin-bottom: 28px;">
+      <h3>🌐 Multi-vertical · varias verticales en tu zona</h3>
+      <p style="color: var(--sl); font-size: 0.92rem;">Si en tu despacho ofreces más de un servicio (ej: abogado + mediador de seguros, o gestoría + inmobiliaria), puedes contratar todas tus verticales desde día 1 con descuento progresivo. Cada vertical tiene su propia URL dedicada, su bot Mar-IA configurado y sus campañas, pero el plan y la progresión se gestionan de forma agregada para todas.</p>
+
+      <table style="width: 100%; border-collapse: collapse; margin-top: 18px; background: var(--wh); border-radius: 10px; overflow: hidden;">
+        <thead style="background: var(--n); color: var(--wh);">
+          <tr>
+            <th style="padding: 12px 14px; text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Vertical contratada</th>
+            <th style="padding: 12px 14px; text-align: center; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Descuento</th>
+            <th style="padding: 12px 14px; text-align: center; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">% cuota base</th>
+            <th style="padding: 12px 14px; text-align: center; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Founding (+5pp)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding: 12px 14px; font-weight: 700;">1ª · vertical principal</td><td style="padding: 12px 14px; text-align: center;">0%</td><td style="padding: 12px 14px; text-align: center;">100%</td><td style="padding: 12px 14px; text-align: center; color: var(--c); font-weight: 700;">0%</td></tr>
+          <tr style="background: var(--bg);"><td style="padding: 12px 14px; font-weight: 700;">2ª vertical adicional</td><td style="padding: 12px 14px; text-align: center;">10%</td><td style="padding: 12px 14px; text-align: center;">90%</td><td style="padding: 12px 14px; text-align: center; color: var(--c); font-weight: 700;">15%</td></tr>
+          <tr><td style="padding: 12px 14px; font-weight: 700;">3ª vertical adicional</td><td style="padding: 12px 14px; text-align: center;">30%</td><td style="padding: 12px 14px; text-align: center;">70%</td><td style="padding: 12px 14px; text-align: center; color: var(--c); font-weight: 700;">35%</td></tr>
+          <tr style="background: var(--bg);"><td style="padding: 12px 14px; font-weight: 700;">4ª vertical adicional</td><td style="padding: 12px 14px; text-align: center;">40%</td><td style="padding: 12px 14px; text-align: center;">60%</td><td style="padding: 12px 14px; text-align: center; color: var(--c); font-weight: 700;">45%</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Calculadora multi-vertical interactiva -->
+      <div style="margin-top: 22px; background: var(--clt); border: 1px solid var(--c); border-radius: 12px; padding: 22px 24px;">
+        <h4 style="font-size: 1rem; color: var(--n); margin-bottom: 14px; font-weight: 800;">📊 Calculadora multi-vertical</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 700; color: var(--n); display: block; margin-bottom: 6px;">Tier de tu zona</label>
+            <select id="mvTier" onchange="calcMultiVertical()" style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--bd); border-radius: 8px; font-family: inherit; font-size: 0.95rem;">
+              <option value="A">Tier A · Premium</option>
+              <option value="B">Tier B · Media</option>
+              <option value="C">Tier C · En desarrollo</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 700; color: var(--n); display: block; margin-bottom: 6px;">Plan</label>
+            <select id="mvPlan" onchange="calcMultiVertical()" style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--bd); border-radius: 8px; font-family: inherit; font-size: 0.95rem;">
+              <option value="ACTIVA">Activa</option>
+              <option value="CRECE" selected>Crece</option>
+              <option value="ESCALA">Escala</option>
+              <option value="LIDERA">Lidera</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--n); display: block; margin-bottom: 8px;">Verticales que ofreces (haz click para añadir/quitar · el orden importa)</label>
+          <div id="mvVerticals" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+            <button type="button" data-v="abogados" onclick="toggleVertical(this)" style="padding: 12px 8px; border: 1.5px solid var(--bd); border-radius: 8px; background: var(--wh); cursor: pointer; font-family: inherit; font-weight: 600; font-size: 0.85rem; transition: all 0.2s;">⚖️ Abogados</button>
+            <button type="button" data-v="gestoria" onclick="toggleVertical(this)" style="padding: 12px 8px; border: 1.5px solid var(--bd); border-radius: 8px; background: var(--wh); cursor: pointer; font-family: inherit; font-weight: 600; font-size: 0.85rem; transition: all 0.2s;">📋 Gestoría</button>
+            <button type="button" data-v="inmobiliaria" onclick="toggleVertical(this)" style="padding: 12px 8px; border: 1.5px solid var(--bd); border-radius: 8px; background: var(--wh); cursor: pointer; font-family: inherit; font-weight: 600; font-size: 0.85rem; transition: all 0.2s;">🏠 Inmobiliaria</button>
+            <button type="button" data-v="seguros" onclick="toggleVertical(this)" style="padding: 12px 8px; border: 1.5px solid var(--bd); border-radius: 8px; background: var(--wh); cursor: pointer; font-family: inherit; font-weight: 600; font-size: 0.85rem; transition: all 0.2s;">🛡️ Seguros</button>
+          </div>
+        </div>
+        <div id="mvFounding" style="margin-top: 14px;">
+          <label style="font-size: 0.85rem; color: var(--n); cursor: pointer;">
+            <input type="checkbox" id="mvFoundingChk" onchange="calcMultiVertical()" style="margin-right: 6px;">
+            Soy candidato a Founding Partner (+5pp adicionales en cada vertical adicional)
+          </label>
+        </div>
+        <div id="mvResult" style="margin-top: 18px; padding: 16px; background: var(--wh); border-radius: 10px; border-left: 4px solid var(--c); display: none;">
+          <div id="mvBreakdown"></div>
+          <div id="mvTotal" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--bd); font-size: 1.1rem; font-weight: 800; color: var(--n);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MULTI-ZONA -->
+    <div class="multi-zone">
+      <h3>🗺️ Multi-zona · operar en varias zonas geográficas</h3>
+      <p style="color: var(--sl); font-size: 0.92rem;">Si tu cartera excede una sola ciudad, puedes operar en varias zonas. A diferencia del multi-vertical, las zonas adicionales se desbloquean por trayectoria — no están disponibles desde día 1.</p>
+
+      <div class="mz-cases">
+        <div class="mz-case">
+          <h4>📍 Día 1 · Activa o Crece</h4>
+          <p><b>1 zona principal incluida.</b> Eliges la ciudad donde tienes oficina o concentración de clientes. No puedes solicitar zonas adicionales aún — primero validas el sistema con la principal.</p>
+        </div>
+        <div class="mz-case">
+          <h4>📍 Mes 9+ · Escala</h4>
+          <p><b>Hasta +2 zonas adicionales.</b> Cada zona extra: <b>50% del precio base</b> del tier de esa zona. Ejemplo: Marbella (Escala A · 690€) + Estepona (Tier A adicional · 345€) = <b>1.035€/mes</b>.</p>
+        </div>
+        <div class="mz-case">
+          <h4>📍 Mes 21+ · Lidera</h4>
+          <p><b>Zona de influencia entera incluida.</b> Sin coste extra adicional. La exclusividad aplica automáticamente solo en tu vertical principal · las verticales adicionales requieren validación específica para extender exclusividad.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: var(--clt); border-radius: 12px; padding: 22px 26px; margin-top: 20px; border-left: 4px solid var(--c);">
+      <h4 style="font-size: 1rem; color: var(--n); margin-bottom: 8px;">Tu caso · ejemplo del abogado-mediador de Alicante</h4>
+      <p style="color: var(--sl); font-size: 0.92rem;">Si eres abogado en Alicante y también ofreces mediación de seguros, atendiendo clientes de Torrevieja y Benidorm, el camino sería: <b>(1)</b> Día 1: entras con Alicante como zona principal en plan Activa o Crece, abogados como vertical principal (100%) y seguros como 2ª vertical (90% de cuota). <b>(2)</b> Mes 9: en plan Escala, solicitas ampliación a Torrevieja + Benidorm como zonas secundarias. <b>(3)</b> Mes 21+: si llegas a Lidera, abogados queda en exclusividad automática · seguros requiere validación adicional para extender exclusividad.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// === CALCULADORA MULTI-VERTICAL ===
+const MV_PRICES = {
+  A: { ACTIVA: 195, CRECE: 390, ESCALA: 690, LIDERA: 1095 },
+  B: { ACTIVA: 145, CRECE: 290, ESCALA: 590, LIDERA: 890 },
+  C: { ACTIVA: 95,  CRECE: 190, ESCALA: 390, LIDERA: 590 }
+};
+const MV_DISCOUNTS_STD = [0, 0.10, 0.30, 0.40];
+const MV_DISCOUNTS_FND = [0, 0.15, 0.35, 0.45];
+const MV_NAMES = { abogados: '⚖️ Abogados', gestoria: '📋 Gestoría', inmobiliaria: '🏠 Inmobiliaria', seguros: '🛡️ Seguros' };
+let mvSelected = [];
+
+function toggleVertical(btn) {
+  const v = btn.dataset.v;
+  const idx = mvSelected.indexOf(v);
+  if (idx >= 0) {
+    mvSelected.splice(idx, 1);
+    btn.style.background = 'var(--wh)';
+    btn.style.borderColor = 'var(--bd)';
+    btn.style.color = 'var(--n)';
+  } else {
+    if (mvSelected.length >= 4) return;
+    mvSelected.push(v);
+    btn.style.background = 'var(--n)';
+    btn.style.borderColor = 'var(--n)';
+    btn.style.color = 'var(--wh)';
+  }
+  // Re-render numbers on selected
+  document.querySelectorAll('#mvVerticals button').forEach(b => {
+    const i = mvSelected.indexOf(b.dataset.v);
+    const nameOnly = MV_NAMES[b.dataset.v];
+    if (i >= 0) {
+      const order = ['1ª', '2ª', '3ª', '4ª'][i];
+      b.innerHTML = `${nameOnly}<br><small style="font-size: 0.65rem; color: var(--c);">${order}</small>`;
+    } else {
+      b.innerHTML = nameOnly;
+    }
+  });
+  calcMultiVertical();
+}
+
+function calcMultiVertical() {
+  const result = document.getElementById('mvResult');
+  if (mvSelected.length === 0) { result.style.display = 'none'; return; }
+  const tier = document.getElementById('mvTier').value;
+  const plan = document.getElementById('mvPlan').value;
+  const isFnd = document.getElementById('mvFoundingChk').checked;
+  const base = MV_PRICES[tier][plan];
+  const dts = isFnd ? MV_DISCOUNTS_FND : MV_DISCOUNTS_STD;
+
+  let total = 0;
+  let html = '';
+  mvSelected.forEach((v, i) => {
+    const dt = dts[i];
+    const price = Math.round(base * (1 - dt));
+    total += price;
+    const order = ['Principal', '2ª', '3ª', '4ª'][i];
+    html += `<div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.92rem;">
+      <span>${MV_NAMES[v]} <small style="color: var(--sl);">(${order} · ${(dt*100).toFixed(0)}% dto.)</small></span>
+      <span style="font-weight: 700; font-variant-numeric: tabular-nums;">${price} €/mes</span>
+    </div>`;
+  });
+  document.getElementById('mvBreakdown').innerHTML = html;
+  document.getElementById('mvTotal').innerHTML = `Total mensual: <span style="color: var(--c);">${total} €/mes</span> ${isFnd ? '<small style="color: var(--g); font-weight: 600;">· con bonificación Founding</small>' : ''}`;
+  result.style.display = 'block';
+}
+</script>
+
+<!-- ============================================ -->
+<!-- PROGRESSION -->
+<!-- ============================================ -->
+<section class="alt" id="progression">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">04</span>Tu camino hacia Lidera</h2>
+    <p class="sec-sub">Cómo se sube de plan: criterios objetivos, tiempos mínimos, métricas verificables. La promoción es automática si cumples — no hay decisión discrecional.</p>
+
+    <div class="ladder-block" style="margin-top: 0;">
+      <h4>Línea de tiempo del partner</h4>
+      <div class="ladder-row">
+        <div class="ladder-step-priced">
+          <div class="ladder-name-p">Activa</div>
+          <div class="ladder-time-p">Día 1 · Entrada</div>
+        </div>
+        <div class="ladder-step-priced">
+          <div class="ladder-name-p">Crece</div>
+          <div class="ladder-time-p">+3 meses · Validado</div>
+        </div>
+        <div class="ladder-step-priced">
+          <div class="ladder-name-p">Escala</div>
+          <div class="ladder-time-p">+9 meses · KPIs</div>
+        </div>
+        <div class="ladder-step-priced elite">
+          <div class="ladder-name-p">🏆 Lidera</div>
+          <div class="ladder-time-p">+21 meses · Trayectoria</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 30px; background: var(--wh); border: 1.5px solid var(--bd); border-radius: 14px; overflow: hidden;">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead style="background: var(--n); color: var(--wh);">
+          <tr>
+            <th style="padding: 14px 16px; text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Salto</th>
+            <th style="padding: 14px 16px; text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Tiempo</th>
+            <th style="padding: 14px 16px; text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Criterios</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 14px 16px; border-bottom: 1px solid var(--bd); font-weight: 700;">Activa → Crece</td>
+            <td style="padding: 14px 16px; border-bottom: 1px solid var(--bd); color: var(--c); font-weight: 700;">3 meses</td>
+            <td style="padding: 14px 16px; border-bottom: 1px solid var(--bd); font-size: 0.9rem; color: var(--sl);">Respuesta &lt; 24 h en &gt;85% leads · NPS &gt; 7 · sin incidencias</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; border-bottom: 1px solid var(--bd); font-weight: 700;">Crece → Escala</td>
+            <td style="padding: 14px 16px; border-bottom: 1px solid var(--bd); color: var(--c); font-weight: 700;">+ 6 meses</td>
+            <td style="padding: 14px 16px; border-bottom: 1px solid var(--bd); font-size: 0.9rem; color: var(--sl);">Conversión lead-cita &gt; 60% · cita-venta &gt; 25% · 3+ cierres documentados</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-weight: 700;">Escala → Lidera</td>
+            <td style="padding: 14px 16px; color: var(--c); font-weight: 700;">+ 12 meses</td>
+            <td style="padding: 14px 16px; font-size: 0.9rem; color: var(--sl);">Cumplimiento sostenido SLAs · NPS cliente &gt; 8 · caso documentado · co-marketing</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- CONTRACT CTA -->
+<!-- ============================================ -->
+<section id="contract">
+  <div class="wrap">
+    <div class="cta-final">
+      <h2 style="color: var(--c); font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.3px;">¿Listo para firmar como Founding Partner?</h2>
+      <p>Te enviamos contrato digital + mandato SEPA con las condiciones Founding aplicadas a tu caso. Plazos: firma + setup técnico en 7 días, primer lead operativo en 14-21 días desde la firma.</p>
+      <a href="#" class="cta-btn" onclick="alert('Conectar con flujo de firma'); return false;">Solicitar contrato Founding</a>
+    </div>
+  </div>
+</section>
+
+<script>
+// === DATOS ===
+const PRICES = {
+  A: { ACTIVA: 195, CRECE: 390, ESCALA: 690, LIDERA: 1095 },
+  B: { ACTIVA: 145, CRECE: 290, ESCALA: 590, LIDERA: 890 },
+  C: { ACTIVA: 95,  CRECE: 190, ESCALA: 390, LIDERA: 590 }
+};
+const VOLUMES_BASE = { ACTIVA: 15, CRECE: 25, ESCALA: 45, LIDERA: 999 };
+const VOLUMES_TXT = { ACTIVA: '15 leads/mes', CRECE: '25 leads/mes', ESCALA: '45 leads/mes', LIDERA: 'Leads ilimitados' };
+const CPL_EXTRA  = { ACTIVA: 25, CRECE: 25, ESCALA: 20, LIDERA: 0 };
+
+const PROFILE_DEFAULTS = {
+  seguros:      { ticket: 500, rec: 1.2 },
+  abogado:      { ticket: 800, rec: 1.1 },
+  gestoria:     { ticket: 200, rec: 4.0 },
+  inmobiliaria: { ticket: 2500, rec: 1.0 }
+};
+
+const PLAN_TAGS = {
+  ACTIVA: { tag: '📥 Plan de entrada', accessType: 'direct' },
+  CRECE:  { tag: '🔓 Tras 3 meses', accessType: 'earned' },
+  ESCALA: { tag: '🔓 Tras 9 meses + KPIs', accessType: 'earned' },
+  LIDERA: { tag: '🏆 Solo por trayectoria', accessType: 'elite' }
+};
+
+// Plazas con otro profesional ya en negociación o activo (zona compartida).
+// El modelo H4S es compartido en Activa/Crece/Escala — solo Lidera bloquea.
+// Por tanto estas plazas NO bloquean la entrada de nuevos partners,
+// pero advertimos de la competencia y de la prelación por nivel.
+const RESERVED = {
+  'seguros_cv_elche':         'Otro profesional en negociación final',
+  'seguros_mu_murcia':        'Otro profesional en negociación final',
+  'abogados_cv_alicante':     'Otro profesional en negociación final',
+  'inmobiliaria_cv_elche':    'Otro profesional en negociación final',
+  'inmobiliaria_cv_torrevieja': 'Otro profesional en negociación final'
+};
+
+// Plazas con partner en Lidera (exclusividad activa) · vacío hoy.
+// Cuando un partner alcance Lidera, su clave entra aquí y bloquea
+// la entrada de nuevos partners en esa ciudad/servicio.
+const LIDERA_LOCKED = {};
+
+const STRATEGIC_PRIORITY = new Set([
+  'cv_torrevieja','cv_orihuela','cv_calpe','cv_javea','cv_denia','cv_altea','cv_alfasdelpi','cv_benidorm',
+  'cv_alicante','cv_elche','cv_santapola','cv_pilar',
+  'mu_murcia','mu_cartagena','mu_sanpedro','mu_sanjavier','mu_torrepacheco','mu_alcazares','mu_lamanga','mu_mazarron'
+]);
+
+const INFLUENCE_ZONES = {
+  cb_norte:  { name: 'Costa Blanca Norte · Marina Alta',  members: ['cv_denia','cv_javea','cv_calpe'] },
+  cb_centro: { name: 'Costa Blanca Centro · Marina Baixa', members: ['cv_benidorm','cv_altea','cv_alfasdelpi'] },
+  cb_sur:    { name: 'Costa Blanca Sur · Vega Baja',       members: ['cv_torrevieja','cv_orihuela','cv_pilar','cv_santapola'] },
+  mm_norte:  { name: 'Mar Menor Norte',                     members: ['mu_sanpedro','mu_sanjavier','mu_alcazares','mu_torrepacheco','mu_lamanga'] },
+  cs_oeste:  { name: 'Costa del Sol Oeste',                 members: ['an_marbella','an_estepona'] },
+  cs_centro: { name: 'Costa del Sol Centro',                members: ['an_fuengirola','an_benalmadena','an_torremolinos','an_mijas'] }
+};
+
+// === ROI CALCULATOR ===
+let currentPlan = 'CRECE';
+
+function selectPlan(btn) {
+  document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentPlan = btn.dataset.plan;
+}
+
+function updateProfileDefaults() {
+  const profile = document.getElementById('profile').value;
+  const defaults = PROFILE_DEFAULTS[profile];
+  document.getElementById('ticket').value = defaults.ticket;
+  document.getElementById('ticketVal').textContent = defaults.ticket.toLocaleString('es-ES') + '€';
+  document.getElementById('rec').value = defaults.rec;
+  document.getElementById('recVal').textContent = defaults.rec.toFixed(1) + 'x';
+}
+
+function calc() {
+  const tier = document.getElementById('tier').value;
+  const leads = parseInt(document.getElementById('leads').value);
+  const cvr = parseFloat(document.getElementById('cvr').value) / 100;
+  const ticket = parseFloat(document.getElementById('ticket').value);
+  const rec = parseFloat(document.getElementById('rec').value);
+  const monthFee = PRICES[tier][currentPlan];
+  const planVolBase = VOLUMES_BASE[currentPlan];
+  const cplExtra = CPL_EXTRA[currentPlan];
+
+  // Update plan button prices for current tier
+  ['ACTIVA','CRECE','ESCALA','LIDERA'].forEach(p => {
+    const el = document.getElementById('pb-' + p);
+    if (el) el.textContent = PRICES[tier][p] + '€';
+  });
+
+  // Calc
+  const opsPerMonth = leads * cvr;
+  const revMonth = opsPerMonth * ticket;
+  const revYear = revMonth * 12 * rec;
+  const extraLeads = Math.max(0, leads - planVolBase);
+  const cplMonth = extraLeads * cplExtra;
+  const totalCostYear = (monthFee + cplMonth) * 12;
+  const netYear = revYear - totalCostYear;
+  const roi = totalCostYear > 0 ? revYear / totalCostYear : 0;
+  const payback = revMonth - (monthFee + cplMonth) > 0 ? totalCostYear / (revMonth * rec) : 0;
+
+  // Update outputs
+  document.getElementById('kpiRevenue').innerHTML = formatCurrency(revMonth) + '<small>/mes</small>';
+  document.getElementById('kpiCost').innerHTML = (monthFee + cplMonth).toLocaleString('es-ES') + '€<small>/mes</small>';
+  document.getElementById('kpiRoi').innerHTML = roi.toFixed(1) + 'x<small>retorno</small>';
+
+  document.getElementById('brOps').textContent = opsPerMonth.toFixed(1);
+  document.getElementById('brRevMonth').textContent = formatCurrency(revMonth);
+  document.getElementById('brRevYear').textContent = formatCurrency(revYear);
+  document.getElementById('brHfsYear').textContent = (monthFee * 12).toLocaleString('es-ES') + '€';
+  document.getElementById('brCpl').textContent = cplMonth > 0 ? cplMonth.toLocaleString('es-ES') + '€/mes' : '0€';
+  document.getElementById('brNet').textContent = formatCurrency(netYear);
+  document.getElementById('brPayback').textContent = payback > 0 ? payback.toFixed(1) : '<1';
+}
+
+function formatCurrency(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M€';
+  if (n >= 1000) return (n / 1000).toFixed(1).replace('.', ',') + 'k€';
+  return Math.round(n).toLocaleString('es-ES') + '€';
+}
+
+// === ZONE FINDER ===
+let currentService = 'inmobiliaria';
+
+function selectService(btn) {
+  document.querySelectorAll('.svc-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentService = btn.dataset.service;
+}
+
+function getInfluenceZone(cityValue) {
+  for (const [id, z] of Object.entries(INFLUENCE_ZONES)) {
+    if (z.members.includes(cityValue)) return { id, ...z };
+  }
+  return null;
+}
+
+function getCityName(value) {
+  const opt = document.querySelector(`#citySelect option[value="${value}"]`);
+  return opt ? opt.text : value;
+}
+
+function updateZone() {
+  const sel = document.getElementById('citySelect');
+  const result = document.getElementById('zoneResult');
+  const empty = document.getElementById('zoneEmpty');
+
+  if (!currentService || !sel.value) {
+    result.classList.remove('show');
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const cityVal = sel.value;
+  const cityName = sel.options[sel.selectedIndex].text;
+  const tier = sel.options[sel.selectedIndex].dataset.tier;
+  const key = `${currentService}_${cityVal}`;
+  const isStrategic = STRATEGIC_PRIORITY.has(cityVal);
+  const isOtra = cityVal === 'otra';
+
+  let avail;
+  let hasCompetition = false;
+  if (isOtra) {
+    avail = { type: 'unmapped', icon: '?', label: 'Tu ciudad no está mapeada', text: 'Cuéntanos en la llamada de cualificación. Asignamos tier y plan en 24h hábiles.' };
+  } else if (LIDERA_LOCKED[key]) {
+    avail = { type: 'locked', icon: '🏆', label: 'Plaza bloqueada en Lidera', text: 'Otro partner ha alcanzado el nivel Lidera en esta zona, lo que activa exclusividad geográfica. La zona se reabre solo si ese partner deja de cumplir KPIs.' };
+  } else if (RESERVED[key]) {
+    hasCompetition = true;
+    avail = { type: 'shared', icon: '⚠', label: 'Zona compartida · hay competencia activa', text: RESERVED[key] + '. Puedes entrar igualmente — los planes Activa, Crece y Escala son compartidos. La zona solo quedaría bloqueada si ese partner alcanza Lidera (mínimo 21 meses + KPIs).' };
+  } else if (ACTIVE[key]) {
+    hasCompetition = true;
+    avail = { type: 'shared', icon: '⚠', label: 'Zona compartida · partner activo', text: 'Hay un partner activo en esta zona en plan compartido. Puedes entrar también — los leads se distribuyen por prelación según nivel. El bloqueo solo aplica en Lidera.' };
+  } else if (isStrategic) {
+    avail = { type: 'free', icon: '✓', label: 'Plaza libre · zona en captación activa', text: 'Estamos prospectando partners en tu ciudad. La campaña Meta Ads en tu zona ya está planificada. Serás el primer partner en esta plaza.' };
+  } else {
+    avail = { type: 'free', icon: '✓', label: 'Plaza libre · activación on-demand', text: 'Tu ciudad no está en prospección activa, pero abrimos plaza si tu perfil cualifica. Tu firma activa la campaña.' };
+  }
+
+  const tierLabel = tier === 'A' ? 'Tier A · Premium' : tier === 'B' ? 'Tier B · Media' : 'Tier C · En desarrollo';
+  const serviceName = { abogados: 'Abogados', gestoria: 'Gestoría', inmobiliaria: 'Inmobiliaria', seguros: 'Seguros' }[currentService];
+  // Solo Lidera-locked y "otra ciudad" bloquean el flujo. Las zonas compartidas dejan continuar.
+  const isLocked = avail.type === 'locked' || avail.type === 'unmapped';
+
+  let html = `
+    <div class="result-head">
+      <div class="result-title-block">
+        <h2>${serviceName} · ${cityName}</h2>
+        <div class="sub">Disponibilidad y planes</div>
+      </div>
+      <span class="tier-pill ${tier}">${tierLabel}</span>
+    </div>
+
+    <div class="availability-bar">
+      <div class="av-icon-b ${avail.type}">${avail.icon}</div>
+      <div class="av-text-b">
+        <strong>${avail.label}</strong>
+        <span>${avail.text}</span>
+      </div>
+    </div>
+  `;
+
+  // Si hay competencia (zona compartida), mostrar warning extra explicativo
+  if (hasCompetition) {
+    html += `
+      <div class="competition-warn">
+        <h4>Esta zona ya tiene actividad — coexistencia permitida</h4>
+        <p>En H4S la <b>exclusividad solo aplica al plan Lidera</b> (acceso por trayectoria · mínimo 21 meses + KPIs sostenidos). Los planes <b>Activa, Crece y Escala son compartidos</b>, lo que significa que <b>varios partners pueden coexistir</b> en la misma zona y servicio. Los leads se distribuyen por <b>prelación según nivel</b>: un partner en Escala recibe antes que uno en Crece, que recibe antes que uno en Activa.</p>
+        <p style="margin-top: 8px;"><b>¿Qué implica entrar aquí?</b> Si firmas, compartirás zona con el otro profesional hasta que alguno de los dos llegue a Lidera. El primero en demostrar trayectoria + KPIs cierra la zona en exclusividad.</p>
+      </div>
+    `;
+  }
+
+  if (isLocked) {
+    if (avail.type === 'locked') {
+      html += `<div class="empty-state"><strong>Esta plaza está bloqueada en Lidera</strong>Otro partner ha alcanzado exclusividad. Considera ciudades adyacentes o servicios diferentes en la misma zona de influencia.</div>`;
+    } else {
+      html += `<div class="empty-state"><strong>Cuéntanos tu caso</strong>Indícanos tu ciudad concreta y la evaluamos individualmente. Asignamos tier y precio en 24 horas hábiles.</div>`;
+    }
+  } else {
+    const prices = PRICES[tier];
+    html += '<div class="plans-grid-priced">';
+    ['ACTIVA','CRECE','ESCALA','LIDERA'].forEach(p => {
+      const cfg = PLAN_TAGS[p];
+      const cls = cfg.accessType === 'elite' ? 'plan-priced elite' : cfg.accessType === 'earned' ? 'plan-priced locked' : 'plan-priced recommended';
+      const flag = p === 'LIDERA' ? '<div class="plan-flag exclusive">Exclusividad</div>' : '<div class="plan-flag shared">Zona compartida</div>';
+      html += `
+        <div class="${cls}">
+          <div class="plan-tag-priced">${cfg.tag}</div>
+          <div class="plan-name-priced">${p.charAt(0) + p.slice(1).toLowerCase()}</div>
+          <div class="plan-price-num">${prices[p]}€<small>/mes</small></div>
+          <div class="plan-volume-text">${VOLUMES_TXT[p]}</div>
+          <div class="plan-cpl-text">${CPL_EXTRA[p] > 0 ? '+' + CPL_EXTRA[p] + '€/lead extra' : 'Sin recargo'}</div>
+          ${flag}
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    // Founding discount
+    html += `
+      <div class="founding-discount">
+        <strong>🎯 Descuento Founding Partner aplicable</strong>
+        <p>Si entras durante la fase de implantación: <b>30% off los primeros 6 meses</b> + bloqueo de precio de por vida + setup fee gratuito. La condición exacta se confirma en la llamada de cualificación.</p>
+      </div>
+    `;
+
+    // Influence zone
+    const zone = getInfluenceZone(cityVal);
+    if (zone) {
+      const others = zone.members.filter(m => m !== cityVal).map(getCityName).join(' · ');
+      html += `
+        <div class="infl-zone">
+          <div class="tag">Tu zona de influencia</div>
+          <h4>${zone.name}</h4>
+          <p>Cuando llegues a <b>Escala</b> puedes solicitar ampliar tu cobertura a esta zona completa (50% del precio base por cada zona adicional). En <b>Lidera</b> esta zona es tuya en exclusividad sin coste extra.</p>
+          <div class="members"><b>Municipios incluidos:</b> ${cityName}${others ? ' · ' + others : ''}</div>
+        </div>
+      `;
+    }
+  }
+
+  result.innerHTML = html;
+  result.classList.add('show');
+}
+
+// === SESSION FROM ACCESO 1 ===
+function loadSessionFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+  if (!token) return; // No session, free access
+
+  const name = params.get('name') || '';
+  const email = params.get('email') || '';
+  const service = params.get('service') || '';
+  const city = params.get('city') || '';
+  const firstName = name.split(' ')[0];
+
+  // Show personalized welcome
+  if (firstName) {
+    document.getElementById('welcomeHead').textContent = `Hola ${firstName}, este es tu acceso privado`;
+  }
+  document.getElementById('welcomeSub').textContent = 'Hemos pre-validado tu perfil. Aquí está la información completa que se te ha desbloqueado: tarifas detalladas en tu zona, calculadora ROI con tus números y simulador de progresión hasta Lidera.';
+
+  const badge = document.getElementById('welcomeBadge');
+  const ctx = document.getElementById('welcomeContext');
+  if (badge && ctx) {
+    badge.style.display = 'block';
+    let ctxText = '';
+    if (service) {
+      const svcMap = { abogados: 'Abogado de extranjería', gestoria: 'Gestoría', inmobiliaria: 'Inmobiliaria', seguros: 'Mediador de seguros' };
+      ctxText += `<b>${svcMap[service] || service}</b>`;
+    }
+    if (city) ctxText += (ctxText ? ' · ' : '') + `<b>${city}</b>`;
+    ctxText += (ctxText ? ' · ' : '') + 'Token: <code style="font-family: monospace; font-size: 0.85rem; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">' + token.substring(0, 16) + '…</code>';
+    ctx.innerHTML = ctxText;
+  }
+
+  // Pre-select profile in ROI calculator if service matches
+  const profileMap = { abogados: 'abogado', gestoria: 'gestoria', inmobiliaria: 'inmobiliaria', seguros: 'seguros' };
+  if (service && profileMap[service]) {
+    const profileEl = document.getElementById('profile');
+    if (profileEl) {
+      profileEl.value = profileMap[service];
+      updateProfileDefaults();
+    }
+  }
+
+  // Pre-select service tab in zone finder
+  if (service) {
+    const svcBtn = document.querySelector(`.svc-btn[data-service="${service}"]`);
+    if (svcBtn) {
+      document.querySelectorAll('.svc-btn').forEach(b => b.classList.remove('active'));
+      svcBtn.classList.add('active');
+      currentService = service;
+    }
+  }
+
+  // Try to match city in dropdown by text
+  if (city) {
+    const sel = document.getElementById('citySelect');
+    if (sel) {
+      const cityLower = city.toLowerCase().trim();
+      let matched = false;
+      for (const opt of sel.options) {
+        if (opt.value && opt.text.toLowerCase().includes(cityLower)) {
+          sel.value = opt.value;
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) {
+        // No exact match — select "Otra"
+        for (const opt of sel.options) {
+          if (opt.value === 'otra') {
+            sel.value = 'otra';
+            matched = true;
+            break;
+          }
+        }
+      }
+      if (matched) updateZone();
+    }
+  }
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  calc();
+  loadSessionFromUrl();
+});
+</script>
+
+</body>
+</html>

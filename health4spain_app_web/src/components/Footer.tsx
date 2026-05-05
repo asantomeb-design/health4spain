@@ -49,6 +49,7 @@ export default async function Footer({ locale = 'es' }: FooterProps) {
     { href: `/${locale}/${r.about}`, label: t.footer.aboutUs },
     { href: `/${locale}/${r.blog}`, label: t.nav.blog },
     { href: `/${locale}/${r.contact}`, label: t.nav.contact },
+    { href: `/es/partners`, label: t.footer.forPartners },
   ];
 
   const legal = [

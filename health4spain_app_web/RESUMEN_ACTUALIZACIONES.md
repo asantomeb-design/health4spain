@@ -44,6 +44,10 @@
 - **Formularios**: validación de urgencia en `LandingFormEmbed`; slugs unificados en los 5 idiomas.
 - **Documentación**: `.env.example`, README, ESTADO_PROYECTO, índices y este archivo actualizados.
 
+### Decisión GHL — cuenta única (abr. 2026)
+
+Tras valorar **dos subcuentas** GHL, el acuerdo con el cliente es **centralizar todos los leads en una sola location**; la agencia filtra seguros de salud y reparte el resto. El código ya usa **un solo webhook** (`GHL_INCOMING_WEBHOOK_SALUD` recibe todos los envíos). Texto completo: **`README.md`** (sección CRM GHL: decisión definitiva + `tipo_ruta` / `servicio`). Referencias alineadas: `CONFIGURACION_VERCEL.md`, `ESTADO_PROYECTO.md`, `INDICE_DOCUMENTACION.md`, `docs/MODELO_PARTNERS_LEADS.md`, `docs/HISTORIAL.md`.
+
 ---
 
 ## 🆕 Logo unificado — 28 Febrero 2026

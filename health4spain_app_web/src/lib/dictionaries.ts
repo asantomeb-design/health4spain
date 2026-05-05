@@ -97,6 +97,7 @@ const es = {
     rights: 'Todos los derechos reservados.',
     copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.',
     madeIn: 'Hecho con ❤️ en España',
+    forPartners: 'Hazte partner',
   },
   stickyCta: {
     text: 'Solicitar información gratuita',
@@ -565,6 +566,7 @@ const en: typeof es = {
     rights: 'All rights reserved.',
     copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.',
     madeIn: 'Made with ❤️ in Spain',
+    forPartners: 'Become a partner',
   },
   stickyCta: {
     text: 'Request free information',
@@ -965,7 +967,7 @@ const fr: typeof es = {
   },
   services: { insurance: 'Assurance Santé', insuranceDesc: 'Polices obligatoires pour visas et permis de séjour', lawyers: 'Avocats', lawyersDesc: 'Famille, civil, travail, immigration et plus', realEstate: 'Immobilier', realEstateDesc: 'Agents spécialisés pour les étrangers', admin: 'Services Administratifs', adminDesc: 'Enregistrement et gestion administrative' },
   audiences: { retirees: 'Retraités', retireesDesc: 'Retraite sur la Costa Blanca/Sol. Visa non lucratif, assurance maladie.', workers: 'Travailleurs', workersDesc: 'Emploi dans l\'agro/industrie. Permis de travail et regroupement familial.', investors: 'Investisseurs', investorsDesc: 'Golden Visa. Investissement immobilier dans des zones premium.', students: 'Étudiants', studentsDesc: 'Visa étudiant. Validation de diplômes.' },
-  footer: { description: 'Votre pont vers les services essentiels pour votre vie en Espagne. Nous connectons les personnes avec des professionnels vérifiés : assurances, avocats, immobilier et services administratifs.', services: 'Services', mainDestinations: 'Destinations Principales', viewAllDestinations: 'Voir toutes les destinations', company: 'Entreprise', aboutUs: 'À propos', legal: 'Légal', privacy: 'Confidentialité', terms: 'Conditions', cookies: 'Cookies', followUs: 'Suivez-nous', rights: 'Tous droits réservés.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Fait avec ❤️ en Espagne' },
+  footer: { description: 'Votre pont vers les services essentiels pour votre vie en Espagne. Nous connectons les personnes avec des professionnels vérifiés : assurances, avocats, immobilier et services administratifs.', services: 'Services', mainDestinations: 'Destinations Principales', viewAllDestinations: 'Voir toutes les destinations', company: 'Entreprise', aboutUs: 'À propos', legal: 'Légal', privacy: 'Confidentialité', terms: 'Conditions', cookies: 'Cookies', followUs: 'Suivez-nous', rights: 'Tous droits réservés.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Fait avec ❤️ en Espagne', forPartners: 'Devenir partenaire' },
   stickyCta: { text: 'Demander des informations gratuites', subtext: 'Sans engagement · Réponse en 24h' },
   contact: {
     metaTitle: 'Contact | Health4Spain', metaDesc: 'Contactez Health4Spain.',
@@ -1141,7 +1143,7 @@ const de: typeof es = {
   },
   services: { insurance: 'Krankenversicherung', insuranceDesc: 'Pflichtversicherungen für Visa und Aufenthaltsgenehmigungen', lawyers: 'Anwälte', lawyersDesc: 'Familien-, Zivil-, Arbeits- und Ausländerrecht', realEstate: 'Immobilien', realEstateDesc: 'Auf Ausländer spezialisierte Makler', admin: 'Verwaltungsdienste', adminDesc: 'Anmeldung und Verwaltung' },
   audiences: { retirees: 'Rentner', retireesDesc: 'Ruhestand an der Costa Blanca/Sol. Nicht-lukratives Visum, Krankenversicherung.', workers: 'Arbeitnehmer', workersDesc: 'Beschäftigung in der Landwirtschaft/Industrie. Arbeitserlaubnis und Familienzusammenführung.', investors: 'Investoren', investorsDesc: 'Golden Visa. Immobilieninvestition in Premium-Gebieten.', students: 'Studenten', studentsDesc: 'Studentenvisum. Anerkennung von Abschlüssen.' },
-  footer: { description: 'Ihre Brücke zu wesentlichen Dienstleistungen für Ihr Leben in Spanien.', services: 'Dienstleistungen', mainDestinations: 'Hauptreiseziele', viewAllDestinations: 'Alle Reiseziele anzeigen', company: 'Unternehmen', aboutUs: 'Über uns', legal: 'Rechtliches', privacy: 'Datenschutz', terms: 'AGB', cookies: 'Cookies', followUs: 'Folgen Sie uns', rights: 'Alle Rechte vorbehalten.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Mit ❤️ in Spanien gemacht' },
+  footer: { description: 'Ihre Brücke zu wesentlichen Dienstleistungen für Ihr Leben in Spanien.', services: 'Dienstleistungen', mainDestinations: 'Hauptreiseziele', viewAllDestinations: 'Alle Reiseziele anzeigen', company: 'Unternehmen', aboutUs: 'Über uns', legal: 'Rechtliches', privacy: 'Datenschutz', terms: 'AGB', cookies: 'Cookies', followUs: 'Folgen Sie uns', rights: 'Alle Rechte vorbehalten.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Mit ❤️ in Spanien gemacht', forPartners: 'Partner werden' },
   stickyCta: { text: 'Kostenlose Informationen anfordern', subtext: 'Ohne Verpflichtung · Antwort in 24h' },
   contact: {
     metaTitle: 'Kontakt | Health4Spain', metaDesc: 'Kontaktieren Sie Health4Spain.',
@@ -1317,7 +1319,7 @@ const pt: typeof es = {
   },
   services: { insurance: 'Seguro de Saúde', insuranceDesc: 'Apólices obrigatórias para vistos e autorizações de residência', lawyers: 'Advogados', lawyersDesc: 'Família, civil, trabalho, imigração e mais', realEstate: 'Imobiliárias', realEstateDesc: 'Agentes especializados em estrangeiros', admin: 'Assessorias', adminDesc: 'Registo e gestão administrativa' },
   audiences: { retirees: 'Reformados', retireesDesc: 'Reforma na Costa Blanca/Sol. Visto não lucrativo, seguro de saúde.', workers: 'Trabalhadores', workersDesc: 'Emprego na agro/indústria. Autorização de trabalho e reagrupamento familiar.', investors: 'Investidores', investorsDesc: 'Golden Visa. Investimento imobiliário em zonas premium.', students: 'Estudantes', studentsDesc: 'Visto de estudante. Validação de diplomas.' },
-  footer: { description: 'A sua ponte para os serviços essenciais para a sua vida em Espanha.', services: 'Serviços', mainDestinations: 'Destinos Principais', viewAllDestinations: 'Ver todos os destinos', company: 'Empresa', aboutUs: 'Sobre Nós', legal: 'Legal', privacy: 'Privacidade', terms: 'Termos', cookies: 'Cookies', followUs: 'Siga-nos', rights: 'Todos os direitos reservados.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Feito com ❤️ em Espanha' },
+  footer: { description: 'A sua ponte para os serviços essenciais para a sua vida em Espanha.', services: 'Serviços', mainDestinations: 'Destinos Principais', viewAllDestinations: 'Ver todos os destinos', company: 'Empresa', aboutUs: 'Sobre Nós', legal: 'Legal', privacy: 'Privacidade', terms: 'Termos', cookies: 'Cookies', followUs: 'Siga-nos', rights: 'Todos os direitos reservados.', copyrightLine: '©️ {year} Health4Spain — By COASEMED S.L.', madeIn: 'Feito com ❤️ em Espanha', forPartners: 'Torne-se parceiro' },
   stickyCta: { text: 'Solicitar informação gratuita', subtext: 'Sem compromisso · Resposta em 24h' },
   contact: {
     metaTitle: 'Contacto | Health4Spain', metaDesc: 'Contacte a Health4Spain.',

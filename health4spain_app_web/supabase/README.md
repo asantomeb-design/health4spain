@@ -1,6 +1,6 @@
 # Configuración de Supabase para Health4Spain
 
-**Última actualización:** 9 abril 2026
+**Última actualización:** 5 mayo 2026
 
 ---
 
@@ -32,8 +32,10 @@ En **SQL Editor**, ejecutar en orden:
 | 12 | `12-chat-messages.sql` | Tabla `chat_messages` (historial conversaciones + ratings) |
 | 13 | `13-landing-visa-no-lucrativa.sql` | Landings visa no lucrativa ES+EN (2 madre + 38 ciudad) |
 | 14 | `14-landing-visa-no-lucrativa-de-fr-pt.sql` | Landings visa no lucrativa DE+FR+PT (3 madre + 57 ciudad) |
-| 15 | `rls-policies.sql` | Row Level Security |
-| 16 | `storage-policies.sql` | Políticas Storage |
+| 15 | `15-ai-blog-config.sql` | Configuración del asistente IA del blog (modelos, prompts, glosarios) |
+| 16 | `16-partner-leads.sql` | **Captación de partners B2B (Fase 1)**: tabla `partner_leads` + vista `admin_partner_leads_overview`. Doc: [`docs/PARTNERS_FASE1_CAPTACION.md`](../docs/PARTNERS_FASE1_CAPTACION.md) |
+| 17 | `rls-policies.sql` | Row Level Security |
+| 18 | `storage-policies.sql` | Políticas Storage |
 
 ## 3. Tablas Principales
 
@@ -50,6 +52,7 @@ En **SQL Editor**, ejecutar en orden:
 | `ciudades_catalogo_traducciones` | Nombres ciudades traducidos | 5 idiomas |
 | `chatbot_config` | Configuración Chat IA (enabled, modelo, prompts, tablas conocimiento) | 1 fila |
 | `chat_messages` | Historial conversaciones Mar-IA + valoración (correcta/mejorable/errónea) | Variable |
+| `partner_leads` | Captación de partners B2B (Fase 1): formulario + cualificación + token UUID con TTL 7d + selección de contrato. RLS deny all anon/authenticated; solo `service_role` vía API. Detalle: [`docs/PARTNERS_FASE1_CAPTACION.md`](../docs/PARTNERS_FASE1_CAPTACION.md). | - |
 
 ### ciudades_contenido (22 campos)
 
@@ -127,3 +130,7 @@ NEXT_PUBLIC_ADMIN_EMAILS=tu-email@gmail.com
 ### Error con columnas JSONB
 - Verificar que `09-expand-ciudades-contenido.sql` se ejecutó
 - Verificar que `10-expand-text-fields.sql` se ejecutó
+
+### `partner_leads` no acepta inserts desde el navegador
+- Es **intencional**: la RLS está configurada como `deny all` para roles `anon` y `authenticated`. Toda lectura/escritura debe pasar por las API routes server-side (`/api/partners/*`), que usan `service_role`.
+- Si necesitas insertar manualmente para pruebas, hazlo desde el SQL Editor (que también usa `service_role`) o vía `POST /api/partners/leads`.

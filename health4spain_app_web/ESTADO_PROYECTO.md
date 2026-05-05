@@ -1,15 +1,17 @@
 # 📊 Estado del Proyecto Health4Spain
 
-**Fecha de última actualización:** 9 de abril de 2026
+**Fecha de última actualización:** 5 de mayo de 2026
 
 ---
 
-## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO + GHL/LEADS + PRODUCTION-READY
+## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO + GHL/LEADS + PARTNERS FASE 1 + PRODUCTION-READY
 
 ### 🎯 Hitos Alcanzados
 
-- ✅ **GoHighLevel integrado** (API upsert + webhook único `GHL_INCOMING_WEBHOOK_SALUD`): valores legibles en **español** en CRM aunque el lead venga de formulario EN/FR/DE/PT (`src/lib/ghl-spanish-labels.ts`, campos `*_es` en webhook y custom fields API).
+- ✅ **Partners Fase 1 — Captación B2B** (mayo 2026): funnel completo de captación de partners pagadores, end-to-end. Landing pública `/es/partners` (Acceso 1) sin precios + formulario; cualificación humana en `/administrator/partners` con generación de **magic link** UUID (TTL 7 días) que se copia al portapapeles; panel privado `/es/partners/acceso?token=...` (Acceso 2) con calculadora ROI interactiva, selector multi-vertical con descuento progresivo y CTA «Solicitar contrato Founding»; tabla `partner_leads` (`supabase/16-partner-leads.sql`), 4 endpoints `/api/partners/*` y lógica centralizada en `src/lib/partners.ts` (matriz Tier × Plan, 19 ciudades→tier, Founding 30%×6m, ROI). Decisión de producto: 19 ciudades estratégicas + plazas compartidas (exclusividad solo en plan LIDERA, por trayectoria). Pagos/firmas manuales en v0; Stripe/Signaturit/Calendly diferidos. Detalle: **`docs/PARTNERS_FASE1_CAPTACION.md`**.
+- ✅ **GoHighLevel integrado** (API upsert + webhook único `GHL_INCOMING_WEBHOOK_SALUD`): valores legibles en **español** en CRM aunque el lead venga de formulario EN/FR/DE/PT (`src/lib/ghl-spanish-labels.ts`, campos `*_es` en webhook y custom fields API). **Una sola location GHL** acordada con el cliente; el JSON incluye `servicio` y `tipo_ruta` (`salud` / `otros`) para filtros y workflows. Fuente de verdad: **`README.md` → «CRM GoHighLevel (GHL) y leads»** (decisión de producto y nombre histórico de la variable).
 - ✅ **Panel admin** `/administrator/leads`: listado y eliminación de leads.
+- ✅ **Panel admin** `/administrator/partners`: listado paginado con filtros (stage, servicio, ciudad), modal de detalle con cualificar A/B/C, rechazar, regenerar token, cambio manual de stage.
 - ✅ **5 idiomas completos** (ES, EN, FR, DE, PT) con páginas idénticas
 - ✅ **748+ páginas estáticas** generadas en build (tras landings visa no lucrativa en BD)
 - ✅ **19 ciudades con contenido exhaustivo** basado en guía de migración (14 secciones)
@@ -136,6 +138,7 @@
 | `leads` | Variable | - |
 | `chatbot_config` | 1 | Configuración Chat IA (singleton) |
 | `chat_messages` | Variable | Historial conversaciones + ratings |
+| `partner_leads` | Variable | Captación de partners B2B: formulario + cualificación + token + selección contrato |
 
 ### Migraciones SQL Ejecutadas
 
@@ -150,6 +153,8 @@
 9. `12-chat-messages.sql` - Tabla historial conversaciones
 10. `13-landing-visa-no-lucrativa.sql` - Landings visa no lucrativa ES+EN
 11. `14-landing-visa-no-lucrativa-de-fr-pt.sql` - Landings visa no lucrativa DE+FR+PT
+12. `15-ai-blog-config.sql` - Configuración del asistente IA del blog
+13. `16-partner-leads.sql` - Captación de partners B2B (Fase 1: formulario, cualificación, magic link, selección de contrato)
 
 ---
 
@@ -208,8 +213,23 @@ npm run check-landings
 - [ ] Google Analytics 4
 - [ ] Google Search Console + sitemap submission
 - [ ] Testing cross-browser
-- [ ] Onboarding primeros partners
-- [ ] Dashboard partners
+- [ ] Onboarding primeros 10 partners (Founding) — captura via `/es/partners`, cualificación manual, firma offline
+- [ ] Dashboard del partner activo post-firma (`MODELO_PARTNERS_LEADS.md` v2)
+- [ ] Integración Calendly en Acceso 2 (agendado de llamada de cualificación) — high-impact, low-effort
+- [ ] Stripe + GoCardless para suscripciones partners (cuando haya >30 partners)
+- [ ] Signaturit para firma digital (cuando volumen ≥ 20 firmas/mes)
+- [ ] Email/WhatsApp automatizado al generar token de Acceso 2
+
+### Completado Recientemente (May 2026 — Partners Fase 1)
+- ✅ **Tabla `partner_leads`** (`supabase/16-partner-leads.sql`): 8 estados de funnel, token UUID con TTL 7d, RLS estricto.
+- ✅ **Lógica de negocio** centralizada en `src/lib/partners.ts`: matriz Tier × Plan, 19 ciudades→tier, multi-vertical (cascada 0/10/30/40 +5pp Founding), zonas adicionales (50%, desde ESCALA), Founding (30% × 6 meses, 10 plazas), `computeRoi()`.
+- ✅ **APIs**: `POST/GET /api/partners/leads`, `POST /api/partners/qualify` (qualify/reject/regenerate_token/set_stage), `GET /api/partners/access/[token]`, `POST /api/partners/contract-request`.
+- ✅ **Acceso 1 público**: `/es/partners` (landing con planes blureados + formulario) + `/es/partners/gracias` (confirmación honesta).
+- ✅ **Acceso 2 privado**: `/es/partners/acceso?token=...` con calculadora ROI interactiva, selector multi-vertical reordenable, total mensual en vivo, CTA Founding; `/es/partners/acceso/contrato` para confirmación.
+- ✅ **Admin**: `/administrator/partners` (listado + filtros + modal con acciones one-click) + entrada en sidebar.
+- ✅ **i18n**: clave `partners` en `routes.ts` (5 idiomas reservados), `t.footer.forPartners` traducido en los 5 idiomas, enlace «Hazte partner» en footer.
+- ✅ **Decisiones de producto cerradas**: 19 ciudades estratégicas (no más sin pago), plazas compartidas (exclusividad solo en LIDERA por trayectoria), v0 100% manual (firma + pago + agendado).
+- ✅ **Build limpio**: 708 páginas estáticas, 0 errores. Fixes preexistentes corregidos: `images.generate` size literal y `setStep` en `BlogAIAssistant`.
 
 ### Completado Recientemente (Abr 2026 — SEO)
 - ✅ **Landings visa no lucrativa**: 100 filas en `landing_pages` (5 madre + 95 ciudad; SQL `13-landing-visa-no-lucrativa.sql` y `14-landing-visa-no-lucrativa-de-fr-pt.sql`)
@@ -222,7 +242,7 @@ npm run check-landings
 - ✅ **`landing_pages`**: ~176+ filas (76 originales + 100 visa no lucrativa)
 
 ### Completado Recientemente (Abr 2026)
-- ✅ Integración CRM GoHighLevel (variables en `.env.example`; texto ES en API + webhook)
+- ✅ Integración CRM GoHighLevel (variables en `.env.example`; texto ES en API + webhook único; decisión **una location** — `README.md` § CRM GHL)
 - ✅ Validación y flujo de leads alineados (p. ej. urgencia en `LandingFormEmbed`)
 
 ### Completado Recientemente (Feb 2026)
@@ -235,6 +255,6 @@ npm run check-landings
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PRODUCTION-READY  
-**Última actualización**: 9 de abril de 2026  
-**Versión**: 3.2.0
+**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PARTNERS FASE 1 + PRODUCTION-READY  
+**Última actualización**: 5 de mayo de 2026  
+**Versión**: 3.3.0

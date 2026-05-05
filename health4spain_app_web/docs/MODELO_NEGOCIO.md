@@ -1,7 +1,20 @@
 # 💼 Health4Spain - Modelo de Negocio y Partners
 
 > **Documento Técnico del Modelo de Negocio**  
-> Última actualización: abril de 2026
+> Última actualización: mayo de 2026
+
+---
+
+## 🗺️ Mapa de la documentación
+
+Este doc describe el **modelo conceptual y operativo** del negocio. La implementación se reparte en dos fases con docs independientes:
+
+| Fase | Qué cubre | Doc | Estado |
+|------|-----------|-----|--------|
+| **Fase 1 · Captación** | Atraer al partner, cualificarlo, conseguir que firme. Acceso 1 público + Acceso 2 privado por magic link + admin de cualificación + matriz Tier × Plan + Founding (10 plazas). | [`PARTNERS_FASE1_CAPTACION.md`](./PARTNERS_FASE1_CAPTACION.md) | ✅ Operativo (mayo 2026) |
+| **Fase 2 · Operativa post-firma** | Asignación de leads al partner, panel del partner activo, facturación, disputas, KPIs. | [`MODELO_PARTNERS_LEADS.md`](./MODELO_PARTNERS_LEADS.md) | 📖 Diseño (target / v2) |
+
+Lo que sigue en este documento es la base conceptual común a ambas fases.
 
 ---
 
@@ -178,4 +191,19 @@ NUEVO → CONTACTADO_H4S → ASIGNADO → ENVIADO → CONTACTADO/CONVERTIDO
 
 ---
 
-*Este documento define el modelo operativo de Health4Spain.*
+## 💸 Estructura de monetización
+
+| Línea | Cuándo | Detalle |
+|-------|--------|---------|
+| **Suscripción de partner** (planes ACTIVA / CRECE / ESCALA / LIDERA) | Tras firma | Cuota mensual fija según Tier × Plan. Detalle: [`PARTNERS_FASE1_CAPTACION.md` §3.1](./PARTNERS_FASE1_CAPTACION.md#31-tarifas-tier--plan-mes). |
+| **Lead extra (CPL)** | Por encima de los leads incluidos en el plan | 35€/lead (ACTIVA) → 0€ (LIDERA, ilimitado). |
+| **Multi-vertical** | Partner que opera 2-4 verticales en su zona | Descuento progresivo 0/10/30/40 (+5pp Founding). |
+| **Zonas adicionales** | Desde plan ESCALA | 50 % del precio base de la zona principal. |
+| **Comisión sobre venta** | Diferida (v2+) | Acuerdos puntuales por servicio (3-10 %). |
+| **Destacados premium / micro-sites** | Diferidos (v2+) | Posicionamiento extra dentro del directorio. |
+
+> Programa **Founding** (primeras 10 plazas): 30 % de descuento durante 6 meses + bloqueo de precio vitalicio + setup gratis. Solo se firma 1 vez globalmente. Detalle: [`PARTNERS_FASE1_CAPTACION.md` §3.5](./PARTNERS_FASE1_CAPTACION.md#35-founding-partners-10-plazas-globales).
+
+---
+
+*Este documento define el modelo operativo de Health4Spain. Para el detalle de la implementación actual de captación de partners, ver [`PARTNERS_FASE1_CAPTACION.md`](./PARTNERS_FASE1_CAPTACION.md).*

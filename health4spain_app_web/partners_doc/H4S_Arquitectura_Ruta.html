@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H4S · Arquitectura y ruta · Diagrama de bloques</title>
+<style>
+  :root {
+    --n: #18253a; --n2: #0e3260; --n3: #1d4e89;
+    --c: #29abe2; --c2: #1a8bbf; --clt: #e8f6fc;
+    --g: #0a7c4e; --glt: #e6f7f0;
+    --o: #e8943a; --olt: #fff3e0;
+    --p: #7c3aed; --plt: #ede9fe;
+    --r: #c0392b; --rlt: #fdecea;
+    --sl: #4a6080; --sl2: #8fa5bf;
+    --bd: #dce7f1; --bg: #f5f7fb; --wh: #fff;
+    --f: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--f); background: var(--bg); color: var(--n); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  header.head {
+    background: linear-gradient(155deg, var(--n) 0%, var(--n2) 60%, var(--n3) 100%);
+    color: var(--wh); padding: 70px 24px 60px; position: relative; overflow: hidden;
+  }
+  header.head::before { content:''; position:absolute; top:-100px; right:-80px; width:520px; height:520px;
+    background: radial-gradient(circle, rgba(41,171,226,0.18) 0%, transparent 60%); }
+  .head-inner { position: relative; max-width: 1280px; margin: 0 auto; }
+  .tag { display: inline-block; background: rgba(41,171,226,0.18); color: var(--c);
+    padding: 6px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 18px; border: 1px solid rgba(41,171,226,0.3); }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; letter-spacing: -1px; margin-bottom: 12px; }
+  h1 em { color: var(--c); font-style: normal; }
+  .head-sub { font-size: 1.05rem; color: rgba(255,255,255,0.78); max-width: 800px; }
+
+  section { padding: 60px 0; }
+  section.alt { background: var(--wh); }
+  .sec-title { font-size: 1.6rem; font-weight: 900; color: var(--n); margin-bottom: 10px; letter-spacing: -0.3px; }
+  .sec-title .num { color: var(--c); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; margin-right: 14px; text-transform: uppercase; }
+  .sec-sub { color: var(--sl); margin-bottom: 32px; max-width: 800px; font-size: 1rem; }
+
+  /* === SYSTEMS GRID === */
+  .systems-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 30px 0; }
+  .sys-card { padding: 22px 20px; background: var(--wh); border: 1.5px solid var(--bd); border-radius: 12px;
+    border-top: 4px solid var(--c); transition: transform 0.2s, box-shadow 0.2s; }
+  .sys-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(41,171,226,0.10); }
+  .sys-card.web { border-top-color: var(--c); }
+  .sys-card.crm { border-top-color: var(--p); }
+  .sys-card.firma { border-top-color: var(--g); }
+  .sys-card.pago { border-top-color: var(--o); }
+  .sys-card.cal { border-top-color: var(--c2); }
+  .sys-card.slack { border-top-color: #4a154b; }
+  .sys-icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .sys-name { font-size: 1.05rem; font-weight: 900; color: var(--n); margin-bottom: 4px; letter-spacing: -0.2px; }
+  .sys-tag { font-size: 0.72rem; color: var(--sl); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; margin-bottom: 12px; }
+  .sys-card ul { list-style: none; padding: 0; margin: 0; }
+  .sys-card li { font-size: 0.82rem; color: var(--n); padding: 4px 0 4px 16px; position: relative; line-height: 1.5; }
+  .sys-card li::before { content: '✓'; position: absolute; left: 0; color: var(--g); font-weight: 800; }
+  .sys-card li.no::before { content: '✗'; color: var(--r); }
+
+  /* === BLOCK DIAGRAM === */
+  .diagram-frame { margin: 40px 0; padding: 30px 20px; background: var(--wh);
+    border: 1.5px solid var(--bd); border-radius: 14px; overflow-x: auto; }
+
+  .row { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin: 14px 0; }
+  .block {
+    padding: 16px 20px; min-width: 180px; border-radius: 10px; background: var(--wh);
+    border: 2px solid; text-align: center; position: relative; transition: transform 0.2s;
+  }
+  .block:hover { transform: translateY(-2px); }
+  .block.web { border-color: var(--c); background: var(--clt); }
+  .block.crm { border-color: var(--p); background: var(--plt); }
+  .block.firma { border-color: var(--g); background: var(--glt); }
+  .block.pago { border-color: var(--o); background: var(--olt); }
+  .block.cal { border-color: var(--c2); background: var(--clt); }
+  .block.action { background: var(--n); color: var(--wh); border-color: var(--n); }
+  .block-tag { font-size: 0.65rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 4px; opacity: 0.7; }
+  .block-title { font-size: 0.95rem; font-weight: 800; line-height: 1.3; }
+  .block-data { font-size: 0.72rem; color: var(--sl); margin-top: 6px; font-style: italic; }
+  .block.action .block-data { color: rgba(255,255,255,0.7); }
+
+  .arrow-down { font-size: 1.5rem; color: var(--c); font-weight: 900; text-align: center; margin: 6px 0; }
+  .arrow-right { font-size: 1.4rem; color: var(--c); font-weight: 900; align-self: center; }
+
+  .step-num {
+    position: absolute; top: -10px; left: -10px; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--c); color: var(--wh); display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 900; box-shadow: 0 2px 6px rgba(41,171,226,0.4);
+  }
+
+  /* === DATA OWNERSHIP TABLE === */
+  .data-table { width: 100%; border-collapse: collapse; background: var(--wh);
+    border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin: 30px 0; }
+  .data-table th { background: var(--n); color: var(--wh); padding: 14px 16px;
+    text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; }
+  .data-table td { padding: 12px 16px; border-bottom: 1px solid var(--bd); font-size: 0.92rem; }
+  .data-table tr:nth-child(even) td { background: var(--bg); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table .sys-pill {
+    display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase;
+  }
+  .pill-web { background: var(--clt); color: var(--c2); }
+  .pill-ghl { background: var(--plt); color: var(--p); }
+  .pill-firma { background: var(--glt); color: var(--g); }
+  .pill-pago { background: var(--olt); color: var(--o); }
+  .pill-cal { background: var(--clt); color: var(--c2); }
+  .pill-slack { background: #f3e6f3; color: #4a154b; }
+
+  /* === SEQUENCE BLOCKS === */
+  .seq { margin: 30px 0; }
+  .seq-step { display: grid; grid-template-columns: 60px 1fr; gap: 16px;
+    margin-bottom: 18px; padding: 18px 20px 18px 18px; background: var(--wh);
+    border: 1.5px solid var(--bd); border-left: 4px solid var(--c); border-radius: 10px; }
+  .seq-num { width: 44px; height: 44px; border-radius: 50%; background: var(--c); color: var(--wh);
+    display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgba(41,171,226,0.25); }
+  .seq-content h4 { font-size: 1.05rem; color: var(--n); font-weight: 800; margin-bottom: 4px; }
+  .seq-content .seq-meta { font-size: 0.78rem; color: var(--sl); margin-bottom: 8px;
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .seq-content p { font-size: 0.92rem; color: var(--n); line-height: 1.6; }
+  .seq-content .seq-data { margin-top: 8px; font-size: 0.78rem; color: var(--sl); font-style: italic;
+    padding-left: 12px; border-left: 2px solid var(--bd); }
+
+  /* Highlight Javi's question */
+  .javi-callout { padding: 26px 30px; background: linear-gradient(135deg, var(--olt) 0%, #fff 100%);
+    border: 2px solid var(--o); border-radius: 14px; margin: 30px 0; }
+  .javi-callout h3 { color: var(--n); margin-bottom: 10px; font-size: 1.15rem; font-weight: 800; }
+  .javi-callout h3::before { content: '💬 '; }
+  .javi-callout p { color: var(--n); font-size: 0.95rem; }
+  .javi-callout p strong { color: var(--g); }
+
+  /* Simplifications */
+  .simp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 30px 0; }
+  .simp { padding: 22px 24px; border-radius: 12px; background: var(--wh); border: 1.5px solid var(--bd); }
+  .simp.now { border-left: 4px solid var(--c); }
+  .simp.later { border-left: 4px solid var(--sl2); opacity: 0.85; }
+  .simp h4 { color: var(--n); margin-bottom: 8px; font-weight: 800; }
+  .simp p { color: var(--sl); font-size: 0.88rem; }
+
+  @media (max-width: 900px) {
+    .systems-grid { grid-template-columns: repeat(2, 1fr); }
+    .simp-grid { grid-template-columns: 1fr; }
+    .row { flex-direction: column; }
+    .arrow-right { transform: rotate(90deg); }
+  }
+  @media (max-width: 600px) {
+    .systems-grid { grid-template-columns: 1fr; }
+    section { padding: 40px 0; }
+    header.head { padding: 50px 20px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="head-inner">
+    <div class="tag">Documento técnico · Para Javi & Claudia</div>
+    <h1>Arquitectura y <em>ruta del partner</em></h1>
+    <p class="head-sub">Qué vive en cada sistema · cuál es la secuencia exacta de eventos · y cómo simplificar lo que parece complicado.</p>
+  </div>
+</header>
+
+<!-- ============== 01 · SISTEMAS ============== -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">01</span>Los 6 sistemas implicados</h2>
+    <p class="sec-sub">Cada sistema tiene UN rol concreto. La regla simple: <strong>ninguno hace lo del otro</strong>. Si un dato vive en un sitio, no se replica en otros sin justificación.</p>
+
+    <div class="systems-grid">
+      <div class="sys-card web">
+        <div class="sys-icon">🌐</div>
+        <div class="sys-tag">Web pública</div>
+        <div class="sys-name">Acceso 1 · Atracción</div>
+        <ul>
+          <li>Captura de leads (form)</li>
+          <li>Demo limitada visual</li>
+          <li>Mapa de zonas (sin precios)</li>
+          <li class="no">No persiste datos</li>
+          <li class="no">No tiene login</li>
+        </ul>
+      </div>
+
+      <div class="sys-card web">
+        <div class="sys-icon">🔓</div>
+        <div class="sys-tag">Web privada</div>
+        <div class="sys-name">Acceso 2 · Cualificada</div>
+        <ul>
+          <li>Calculadora ROI</li>
+          <li>Tarifas reales por zona</li>
+          <li>Selector multi-vertical</li>
+          <li>CTA "Solicitar contrato"</li>
+          <li class="no">No persiste datos</li>
+        </ul>
+      </div>
+
+      <div class="sys-card crm">
+        <div class="sys-icon">🧠</div>
+        <div class="sys-tag">CRM · cerebro</div>
+        <div class="sys-name">GoHighLevel</div>
+        <ul>
+          <li>Contactos y datos</li>
+          <li>Pipelines y stages</li>
+          <li>Bot Mar-IA WhatsApp</li>
+          <li>Workflows automatizados</li>
+          <li>Emails transaccionales</li>
+        </ul>
+      </div>
+
+      <div class="sys-card firma">
+        <div class="sys-icon">✍️</div>
+        <div class="sys-tag">Firma digital</div>
+        <div class="sys-name">Signaturit</div>
+        <ul>
+          <li>Contrato Marco</li>
+          <li>Anexo Founding</li>
+          <li>Mandato SEPA</li>
+          <li>Webhook al firmar</li>
+        </ul>
+      </div>
+
+      <div class="sys-card pago">
+        <div class="sys-icon">💳</div>
+        <div class="sys-tag">Pagos</div>
+        <div class="sys-name">Stripe + GoCardless</div>
+        <ul>
+          <li>Stripe · setup fee one-off</li>
+          <li>GoCardless · mandato SEPA B2B</li>
+          <li>Cobro recurrente día 15</li>
+          <li>Reintentos ante impago</li>
+        </ul>
+      </div>
+
+      <div class="sys-card cal">
+        <div class="sys-icon">📅</div>
+        <div class="sys-tag">Agenda</div>
+        <div class="sys-name">Calendly</div>
+        <ul>
+          <li>Slots de cualificación</li>
+          <li>Llamadas de 20 min</li>
+          <li>Webhook a GHL al agendar</li>
+          <li>Recordatorios automáticos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 02 · DIAGRAMA DE BLOQUES ============== -->
+<section class="alt">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">02</span>Diagrama de bloques · la ruta del partner</h2>
+    <p class="sec-sub">De la primera visita a la web hasta el primer lead operativo · 11 hitos · pasando por 6 sistemas. Cada bloque indica QUIÉN lo dispara y QUÉ DATO lo cruza.</p>
+
+    <div class="diagram-frame">
+
+      <div class="row"><div class="block web"><span class="step-num">1</span>
+        <div class="block-tag">Web pública</div>
+        <div class="block-title">Partner llega a Acceso 1</div>
+        <div class="block-data">URL: health4spain.com/partners</div>
+      </div></div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row"><div class="block web"><span class="step-num">2</span>
+        <div class="block-tag">Web pública · form submit</div>
+        <div class="block-title">Rellena formulario · 10 campos</div>
+        <div class="block-data">POST → webhook GHL · datos del lead</div>
+      </div></div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row">
+        <div class="block crm"><span class="step-num">3</span>
+          <div class="block-tag">GHL · workflow</div>
+          <div class="block-title">Crea contacto · pipeline</div>
+          <div class="block-data">Token UUID generado · Tag asignados</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="block crm">
+          <div class="block-tag">GHL · email</div>
+          <div class="block-title">E1 · Welcome</div>
+          <div class="block-data">Inmediato · al partner</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="block crm">
+          <div class="block-tag">GHL · WhatsApp</div>
+          <div class="block-title">Bot Mar-IA · M1</div>
+          <div class="block-data">30 seg post-form</div>
+        </div>
+      </div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row">
+        <div class="block cal"><span class="step-num">4</span>
+          <div class="block-tag">Calendly</div>
+          <div class="block-title">Partner agenda llamada</div>
+          <div class="block-data">Webhook → GHL pipeline avanza</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="block crm">
+          <div class="block-tag">GHL</div>
+          <div class="block-title">E3 · Pre-llamada (24h antes)</div>
+          <div class="block-data">Email + WhatsApp recordatorio</div>
+        </div>
+      </div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row"><div class="block action"><span class="step-num">5</span>
+        <div class="block-tag">Llamada 20 min · Closer</div>
+        <div class="block-title">Adolfo / Claudia hace cualificación</div>
+        <div class="block-data">Resultado: Tipo A (firma) / B (dudoso) / C (no)</div>
+      </div></div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row"><div class="block web"><span class="step-num">6</span>
+        <div class="block-tag">Web privada · Acceso 2</div>
+        <div class="block-title">Partner explora ROI · selecciona condiciones</div>
+        <div class="block-data">Plan + Tier + Verticales + Founding sí/no</div>
+      </div></div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row" style="background: var(--olt); padding: 20px; border-radius: 12px; border: 2px dashed var(--o);">
+        <div class="block web" style="background: #fff; border-color: var(--o);"><span class="step-num" style="background: var(--o);">7</span>
+          <div class="block-tag" style="color: var(--o);">Web · click "Solicitar contrato"</div>
+          <div class="block-title">Datos seleccionados → GHL</div>
+          <div class="block-data">⚠️ Punto clave para Javi</div>
+        </div>
+        <div class="arrow-right" style="color: var(--o);">→</div>
+        <div class="block crm">
+          <div class="block-tag">GHL · custom fields</div>
+          <div class="block-title">Setea: plan, tier, verticales, founding</div>
+          <div class="block-data">Pipeline avanza a "Esperando Firma"</div>
+        </div>
+      </div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row">
+        <div class="block firma"><span class="step-num">8</span>
+          <div class="block-tag">Signaturit</div>
+          <div class="block-title">Pack legal generado</div>
+          <div class="block-data">Contrato + Anexo + SEPA con datos del partner</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="block crm">
+          <div class="block-tag">GHL · email</div>
+          <div class="block-title">E4 · pack de firma</div>
+          <div class="block-data">URL Signaturit personalizada</div>
+        </div>
+      </div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row"><div class="block firma"><span class="step-num">9</span>
+        <div class="block-tag">Signaturit · firma del partner</div>
+        <div class="block-title">Contrato firmado digitalmente</div>
+        <div class="block-data">Webhook → GHL "documento firmado"</div>
+      </div></div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row">
+        <div class="block crm"><span class="step-num">10</span>
+          <div class="block-tag">GHL · workflow Onboarding</div>
+          <div class="block-title">Cambia pipeline + asigna AM</div>
+          <div class="block-data">Tag "partner-activo" + Slack notificación</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="block pago">
+          <div class="block-tag">GoCardless + Stripe</div>
+          <div class="block-title">Crea mandato SEPA + cobro setup fee</div>
+          <div class="block-data">SEPA recurrente día 15 cada mes</div>
+        </div>
+      </div>
+
+      <div class="arrow-down">↓</div>
+
+      <div class="row"><div class="block action"><span class="step-num">11</span>
+        <div class="block-tag">Setup técnico H4S · 14-21 días</div>
+        <div class="block-title">URL · panel · bot Mar-IA partner · Meta Ads</div>
+        <div class="block-data">Primer lead operativo entregado al partner</div>
+      </div></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============== 03 · RESPUESTA A JAVI ============== -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">03</span>Respuesta a la pregunta de Javi</h2>
+
+    <div class="javi-callout">
+      <h3>"¿Cuando se le da a Solicitar Contrato escribimos lo que hayan seleccionado en GHL, no? Para que os hagáis con el control."</h3>
+      <p><strong>Sí, exactamente eso.</strong> En el paso 7 del diagrama, cuando el partner hace click en "Solicitar contrato Founding" desde el panel privado (Acceso 2), los datos que ha configurado en su sesión se mandan automáticamente a GHL como webhook. Específicamente: vertical principal, verticales adicionales, ciudad, plan, tier, founding sí/no, idiomas que atiende, y cualquier nota que haya añadido.</p>
+      <p style="margin-top: 12px;">Eso significa que cuando el closer abre el contacto en GHL para preparar el pack legal de firma (paso 8), tiene <strong>toda la información que el partner ha decidido</strong> sin necesidad de pedírsela de nuevo. El control es de COASEMED · el partner solo ha "preparado el carrito".</p>
+      <p style="margin-top: 12px;">El pack legal de Signaturit se genera con esos datos auto-rellenados. Si algo no encaja (por ejemplo, el partner se equivocó al seleccionar tier porque su ciudad es B y él pensaba que era A), el closer corrige antes de enviar el pack.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 04 · DATA OWNERSHIP ============== -->
+<section class="alt">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">04</span>Qué dato vive en cada sitio</h2>
+    <p class="sec-sub">Mapa de propiedad de datos. La regla: cada dato tiene UN sistema dueño · los demás lo consumen vía webhook o API.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Dato</th><th>Sistema dueño</th><th>Quién más lo consume</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Datos del lead (nombre, email, teléfono, ciudad)</td><td><span class="sys-pill pill-ghl">GHL</span></td><td>Web Acceso 2 (lectura), Signaturit (lectura), Slack (notif)</td></tr>
+        <tr><td>Token de sesión Acceso 2</td><td><span class="sys-pill pill-ghl">GHL</span></td><td>Web Acceso 2 (validación)</td></tr>
+        <tr><td>Selección de plan / tier / verticales</td><td><span class="sys-pill pill-ghl">GHL</span></td><td>Signaturit (lectura para auto-rellenar contrato)</td></tr>
+        <tr><td>Estado del pipeline (cualificación / firma / setup)</td><td><span class="sys-pill pill-ghl">GHL</span></td><td>Slack (notif), dashboards</td></tr>
+        <tr><td>Cita agendada</td><td><span class="sys-pill pill-cal">Calendly</span></td><td>GHL (sincroniza vía webhook)</td></tr>
+        <tr><td>Conversaciones bot Mar-IA</td><td><span class="sys-pill pill-ghl">GHL</span></td><td>Closer (lectura para preparar llamada)</td></tr>
+        <tr><td>Documento firmado</td><td><span class="sys-pill pill-firma">Signaturit</span></td><td>GHL (estado del flag), partner (descarga)</td></tr>
+        <tr><td>Mandato SEPA</td><td><span class="sys-pill pill-pago">GoCardless</span></td><td>GHL (referencia ID)</td></tr>
+        <tr><td>Pago setup fee</td><td><span class="sys-pill pill-pago">Stripe</span></td><td>GHL (estado pagado/pendiente)</td></tr>
+        <tr><td>Cobros mensuales recurrentes</td><td><span class="sys-pill pill-pago">GoCardless</span></td><td>GHL (estado del cobro)</td></tr>
+        <tr><td>Lead cliente final entregado al partner</td><td><span class="sys-pill pill-ghl">GHL</span></td><td>Panel del Partner (post-firma)</td></tr>
+        <tr><td>Métricas operativas del partner</td><td><span class="sys-pill pill-ghl">GHL</span></td><td>Panel del Partner, dashboards</td></tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top: 24px; padding: 18px 22px; background: var(--clt); border-left: 4px solid var(--c); border-radius: 8px; font-size: 0.95rem;"><strong>Resumen para Javi:</strong> 80% de los datos viven en GHL. Las webs (Acceso 1 y 2) son <em>frontends sin persistencia</em>. Signaturit, Stripe, GoCardless y Calendly son <em>servicios externos especializados</em> · cada uno hace una cosa muy concreta y devuelve resultado a GHL vía webhook. El partner panel post-firma se construye lateralmente leyendo de GHL.</p>
+  </div>
+</section>
+
+<!-- ============== 05 · SIMPLIFICACIONES ============== -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">05</span>Simplificaciones recomendadas</h2>
+    <p class="sec-sub">Lo que Javi tiene razón en simplificar · y lo que conviene mantener tal cual está.</p>
+
+    <h3 style="font-size: 1.1rem; color: var(--n); margin: 24px 0 16px; font-weight: 800;">✂️ Lo que SÍ simplificamos en v1</h3>
+    <div class="simp-grid">
+      <div class="simp now">
+        <h4>Bot Mar-IA · idiomas en v1</h4>
+        <p>Arrancar SOLO con español + inglés. Alemán, francés y holandés se añaden cuando lleguen partners que los necesiten · no antes. Reduce traducciones y testing inicial.</p>
+      </div>
+      <div class="simp now">
+        <h4>Dashboards · solo el del Founder</h4>
+        <p>En v1 solo el dashboard del CEO. Los de Closer y AM se construyen cuando haya 5+ partners activos · con datos reales para diseñar bien los widgets.</p>
+      </div>
+      <div class="simp now">
+        <h4>Pipelines · empezar con 1, no 2</h4>
+        <p>Pipeline 1 (cualificación) sin Pipeline 2 separado. Cuando el partner firma, simplemente cambia stage dentro del mismo pipeline a "Activo". Cuando haya 10 partners firmados se separa.</p>
+      </div>
+      <div class="simp now">
+        <h4>Workflows · arrancar con 4 de los 8</h4>
+        <p>Solo Welcome (E1), Pre-llamada (E3), Tipo A (E4) y Onboarding (E7). Recordatorios y nurturing se añaden semana 2-3 cuando ya haya tracking del primer flujo.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size: 1.1rem; color: var(--n); margin: 32px 0 16px; font-weight: 800;">⏳ Lo que NO simplificamos · son críticos desde día 1</h3>
+    <div class="simp-grid">
+      <div class="simp later">
+        <h4>Custom Fields · todos los 22</h4>
+        <p>Si dejamos campos para más adelante, los workflows fallan. Es trabajo único de Día 1 que blinda todo lo posterior.</p>
+      </div>
+      <div class="simp later">
+        <h4>Token de sesión Acceso 2</h4>
+        <p>Sin token, el partner accede al panel privado sin validación. Esto compromete la seguridad y la experiencia. Es no negociable.</p>
+      </div>
+      <div class="simp later">
+        <h4>Webhook GHL ← Acceso 2 (paso 7)</h4>
+        <p>El "Solicitar contrato" tiene que escribir en GHL para que el closer trabaje con datos reales. Sin esto el modelo no opera.</p>
+      </div>
+      <div class="simp later">
+        <h4>Integración Signaturit ↔ GHL</h4>
+        <p>Webhook de "documento firmado" dispara el onboarding completo. Sin él, el equipo se entera por email del partner. Inviable a escala.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 06 · PRÓXIMOS PASOS ============== -->
+<section class="alt">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">06</span>Próximos pasos · acción concreta</h2>
+
+    <div class="seq">
+      <div class="seq-step">
+        <div class="seq-num">1</div>
+        <div class="seq-content">
+          <h4>Revisión conjunta de este diagrama</h4>
+          <div class="seq-meta">Adolfo + Javi + Claudia · 30 minutos</div>
+          <p>Sentarnos los tres con este documento. Cada uno valida que entiende su parte y plantea las dudas.</p>
+        </div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-num">2</div>
+        <div class="seq-content">
+          <h4>Javi confirma desarrollo del paso 7 (webhook Acceso 2 → GHL)</h4>
+          <div class="seq-meta">Javi · responsable técnico</div>
+          <p>Ese webhook es el corazón del flujo. Javi confirma viabilidad, plazo y especificación técnica del payload.</p>
+        </div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-num">3</div>
+        <div class="seq-content">
+          <h4>Claudia arranca el setup GHL simplificado</h4>
+          <div class="seq-meta">Claudia · v1 mínimo viable</div>
+          <p>Solo 4 workflows (Welcome, Pre-llamada, Tipo A, Onboarding) + bot Mar-IA en español/inglés + dashboard CEO. El resto se añade en sprints siguientes.</p>
+        </div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-num">4</div>
+        <div class="seq-content">
+          <h4>Dry-run end-to-end con un partner ficticio</h4>
+          <div class="seq-meta">Equipo completo · antes de pasar a producción</div>
+          <p>Crear contacto de prueba · que pase por toda la ruta del diagrama · validar que cada webhook dispara, cada email llega, cada pipeline avanza. Sin dry-run no abrimos a partners reales.</p>
+        </div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-num">5</div>
+        <div class="seq-content">
+          <h4>Producción · primeros 5 founding</h4>
+          <div class="seq-meta">Tras validar el dry-run</div>
+          <p>Cerrar las 5 plazas reservadas con el flujo completo activo. Documentar cada incidencia para mejorar v2.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

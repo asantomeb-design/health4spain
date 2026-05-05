@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Health4Spain · Red de Partners — Expatriados cualificados, sin esfuerzo comercial</title>
+<meta name="description" content="Únete a la red exclusiva de partners de Health4Spain. Captamos expatriados en España, los cualificamos por IA y te los entregamos con cita agendada. Un partner por ciudad y servicio.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --n:#18253a;--n2:#0e3260;--n3:#1d4e89;
+  --c:#29abe2;--c2:#1a8bbf;--clt:#e8f6fc;
+  --g:#0a7c4e;--glt:#e6f7f0;--gwa:#25d366;--twa:#128c7e;
+  --o:#e8943a;--olt:#fff3e0;
+  --p:#7c3aed;--plt:#ede9fe;
+  --amber:#f59e0b;--amberlt:#fef3c7;
+  --r:#c0392b;--rlt:#fdecea;
+  --sl:#4a6080;--sl2:#8fa5bf;
+  --bd:#dce7f1;--bg:#f5f7fb;--wh:#fff;
+  --f:'Plus Jakarta Sans',system-ui,sans-serif;
+  --fm:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--f);background:var(--bg);color:var(--n);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,.5)}60%{box-shadow:0 0 0 9px rgba(41,171,226,0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes slideLock{0%{transform:translateX(-4px)}50%{transform:translateX(4px)}100%{transform:translateX(0)}}
+
+.w{max-width:940px;margin:0 auto;padding:0 18px}
+@media(min-width:560px){.w{padding:0 28px}}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:30px;padding:4px 13px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.cc{background:rgba(41,171,226,.12);border:1px solid rgba(41,171,226,.28);color:var(--c2)}
+.cw{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.5)}
+.cg{background:var(--glt);border:1px solid #a9dfbf;color:var(--g)}
+
+/* ─── NAV ──────────────────────────────────────────── */
+.nav{background:rgba(24,37,58,.92);backdrop-filter:blur(8px);padding:11px 18px;position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:9px;cursor:pointer}
+.nav-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--c),var(--g));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.75rem;color:#fff}
+.nav-name{font-size:.88rem;font-weight:800;color:#fff;letter-spacing:-.2px}.nav-name b{color:var(--c)}
+.nav-cta{padding:7px 16px;background:var(--c);color:var(--n);font-weight:800;font-size:.77rem;border-radius:8px;text-decoration:none;transition:.15s}
+.nav-cta:hover{background:#3dbfee}
+
+/* ─── HERO ─────────────────────────────────────────── */
+.hero{background:linear-gradient(155deg,#18253a 0%,#0e3260 52%,#1d4e89 100%);position:relative;overflow:hidden;padding:56px 0 72px}
+.hero-mesh{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 82% 15%,rgba(41,171,226,.15),transparent),radial-gradient(ellipse 55% 45% at 8% 88%,rgba(10,124,78,.1),transparent)}
+.hero-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(41,171,226,.08) 1px,transparent 1px);background-size:32px 32px}
+.hi{position:relative;z-index:2;width:100%}
+.hero-ey{margin-bottom:18px;animation:fadeUp .6s .08s both}
+.hero-ey .chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--c);animation:pulse 2s infinite}
+h1.hh{font-size:clamp(1.85rem,6vw,3.1rem);font-weight:900;color:#fff;line-height:1.08;letter-spacing:-1.5px;margin-bottom:16px;animation:fadeUp .6s .15s both}
+h1.hh .c1{color:var(--c)}
+h1.hh .c2{color:var(--gwa)}
+.hp{font-size:clamp(.9rem,2.5vw,1.02rem);color:rgba(255,255,255,.55);max-width:520px;line-height:1.78;margin-bottom:32px;animation:fadeUp .6s .22s both}
+.hkpis{display:flex;gap:0;flex-wrap:wrap;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;animation:fadeUp .6s .3s both;width:fit-content}
+.kpi{padding:13px 18px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.kpi:last-child{border:none}
+.kpi-n{font-size:1.5rem;font-weight:900;color:var(--c);line-height:1}
+.kpi-l{font-size:.6rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
+.hero-ctas{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;animation:fadeUp .6s .38s both}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--c);color:var(--n);border-radius:10px;padding:12px 22px;font-weight:800;font-size:.9rem;text-decoration:none;transition:.15s;box-shadow:0 6px 20px rgba(41,171,226,.38)}
+.btn-primary:hover{background:#3dbfee;transform:translateY(-1px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:12px 22px;font-weight:700;font-size:.9rem;text-decoration:none;transition:.15s}
+.btn-ghost:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.35)}
+
+/* ─── POSICIONAMIENTO ──────────────────────────────── */
+.pos{background:var(--wh);padding:64px 0}
+.two{display:grid;gap:36px;align-items:start}
+@media(min-width:680px){.two{grid-template-columns:1fr 1fr;gap:48px}}
+.sec-lbl{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--c2);margin-bottom:10px}
+h2.sec-h{font-size:clamp(1.4rem,3.5vw,1.9rem);font-weight:900;letter-spacing:-.4px;line-height:1.15;margin-bottom:14px}
+.sec-p{font-size:.92rem;color:var(--sl);line-height:1.78;margin-bottom:12px}
+.quote-box{background:var(--clt);border-left:3px solid var(--c);border-radius:0 12px 12px 0;padding:13px 17px;font-size:.88rem;color:var(--n2);line-height:1.65;margin-top:18px;font-style:italic}
+.quote-box strong{font-style:normal;color:var(--c2)}
+.pillars{display:flex;flex-direction:column;gap:10px}
+.pill-row{display:flex;align-items:flex-start;gap:13px;padding:15px;border:1.5px solid var(--bd);border-radius:14px;transition:.18s;background:var(--wh)}
+.pill-row:hover{border-color:var(--c);box-shadow:0 5px 18px rgba(41,171,226,.08)}
+.pill-ico{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+.ico-c{background:var(--clt)} .ico-g{background:var(--glt)} .ico-o{background:var(--olt)}
+.pill-txt h3{font-size:.87rem;font-weight:700;margin-bottom:3px}
+.pill-txt p{font-size:.78rem;color:var(--sl);line-height:1.5}
+
+/* ─── TIPOS DE PARTNER ─────────────────────────────── */
+.types{background:var(--n);padding:60px 0}
+.types-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
+@media(min-width:620px){.types-g{grid-template-columns:repeat(4,1fr)}}
+.tc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:20px 14px;text-align:center;transition:.2s}
+.tc:hover{background:rgba(41,171,226,.08);border-color:rgba(41,171,226,.25);transform:translateY(-3px)}
+.tc-em{font-size:1.9rem;margin-bottom:9px;display:block}
+.tc-n{font-size:.86rem;font-weight:700;color:#fff;margin-bottom:4px}
+.tc-d{font-size:.72rem;color:rgba(255,255,255,.36);line-height:1.45}
+.tc-b{display:inline-block;margin-top:7px;background:rgba(41,171,226,.18);color:var(--c);border-radius:6px;padding:2px 7px;font-size:.6rem;font-weight:700;letter-spacing:.04em}
+
+/* ─── 4 CASOS REALES ──────────────────────────────── */
+.cases{background:var(--bg);padding:64px 0}
+.cases-g{display:grid;gap:14px;margin-top:32px}
+@media(min-width:700px){.cases-g{grid-template-columns:1fr 1fr}}
+.case-card{background:var(--wh);border:1.5px solid var(--bd);border-radius:18px;overflow:hidden;transition:.2s;position:relative}
+.case-card:hover{border-color:var(--c);box-shadow:0 10px 30px rgba(24,37,58,.08);transform:translateY(-2px)}
+.case-head{padding:18px 20px 12px;display:flex;align-items:flex-start;gap:13px;border-bottom:1px solid var(--bd)}
+.case-flag{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;background:linear-gradient(135deg,var(--c),var(--g));color:#fff}
+.case-meta{flex:1;min-width:0}
+.case-name{font-size:.95rem;font-weight:800;letter-spacing:-.2px;margin-bottom:2px}
+.case-who{font-size:.7rem;color:var(--sl);line-height:1.4}
+.case-tag{display:inline-flex;align-items:center;gap:4px;background:var(--clt);color:var(--c2);border-radius:6px;padding:3px 8px;font-size:.6rem;font-weight:700;margin-top:5px;letter-spacing:.03em;text-transform:uppercase}
+.case-body{padding:16px 20px}
+.case-need{font-size:.83rem;color:var(--n);line-height:1.65;margin-bottom:12px}
+.case-need b{color:var(--c2)}
+.case-partners{display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px dashed var(--bd)}
+.cp-row{display:flex;align-items:center;gap:8px;font-size:.75rem}
+.cp-ico{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.cp-lbl{color:var(--sl);flex:1}
+.cp-lbl b{color:var(--n);font-weight:700}
+.cp-ok{font-size:.6rem;background:var(--glt);color:var(--g);border-radius:5px;padding:2px 7px;font-weight:700}
+
+/* ─── FLOW STEPS ───────────────────────────────────── */
+.flow{background:var(--wh);padding:64px 0}
+.flow-steps{display:flex;flex-direction:column;margin-top:28px}
+.fs{display:grid;grid-template-columns:48px 1fr;gap:0}
+.fs-l{display:flex;flex-direction:column;align-items:center}
+.fs-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;color:#fff;flex-shrink:0;z-index:2;box-shadow:0 3px 12px rgba(0,0,0,.14)}
+.fs-line{width:2px;flex:1;min-height:14px;margin:0 auto;border-radius:1px}
+.fs-r{padding:2px 0 28px 16px}
+.fs-ph{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.fs-ti{font-size:.95rem;font-weight:800;letter-spacing:-.3px;margin-bottom:5px;line-height:1.25}
+.fs-tm{font-size:.64rem;font-weight:700;padding:2px 9px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;margin-bottom:9px}
+.fs-de{font-size:.84rem;color:var(--sl);line-height:1.68;margin-bottom:10px}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.t{display:inline-flex;align-items:center;gap:4px;border-radius:7px;padding:4px 9px;font-size:.72rem;font-weight:600}
+.tc2{background:var(--clt);color:var(--c2)}
+.tg{background:var(--glt);color:#066e45}
+.to{background:var(--olt);color:#9a4d00}
+.tn{background:#eef2f8;color:var(--n)}
+.so .fs-dot{background:linear-gradient(135deg,#e8943a,#f5b74f)}.so .fs-line{background:linear-gradient(#f5b74f,#fff3e0 90%)}.so .fs-ph{color:#9a4d00}.so .fs-tm{background:#fff3e0;color:#9a4d00}
+.sb .fs-dot{background:linear-gradient(135deg,#0e3260,#29abe2)}.sb .fs-line{background:linear-gradient(#29abe2,var(--clt) 90%)}.sb .fs-ph{color:var(--n2)}.sb .fs-tm{background:var(--clt);color:var(--c2)}
+.sp .fs-dot{background:linear-gradient(135deg,#5b21b6,#8b5cf6)}.sp .fs-line{background:linear-gradient(#8b5cf6,#ede9fe 90%)}.sp .fs-ph{color:#5b21b6}.sp .fs-tm{background:#ede9fe;color:#5b21b6}
+.sg .fs-dot{background:linear-gradient(135deg,#065f46,#10b981)}.sg .fs-ph{color:#065f46}.sg .fs-tm{background:var(--glt);color:#065f46}
+
+/* ─── PRICING ──────────────────────────────────────── */
+.pricing{background:var(--bg);padding:64px 0}
+.pricing-head{text-align:center;max-width:560px;margin:0 auto 36px}
+.pricing-head .sec-p{color:var(--sl)}
+.price-card{background:var(--wh);border:2px solid var(--c);border-radius:22px;overflow:hidden;max-width:640px;margin:0 auto;box-shadow:0 14px 40px rgba(41,171,226,.15);position:relative}
+.price-badge{position:absolute;top:16px;right:16px;background:var(--c);color:var(--n);border-radius:20px;padding:4px 12px;font-size:.65rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.price-top{background:linear-gradient(135deg,var(--n),var(--n2));padding:28px 26px 22px;color:#fff}
+.price-name{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--c);margin-bottom:8px}
+.price-amt{font-size:2.8rem;font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1}
+.price-amt span{font-size:1rem;color:rgba(255,255,255,.45);font-weight:600;margin-left:3px}
+.price-sub{font-size:.78rem;color:rgba(255,255,255,.5);margin-top:6px;line-height:1.55}
+.price-inc{padding:22px 26px}
+.pi-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--c2);margin-bottom:14px}
+.pi-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd);font-size:.82rem;line-height:1.55}
+.pi-row:last-child{border:none}
+.pi-check{width:22px;height:22px;border-radius:50%;background:var(--glt);color:var(--g);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;flex-shrink:0;margin-top:1px}
+.pi-txt b{color:var(--n);font-weight:700}
+.pi-txt span{color:var(--sl)}
+.price-extra{background:var(--clt);border-top:1px solid var(--bd);padding:16px 26px;display:flex;align-items:center;gap:12px;font-size:.78rem;color:var(--n2);line-height:1.55}
+.price-extra .pe-ico{font-size:1.2rem;flex-shrink:0}
+.price-extra b{color:var(--n)}
+.price-terms{padding:18px 26px;font-size:.73rem;color:var(--sl);line-height:1.65;background:var(--wh);border-top:1px solid var(--bd)}
+.price-terms b{color:var(--n);font-weight:700}
+.price-vs{display:grid;gap:10px;margin-top:24px;max-width:640px;margin-left:auto;margin-right:auto}
+@media(min-width:560px){.price-vs{grid-template-columns:1fr 1fr}}
+.pv{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:14px 16px}
+.pv-l{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--sl2);margin-bottom:4px}
+.pv-v{font-size:1.1rem;font-weight:900;color:var(--n);line-height:1.2;margin-bottom:3px}
+.pv-d{font-size:.72rem;color:var(--sl);line-height:1.45}
+
+/* ─── COBERTURA ────────────────────────────────────── */
+.coverage{background:var(--wh);padding:64px 0}
+.cov-head{text-align:center;max-width:560px;margin:0 auto 32px}
+.phase-nav{display:flex;gap:6px;justify-content:center;margin-bottom:22px;flex-wrap:wrap}
+.pn-btn{padding:7px 16px;border-radius:22px;border:1.5px solid var(--bd);background:var(--wh);color:var(--sl);font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--f);transition:.15s}
+.pn-btn:hover{border-color:var(--c);color:var(--c2)}
+.pn-btn.on{background:var(--c);border-color:var(--c);color:var(--n)}
+.cities-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;margin-top:8px}
+.city-card{background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;padding:12px 14px;position:relative;transition:.18s}
+.city-card.live{border-color:var(--g);background:linear-gradient(135deg,var(--glt) 0%,var(--wh) 60%)}
+.city-card.soon{border-color:var(--amber);background:linear-gradient(135deg,var(--amberlt) 0%,var(--wh) 60%);opacity:.85}
+.city-card.roadmap{border-color:var(--p);background:linear-gradient(135deg,var(--plt) 0%,var(--wh) 60%);opacity:.7}
+.city-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.cc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.cc-name{font-size:.9rem;font-weight:800;letter-spacing:-.2px}
+.cc-status{font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em}
+.cc-status.live{background:var(--g);color:#fff}
+.cc-status.soon{background:var(--amber);color:#fff}
+.cc-status.roadmap{background:var(--p);color:#fff}
+.cc-region{font-size:.68rem;color:var(--sl);margin-bottom:8px}
+.cc-svc{display:flex;gap:4px;flex-wrap:wrap}
+.svc-dot{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;background:rgba(24,37,58,.06)}
+.svc-dot.off{opacity:.3}
+.cov-legend{display:flex;justify-content:center;gap:16px;margin-top:22px;flex-wrap:wrap}
+.lg{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--sl)}
+.lg-dot{width:10px;height:10px;border-radius:3px}
+.lg-dot.live{background:var(--g)}
+.lg-dot.soon{background:var(--amber)}
+.lg-dot.roadmap{background:var(--p)}
+
+/* ─── DEMO ÁREA PRIVADA ───────────────────────────── */
+.demo{background:var(--n);padding:64px 0;position:relative;overflow:hidden}
+.demo::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 30%,rgba(41,171,226,.12),transparent);pointer-events:none}
+.demo-head{text-align:center;max-width:580px;margin:0 auto 32px;position:relative;z-index:2}
+.demo-head .sec-lbl{color:var(--c)}
+.demo-head h2{color:#fff}
+.demo-head p{color:rgba(255,255,255,.5)}
+.demo-wrap{max-width:860px;margin:0 auto;position:relative;z-index:2}
+.demo-frame{background:var(--wh);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.4);filter:blur(0)}
+.demo-bar{background:var(--bg);padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd)}
+.db-dot{width:10px;height:10px;border-radius:50%}
+.db-dot.r{background:#ed6a5e}.db-dot.y{background:#f5bf4f}.db-dot.g{background:#61c554}
+.db-url{margin-left:auto;background:var(--wh);border:1px solid var(--bd);border-radius:6px;padding:3px 10px;font-size:.68rem;font-family:var(--fm);color:var(--sl);display:flex;align-items:center;gap:5px}
+.db-url::before{content:'🔒';font-size:.7rem}
+.demo-inner{padding:18px 20px;position:relative}
+.demo-blur{filter:blur(3px);pointer-events:none;user-select:none}
+.demo-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--bd);margin-bottom:14px}
+.dt-title{font-size:.88rem;font-weight:800}
+.dt-user{display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--sl)}
+.dt-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--c),var(--g));display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#fff}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.dg-kpi{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px}
+.dg-n{font-size:1.2rem;font-weight:900;color:var(--c);line-height:1}
+.dg-l{font-size:.6rem;color:var(--sl);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+.demo-list-title{font-size:.7rem;font-weight:700;color:var(--sl);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.demo-list{display:flex;flex-direction:column;gap:5px}
+.dl{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:9px;font-size:.75rem}
+.dl-dot{width:8px;height:8px;border-radius:50%;background:var(--g);box-shadow:0 0 0 3px var(--glt);flex-shrink:0}
+.dl-main{flex:1;line-height:1.3}
+.dl-main b{display:block;font-weight:700}
+.dl-main span{font-size:.65rem;color:var(--sl)}
+.dl-price{font-family:var(--fm);font-size:.72rem;font-weight:700;color:var(--g)}
+
+/* lock overlay */
+.lock-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,37,58,0) 0%,rgba(24,37,58,.88) 65%,rgba(24,37,58,.97) 100%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:36px 28px 28px;text-align:center;pointer-events:none}
+.lock-ico{width:54px;height:54px;border-radius:14px;background:var(--c);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--n);margin-bottom:14px;box-shadow:0 6px 20px rgba(41,171,226,.5);animation:float 3s infinite ease-in-out}
+.lock-title{font-size:1.05rem;font-weight:900;color:#fff;letter-spacing:-.3px;margin-bottom:6px}
+.lock-text{font-size:.82rem;color:rgba(255,255,255,.6);max-width:400px;line-height:1.65;margin-bottom:18px}
+.lock-cta{pointer-events:auto;display:inline-flex;align-items:center;gap:8px;background:var(--c);color:var(--n);border-radius:10px;padding:11px 22px;font-weight:800;font-size:.87rem;text-decoration:none;transition:.15s;box-shadow:0 6px 20px rgba(41,171,226,.4)}
+.lock-cta:hover{background:#3dbfee;transform:translateY(-1px)}
+
+/* ─── FAQ ─────────────────────────────────────────── */
+.faq{background:var(--bg);padding:64px 0}
+.faq-g{max-width:720px;margin:28px auto 0}
+.faq-item{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;margin-bottom:8px;overflow:hidden;transition:.15s}
+.faq-item[open]{border-color:var(--c);box-shadow:0 6px 20px rgba(41,171,226,.08)}
+.faq-q{padding:14px 18px;font-size:.88rem;font-weight:700;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.faq-q::-webkit-details-marker{display:none}
+.faq-q::after{content:'+';font-size:1.3rem;color:var(--c);font-weight:700;flex-shrink:0;transition:.2s}
+.faq-item[open] .faq-q::after{transform:rotate(45deg)}
+.faq-a{padding:0 18px 16px;font-size:.82rem;color:var(--sl);line-height:1.72}
+.faq-a b{color:var(--n)}
+
+/* ─── FORMULARIO ──────────────────────────────────── */
+.form-sec{background:var(--wh);padding:64px 0}
+.form-head{text-align:center;max-width:540px;margin:0 auto 28px}
+.form-wrap{max-width:620px;margin:0 auto}
+.form-card{background:var(--wh);border:1.5px solid var(--bd);border-radius:18px;box-shadow:0 10px 32px rgba(24,37,58,.07);overflow:hidden}
+.fc-top{background:linear-gradient(135deg,var(--n),var(--n2));padding:22px 24px;color:#fff}
+.fc-top h3{font-size:1.1rem;font-weight:900;margin-bottom:5px;letter-spacing:-.3px}
+.fc-top p{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.65}
+.fc-steps{display:flex;align-items:center;gap:4px;margin-top:14px}
+.fcs{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,.15)}
+.fcs.on{background:var(--c)}
+.fc-body{padding:22px 24px}
+.frow{margin-bottom:14px}
+.flabel{font-size:.68rem;font-weight:700;color:var(--sl);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;display:block}
+.finput,.fselect,.ftextarea{width:100%;padding:11px 13px;border:1.5px solid var(--bd);border-radius:10px;font-family:var(--f);font-size:.85rem;color:var(--n);background:var(--bg);outline:none;transition:.15s;-webkit-appearance:none}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:var(--c);background:var(--wh)}
+.ftextarea{resize:vertical;min-height:72px}
+.frow-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.frow-2{grid-template-columns:1fr}}
+.radio-group{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:500px){.radio-group{grid-template-columns:repeat(4,1fr)}}
+.rg-item{position:relative}
+.rg-item input{position:absolute;opacity:0;pointer-events:none}
+.rg-item label{display:block;padding:10px 8px;border:1.5px solid var(--bd);border-radius:10px;background:var(--bg);font-size:.75rem;font-weight:700;text-align:center;cursor:pointer;transition:.15s;line-height:1.3}
+.rg-item label em{display:block;font-style:normal;font-size:1.15rem;margin-bottom:3px}
+.rg-item input:checked+label{border-color:var(--c);background:var(--clt);color:var(--c2)}
+.rg-item:hover label{border-color:var(--c)}
+.fchk{display:flex;align-items:flex-start;gap:8px;font-size:.73rem;color:var(--sl);line-height:1.55;margin-top:6px}
+.fchk input{margin-top:3px;flex-shrink:0;accent-color:var(--c)}
+.fchk a{color:var(--c2);text-decoration:underline}
+.form-submit{width:100%;padding:13px;background:var(--c);color:var(--n);font-family:var(--f);font-size:.92rem;font-weight:800;border:none;border-radius:12px;cursor:pointer;transition:.15s;margin-top:8px;box-shadow:0 6px 18px rgba(41,171,226,.3)}
+.form-submit:hover{background:#3dbfee}
+.form-note{font-size:.7rem;color:var(--sl);text-align:center;margin-top:10px;line-height:1.55}
+
+/* ─── CTA FINAL ───────────────────────────────────── */
+.cta-final{background:var(--bg);padding:50px 0 70px}
+.cta-box{background:linear-gradient(135deg,var(--n) 0%,var(--n2) 100%);border-radius:24px;padding:42px 24px;text-align:center;position:relative;overflow:hidden}
+@media(min-width:560px){.cta-box{padding:54px 48px}}
+.cta-box::before{content:'';position:absolute;top:-70px;right:-70px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(41,171,226,.13),transparent 70%)}
+.cta-box::after{content:'';position:absolute;bottom:-50px;left:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(10,124,78,.1),transparent 70%)}
+.cta-box h2{font-size:clamp(1.4rem,4vw,2rem);font-weight:900;color:#fff;letter-spacing:-.4px;margin-bottom:11px;position:relative;z-index:2;line-height:1.15}
+.cta-box p{font-size:.88rem;color:rgba(255,255,255,.48);max-width:460px;margin:0 auto 26px;line-height:1.7;position:relative;z-index:2}
+.cta-contact{font-size:.82rem;color:rgba(255,255,255,.35);position:relative;z-index:2;margin-top:14px}
+.cta-contact a{color:var(--c);text-decoration:none;font-weight:600}
+.cta-contact a:hover{text-decoration:underline}
+
+/* ─── FOOTER ──────────────────────────────────────── */
+footer{background:#090e18;padding:26px 18px;text-align:center;font-size:.72rem;color:rgba(255,255,255,.22);line-height:1.7}
+footer b{color:rgba(255,255,255,.38)}
+footer a{color:rgba(255,255,255,.4);text-decoration:none}
+footer a:hover{color:var(--c)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-mark">H4</div>
+    <div class="nav-name">Health<b>4</b>Spain</div>
+  </div>
+  <a href="#solicitar-acceso" class="nav-cta">Solicitar acceso →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-dots"></div>
+  <div class="w hi">
+
+    <div class="hero-ey"><span class="chip cc">Red de Partners · Fase 1 · 2026</span></div>
+
+    <h1 class="hh">
+      Expatriados que buscan<br>
+      <span class="c1">tu servicio.</span><br>
+      <span class="c2">Nosotros los llevamos a ti.</span>
+    </h1>
+
+    <p class="hp">Captamos la demanda de expatriados en España con campañas digitales, la cualificamos por IA en su idioma y te la entregamos con la cita agendada en tu calendario. Sin llamadas en frío. Sin coordinación manual. <b style="color:rgba(255,255,255,.78)">Un único partner por ciudad y servicio.</b></p>
+
+    <div class="hkpis">
+      <div class="kpi"><div class="kpi-n">~34</div><div class="kpi-l">Leads/mes cualificados</div></div>
+      <div class="kpi"><div class="kpi-n">23%</div><div class="kpi-l">Conversión mes 4+</div></div>
+      <div class="kpi"><div class="kpi-n">5</div><div class="kpi-l">Idiomas</div></div>
+      <div class="kpi"><div class="kpi-n">19</div><div class="kpi-l">Ciudades objetivo</div></div>
+    </div>
+
+    <div class="hero-ctas">
+      <a href="#solicitar-acceso" class="btn-primary">Solicitar acceso a la red →</a>
+      <a href="#como-funciona" class="btn-ghost">Ver cómo funciona</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- POSICIONAMIENTO -->
+<section class="pos" id="como-funciona">
+  <div class="w">
+    <div class="two">
+      <div>
+        <div class="sec-lbl">Qué somos</div>
+        <h2 class="sec-h">No somos un portal de leads.<br>Somos tu infraestructura de captación digital.</h2>
+        <p class="sec-p">El expatriado que necesita tu servicio ya existe: está buscando en Google, viendo Instagram, preguntando en WhatsApp. El problema no es la demanda. Es que no te encuentra a ti primero.</p>
+        <p class="sec-p">Health4Spain captura esa demanda, la cualifica con inteligencia artificial y te la entrega con la reunión fijada en tu agenda. Sin que tú muevas un dedo.</p>
+        <div class="quote-box"><strong>Nuestra definición:</strong> somos el partner tecnológico invisible detrás de tu negocio. Tú pones el talento y el servicio. Nosotros ponemos el tráfico, la IA y la automatización.</div>
+      </div>
+      <div class="pillars">
+        <div class="pill-row">
+          <div class="pill-ico ico-o">📣</div>
+          <div class="pill-txt">
+            <h3>Captación digital — invertimos nosotros</h3>
+            <p>Campañas Meta y Google segmentadas por ciudad, idioma y perfil de expatriado. 250€/mes de presupuesto Meta incluido, gestionado por nuestra agencia.</p>
+          </div>
+        </div>
+        <div class="pill-row">
+          <div class="pill-ico ico-c">🤖</div>
+          <div class="pill-txt">
+            <h3>Cualificación por IA en tiempo real</h3>
+            <p>El bot Mar-IA filtra, pregunta y clasifica cada lead en su propio idioma antes de que lo toque ningún humano. Nueve etiquetas automáticas, priorización por urgencia.</p>
+          </div>
+        </div>
+        <div class="pill-row">
+          <div class="pill-ico ico-g">📅</div>
+          <div class="pill-txt">
+            <h3>La cita llega a tu Google Calendar</h3>
+            <p>El cliente elige su slot entre tus huecos reales. La confirmación aparece automáticamente en tu agenda con el briefing completo por email y WhatsApp.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPOS DE PARTNER -->
+<section class="types">
+  <div class="w">
+    <div class="sec-lbl" style="color:var(--c);text-align:center">Para quién</div>
+    <h2 class="sec-h" style="color:#fff;text-align:center;margin-bottom:7px">Cualquier profesional que atienda expatriados</h2>
+    <p style="text-align:center;color:rgba(255,255,255,.42);font-size:.9rem;max-width:440px;margin:0 auto">Si tu cliente objetivo viene de fuera de España, este es tu canal de captación digital.</p>
+    <div class="types-g">
+      <div class="tc"><span class="tc-em">⚖️</span><div class="tc-n">Despacho de Abogados</div><div class="tc-d">Extranjería · Visados · Compraventa · Herencias</div></div>
+      <div class="tc"><span class="tc-em">📋</span><div class="tc-n">Gestoría / Asesoría</div><div class="tc-d">NIE · Empadronamiento · Autónomos · Fiscal</div></div>
+      <div class="tc"><span class="tc-em">🏠</span><div class="tc-n">Inmobiliaria</div><div class="tc-d">Compra · Alquiler · Inversión · Golden Visa</div></div>
+      <div class="tc"><span class="tc-em">🛡️</span><div class="tc-n">Agente / Correduría de Seguros</div><div class="tc-d">ASISA · Sanitas · DKV · Caser · y otras</div><div class="tc-b">Nuevo</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 CASOS REALES -->
+<section class="cases">
+  <div class="w">
+    <div class="sec-lbl" style="text-align:center">Cuatro casos, un mismo motor</div>
+    <h2 class="sec-h" style="text-align:center;margin-bottom:8px">Así llegan los clientes a los partners de H4S</h2>
+    <p class="sec-p" style="text-align:center;max-width:540px;margin:0 auto 8px">Cada expatriado que llega a Health4Spain es un caso real con varias necesidades cruzadas: seguro, papeles, vivienda, gestoría. La IA detecta qué necesita y lo deriva a los partners correspondientes.</p>
+
+    <div class="cases-g">
+
+      <!-- Caso 1 - Margaret -->
+      <div class="case-card">
+        <div class="case-head">
+          <div class="case-flag">🇬🇧</div>
+          <div class="case-meta">
+            <div class="case-name">Margaret · 58 años</div>
+            <div class="case-who">Jubilada británica · Torrevieja (Alicante)</div>
+            <div class="case-tag">🏖️ Non-Lucrative Visa · EN</div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-need">Necesita <b>seguro médico privado</b> para su visado, <b>asesoramiento legal</b> para la no lucrativa y quiere <b>comprar vivienda</b> de ~€350.000 en la costa.</div>
+          <div class="case-partners">
+            <div class="cp-row"><div class="cp-ico" style="background:var(--olt)">🛡️</div><div class="cp-lbl"><b>Correduría de seguros</b> · ASISA Premium</div><div class="cp-ok">✓ cerrado</div></div>
+            <div class="cp-row"><div class="cp-ico" style="background:var(--clt)">⚖️</div><div class="cp-lbl"><b>Abogado extranjería EN</b> · Visa NL</div><div class="cp-ok">✓ cita</div></div>
+            <div class="cp-row"><div class="cp-ico" style="background:var(--glt)">🏠</div><div class="cp-lbl"><b>Inmobiliaria EN</b> · Compra ~€350k</div><div class="cp-ok">✓ cita</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caso 2 - Mohamed -->
+      <div class="case-card">
+        <div class="case-head">
+          <div class="case-flag">🇲🇦</div>
+          <div class="case-meta">
+            <div class="case-name">Mohamed · 34 años</div>
+            <div class="case-who">Trabajador marroquí · Murcia capital</div>
+            <div class="case-tag">📋 Reagrupación familiar · AR/ES</div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-need">Necesita tramitar la <b>reagrupación familiar</b> para su esposa e hija, contratar <b>seguro de salud privado</b> (requisito) y una <b>gestoría</b> que le ayude con el NIE y el alta fiscal.</div>
+          <div class="case-partners">
+            <div class="cp-row"><div class="cp-ico" style="background:var(--clt)">⚖️</div><div class="cp-lbl"><b>Abogado extranjería AR/ES</b> · Reagrupación</div><div class="cp-ok">✓ cita</div></div>
+            <div class="cp-row"><div class="cp-ico" style="background:var(--olt)">🛡️</div><div class="cp-lbl"><b>Agente de seguros</b> · Salud familiar</div><div class="cp-ok">✓ cerrado</div></div>
+            <div class="cp-row"><div class="cp-ico" style="background:#ede9fe">📋</div><div class="cp-lbl"><b>Gestoría</b> · NIE + alta fiscal</div><div class="cp-ok">✓ cita</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caso 3 - Richard -->
+      <div class="case-card">
+        <div class="case-head">
+          <div class="case-flag">🇩🇪</div>
+          <div class="case-meta">
+            <div class="case-name">Richard · 42 años</div>
+            <div class="case-who">Nómada digital alemán · Alicante</div>
+            <div class="case-tag">💻 Digital Nomad Visa · DE</div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-need">Se traslada con su familia. Necesita la <b>Digital Nomad Visa</b>, <b>seguro de salud</b> con cobertura internacional, una <b>gestoría</b> para el autónomo y <b>alquilar vivienda</b> cerca del mar.</div>
+          <div class="case-partners">
+            <div class="cp-row"><div class="cp-ico" style="background:var(--clt)">⚖️</div><div class="cp-lbl"><b>Abogado extranjería DE</b> · DNV</div><div class="cp-ok">✓ cita</div></div>
+            <div class="cp-row"><div class="cp-ico" style="background:var(--olt)">🛡️</div><div class="cp-lbl"><b>Agente de seguros</b> · Salud DKV</div><div class="cp-ok">✓ cerrado</div></div>
+            <div class="cp-row"><div class="cp-ico" style="background:var(--glt)">🏠</div><div class="cp-lbl"><b>Inmobiliaria DE</b> · Alquiler larga dur.</div><div class="cp-ok">✓ cita</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caso 4 - Laura -->
+      <div class="case-card">
+        <div class="case-head">
+          <div class="case-flag">🇫🇷</div>
+          <div class="case-meta">
+            <div class="case-name">Laura · 51 años</div>
+            <div class="case-who">Emprendedora francesa · San Pedro del Pinatar</div>
+            <div class="case-tag">🏠 Inversión inmobiliaria · FR</div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-need">Compra vivienda para <b>vacacional y alquiler</b> (€280.000). Requiere <b>abogado</b> para la compraventa, <b>seguro hogar + salud</b>, y <b>gestoría</b> para el alta fiscal no residente.</div>
+          <div class="case-partners">
+            <div class="cp-row"><div class="cp-ico" style="background:var(--glt)">🏠</div><div class="cp-lbl"><b>Inmobiliaria FR</b> · Inversión costa</div><div class="cp-ok">✓ cerrado</div></div>
+            <div class="cp-row"><div class="cp-ico" style="background:var(--clt)">⚖️</div><div class="cp-lbl"><b>Abogado</b> · Compraventa FR</div><div class="cp-ok">✓ cita</div></div>
+            <div class="cp-row"><div class="cp-ico" style="background:var(--olt)">🛡️</div><div class="cp-lbl"><b>Correduría</b> · Hogar + Salud</div><div class="cp-ok">✓ cita</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FLUJO PASO A PASO -->
+<section class="flow">
+  <div class="w">
+    <div class="sec-lbl">Entre bambalinas</div>
+    <h2 class="sec-h">Del anuncio a tu agenda<br>en menos de 8 minutos</h2>
+    <p class="sec-p" style="margin-bottom:22px">Todo automatizado. Sin llamadas en frío. Sin coordinación manual.</p>
+
+    <div class="flow-steps">
+      <div class="fs so">
+        <div class="fs-l"><div class="fs-dot">📣</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Captación · Meta & Google Ads</div>
+          <div class="fs-ti">El anuncio encuentra al expatriado</div>
+          <div class="fs-tm">⏱ T = 0</div>
+          <div class="fs-de">Anuncio segmentado por ciudad, nacionalidad, edad e intereses. Presupuesto publicitario incluido en tu cuota. La agencia revisa audiencias y creatividades cada semana.</div>
+          <div class="tags"><span class="t to">💰 250€/mes Meta incluidos</span><span class="t to">🎯 Ciudad + idioma + perfil</span></div>
+        </div>
+      </div>
+      <div class="fs sb">
+        <div class="fs-l"><div class="fs-dot">🌐</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Landing + Formulario</div>
+          <div class="fs-ti">Formulario completado en 90 segundos</div>
+          <div class="fs-tm">⏱ T + 1 min</div>
+          <div class="fs-de">Landing en el idioma del lead. Tres pasos: qué necesita → su situación → contacto. Los datos llegan a GoHighLevel CRM en menos de un segundo.</div>
+          <div class="tags"><span class="t tc2">⚡ GHL en &lt;1 seg</span><span class="t tc2">📊 Meta Pixel activo</span></div>
+        </div>
+      </div>
+      <div class="fs sp">
+        <div class="fs-l"><div class="fs-dot">🤖</div><div class="fs-line"></div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Cualificación IA · Mar-IA</div>
+          <div class="fs-ti">Mar-IA profundiza en 6 minutos, sin humanos</div>
+          <div class="fs-tm">⏱ T + 2 min · Automático</div>
+          <div class="fs-de">El bot abre conversación en el idioma del lead. Detecta tipo de visa, presupuesto, urgencia. 9 etiquetas automáticas. El lead queda clasificado y priorizado antes de tocarlo ningún humano.</div>
+          <div class="tags"><span class="t tn">🤖 EN · DE · ES · PT · FR</span><span class="t tn">🏷️ 9 tags auto</span></div>
+        </div>
+      </div>
+      <div class="fs sg">
+        <div class="fs-l"><div class="fs-dot">📅</div></div>
+        <div class="fs-r">
+          <div class="fs-ph">Smart Routing · Tu agenda</div>
+          <div class="fs-ti">La cita llega a tu Google Calendar con briefing completo</div>
+          <div class="fs-tm">⏱ T + 8 min · 0 intervención</div>
+          <div class="fs-de">GHL comprueba tu calendario sincronizado, ofrece al cliente tus huecos reales, él elige. Recibes email + WhatsApp con el briefing del cliente antes de la reunión. Recordatorio automático 24h antes.</div>
+          <div class="tags"><span class="t tg">📁 Briefing antes de reunión</span><span class="t tg">🔔 Recordatorio 24h</span><span class="t tg">✅ Tú solo te presentas</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="w">
+    <div class="pricing-head">
+      <div class="sec-lbl">Una cuota, todo incluido</div>
+      <h2 class="sec-h">Plan "Agenda Llena"</h2>
+      <p class="sec-p">Un único plan, sin letra pequeña. Mensual, con exclusividad geográfica por contrato. Para profesionales que quieren flujo predecible de clientes cualificados.</p>
+    </div>
+
+    <div class="price-card">
+      <div class="price-badge">Partner Program 2026</div>
+      <div class="price-top">
+        <div class="price-name">Plan Agenda Llena</div>
+        <div class="price-amt">590€<span>/mes + IVA</span></div>
+        <div class="price-sub">340€ plataforma + gestión · 250€ presupuesto Meta Ads (gestionado a tu nombre, sin margen)</div>
+      </div>
+
+      <div class="price-inc">
+        <div class="pi-title">Todo incluido en tu cuota mensual</div>
+        <div class="pi-row">
+          <div class="pi-check">✓</div>
+          <div class="pi-txt"><b>CRM GoHighLevel completo</b> <span>· Pipeline configurado, app móvil, soporte técnico.</span></div>
+        </div>
+        <div class="pi-row">
+          <div class="pi-check">✓</div>
+          <div class="pi-txt"><b>Setup y automatizaciones</b> <span>· Landing dedicada en el idioma de tu lead, pixel Meta, workflows WhatsApp &lt;60 seg, alertas push de lead caliente.</span></div>
+        </div>
+        <div class="pi-row">
+          <div class="pi-check">✓</div>
+          <div class="pi-txt"><b>Gestión semanal de campañas Meta</b> <span>· Revisión de audiencias, A/B testing de creatividades, control de presupuesto e informe cada lunes.</span></div>
+        </div>
+        <div class="pi-row">
+          <div class="pi-check">✓</div>
+          <div class="pi-txt"><b>Cualificación IA Mar-IA</b> <span>· ~34 contactos/mes verificados por WhatsApp, clasificados por urgencia, con ficha completa.</span></div>
+        </div>
+        <div class="pi-row">
+          <div class="pi-check">✓</div>
+          <div class="pi-txt"><b>Presupuesto publicitario incluido</b> <span>· 250€/mes invertidos directamente a tu cuenta Meta, sin margen para H4S.</span></div>
+        </div>
+        <div class="pi-row">
+          <div class="pi-check">✓</div>
+          <div class="pi-txt"><b>Exclusividad geográfica</b> <span>· Un único partner por ciudad y servicio durante la vigencia del contrato.</span></div>
+        </div>
+      </div>
+
+      <div class="price-extra">
+        <div class="pe-ico">💎</div>
+        <div><b>Si contratases estos servicios por separado:</b> 1.775€ – 4.375€/mes. Con H4S consolidas todo en un único proveedor por 590€.</div>
+      </div>
+
+      <div class="price-terms">
+        <b>Condiciones:</b> Permanencia mínima 6 meses · Penalización rescisión anticipada: 2 mensualidades · Los leads son <b>100% de tu propiedad</b> (export CSV en 7 días hábiles si causas baja) · Pago mensual por domiciliación bancaria o Stripe · Facturación con IVA a nombre de COASEMED S.L.
+      </div>
+    </div>
+
+    <div class="price-vs">
+      <div class="pv">
+        <div class="pv-l">Expectativa mes 4+</div>
+        <div class="pv-v">~8 pólizas / clientes</div>
+        <div class="pv-d">34 leads × 23% conversión consolidada</div>
+      </div>
+      <div class="pv">
+        <div class="pv-l">Retorno típico</div>
+        <div class="pv-v">ROI 20% mínimo</div>
+        <div class="pv-d">Cálculo sobre comisión media salud · Calculadora personalizada en área privada</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COBERTURA GEOGRÁFICA -->
+<section class="coverage" id="cobertura">
+  <div class="w">
+    <div class="cov-head">
+      <div class="sec-lbl">Cobertura</div>
+      <h2 class="sec-h">19 ciudades · 4 servicios · 5 idiomas</h2>
+      <p class="sec-p">Fase 1 activa en 8 ciudades de Murcia y Alicante. Apertura escalonada del resto durante 2026. Expansión nacional en 2027.</p>
+    </div>
+
+    <div class="phase-nav">
+      <button class="pn-btn on" data-phase="all">Todas</button>
+      <button class="pn-btn" data-phase="live">Activas (Fase 1)</button>
+      <button class="pn-btn" data-phase="soon">Apertura 2026</button>
+      <button class="pn-btn" data-phase="roadmap">Roadmap 2027</button>
+    </div>
+
+    <div class="cities-grid" id="cities-grid">
+      <!-- FASE 1 · ACTIVAS -->
+      <div class="city-card live" data-phase="live"><div class="cc-hd"><div class="cc-name">Murcia</div><span class="cc-status live">Activa</span></div><div class="cc-region">Región de Murcia · 460k hab · 13% extranjeros</div><div class="cc-svc"><div class="svc-dot" title="Abogados">⚖️</div><div class="svc-dot" title="Gestoría">📋</div><div class="svc-dot" title="Inmobiliaria">🏠</div><div class="svc-dot" title="Seguros">🛡️</div></div></div>
+      <div class="city-card live" data-phase="live"><div class="cc-hd"><div class="cc-name">Cartagena</div><span class="cc-status live">Activa</span></div><div class="cc-region">Región de Murcia · 215k hab · 13%</div><div class="cc-svc"><div class="svc-dot">⚖️</div><div class="svc-dot">📋</div><div class="svc-dot">🏠</div><div class="svc-dot">🛡️</div></div></div>
+      <div class="city-card live" data-phase="live"><div class="cc-hd"><div class="cc-name">Lorca</div><span class="cc-status live">Activa</span></div><div class="cc-region">Región de Murcia · 98k hab · 20%</div><div class="cc-svc"><div class="svc-dot">⚖️</div><div class="svc-dot">📋</div><div class="svc-dot">🏠</div><div class="svc-dot">🛡️</div></div></div>
+      <div class="city-card live" data-phase="live"><div class="cc-hd"><div class="cc-name">San Pedro del Pinatar</div><span class="cc-status live">Activa</span></div><div class="cc-region">Región de Murcia · 27k hab · 20%</div><div class="cc-svc"><div class="svc-dot">⚖️</div><div class="svc-dot">📋</div><div class="svc-dot">🏠</div><div class="svc-dot">🛡️</div></div></div>
+      <div class="city-card live" data-phase="live"><div class="cc-hd"><div class="cc-name">Alicante</div><span class="cc-status live">Activa</span></div><div class="cc-region">Provincia de Alicante · 330k hab · 23%</div><div class="cc-svc"><div class="svc-dot">⚖️</div><div class="svc-dot">📋</div><div class="svc-dot">🏠</div><div class="svc-dot">🛡️</div></div></div>
+      <div class="city-card live" data-phase="live"><div class="cc-hd"><div class="cc-name">Elche</div><span class="cc-status live">Activa</span></div><div class="cc-region">Provincia de Alicante · 230k hab · 20%</div><div class="cc-svc"><div class="svc-dot">⚖️</div><div class="svc-dot">📋</div><div class="svc-dot">🏠</div><div class="svc-dot">🛡️</div></div></div>
+      <div class="city-card live" data-phase="live"><div class="cc-hd"><div class="cc-name">Torrevieja</div><span class="cc-status live">Activa</span></div><div class="cc-region">Provincia de Alicante · 90k hab · 28%</div><div class="cc-svc"><div class="svc-dot">⚖️</div><div class="svc-dot">📋</div><div class="svc-dot">🏠</div><div class="svc-dot">🛡️</div></div></div>
+      <div class="city-card live" data-phase="live"><div class="cc-hd"><div class="cc-name">Orihuela</div><span class="cc-status live">Activa</span></div><div class="cc-region">Provincia de Alicante · 110k hab · 18%</div><div class="cc-svc"><div class="svc-dot">⚖️</div><div class="svc-dot">📋</div><div class="svc-dot">🏠</div><div class="svc-dot">🛡️</div></div></div>
+
+      <!-- APERTURA 2026 -->
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Mazarrón</div><span class="cc-status soon">Q2 2026</span></div><div class="cc-region">Región de Murcia · 33k hab · 20%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Torre Pacheco</div><span class="cc-status soon">Q2 2026</span></div><div class="cc-region">Región de Murcia · 38k hab · 30%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">San Javier</div><span class="cc-status soon">Q2 2026</span></div><div class="cc-region">Región de Murcia · 33k hab · 25%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Molina de Segura</div><span class="cc-status soon">Q3 2026</span></div><div class="cc-region">Región de Murcia · 74k hab · 15%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Águilas</div><span class="cc-status soon">Q3 2026</span></div><div class="cc-region">Región de Murcia · 35k hab · 15%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Cieza</div><span class="cc-status soon">Q3 2026</span></div><div class="cc-region">Región de Murcia · 28k hab · 18%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Jumilla</div><span class="cc-status soon">Q4 2026</span></div><div class="cc-region">Región de Murcia · 24k hab · 16%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Yecla</div><span class="cc-status soon">Q4 2026</span></div><div class="cc-region">Región de Murcia · 31k hab · 14%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Rojales</div><span class="cc-status soon">Q2 2026</span></div><div class="cc-region">Provincia de Alicante · 35k hab · 22%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Benidorm</div><span class="cc-status soon">Q3 2026</span></div><div class="cc-region">Provincia de Alicante · 70k hab · 35%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card soon" data-phase="soon"><div class="cc-hd"><div class="cc-name">Denia</div><span class="cc-status soon">Q3 2026</span></div><div class="cc-region">Provincia de Alicante · 42k hab · 15%</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+
+      <!-- ROADMAP 2027 -->
+      <div class="city-card roadmap" data-phase="roadmap"><div class="cc-hd"><div class="cc-name">Málaga · Costa del Sol</div><span class="cc-status roadmap">2027</span></div><div class="cc-region">Andalucía · Expansión nacional</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card roadmap" data-phase="roadmap"><div class="cc-hd"><div class="cc-name">Canarias</div><span class="cc-status roadmap">2027</span></div><div class="cc-region">Tenerife · Gran Canaria · Fuerteventura</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card roadmap" data-phase="roadmap"><div class="cc-hd"><div class="cc-name">Cataluña</div><span class="cc-status roadmap">2027</span></div><div class="cc-region">Barcelona · Costa Brava · Tarragona</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card roadmap" data-phase="roadmap"><div class="cc-hd"><div class="cc-name">Valencia</div><span class="cc-status roadmap">2027</span></div><div class="cc-region">Comunidad Valenciana · capital</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+      <div class="city-card roadmap" data-phase="roadmap"><div class="cc-hd"><div class="cc-name">Baleares</div><span class="cc-status roadmap">2027</span></div><div class="cc-region">Mallorca · Ibiza · Menorca</div><div class="cc-svc"><div class="svc-dot off">⚖️</div><div class="svc-dot off">📋</div><div class="svc-dot off">🏠</div><div class="svc-dot off">🛡️</div></div></div>
+    </div>
+
+    <div class="cov-legend">
+      <div class="lg"><div class="lg-dot live"></div> Activa · captando partners</div>
+      <div class="lg"><div class="lg-dot soon"></div> Apertura programada 2026</div>
+      <div class="lg"><div class="lg-dot roadmap"></div> Expansión nacional 2027</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO ÁREA PRIVADA -->
+<section class="demo" id="area-privada">
+  <div class="w">
+    <div class="demo-head">
+      <div class="sec-lbl">Área de Partners</div>
+      <h2 class="sec-h">Tu panel privado, con todo el detalle</h2>
+      <p class="sec-p">Cuando solicitas acceso, te abrimos la vista real: plazas disponibles por ciudad y servicio, calculadora ROI personalizada con tu tipo de comisión, condiciones contractuales, y formulario de alta. Por confidencialidad, esta información solo está disponible para partners aprobados.</p>
+    </div>
+
+    <div class="demo-wrap">
+      <div class="demo-frame">
+        <div class="demo-bar">
+          <div class="db-dot r"></div><div class="db-dot y"></div><div class="db-dot g"></div>
+          <div class="db-url">partners.health4spain.com/panel</div>
+        </div>
+        <div class="demo-inner">
+          <div class="demo-blur">
+            <div class="demo-top">
+              <div class="dt-title">Panel de Plazas · Tu zona</div>
+              <div class="dt-user"><div class="dt-avatar">JM</div>Juan M. · Abogado Murcia</div>
+            </div>
+            <div class="demo-grid">
+              <div class="dg-kpi"><div class="dg-n">8</div><div class="dg-l">Plazas activas</div></div>
+              <div class="dg-kpi"><div class="dg-n">34</div><div class="dg-l">Leads/mes prev.</div></div>
+              <div class="dg-kpi"><div class="dg-n">590€</div><div class="dg-l">Cuota mensual</div></div>
+            </div>
+            <div class="demo-list-title">Plazas disponibles en tu zona</div>
+            <div class="demo-list">
+              <div class="dl"><div class="dl-dot"></div><div class="dl-main"><b>⚖️ Abogado extranjería · Murcia capital · EN</b><span>Tier A · 34 leads/mes · Disponible desde hoy</span></div><div class="dl-price">590€/mes</div></div>
+              <div class="dl"><div class="dl-dot"></div><div class="dl-main"><b>⚖️ Abogado extranjería · Cartagena · EN/ES</b><span>Tier A · 28 leads/mes · Disponible desde hoy</span></div><div class="dl-price">590€/mes</div></div>
+              <div class="dl"><div class="dl-dot"></div><div class="dl-main"><b>⚖️ Abogado reagrupación · Lorca · AR/ES</b><span>Tier B · 22 leads/mes · Disponible Q2 2026</span></div><div class="dl-price">590€/mes</div></div>
+            </div>
+          </div>
+
+          <div class="lock-overlay">
+            <div class="lock-ico">🔒</div>
+            <div class="lock-title">Información protegida</div>
+            <div class="lock-text">Plazas exactas, condiciones contractuales, calculadora ROI personalizada y dossier completo están reservados a partners aprobados. Solicita acceso y te los enviamos en menos de 24h.</div>
+            <a href="#solicitar-acceso" class="lock-cta">Solicitar acceso al panel →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="w">
+    <div class="sec-lbl" style="text-align:center">Preguntas frecuentes</div>
+    <h2 class="sec-h" style="text-align:center;margin-bottom:12px">Antes de solicitar acceso</h2>
+
+    <div class="faq-g">
+      <details class="faq-item">
+        <summary class="faq-q">¿Qué incluye exactamente la cuota de 590€/mes?</summary>
+        <div class="faq-a">La cuota consolida todos los componentes que necesitarías contratar por separado: <b>CRM GoHighLevel</b>, <b>setup técnico</b> (landing, pixel Meta, automatizaciones WhatsApp), <b>gestión semanal de campañas</b> por la agencia, <b>cualificación IA</b> del bot Mar-IA, y <b>250€ de presupuesto Meta Ads</b> invertidos a tu nombre sin margen para H4S. Si contrataras estos servicios de forma independiente, el coste sería de 1.775€ a 4.375€ al mes.</div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">¿Qué pasa si un mes no genero conversiones?</summary>
+        <div class="faq-a">Los meses 1 y 2 son de <b>calibración</b> — estamos ajustando audiencias, creatividades y tu script de cierre. A partir del mes 3, si no estás superando el 18% de conversión, revisamos juntos dónde están los cuellos de botella y ajustamos. No te dejamos solo. La cuota es fija, pero la optimización continua es parte del servicio.</div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">¿Los leads son míos o de Health4Spain?</summary>
+        <div class="faq-a">Los leads son <b>100% tuyos</b>. Si en algún momento causas baja del programa, te entregamos el histórico completo en CSV en un plazo máximo de 7 días hábiles. No firmamos cláusulas de no competencia sobre tu cartera.</div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">¿Hay exclusividad? ¿Pueden captar a otro partner en mi ciudad?</summary>
+        <div class="faq-a">No. La <b>exclusividad geográfica</b> es el pilar del modelo: un único partner por ciudad y tipo de servicio durante toda la vigencia del contrato. Si eres el abogado de extranjería en Alicante, todos los leads de ese servicio en Alicante vienen a ti.</div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">¿Qué permanencia tiene el contrato?</summary>
+        <div class="faq-a">Permanencia mínima de <b>6 meses</b> para permitir que la campaña se estabilice (tras el periodo de calibración inicial). Si quieres causar baja antes, la penalización es de 2 mensualidades. Después de los 6 meses, el contrato se renueva mes a mes sin penalización por baja.</div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">¿Cómo es el proceso para darme de alta?</summary>
+        <div class="faq-a"><b>1.</b> Solicitas acceso por el formulario. <b>2.</b> Revisamos tu perfil y la disponibilidad de plaza en tu ciudad/servicio (24–48h). <b>3.</b> Te enviamos por email las credenciales del panel privado con tu propuesta personalizada, calculadora ROI y contrato. <b>4.</b> Firmamos digitalmente. <b>5.</b> En 4 días laborables estás operativo y recibes los primeros leads.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULARIO -->
+<section class="form-sec" id="solicitar-acceso">
+  <div class="w">
+    <div class="form-head">
+      <div class="sec-lbl">Solicitud de acceso</div>
+      <h2 class="sec-h">Cuéntanos tu perfil y te abrimos el panel</h2>
+      <p class="sec-p">Revisamos tu solicitud en menos de 24h. Si tu ciudad y servicio tienen plaza disponible, recibirás por email las credenciales del área privada con tu propuesta personalizada.</p>
+    </div>
+
+    <div class="form-wrap">
+      <div class="form-card">
+        <div class="fc-top">
+          <h3>Formulario de alta de partner</h3>
+          <p>3 minutos · Confidencial · Sin compromiso</p>
+          <div class="fc-steps"><div class="fcs on"></div><div class="fcs on"></div><div class="fcs on"></div><div class="fcs"></div></div>
+        </div>
+        <form class="fc-body" id="partnerForm" method="POST" action="#">
+
+          <div class="frow">
+            <label class="flabel">Tu servicio profesional</label>
+            <div class="radio-group">
+              <div class="rg-item"><input type="radio" name="servicio" id="svc-abg" value="abogado" required><label for="svc-abg"><em>⚖️</em>Abogado</label></div>
+              <div class="rg-item"><input type="radio" name="servicio" id="svc-ges" value="gestoria"><label for="svc-ges"><em>📋</em>Gestoría</label></div>
+              <div class="rg-item"><input type="radio" name="servicio" id="svc-inm" value="inmobiliaria"><label for="svc-inm"><em>🏠</em>Inmobiliaria</label></div>
+              <div class="rg-item"><input type="radio" name="servicio" id="svc-seg" value="seguros"><label for="svc-seg"><em>🛡️</em>Seguros</label></div>
+            </div>
+          </div>
+
+          <div class="frow-2">
+            <div class="frow">
+              <label class="flabel" for="nombre">Nombre y apellidos</label>
+              <input class="finput" type="text" id="nombre" name="nombre" placeholder="Juan García López" required>
+            </div>
+            <div class="frow">
+              <label class="flabel" for="empresa">Nombre de tu empresa</label>
+              <input class="finput" type="text" id="empresa" name="empresa" placeholder="Bufete García S.L." required>
+            </div>
+          </div>
+
+          <div class="frow-2">
+            <div class="frow">
+              <label class="flabel" for="email">Email profesional</label>
+              <input class="finput" type="email" id="email" name="email" placeholder="juan@bufetegarcia.es" required>
+            </div>
+            <div class="frow">
+              <label class="flabel" for="telefono">Teléfono · WhatsApp</label>
+              <input class="finput" type="tel" id="telefono" name="telefono" placeholder="+34 666 123 456" required>
+            </div>
+          </div>
+
+          <div class="frow">
+            <label class="flabel" for="ciudad">¿En qué ciudad quieres operar?</label>
+            <select class="fselect" id="ciudad" name="ciudad" required>
+              <option value="">Selecciona ciudad</option>
+              <optgroup label="Fase 1 · Activa">
+                <option>Murcia</option><option>Cartagena</option><option>Lorca</option><option>San Pedro del Pinatar</option>
+                <option>Alicante</option><option>Elche</option><option>Torrevieja</option><option>Orihuela</option>
+              </optgroup>
+              <optgroup label="Apertura 2026">
+                <option>Mazarrón</option><option>Torre Pacheco</option><option>San Javier</option><option>Molina de Segura</option>
+                <option>Águilas</option><option>Cieza</option><option>Jumilla</option><option>Yecla</option>
+                <option>Rojales</option><option>Benidorm</option><option>Denia</option>
+              </optgroup>
+              <optgroup label="Expansión Nacional 2027">
+                <option>Málaga / Costa del Sol</option><option>Canarias (Tenerife / GC)</option><option>Cataluña (Barcelona)</option>
+                <option>Valencia capital</option><option>Baleares (Mallorca / Ibiza)</option>
+                <option>Otra (indicar en comentarios)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="frow-2">
+            <div class="frow">
+              <label class="flabel" for="idiomas">Idiomas que atiendes</label>
+              <select class="fselect" id="idiomas" name="idiomas" multiple size="3" required>
+                <option>Español</option><option>Inglés</option><option>Alemán</option>
+                <option>Francés</option><option>Árabe</option><option>Portugués</option><option>Ruso</option>
+              </select>
+            </div>
+            <div class="frow">
+              <label class="flabel" for="colegiado">Nº colegiado / código mediador</label>
+              <input class="finput" type="text" id="colegiado" name="colegiado" placeholder="Opcional">
+            </div>
+          </div>
+
+          <div class="frow">
+            <label class="flabel" for="web">Web / LinkedIn (opcional)</label>
+            <input class="finput" type="url" id="web" name="web" placeholder="https://...">
+          </div>
+
+          <div class="frow">
+            <label class="flabel" for="mensaje">Cuéntanos brevemente sobre tu despacho</label>
+            <textarea class="ftextarea" id="mensaje" name="mensaje" placeholder="Años de experiencia, especialización, facturación estimada anual, qué esperas de H4S..."></textarea>
+          </div>
+
+          <div class="fchk">
+            <input type="checkbox" id="privacy" required>
+            <label for="privacy">He leído y acepto la <a href="#privacidad">política de privacidad</a> de COASEMED S.L. y consiento el tratamiento de mis datos para evaluar mi solicitud de alta como partner de Health4Spain.</label>
+          </div>
+
+          <button type="submit" class="form-submit">Enviar solicitud de acceso →</button>
+          <div class="form-note">Respondemos en menos de 24 horas laborables con tus credenciales de acceso al panel privado.</div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="w">
+    <div class="cta-box">
+      <div class="sec-lbl" style="color:var(--c);margin-bottom:12px;position:relative;z-index:2">¿Dudas antes de rellenar?</div>
+      <h2>Hablamos 20 minutos<br>y te enviamos el dossier completo</h2>
+      <p>Si prefieres una llamada previa antes de rellenar el formulario, escríbenos directamente. Nos ponemos en contacto contigo el mismo día.</p>
+      <div class="cta-contact">
+        Escríbenos a <a href="mailto:adolfo@health4spain.com">adolfo@health4spain.com</a> ·
+        WhatsApp <a href="https://wa.me/34666000000">+34 666 000 000</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>Health4Spain</b> · una marca de <b>COASEMED S.L.</b> · Red de Partners 2026<br>
+  <a href="#">Aviso legal</a> · <a href="#">Política de privacidad</a> · <a href="#">Cookies</a> · <a href="mailto:adolfo@health4spain.com">adolfo@health4spain.com</a>
+</footer>
+
+<script>
+// Phase filter on cities grid
+document.querySelectorAll('.pn-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pn-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    const phase = btn.dataset.phase;
+    document.querySelectorAll('.city-card').forEach(card => {
+      card.style.display = (phase === 'all' || card.dataset.phase === phase) ? '' : 'none';
+    });
+  });
+});
+
+// Form submit handler (placeholder — Javi conectará con backend / webhook)
+document.getElementById('partnerForm').addEventListener('submit', e => {
+  e.preventDefault();
+  alert('[DEMO] Formulario enviado. Javi debe conectar con el endpoint POST definitivo (GHL webhook o email transaccional). Datos capturados correctamente — ver consola.');
+  console.log('Partner form submission:', Object.fromEntries(new FormData(e.target)));
+});
+</script>
+
+</body>
+</html>

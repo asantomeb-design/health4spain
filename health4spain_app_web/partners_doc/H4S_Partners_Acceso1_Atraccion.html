@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Únete a Health4Spain Partners · Modo Implantación 2026</title>
+<style>
+  :root {
+    /* Health4Spain brand */
+    --n: #18253a;
+    --n2: #0e3260;
+    --n3: #1d4e89;
+    --c: #29abe2;
+    --c2: #1a8bbf;
+    --clt: #e8f6fc;
+    --g: #0a7c4e;
+    --glt: #e6f7f0;
+    --o: #e8943a;
+    --olt: #fff3e0;
+    --p: #7c3aed;
+    --plt: #ede9fe;
+    --r: #c0392b;
+    --rlt: #fdecea;
+    --sl: #4a6080;
+    --sl2: #8fa5bf;
+    --bd: #dce7f1;
+    --bg: #f5f7fb;
+    --wh: #fff;
+    --f: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--f);
+    background: var(--bg);
+    color: var(--n);
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* ================ HERO ================ */
+  header.hero {
+    position: relative;
+    background: linear-gradient(155deg, var(--n) 0%, var(--n2) 52%, var(--n3) 100%);
+    color: var(--wh);
+    padding: 100px 24px 80px;
+    overflow: hidden;
+  }
+  header.hero::before {
+    content:'';
+    position:absolute; top:-100px; right:-80px; width:600px; height:600px;
+    background: radial-gradient(circle, rgba(41,171,226,0.18) 0%, transparent 60%);
+  }
+  header.hero::after {
+    content:'';
+    position:absolute; bottom:-200px; left:-100px; width:500px; height:500px;
+    background: radial-gradient(circle, rgba(10,124,78,0.12) 0%, transparent 60%);
+  }
+  .hero-inner { max-width: 1180px; margin: 0 auto; position: relative; }
+  .eyebrow {
+    display: inline-block;
+    background: rgba(41,171,226,0.15);
+    color: var(--c);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    border: 1px solid rgba(41,171,226,0.3);
+  }
+  h1.hero-title {
+    font-size: clamp(2rem, 6vw, 3.4rem);
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    max-width: 900px;
+  }
+  h1.hero-title em { color: var(--c); font-style: normal; }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: rgba(255,255,255,0.72);
+    max-width: 760px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 32px;
+    margin-top: 30px;
+  }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--c);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .stat-num small { font-size: 0.85rem; color: var(--c); margin-left: 4px; }
+  .stat-lbl {
+    margin-top: 6px;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* ================ MODO IMPLANTACIÓN BANNER ================ */
+  .implant-banner {
+    background: linear-gradient(135deg, var(--c) 0%, var(--c2) 100%);
+    color: var(--wh);
+    padding: 36px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .implant-banner::before {
+    content: '🎯';
+    font-size: 1.5rem;
+    margin-right: 8px;
+  }
+  .implant-banner h3 {
+    display: inline;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .implant-banner p {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.92);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ================ SECTIONS ================ */
+  section { padding: 80px 0; }
+  section.alt { background: var(--wh); }
+
+  .sec-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--n);
+    margin-bottom: 12px;
+  }
+  .sec-title .num {
+    color: var(--c);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-right: 16px;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+  .sec-sub {
+    color: var(--sl);
+    font-size: 1.05rem;
+    margin-bottom: 40px;
+    max-width: 800px;
+  }
+
+  /* ================ CAPTURE CHAIN ================ */
+  .chain {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin: 40px 0;
+    background: var(--wh);
+    border-radius: 18px;
+    padding: 32px 24px;
+    border: 1.5px solid var(--bd);
+  }
+  .chain-step {
+    padding: 16px 12px;
+    text-align: center;
+    position: relative;
+    border-right: 1px dashed var(--bd);
+  }
+  .chain-step:last-child { border-right: none; }
+  .chain-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c) 0%, var(--c2) 100%);
+    color: var(--wh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    box-shadow: 0 6px 18px rgba(41,171,226,0.25);
+  }
+  .chain-step:nth-child(2) .chain-icon { background: linear-gradient(135deg, var(--p) 0%, #6028c8 100%); box-shadow: 0 6px 18px rgba(124,58,237,0.25); }
+  .chain-step:nth-child(3) .chain-icon { background: linear-gradient(135deg, var(--o) 0%, #cc7820 100%); box-shadow: 0 6px 18px rgba(232,148,58,0.25); }
+  .chain-step:nth-child(4) .chain-icon { background: linear-gradient(135deg, var(--g) 0%, #086a42 100%); box-shadow: 0 6px 18px rgba(10,124,78,0.25); }
+  .chain-step:nth-child(5) .chain-icon { background: linear-gradient(135deg, var(--n3) 0%, var(--n) 100%); }
+  .chain-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--c);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .chain-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--n);
+    margin-bottom: 6px;
+  }
+  .chain-desc {
+    font-size: 0.78rem;
+    color: var(--sl);
+    line-height: 1.5;
+  }
+
+  /* ================ PLANS GRID (NO PRICES) ================ */
+  .plans-locked {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 40px 0;
+  }
+  .plan-card {
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 18px;
+    padding: 28px 22px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .plan-card:hover { border-color: var(--c); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(41,171,226,0.10); }
+  .plan-card.elite {
+    border: 2px solid var(--n);
+    background: linear-gradient(180deg, #fff 0%, var(--clt) 100%);
+  }
+  .plan-card.elite::before {
+    content: '🏆 EXCLUSIVO';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--n);
+    color: var(--c);
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    white-space: nowrap;
+  }
+  .plan-name {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--n);
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .plan-tagline {
+    font-size: 0.78rem;
+    color: var(--c);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .plan-price-locked {
+    background: var(--bg);
+    border: 1px dashed var(--bd);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+    margin-bottom: 18px;
+    color: var(--sl2);
+    font-size: 0.85rem;
+    font-style: italic;
+  }
+  .plan-price-locked b { color: var(--n); display: block; font-style: normal; margin-bottom: 4px; font-size: 0.92rem; }
+  .plan-features { list-style: none; padding: 0; margin: 0; }
+  .plan-features li {
+    padding: 7px 0 7px 24px;
+    position: relative;
+    font-size: 0.88rem;
+    color: var(--sl);
+    line-height: 1.5;
+  }
+  .plan-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--g);
+    font-weight: 800;
+  }
+  .plan-card.elite .plan-features li::before { color: var(--c); }
+  .plan-access {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--bd);
+    font-size: 0.75rem;
+    color: var(--sl);
+  }
+  .plan-access b { color: var(--n); }
+
+  /* ================ ZONES MAP ================ */
+  .zones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 32px 0;
+  }
+  .zone-card {
+    padding: 16px 18px;
+    border: 1.5px solid var(--bd);
+    border-radius: 12px;
+    background: var(--wh);
+    transition: all 0.2s;
+  }
+  .zone-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.05); }
+  .zone-card.live { border-color: var(--g); background: linear-gradient(135deg, var(--glt) 0%, var(--wh) 100%); }
+  .zone-card.reserved { border-color: var(--o); background: linear-gradient(135deg, var(--olt) 0%, var(--wh) 100%); }
+  .zone-card.available { border-color: var(--c); background: linear-gradient(135deg, var(--clt) 0%, var(--wh) 100%); }
+  .zone-card.locked-preview {
+    filter: blur(3px);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .zone-name { font-size: 1rem; font-weight: 800; color: var(--n); margin-bottom: 4px; }
+  .zone-meta { font-size: 0.78rem; color: var(--sl); }
+  .zone-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 8px;
+  }
+  .zone-status.live { background: var(--g); color: var(--wh); }
+  .zone-status.reserved { background: var(--o); color: var(--wh); }
+  .zone-status.available { background: var(--c); color: var(--wh); }
+  .zones-locked-overlay {
+    text-align: center;
+    margin: 30px 0 0;
+    padding: 24px;
+    background: var(--clt);
+    border: 1px dashed var(--c);
+    border-radius: 12px;
+    color: var(--n);
+    font-weight: 600;
+  }
+  .zones-locked-overlay b { color: var(--c); }
+
+  /* ================ DEMO LIMITED ================ */
+  .demo-mockup {
+    margin: 40px 0;
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 18px;
+    padding: 32px;
+    position: relative;
+  }
+  .demo-mockup-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--bd);
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+  }
+  .demo-title { font-weight: 800; color: var(--n); font-size: 1.05rem; }
+  .demo-bullets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .demo-bullet {
+    padding: 16px;
+    background: var(--bg);
+    border-radius: 10px;
+    border-left: 3px solid var(--c);
+  }
+  .demo-bullet.locked {
+    filter: blur(2.5px);
+    pointer-events: none;
+    user-select: none;
+  }
+  .demo-bullet h4 { font-size: 0.92rem; color: var(--n); margin-bottom: 6px; }
+  .demo-bullet p { font-size: 0.82rem; color: var(--sl); }
+
+  /* ================ FOUNDING PARTNER ================ */
+  .founding-block {
+    background: linear-gradient(135deg, var(--n) 0%, var(--n3) 100%);
+    color: var(--wh);
+    padding: 50px 40px;
+    border-radius: 24px;
+    margin: 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .founding-block::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(41,171,226,0.2) 0%, transparent 60%);
+  }
+  .founding-block-inner { position: relative; }
+  .founding-tag {
+    display: inline-block;
+    background: var(--c);
+    color: var(--n);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .founding-block h2 {
+    color: var(--wh);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+  .founding-block h2 em { color: var(--c); font-style: normal; }
+  .founding-perks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 30px;
+    margin-top: 28px;
+  }
+  .founding-perks li {
+    list-style: none;
+    padding: 8px 0 8px 30px;
+    position: relative;
+    color: rgba(255,255,255,0.92);
+    font-size: 0.95rem;
+  }
+  .founding-perks li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--c);
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  /* ================ PROCESS STEPS ================ */
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 40px 0;
+  }
+  .process-step {
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: left;
+    position: relative;
+  }
+  .process-step .step-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--c);
+    color: var(--wh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+  }
+  .process-step h4 { font-size: 1rem; font-weight: 800; color: var(--n); margin-bottom: 8px; }
+  .process-step p { font-size: 0.85rem; color: var(--sl); }
+  .process-step .when {
+    margin-top: 12px;
+    font-size: 0.72rem;
+    color: var(--c);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  /* ================ FORM ================ */
+  .form-block {
+    background: var(--wh);
+    border: 1.5px solid var(--bd);
+    border-radius: 24px;
+    padding: 50px 40px;
+    margin: 40px 0;
+    box-shadow: 0 14px 40px rgba(24,37,58,0.06);
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--n);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--bd);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--n);
+    background: var(--wh);
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--c);
+    box-shadow: 0 0 0 3px rgba(41,171,226,0.12);
+  }
+  .form-textarea { min-height: 90px; resize: vertical; }
+  .form-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--sl);
+    margin-top: 10px;
+  }
+  .form-checkbox input { margin-top: 4px; flex-shrink: 0; }
+  .submit-btn {
+    background: linear-gradient(135deg, var(--c) 0%, var(--c2) 100%);
+    color: var(--wh);
+    border: none;
+    padding: 16px 36px;
+    font-size: 1rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+    margin-top: 12px;
+  }
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(41,171,226,0.3);
+  }
+  .form-note {
+    margin-top: 14px;
+    font-size: 0.82rem;
+    color: var(--sl);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ================ FAQ ================ */
+  .faq-list { margin: 30px 0; }
+  .faq-item {
+    background: var(--wh);
+    border: 1px solid var(--bd);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+  .faq-q {
+    font-weight: 800;
+    color: var(--n);
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  .faq-q::before { content: '— '; color: var(--c); }
+  .faq-a { color: var(--sl); font-size: 0.92rem; }
+
+  /* ================ FOOTER ================ */
+  footer.foot {
+    background: var(--n);
+    color: rgba(255,255,255,0.6);
+    padding: 50px 24px 40px;
+    text-align: center;
+  }
+  footer.foot strong { color: var(--c); }
+
+  /* ================ RESPONSIVE ================ */
+  /* Tablet · ≤ 1024px */
+  @media (max-width: 1024px) {
+    .wrap { padding: 0 20px; }
+    .chain { grid-template-columns: repeat(3, 1fr); padding: 24px 16px; }
+    .chain-step:nth-child(3) { border-right: none; }
+    .chain-step:nth-child(4), .chain-step:nth-child(5) { border-top: 1px dashed var(--bd); padding-top: 24px; }
+  }
+
+  /* Tablet portrait · ≤ 900px */
+  @media (max-width: 900px) {
+    .plans-locked, .process-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .plan-card { padding: 22px 18px; }
+    .demo-bullets { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; gap: 12px; }
+    .founding-perks { grid-template-columns: 1fr; gap: 10px 0; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 22px 18px; padding-top: 26px; }
+    .stat-num { font-size: 1.7rem; }
+    section { padding: 60px 0; }
+    header.hero { padding: 70px 20px 60px; }
+    h1.hero-title { letter-spacing: -1px; }
+    .founding-block { padding: 38px 28px; }
+  }
+
+  /* Mobile · ≤ 640px */
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px; }
+    .chain {
+      grid-template-columns: 1fr;
+      padding: 18px;
+      gap: 0;
+    }
+    .chain-step {
+      border-right: none;
+      border-bottom: 1px dashed var(--bd);
+      padding: 22px 8px;
+      text-align: center;
+    }
+    .chain-step:last-child { border-bottom: none; }
+    .chain-step:nth-child(4), .chain-step:nth-child(5) { border-top: none; padding-top: 22px; }
+    .chain-icon { margin: 0 auto 12px; width: 50px; height: 50px; font-size: 1.25rem; }
+    .plans-locked, .process-grid { grid-template-columns: 1fr; gap: 14px; }
+    .plan-card { padding: 22px 20px; }
+    .plan-card.elite::before { font-size: 0.65rem; padding: 4px 11px; }
+    section { padding: 50px 0; }
+    header.hero { padding: 60px 16px 50px; }
+    .eyebrow { font-size: 0.72rem; padding: 6px 14px; }
+    h1.hero-title { font-size: 1.7rem; line-height: 1.1; }
+    .hero-sub { font-size: 0.95rem; }
+    .hero-stats { grid-template-columns: 1fr 1fr; gap: 18px; }
+    .stat-num { font-size: 1.5rem; }
+    .stat-lbl { font-size: 0.7rem; }
+    .implant-banner { padding: 28px 16px; }
+    .implant-banner h3 { font-size: 1.05rem; display: block; margin-bottom: 8px; }
+    .implant-banner::before { display: block; margin: 0 auto 8px; }
+    .implant-banner p { font-size: 0.9rem; }
+    .sec-title { font-size: 1.4rem; }
+    .sec-title .num { display: block; margin-bottom: 6px; margin-right: 0; font-size: 0.78rem; }
+    .sec-sub { font-size: 0.95rem; margin-bottom: 30px; }
+    .form-block { padding: 28px 22px; border-radius: 18px; }
+    .founding-block { padding: 32px 22px; border-radius: 18px; }
+    .founding-block h2 { font-size: 1.45rem; }
+    .founding-perks li { font-size: 0.9rem; padding-left: 26px; }
+    .demo-mockup { padding: 22px 18px; border-radius: 14px; }
+    .demo-mockup-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .zones-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .zone-card { padding: 12px 14px; }
+    .zone-name { font-size: 0.92rem; }
+    .zone-meta { font-size: 0.72rem; }
+    .submit-btn { padding: 14px 24px; font-size: 0.95rem; }
+    /* Touch targets */
+    input, select, textarea, button, a.cta-btn { min-height: 44px; }
+    .form-input, .form-select, .form-textarea { padding: 14px 14px; font-size: 16px; /* Prevent iOS zoom */ }
+    /* FAQ */
+    .faq-item { padding: 16px 18px; }
+    .faq-q { font-size: 0.95rem; }
+    .faq-a { font-size: 0.88rem; }
+  }
+
+  /* Small mobile · ≤ 380px */
+  @media (max-width: 380px) {
+    h1.hero-title { font-size: 1.5rem; }
+    .stat-num { font-size: 1.3rem; }
+    .zones-grid { grid-template-columns: 1fr; }
+    .founding-block h2 { font-size: 1.3rem; }
+    .sec-title { font-size: 1.25rem; }
+  }
+
+  /* Disable hover transforms on touch devices */
+  @media (hover: none) {
+    .plan-card:hover, .zone-card:hover, .process-step:hover { transform: none; box-shadow: none; }
+    .submit-btn:hover { transform: none; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- HERO -->
+<!-- ============================================ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">⚡ Modo Implantación · Founding Partners 2026</div>
+    <h1 class="hero-title">Únete a la red de profesionales que <em>capta clientes extranjeros</em> en España, mientras tú te dedicas a cerrarlos.</h1>
+    <p class="hero-sub">Health4Spain capta expatriados con campañas digitales, los cualifica con IA y entrega la cita ya agendada al partner local correspondiente. Estamos en fase de implantación con condiciones especiales para los primeros 10 partners founding.</p>
+
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">7,24<small>M</small></div>
+        <div class="stat-lbl">Expatriados en España</div>
+      </div>
+      <div>
+        <div class="stat-num">+6,3<small>%</small></div>
+        <div class="stat-lbl">Crecimiento anual</div>
+      </div>
+      <div>
+        <div class="stat-num">5</div>
+        <div class="stat-lbl">Plazas en negociación</div>
+      </div>
+      <div>
+        <div class="stat-num">10</div>
+        <div class="stat-lbl">Founding partners totales</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================ -->
+<!-- IMPLANT BANNER -->
+<!-- ============================================ -->
+<div class="implant-banner">
+  <h3>Modo Implantación · Coste reducido para los primeros 10 partners</h3>
+  <p>Si entras en H4S durante la fase de implantación, accedes a tarifas reducidas mantenidas de por vida, ampliación de territorio y prelación en verticales adyacentes. Las condiciones de Founding Partner no se replican una vez cerrada esta fase.</p>
+</div>
+
+<!-- ============================================ -->
+<!-- 01 · QUÉ HACEMOS / CADENA DE CAPTACIÓN -->
+<!-- ============================================ -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">01</span>Cómo captamos a tus futuros clientes</h2>
+    <p class="sec-sub">Una cadena automatizada de cinco pasos que convierte una búsqueda en Google en una cita en tu agenda — en menos de 8 minutos. Tú apareces solo en el último paso.</p>
+
+    <div class="chain">
+      <div class="chain-step">
+        <div class="chain-icon">📱</div>
+        <div class="chain-num">Paso 1</div>
+        <div class="chain-title">Captación</div>
+        <div class="chain-desc">Campañas Meta + Google Ads en 5 idiomas, segmentadas por nacionalidad y zona.</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-icon">🌐</div>
+        <div class="chain-num">Paso 2</div>
+        <div class="chain-title">Landing</div>
+        <div class="chain-desc">Formulario en idioma del cliente. Convierte en menos de 90 segundos.</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-icon">🤖</div>
+        <div class="chain-num">Paso 3</div>
+        <div class="chain-title">Cualificación IA</div>
+        <div class="chain-desc">El bot Mar-IA conversa por WhatsApp, valida la necesidad y descarta lo no relevante.</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-icon">📅</div>
+        <div class="chain-num">Paso 4</div>
+        <div class="chain-title">Agenda</div>
+        <div class="chain-desc">Cita confirmada con briefing del cliente: nombre, idioma, presupuesto, urgencia.</div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-icon">🤝</div>
+        <div class="chain-num">Paso 5</div>
+        <div class="chain-title">Tu cierre</div>
+        <div class="chain-desc">El cliente llega informado y con cita confirmada. Tú solo tienes que aparecer y cerrar.</div>
+      </div>
+    </div>
+
+    <p style="text-align: center; color: var(--sl); font-size: 0.9rem; font-style: italic; margin-top: 24px;">
+      <b style="color: var(--n);">No vendemos leads.</b> Activamos tu cartera digital en tu zona, en tu idioma, con tu marca personal en el último paso.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 02 · PLANS (NO PRICES) -->
+<!-- ============================================ -->
+<section class="alt">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">02</span>Los 4 planes · acceso por trayectoria</h2>
+    <p class="sec-sub">Todos los partners entran en el plan de aterrizaje. Los planes superiores se desbloquean por tiempo activo y métricas verificables, no se contratan directamente. La <b>exclusividad geográfica</b> es destino, no entrada.</p>
+
+    <div class="plans-locked">
+      <div class="plan-card">
+        <div class="plan-name">Activa</div>
+        <div class="plan-tagline">Plan de entrada</div>
+        <div class="plan-price-locked"><b>Tarifa según tier de zona</b>Disponible al solicitar acceso completo</div>
+        <ul class="plan-features">
+          <li>15 leads cualificados/mes</li>
+          <li>Panel privado del partner</li>
+          <li>URL dedicada en partners.health4spain.com</li>
+          <li>Bot Mar-IA configurado en tu idioma</li>
+          <li>Soporte equipo H4S</li>
+        </ul>
+        <div class="plan-access"><b>Acceso:</b> directo tras llamada de validación</div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Crece</div>
+        <div class="plan-tagline">🔓 Por trayectoria · 3 meses</div>
+        <div class="plan-price-locked"><b>Tarifa según tier de zona</b>Disponible al solicitar acceso completo</div>
+        <ul class="plan-features">
+          <li>25 leads cualificados/mes</li>
+          <li>Prioridad media en routing</li>
+          <li>Reporting mensual de métricas</li>
+          <li>Material de venta personalizado</li>
+          <li>Acceso a campañas estacionales</li>
+        </ul>
+        <div class="plan-access"><b>Acceso:</b> tras 3 meses + métricas</div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Escala</div>
+        <div class="plan-tagline">🔓 Por trayectoria · 9 meses</div>
+        <div class="plan-price-locked"><b>Tarifa según tier de zona</b>Disponible al solicitar acceso completo</div>
+        <ul class="plan-features">
+          <li>45 leads cualificados/mes</li>
+          <li>Prelación alta en routing</li>
+          <li>Ampliación opcional a zona influencia</li>
+          <li>Posibilidad de multi-zona</li>
+          <li>Co-marketing local opcional</li>
+        </ul>
+        <div class="plan-access"><b>Acceso:</b> 9 meses + KPIs cumplidos</div>
+      </div>
+
+      <div class="plan-card elite">
+        <div class="plan-name">Lidera</div>
+        <div class="plan-tagline">🏆 Solo por trayectoria</div>
+        <div class="plan-price-locked"><b>No se contrata</b>Se desbloquea por trayectoria de 21+ meses</div>
+        <ul class="plan-features">
+          <li>Leads ilimitados en tu zona</li>
+          <li><b>Exclusividad geográfica</b> de zona de influencia entera</li>
+          <li>Bloqueo de servicios adyacentes</li>
+          <li>Voz en roadmap de producto</li>
+          <li>Línea directa con dirección H4S</li>
+        </ul>
+        <div class="plan-access"><b>Acceso:</b> solo se desbloquea, nunca se vende</div>
+      </div>
+    </div>
+
+    <div style="text-align: center; padding: 26px; background: var(--clt); border-radius: 12px; border: 1px solid var(--c); margin-top: 30px;">
+      <p style="color: var(--n); font-weight: 600; margin: 0;">
+        💡 Las tarifas concretas según tu zona se desbloquean en el <b>acceso completo</b>, tras llamada de cualificación. Solicítalo en el formulario al final de esta página.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 03 · DEMO LIMITED -->
+<!-- ============================================ -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">03</span>Demo limitada del panel del Partner</h2>
+    <p class="sec-sub">Una vista parcial del entorno donde verás tus leads, gestionarás citas y mediarás métricas. La demo completa con datos reales se libera tras cualificación.</p>
+
+    <div class="demo-mockup">
+      <div class="demo-mockup-head">
+        <div class="demo-title">Dashboard del Partner · vista resumen</div>
+        <div style="font-size: 0.78rem; color: var(--sl); font-style: italic;">demo limitada · acceso completo tras cualificación</div>
+      </div>
+      <div class="demo-bullets">
+        <div class="demo-bullet">
+          <h4>📥 Mis leads</h4>
+          <p>Listado de todos los leads entregados, con datos de contacto, idioma, urgencia y notas del briefing.</p>
+        </div>
+        <div class="demo-bullet">
+          <h4>📅 Citas confirmadas</h4>
+          <p>Calendario de citas confirmadas con cliente, briefing y enlace a videollamada o presencial.</p>
+        </div>
+        <div class="demo-bullet">
+          <h4>📊 Métricas en vivo</h4>
+          <p>Volumen, conversión, tiempo de respuesta. Lo que mide tu progresión a Crece, Escala, Lidera.</p>
+        </div>
+        <div class="demo-bullet locked">
+          <h4>💰 ROI calculado</h4>
+          <p>Calculadora con tus números reales: revenue, payback, comparativa con captación propia.</p>
+        </div>
+        <div class="demo-bullet locked">
+          <h4>🗺️ Mapa de zonas</h4>
+          <p>Visualización de tu zona de influencia y zonas adyacentes con disponibilidad de plaza.</p>
+        </div>
+        <div class="demo-bullet locked">
+          <h4>📑 Contratos y firma</h4>
+          <p>Estado de tus contratos, mandato SEPA, facturas, ampliación de zonas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 04 · ZONES PREVIEW -->
+<!-- ============================================ -->
+<section class="alt">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">04</span>Zonas · disponibilidad por toda España</h2>
+    <p class="sec-sub">Cada zona tiene un tier (A premium, B media, C en desarrollo) que determina su tarifa. Las plazas en planes Activa, Crece y Escala son <b>compartidas</b> — varios partners pueden coexistir mientras avanzan en su trayectoria. La <b>exclusividad geográfica</b> solo aplica al plan Lidera, que se gana con tiempo + KPIs (mínimo 21 meses). Las tarifas concretas se desbloquean tras cualificación.</p>
+
+    <h3 style="font-size: 1.1rem; color: var(--n); margin-top: 30px; margin-bottom: 16px; font-weight: 800;">🏖️ Costa Blanca · Tier A (premium)</h3>
+    <div class="zones-grid">
+      <div class="zone-card reserved">
+        <div class="zone-name">Torrevieja</div>
+        <div class="zone-meta">Inmobiliaria · 52% extranjeros</div>
+        <span class="zone-status reserved">Compartida</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">Calpe</div>
+        <div class="zone-meta">Tier A · 38% extranjeros</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">Jávea / Xàbia</div>
+        <div class="zone-meta">Tier A · 37% extranjeros</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">Benidorm</div>
+        <div class="zone-meta">Tier A · 32% extranjeros</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card reserved">
+        <div class="zone-name">Alicante</div>
+        <div class="zone-meta">Abogados · capital</div>
+        <span class="zone-status reserved">Compartida</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">Denia</div>
+        <div class="zone-meta">Tier A · Marina Alta</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+    </div>
+
+    <h3 style="font-size: 1.1rem; color: var(--n); margin-top: 36px; margin-bottom: 16px; font-weight: 800;">🌴 Costa del Sol · Tier A (premium)</h3>
+    <div class="zones-grid">
+      <div class="zone-card available">
+        <div class="zone-name">Marbella</div>
+        <div class="zone-meta">Tier A · ticket más alto España</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">Estepona</div>
+        <div class="zone-meta">Tier A · expat consolidado</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">Fuengirola</div>
+        <div class="zone-meta">Tier A · 28% extranjeros</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">Mijas</div>
+        <div class="zone-meta">Tier A · 26% extranjeros</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+    </div>
+
+    <h3 style="font-size: 1.1rem; color: var(--n); margin-top: 36px; margin-bottom: 16px; font-weight: 800;">🌅 Mar Menor · Tier B (media)</h3>
+    <div class="zones-grid">
+      <div class="zone-card reserved">
+        <div class="zone-name">Murcia capital</div>
+        <div class="zone-meta">Seguros · expat laboral</div>
+        <span class="zone-status reserved">Compartida</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">Cartagena</div>
+        <div class="zone-meta">Tier B · costa</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">San Pedro del Pinatar</div>
+        <div class="zone-meta">Tier B · Mar Menor norte</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available">
+        <div class="zone-name">San Javier</div>
+        <div class="zone-meta">Tier B · Mar Menor</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+    </div>
+
+    <h3 style="font-size: 1.1rem; color: var(--n); margin-top: 36px; margin-bottom: 16px; font-weight: 800; opacity: 0.5;">🏝️ Baleares · Canarias · Cataluña · Madrid</h3>
+    <div class="zones-grid">
+      <div class="zone-card available locked-preview">
+        <div class="zone-name">Mallorca · Calvià</div>
+        <div class="zone-meta">Tier A</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available locked-preview">
+        <div class="zone-name">Tenerife · Adeje</div>
+        <div class="zone-meta">Tier A · 48% extranjeros</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available locked-preview">
+        <div class="zone-name">Ibiza · isla</div>
+        <div class="zone-meta">Tier A</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+      <div class="zone-card available locked-preview">
+        <div class="zone-name">Madrid · centro</div>
+        <div class="zone-meta">Tier A · capital</div>
+        <span class="zone-status available">Disponible</span>
+      </div>
+    </div>
+
+    <div class="zones-locked-overlay">
+      Mapa completo de <b>~200 ciudades en toda España</b> con tarifas detalladas y disponibilidad por servicio se desbloquea al solicitar acceso completo.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 05 · FOUNDING PARTNER -->
+<!-- ============================================ -->
+<section>
+  <div class="wrap">
+    <div class="founding-block">
+      <div class="founding-block-inner">
+        <div class="founding-tag">Solo durante implantación</div>
+        <h2>Condiciones <em>Founding Partner</em> · los primeros 10</h2>
+        <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top: 14px;">Si entras en H4S durante la fase de implantación, no solo accedes a tarifa reducida durante el arranque — accedes a un paquete de ventajas que no se replicará una vez cerrada esta fase.</p>
+
+        <ul class="founding-perks">
+          <li><b>Tarifa de implantación reducida</b> los primeros 6 meses</li>
+          <li><b>Bloqueo de precio de por vida</b> · cuando subamos tarifas, tú te quedas</li>
+          <li><b>Setup fee gratuito</b> (ahorro de 300-500€ de entrada)</li>
+          <li><b>Territorio ampliado desde Escala</b> en lugar de Lidera</li>
+          <li><b>Primer derecho sobre verticales adyacentes</b> en tu ciudad</li>
+          <li><b>Co-marketing destacado</b> · tu marca en home de health4spain.com</li>
+          <li><b>Línea directa con dirección</b> · feedback de producto</li>
+          <li><b>Comisión por referrals</b> 10% sobre primer año</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 06 · PROCESS -->
+<!-- ============================================ -->
+<section class="alt">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">06</span>Cómo se accede a Health4Spain</h2>
+    <p class="sec-sub">Un proceso de 4 pasos diseñado para validar encaje en ambas direcciones. Sin compromiso hasta firma.</p>
+
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <h4>Solicitas acceso</h4>
+        <p>Rellenas el formulario al final de esta página. 2 minutos. Sin precios mostrados aún — esto es para validar encaje.</p>
+        <div class="when">Día 0</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <h4>Llamada de cualificación</h4>
+        <p>20 minutos con un closer H4S. Validamos tu trayectoria, tu zona, tu capacidad operativa. Si encajas, abrimos acceso completo.</p>
+        <div class="when">Día 1-2</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <h4>Acceso completo</h4>
+        <p>Recibes acceso a la zona privada con calculadora ROI con tus números, tarifas detalladas para tu zona y simulador de progresión.</p>
+        <div class="when">Día 2-5</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <h4>Firma y arranque</h4>
+        <p>Si decides avanzar: contrato digital, mandato SEPA, configuración técnica. Operativo recibiendo leads en 14-21 días.</p>
+        <div class="when">Día 7-21</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 07 · FORM -->
+<!-- ============================================ -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">07</span>Solicita acceso completo</h2>
+    <p class="sec-sub">Antes de avanzar queremos conocernos los dos. Estos datos son la base sobre la que decidimos si hay encaje. En menos de 24 horas hábiles te confirmamos plaza y abrimos tu acceso.</p>
+
+    <div class="form-block" id="formBlock">
+      <form id="partnerForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nombre y apellidos *</label>
+            <input type="text" class="form-input" name="name" required placeholder="Juan García López">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Empresa / Despacho *</label>
+            <input type="text" class="form-input" name="company" required placeholder="Bufete García S.L.">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email profesional *</label>
+            <input type="email" class="form-input" name="email" required placeholder="juan@bufetegarcia.es">
+          </div>
+          <div class="form-group">
+            <label class="form-label">WhatsApp / Teléfono *</label>
+            <input type="tel" class="form-input" name="phone" required placeholder="+34 666 123 456">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Servicio que ofreces *</label>
+            <select class="form-select" name="service" required>
+              <option value="">— Selecciona —</option>
+              <option value="abogados">Abogado de extranjería</option>
+              <option value="gestoria">Gestoría / Asesoría fiscal</option>
+              <option value="inmobiliaria">Inmobiliaria</option>
+              <option value="seguros">Mediador / Agente de seguros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ciudad principal de operación *</label>
+            <input type="text" class="form-input" name="city" required placeholder="Torrevieja, Marbella, etc.">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Años ejerciendo en esa ciudad *</label>
+            <input type="number" class="form-input" name="years" required min="0" max="50" placeholder="8">
+          </div>
+          <div class="form-group">
+            <label class="form-label">% cartera actual extranjera *</label>
+            <select class="form-select" name="expat_pct" required>
+              <option value="">— Selecciona —</option>
+              <option>Menos del 10%</option>
+              <option>Entre 10% y 30%</option>
+              <option>Entre 30% y 60%</option>
+              <option>Más del 60%</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Idiomas que atiendes en consulta *</label>
+            <input type="text" class="form-input" name="languages" required placeholder="Español, Inglés, Alemán, Francés…">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Cuéntanos brevemente sobre tu despacho</label>
+            <textarea class="form-textarea" name="about" placeholder="Años de experiencia, especialización, facturación estimada anual, equipo, qué esperas resolver con H4S..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-checkbox">
+          <input type="checkbox" id="privacy" required>
+          <label for="privacy">Acepto la política de privacidad. Acepto que Health4Spain me contacte por email y WhatsApp para los pasos siguientes del proceso de selección.</label>
+        </div>
+
+        <button type="submit" class="submit-btn">Solicitar acceso completo</button>
+        <p class="form-note">Al enviar, validamos tu perfil en tiempo real y, si encajas, te abrimos acceso al panel privado con tarifas detalladas para tu zona y calculadora ROI con tus números.</p>
+      </form>
+    </div>
+
+    <!-- Pre-qualification transition state (hidden by default) -->
+    <div id="qualifyState" style="display:none; background: var(--wh); border: 1.5px solid var(--bd); border-radius: 24px; padding: 60px 40px; text-align: center; box-shadow: 0 14px 40px rgba(24,37,58,0.06);">
+      <div id="qualifyContent">
+        <div id="qualifyIcon" style="width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%; background: var(--clt); display: flex; align-items: center; justify-content: center; font-size: 2.4rem;">⏳</div>
+        <h3 id="qualifyTitle" style="font-size: 1.4rem; color: var(--n); font-weight: 800; margin-bottom: 12px;">Validando tu perfil...</h3>
+        <p id="qualifyText" style="color: var(--sl); font-size: 1rem; max-width: 540px; margin: 0 auto;">Cruzando tus datos con disponibilidad de zona, plazas reservadas y criterios de cualificación H4S.</p>
+        <div id="qualifySteps" style="margin-top: 32px; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+          <div class="qstep" id="qs1" style="display: flex; align-items: center; gap: 12px; padding: 10px 0; opacity: 0.4;">
+            <span class="qstep-icon" style="width: 24px; height: 24px; border-radius: 50%; background: var(--bd); color: var(--sl); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800;">1</span>
+            <span style="font-size: 0.92rem; color: var(--sl);">Datos del perfil recibidos</span>
+          </div>
+          <div class="qstep" id="qs2" style="display: flex; align-items: center; gap: 12px; padding: 10px 0; opacity: 0.4;">
+            <span class="qstep-icon" style="width: 24px; height: 24px; border-radius: 50%; background: var(--bd); color: var(--sl); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800;">2</span>
+            <span style="font-size: 0.92rem; color: var(--sl);">Validando disponibilidad de plaza en tu zona</span>
+          </div>
+          <div class="qstep" id="qs3" style="display: flex; align-items: center; gap: 12px; padding: 10px 0; opacity: 0.4;">
+            <span class="qstep-icon" style="width: 24px; height: 24px; border-radius: 50%; background: var(--bd); color: var(--sl); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800;">3</span>
+            <span style="font-size: 0.92rem; color: var(--sl);">Cruzando criterios mínimos H4S</span>
+          </div>
+          <div class="qstep" id="qs4" style="display: flex; align-items: center; gap: 12px; padding: 10px 0; opacity: 0.4;">
+            <span class="qstep-icon" style="width: 24px; height: 24px; border-radius: 50%; background: var(--bd); color: var(--sl); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800;">4</span>
+            <span style="font-size: 0.92rem; color: var(--sl);">Generando tu acceso al panel privado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Success state (hidden initially) -->
+      <div id="successContent" style="display: none;">
+        <div style="width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%; background: var(--g); color: var(--wh); display: flex; align-items: center; justify-content: center; font-size: 2.4rem; box-shadow: 0 8px 28px rgba(10,124,78,0.3);">✓</div>
+        <h3 style="font-size: 1.5rem; color: var(--n); font-weight: 800; margin-bottom: 12px;">Pre-cualificado · Acceso desbloqueado</h3>
+        <p style="color: var(--sl); font-size: 1rem; max-width: 580px; margin: 0 auto 28px;">
+          <span id="welcomeName"></span>, tu perfil cumple los mínimos de H4S Partners. Te hemos generado un acceso al panel privado con tarifas detalladas para <span id="welcomeCity"></span>, calculadora ROI con tus números y simulador de progresión.
+        </p>
+        <div style="background: var(--clt); border: 1px solid var(--c); border-radius: 12px; padding: 18px 24px; max-width: 580px; margin: 0 auto 28px; text-align: left;">
+          <div style="font-size: 0.8rem; color: var(--c); font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px;">📩 También te enviamos:</div>
+          <div style="font-size: 0.92rem; color: var(--n); line-height: 1.7;">
+            • Email con enlace personalizado a tu panel<br>
+            • WhatsApp del closer asignado para la llamada de validación final<br>
+            • Resumen ejecutivo del modelo H4S adaptado a tu vertical
+          </div>
+        </div>
+        <a href="#" id="goToPanel" class="submit-btn" style="display: inline-block; text-decoration: none; max-width: 320px; padding: 16px 36px;">Acceder al panel privado →</a>
+        <p style="margin-top: 16px; font-size: 0.82rem; color: var(--sl); font-style: italic;">El enlace caduca en 7 días · solo accede tu cuenta verificada</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 08 · FAQ -->
+<!-- ============================================ -->
+<section class="alt">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="num">08</span>Preguntas frecuentes</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">¿Por qué no muestran las tarifas en esta página?</div>
+        <div class="faq-a">Porque trabajamos con un único partner por ciudad y servicio, y queremos validar el encaje antes de hablar de números. La cualificación inicial nos asegura que solo dedicamos tiempo a profesionales que cumplen los mínimos. En la llamada y en el acceso completo verás todas las tarifas detalladas para tu zona específica.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Qué quiere decir Modo Implantación y por qué la tarifa es reducida?</div>
+        <div class="faq-a">Estamos cerrando los primeros 10 partners founding de H4S. Durante esta fase, los partners que entran lo hacen con condiciones mejoradas: tarifa de implantación reducida durante 6 meses, bloqueo de precio de por vida, setup fee gratuito y otras ventajas. Una vez cerrada esta fase (~mes 8-10 de 2026), las condiciones estándar aplican y los Founding mantienen las suyas.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Tengo exclusividad si firmo con vosotros?</div>
+        <div class="faq-a">No de día 1. La exclusividad geográfica está reservada al plan Lidera, que se desbloquea por trayectoria (mínimo 21 meses + métricas validadas). Esto protege la marca H4S y al cliente final: no bloqueamos zonas con partners que no han demostrado rendimiento. Lo bueno: cuando llegas a Lidera, la exclusividad es real y se extiende a tu zona de influencia entera (no solo tu municipio).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Y si quiero operar en varias zonas, no solo en una?</div>
+        <div class="faq-a">Es posible y lo contemplamos. Empezamos típicamente con tu zona principal. A partir del plan Escala puedes solicitar ampliación a zonas adicionales con descuento por multi-zona. Los detalles concretos los discutimos en la llamada de cualificación.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Qué se compromete H4S a entregar?</div>
+        <div class="faq-a">Volumen mensual de leads cualificados según el plan, gestión de campañas Meta Ads en tu zona, configuración del bot Mar-IA en los idiomas que atiendes, panel privado y URL dedicada. Si en algún momento no entregamos el volumen mínimo pactado, el contrato contempla compensación o devolución parcial. Esos detalles los verás en el acceso completo.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Cuánto tarda en estar operativo desde la firma?</div>
+        <div class="faq-a">14-21 días desde la firma. Setup técnico (URL dedicada, panel, bot Mar-IA, integración CRM) en 7-10 días. Activación de campañas Meta Ads en 4-7 días adicionales. Primer lead típicamente entregado entre día 14 y día 21.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- FOOTER -->
+<!-- ============================================ -->
+<footer class="foot">
+  <div class="wrap">
+    <p style="font-size: 1.05rem; color: var(--c); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 8px;">Health4Spain · Red de Partners</p>
+    <p>Captamos · cualificamos · entregamos. Tú cierras.</p>
+    <p style="margin-top: 24px; font-size: 0.78rem; color: rgba(255,255,255,0.4);">COASEMED S.L. · Health4Spain Partners · Modo Implantación 2026 · Documento confidencial</p>
+  </div>
+</footer>
+
+<script>
+// === FLUJO DE PRE-CUALIFICACIÓN Y ACCESO AL PANEL ===
+document.getElementById('partnerForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  // Hide form, show transition state
+  document.getElementById('formBlock').style.display = 'none';
+  const qualifyState = document.getElementById('qualifyState');
+  qualifyState.style.display = 'block';
+  qualifyState.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Animate steps progressively
+  const steps = ['qs1','qs2','qs3','qs4'];
+  steps.forEach((id, idx) => {
+    setTimeout(() => {
+      const step = document.getElementById(id);
+      step.style.opacity = '1';
+      const icon = step.querySelector('.qstep-icon');
+      icon.style.background = 'var(--g)';
+      icon.style.color = 'var(--wh)';
+      icon.innerHTML = '✓';
+    }, (idx + 1) * 700);
+  });
+
+  // After all steps complete, transition to success
+  setTimeout(() => {
+    document.getElementById('qualifyContent').style.display = 'none';
+    document.getElementById('successContent').style.display = 'block';
+
+    // Personalize success message
+    const firstName = (data.name || '').split(' ')[0] || '';
+    document.getElementById('welcomeName').textContent = firstName ? 'Hola ' + firstName : 'Tu perfil';
+    document.getElementById('welcomeCity').textContent = data.city || 'tu ciudad';
+
+    // Build URL to Acceso 2 with token + key data
+    const params = new URLSearchParams();
+    params.set('token', generateToken());
+    params.set('name', data.name || '');
+    params.set('email', data.email || '');
+    params.set('service', data.service || '');
+    params.set('city', data.city || '');
+    params.set('phone', data.phone || '');
+    params.set('source', 'acceso1');
+
+    const link = document.getElementById('goToPanel');
+    link.href = 'H4S_Partners_Acceso2_Cualificado.html?' + params.toString();
+  }, 3500);
+});
+
+function generateToken() {
+  // Simulación · en producción esto lo genera el backend tras cualificación
+  return 'h4s_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now().toString(36);
+}
+</script>
+
+</body>
+</html>

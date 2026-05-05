@@ -1,13 +1,29 @@
 # 💼 Health4Spain - Modelo de Partners y Gestión de Leads
 
-> **Documento Técnico del Modelo de Negocio**  
-> Última actualización: abril de 2026
+> **Documento Técnico del Modelo de Negocio (post-firma · diseño / target v2)**
+> Última actualización: mayo de 2026
+
+---
+
+## 🚦 Alcance de este documento
+
+Este doc describe la **operativa del partner ya firmado**: cómo se le asignan los leads de cliente final, cómo gestiona su panel privado, cómo se factura, disputas, KPIs y reglas de relación.
+
+> **Para todo lo previo (cómo conseguir que el partner firme)** —landing pública, formulario, cualificación humana, magic link, calculadora ROI, contrato Founding y panel admin de candidatos— ver el doc dedicado: **[`PARTNERS_FASE1_CAPTACION.md`](./PARTNERS_FASE1_CAPTACION.md)** (✅ operativo desde mayo 2026).
+
+| Estado de implementación |  |
+|---|---|
+| Captura de leads cliente final + GHL (operativa) | ✅ En producción |
+| `partner_leads` (captación de partners B2B) | ✅ En producción (Fase 1) |
+| `partners` operativos + asignación + panel + facturación | 📖 Diseño / target — pendiente de Fase 2 |
+
+La implementación actual de v0 maneja la fase post-firma **manualmente** (transferencia SEPA, PDF firmado, alta manual del partner). El esquema de tablas y flujos descrito a continuación es la **referencia para Fase 2** cuando el volumen lo justifique.
 
 ---
 
 ## ✅ Integración operativa (abril 2026)
 
-Los leads del sitio se guardan en **Supabase** (`leads`) y pueden enviarse a **GoHighLevel**: API de contactos (upsert) + **webhook entrante** con campos en español (`*_es`) para que el equipo trabaje en un solo idioma en el CRM. Panel interno: **`/administrator/leads`**. Detalle técnico: `README.md`, `.env.example`, `src/lib/gohighlevel.ts`.
+Los leads del sitio se guardan en **Supabase** (`leads`) y pueden enviarse a **GoHighLevel**: API de contactos (upsert) + **un solo webhook entrante** (`GHL_INCOMING_WEBHOOK_SALUD`, POST JSON para **todos** los servicios) con campos en español (`*_es`) y slugs (`servicio`, `tipo_ruta` `salud` \| `otros`) para que el equipo trabaje en un solo idioma en el CRM y pueda ramificar en GHL sin duplicar subcuentas (decisión abril 2026 — ver **`README.md`**, sección CRM GHL). Panel interno: **`/administrator/leads`**. Detalle técnico: `.env.example`, `src/lib/gohighlevel.ts`.
 
 ---
 

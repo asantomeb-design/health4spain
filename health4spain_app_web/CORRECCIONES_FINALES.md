@@ -161,4 +161,4 @@ Todos los archivos del proyecto ahora reflejan correctamente:
 
 ---
 
-**Nota (abril 2026):** La integración con **GoHighLevel**, los campos en español para el CRM y el panel **`/administrator/leads`** están documentados en `README.md`, `RESUMEN_ACTUALIZACIONES.md` y `docs/HISTORIAL.md` (v3.1.0).
+**Nota (abril 2026):** La integración con **GoHighLevel**, los campos en español para el CRM y el panel **`/administrator/leads`** están documentados en `README.md`, `RESUMEN_ACTUALIZACIONES.md` y `docs/HISTORIAL.md` (v3.1.0). La **decisión de una sola subcuenta GHL** y el modelo webhook único + `tipo_ruta` / `servicio` están descritos de forma definitiva en **`README.md`** (sección CRM GHL), replicados en `CONFIGURACION_VERCEL.md`, `ESTADO_PROYECTO.md`, `INDICE_DOCUMENTACION.md` y `docs/MODELO_PARTNERS_LEADS.md`.

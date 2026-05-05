@@ -29,7 +29,7 @@ NEXT_PUBLIC_SITE_NAME=Health4Spain
 ### 3. Documentación
 
 - **`CONFIGURACION_VERCEL.md`**: Guía completa para configurar las variables de entorno en Vercel
-- **GoHighLevel (opcional)**: Si usas CRM GHL, añade `GHL_PRIVATE_TOKEN`, `GHL_LOCATION_ID`, `GHL_INCOMING_WEBHOOK_SALUD` y opcionalmente `GHL_CUSTOM_FIELD_IDS` según `.env.example` — integración **lista en código** (abril 2026).
+- **GoHighLevel (opcional)**: Si usas CRM GHL, añade `GHL_PRIVATE_TOKEN`, `GHL_LOCATION_ID`, `GHL_INCOMING_WEBHOOK_SALUD` (URL única; recibe todos los leads) y opcionalmente `GHL_CUSTOM_FIELD_IDS` según `.env.example` — integración **lista en código** (abril 2026). En Vercel, mismas variables: **`CONFIGURACION_VERCEL.md`**. Decisión **una sola location**: **`README.md`** (CRM GHL).
 
 ---
 
