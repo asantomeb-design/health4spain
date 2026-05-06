@@ -8,6 +8,7 @@ const es = {
     about: 'Nosotros',
     blog: 'Blog',
     contact: 'Contacto',
+    partners: 'Partners',
     language: 'Idioma',
     followUs: 'Síguenos',
   },
@@ -477,6 +478,7 @@ const en: typeof es = {
     about: 'About Us',
     blog: 'Blog',
     contact: 'Contact',
+    partners: 'Partners',
     language: 'Language',
     followUs: 'Follow Us',
   },
@@ -939,7 +941,7 @@ const en: typeof es = {
 };
 
 const fr: typeof es = {
-  nav: { home: 'Accueil', destinations: 'Destinations', services: 'Services', about: 'À propos', blog: 'Blog', contact: 'Contact', language: 'Langue', followUs: 'Suivez-nous' },
+  nav: { home: 'Accueil', destinations: 'Destinations', services: 'Services', about: 'À propos', blog: 'Blog', contact: 'Contact', partners: 'Partenaires', language: 'Langue', followUs: 'Suivez-nous' },
   home: {
     metaTitle: 'Health4Spain — Assurance, Avocats et Services pour Étrangers en Espagne',
     metaDesc: 'Nous connectons les étrangers avec des professionnels vérifiés : avocats, assurances, immobilier et services administratifs. 150+ professionnels dans 19 villes.',
@@ -1115,7 +1117,7 @@ const fr: typeof es = {
 };
 
 const de: typeof es = {
-  nav: { home: 'Startseite', destinations: 'Reiseziele', services: 'Dienstleistungen', about: 'Über uns', blog: 'Blog', contact: 'Kontakt', language: 'Sprache', followUs: 'Folgen Sie uns' },
+  nav: { home: 'Startseite', destinations: 'Reiseziele', services: 'Dienstleistungen', about: 'Über uns', blog: 'Blog', contact: 'Kontakt', partners: 'Partner', language: 'Sprache', followUs: 'Folgen Sie uns' },
   home: {
     metaTitle: 'Health4Spain — Versicherung, Anwälte und Dienstleistungen für Ausländer in Spanien',
     metaDesc: 'Wir verbinden Ausländer mit verifizierten Fachleuten: Anwälte, Versicherungen, Immobilien und Verwaltungsdienstleistungen. 150+ Fachleute in 19 Städten.',
@@ -1291,7 +1293,7 @@ const de: typeof es = {
 };
 
 const pt: typeof es = {
-  nav: { home: 'Início', destinations: 'Destinos', services: 'Serviços', about: 'Sobre Nós', blog: 'Blog', contact: 'Contacto', language: 'Idioma', followUs: 'Siga-nos' },
+  nav: { home: 'Início', destinations: 'Destinos', services: 'Serviços', about: 'Sobre Nós', blog: 'Blog', contact: 'Contacto', partners: 'Parceiros', language: 'Idioma', followUs: 'Siga-nos' },
   home: {
     metaTitle: 'Health4Spain — Seguros, Advogados e Serviços para Estrangeiros em Espanha',
     metaDesc: 'Conectamos estrangeiros com profissionais verificados: advogados, seguros, imobiliário e serviços administrativos. 150+ profissionais em 19 cidades.',

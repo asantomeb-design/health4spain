@@ -74,7 +74,14 @@ export default function Navigation() {
                   {link.label}
                 </Link>
               ))}
-              
+
+              <Link
+                href={`/${currentLang}/${ROUTES[currentLang].partners}`}
+                className={`text-sm font-medium transition-colors hover:text-[#3bbdda] ${isActive(`/${currentLang}/${ROUTES[currentLang].partners}`) ? 'text-[#293f92]' : 'text-gray-700'}`}
+              >
+                {t.nav.partners}
+              </Link>
+
               <div className="flex items-center gap-1 border-l border-gray-300 pl-6">
                 {LANGUAGES.map((lang) => (
                   <Link key={lang.code} href={switchLanguage(lang.code)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${currentLang === lang.code ? 'bg-[#293f92] text-white' : 'text-gray-600 hover:bg-gray-100'}`} title={lang.label}>
@@ -118,11 +125,24 @@ export default function Navigation() {
                   {link.label}
                 </Link>
               ))}
+
+              <Link
+                href={`/${currentLang}/${ROUTES[currentLang].partners}`}
+                className={`block px-4 py-3 rounded-lg text-base font-medium transition-all ${isActive(`/${currentLang}/${ROUTES[currentLang].partners}`) ? 'bg-gray-100 text-[#293f92]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#3bbdda]'}`}
+              >
+                {t.nav.partners}
+              </Link>
             </nav>
 
-            <div className="px-6 pb-6">
+            <div className="px-6 pb-6 space-y-3">
               <Link href={`/${currentLang}/${ROUTES[currentLang].contact}`} className="block w-full bg-[#293f92] text-white text-center px-6 py-4 rounded-lg font-semibold text-base hover:bg-[#3bbdda] transition-colors shadow-md">
                 {t.nav.contact}
+              </Link>
+              <Link
+                href={`/${currentLang}/${ROUTES[currentLang].partners}`}
+                className="block w-full text-center px-6 py-3 border-b-3 border-accent text-[#293f92] font-semibold text-base hover:border-b-4 transition-all"
+              >
+                {t.nav.partners} →
               </Link>
             </div>
 

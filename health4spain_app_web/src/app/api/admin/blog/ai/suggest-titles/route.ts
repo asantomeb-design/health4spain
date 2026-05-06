@@ -11,7 +11,7 @@ import {
   LANG_NAMES,
   type SupportedLang,
 } from '@/lib/ai/openai-blog';
-import { searchNews, type NewsResult } from '@/lib/ai/serpapi';
+import { searchNews, type NewsResult } from '@/lib/ai/web-search';
 
 interface RequestBody {
   mode?: 'blog' | 'news';

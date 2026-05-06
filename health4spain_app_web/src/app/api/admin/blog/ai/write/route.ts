@@ -13,6 +13,7 @@ import {
   slugify,
   type SupportedLang,
 } from '@/lib/ai/openai-blog';
+import { extractResponseOutputText } from '@/lib/ai/web-search';
 
 export const maxDuration = 300; // hasta 5 minutos en Vercel para artículos largos
 
@@ -114,7 +115,7 @@ export async function POST(request: NextRequest) {
 
     let raw = '';
 
-    // Intento principal: Responses API con web_search_preview habilitado.
+    // Intento principal: Responses API con web_search habilitado.
     // Si el modelo configurado no soporta tools/web_search, hacemos fallback.
     try {
       const responsesApi = (openai as unknown as { responses?: any }).responses;
@@ -131,24 +132,11 @@ export async function POST(request: NextRequest) {
               content: JSON.stringify(userInput),
             },
           ],
-          tools: [{ type: 'web_search_preview' }],
+          tools: [{ type: 'web_search' }],
           temperature: config.temperature_writer,
         });
 
-        if (typeof resp?.output_text === 'string' && resp.output_text.trim()) {
-          raw = resp.output_text;
-        } else if (Array.isArray(resp?.output)) {
-          // Reconstruir texto a partir del output estructurado
-          for (const item of resp.output) {
-            if (item?.type === 'message' && Array.isArray(item.content)) {
-              for (const part of item.content) {
-                if (part?.type === 'output_text' && typeof part.text === 'string') {
-                  raw += part.text;
-                }
-              }
-            }
-          }
-        }
+        raw = extractResponseOutputText(resp);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'desconocido';

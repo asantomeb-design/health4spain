@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateAdminAuth } from '@/lib/auth';
-import { searchNews } from '@/lib/ai/serpapi';
+import { searchNews } from '@/lib/ai/web-search';
 import { getAiBlogConfig, isSupportedLang } from '@/lib/ai/openai-blog';
 
 export async function POST(request: NextRequest) {

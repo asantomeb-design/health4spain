@@ -318,17 +318,29 @@ export default function ContactoPage() {
       {/* CTA Profesionales - Fondo gris para contraste */}
       <section className="section-alt pt-0">
         <div className="container-narrow py-8 md:py-12">
-          <div className="text-center">
-            <h3 className="text-2xl font-bold mb-4">¿Eres Profesional?</h3>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
-              Únete a nuestro directorio verificado. Recibe leads cualificados de tu especialidad y zona.
+          <div className="text-center max-w-3xl mx-auto">
+            <span className="inline-block text-xs uppercase tracking-widest font-bold text-accent mb-3">
+              Modo Implantación · 10 founding
+            </span>
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">¿Eres Profesional?</h3>
+            <p className="text-lg text-gray-600 mb-8">
+              Captamos extranjeros, los cualificamos con IA y te entregamos la cita con briefing.
+              Tú solo cierras. Plazas limitadas en cada ciudad y servicio.
             </p>
-            <a 
-              href={`mailto:${CONTACT_INFO.email}?subject=Quiero ser Partner - Health4Spain`}
-              className="inline-flex items-center justify-center px-8 py-3 bg-[#293f92] text-white border-2 border-[#293f92] hover:bg-[#1e2d6b] hover:border-[#1e2d6b] transition-all text-sm uppercase tracking-widest font-semibold"
-            >
-              Solicitar Información Partners
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/es/partners"
+                className="inline-flex items-center justify-center px-8 py-3 bg-[#293f92] text-white border-2 border-[#293f92] hover:bg-[#1e2d6b] hover:border-[#1e2d6b] transition-all text-sm uppercase tracking-widest font-semibold"
+              >
+                Solicitar acceso partner →
+              </Link>
+              <a
+                href={`mailto:${CONTACT_INFO.email}?subject=Consulta Partners - Health4Spain`}
+                className="inline-flex items-center justify-center px-8 py-3 border-2 border-gray-300 text-gray-700 hover:border-[#293f92] hover:text-[#293f92] transition-all text-sm uppercase tracking-widest font-semibold"
+              >
+                Hablar con un closer
+              </a>
+            </div>
           </div>
         </div>
       </section>

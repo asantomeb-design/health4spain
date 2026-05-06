@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS ai_blog_config (
   image_size  text DEFAULT '1792x1024',
   image_style text DEFAULT 'editorial photography, natural light, warm and slightly desaturated tones, cinematic composition, no text overlays, no watermarks',
 
-  -- Búsqueda de noticias (SerpAPI Google News)
+  -- Búsqueda de noticias (OpenAI Responses API + web_search)
   news_country   text DEFAULT 'es',
   news_language  text DEFAULT 'es',
   news_timeframe text DEFAULT 'qdr:w', -- qdr:d (24h), qdr:w (7d), qdr:m (30d)

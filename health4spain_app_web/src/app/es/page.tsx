@@ -463,6 +463,27 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* CTA Partners — Banda final dirigida a profesionales */}
+      <section className="section-alt">
+        <div className="container-narrow">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 md:gap-12 items-center">
+            <div>
+              <span className="inline-block text-xs uppercase tracking-widest font-bold text-accent mb-3">
+                ¿Eres profesional?
+              </span>
+              <h2 className="mb-4">Únete a la red Health4Spain</h2>
+              <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
+                Captamos extranjeros con campañas en 5 idiomas, los cualificamos con IA y te
+                entregamos la cita ya agendada. Tú solo cierras. 10 plazas Founding.
+              </p>
+            </div>
+            <Link href="/es/partners" className="btn-minimal-lg whitespace-nowrap">
+              Hazte partner →
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
