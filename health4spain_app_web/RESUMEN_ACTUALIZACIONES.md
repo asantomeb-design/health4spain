@@ -2,6 +2,14 @@
 
 ---
 
+## 🆕 Blog IA + traducciones enlazadas + documentación — 8 mayo 2026
+
+- Asistente del blog en admin (`Crear con IA`, `Config IA`, SerpAPI, portadas OpenAI → Storage `blog-images/ai-covers/`).
+- `translation_group_id`, API pública `/api/blog/translations`, hreflang por slug real, navbar acorde (`Navigation` + `blog-locale-switch`).
+- Guía técnica: **`docs/BLOG_IA_Y_TRADUCCIONES.md`**. Versión del proyecto **3.4.0**.
+
+---
+
 ## 🆕 SEO: Landings visa no lucrativa + schemas + contacto + blog — 9 abril 2026
 
 ### 1. **100 Landings "Visa No Lucrativa"**

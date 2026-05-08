@@ -110,6 +110,8 @@ node scripts/translate-all.js
 
 Traduce los contenidos de las tablas `blog_posts` y `landing_pages` del español a EN/FR/DE/PT.
 
+**Nota (mayo 2026):** El flujo recomendado para nuevos artículos es el admin (blog IA + traducción con `translation_group_id`); ver **`docs/BLOG_IA_Y_TRADUCCIONES.md`**. `translate-all.js` sigue sirviendo para migraciones o cargas masivas iniciales.
+
 ---
 
 ## 📍 generate-landings.ts

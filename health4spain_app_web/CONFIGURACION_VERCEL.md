@@ -49,11 +49,17 @@ Debes configurar estas variables de entorno en tu proyecto de Vercel:
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `G-XXXXXXXXXX` | Google Analytics 4 |
 | `NEXT_PUBLIC_GTM_ID` | `GTM-XXXXXXX` | Google Tag Manager |
 
-#### 🤖 OPENAI (Opcional)
+#### 🤖 OPENAI (Recomendado si usas Chat Mar-IA y/o asistente del blog)
 
 | Variable | Valor | Descripción |
 |----------|-------|-------------|
-| `OPENAI_API_KEY` | `sk-...` | Para generar landings automáticamente |
+| `OPENAI_API_KEY` | `sk-...` | Chat Mar-IA; wizard «Crear con IA», traducción y portadas del blog (`/api/admin/blog/ai/*`); scripts de generación |
+
+#### 📰 SERPAPI (Opcional — modo noticias del blog)
+
+| Variable | Valor | Descripción |
+|----------|-------|-------------|
+| `SERPAPI_KEY` | `...` | Búsqueda Google News en el asistente del blog. Sin clave, el modo «Noticias» no funcionará. Detalle: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](./docs/BLOG_IA_Y_TRADUCCIONES.md) |
 
 #### 📧 EMAIL (Opcional)
 

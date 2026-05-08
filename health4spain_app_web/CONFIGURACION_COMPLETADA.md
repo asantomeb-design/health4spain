@@ -45,7 +45,7 @@ Este comando verificará:
 - ✅ Variables de entorno configuradas
 - ✅ Conexión a Supabase funciona
 - ✅ Tablas existen (blog_posts, landing_pages, leads)
-- ✅ Storage buckets configurados (blog-images, media)
+- ✅ Storage buckets configurados (`blog-images`, `media`; si blog IA: también `ai-covers`, ver `GUIA_CONFIGURACION_SUPABASE.md`)
 - ✅ Autenticación configurada
 
 ### Paso 2: Inicializar la base de datos (si es necesario)
@@ -163,7 +163,8 @@ Estas variables empiezan con `NEXT_PUBLIC_` y son accesibles desde el navegador:
 Estas variables NO tienen `NEXT_PUBLIC_` y solo son accesibles en el servidor:
 
 - ❌ `SUPABASE_SERVICE_ROLE_KEY` (bypassa todas las políticas RLS)
-- ❌ `OPENAI_API_KEY`
+- ❌ `OPENAI_API_KEY` (Mar-IA y generación/traducción blog IA)
+- ❌ `SERPAPI_KEY` (opcional; imágenes blog IA por búsqueda)
 - ❌ `RESEND_API_KEY`
 
 **IMPORTANTE**: Nunca uses variables privadas en componentes de React o código que se ejecute en el navegador.

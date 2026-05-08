@@ -32,7 +32,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 
 176+ landing pages SEO (76 servicio×ciudad + 100 visa no lucrativa) + blog multiidioma + páginas de destinos
 
-**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: API + webhook único, segmentación por `servicio` / `tipo_ruta`) + leads en español**, panel admin de leads, **módulo Partners Fase 1 (captación + cualificación + magic link + selector ROI/contrato Founding)**, production-ready — **v3.3.0** (5 May 2026)
+**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: API + webhook único, segmentación por `servicio` / `tipo_ruta`) + leads en español**, panel admin de leads, **módulo Partners Fase 1 (captación + cualificación + magic link + selector ROI/contrato Founding)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, production-ready — **v3.4.0** (8 May 2026)
 
 ---
 
@@ -46,7 +46,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 - **Logo**: Unificado en toda la web con `h4s vertical color_recortado.webp` (header, footer, Open Graph, SEO)
 - **Estilos**: Tailwind CSS
 - **Editor**: TinyMCE
-- **IA**: OpenAI (GPT-4o, GPT-4o-mini, GPT-4.1, GPT-3.5 Turbo) para chat y generación de contenido
+- **IA**: OpenAI (chat Mar-IA, **asistente blog**: propuestas/redacción/traducción/imagen; modelos configurables en BD) + **SerpAPI** opcional (modo noticias del wizard)
 - **Chat IA (Mar-IA)**: Widget flotante con asistente virtual; detección de idioma en dos agentes; contexto desde Supabase (servicios, ciudades, blog, landings); sin caché para estado activo/inactivo
 - **Optimización**: sharp (conversión WebP)
 - **i18n**: Sistema híbrido (Supabase dinámico + dictionaries.ts estático)
@@ -59,8 +59,8 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 health4spain/
 ├── src/
 │   ├── app/
-│   │   ├── api/                    # API Routes (chat, chat/config, chat/rate, leads, partners/*)
-│   │   ├── administrator/          # Panel admin (Chat IA, Chat History, Blog, Leads, Partners…)
+│   │   ├── api/                    # API Routes (chat, leads, partners/*, blog, admin/blog/ai/*)
+│   │   ├── administrator/          # Panel admin (Chat IA, Chat History, Blog + IA, Leads, Partners…)
 │   │   ├── es/                     # Rutas español
 │   │   │   ├── blog/               # Blog + [slug]
 │   │   │   ├── contacto/
@@ -86,7 +86,8 @@ health4spain/
 │       ├── data.ts                 # Capa de datos compartida (locale-aware)
 │       ├── dictionaries.ts         # Traducciones UI (5 idiomas, 200+ claves)
 │       ├── routes.ts               # URLs traducidas por idioma
-│       ├── seo.tsx                 # SEO helpers (JSON-LD, OG, hreflang, Place, Service+areaServed)
+│       ├── seo.tsx                 # SEO helpers (JSON-LD, OG, hreflang, buildBlogAlternates…)
+│       ├── blog-locale-switch.ts   # Enlaces de idioma coherentes en /blog/[slug]
 │       ├── services.ts             # RPCs traducidas
 │       ├── ciudades.ts             # Funciones ciudades
 │       └── partners.ts             # Lógica negocio Partners (precios Tier×Plan, ciudades→tier, multi-vertical, Founding, ROI)
@@ -106,8 +107,10 @@ health4spain/
 │   ├── 12-chat-messages.sql              # Historial conversaciones + ratings
 │   ├── 13-landing-visa-no-lucrativa.sql       # Landings visa no lucrativa ES+EN
 │   ├── 14-landing-visa-no-lucrativa-de-fr-pt.sql  # Landings visa no lucrativa DE+FR+PT
-│   ├── 15-ai-blog-config.sql              # Configuración del asistente IA del blog
-│   └── 16-partner-leads.sql               # Captación de partners B2B (Fase 1)
+│   ├── 15-ai-blog-config.sql              # Tabla ai_blog_config (asistente IA del blog)
+│   ├── 16-partner-leads.sql               # Captación de partners B2B (Fase 1)
+│   ├── 17-blog-translation-groups.sql     # translation_group_id en blog_posts + backfill + índices
+│   └── 18-ai-blog-model-image-gpt-image-1.5.sql  # model_image → gpt-image-1.5 (+ DEFAULT)
 └── public/images/                      # chat_ia_logo.jpg (avatar Mar-IA), favicon, logos
 ```
 
@@ -120,7 +123,7 @@ health4spain/
 | Tipo de contenido | Fuente | Cómo funciona |
 |-------------------|--------|---------------|
 | **UI estático** (botones, títulos, labels) | `src/lib/dictionaries.ts` | 200+ claves en 5 idiomas |
-| **Blog posts** | Supabase `blog_posts` | Columna `lang` (es/en/fr/de/pt) |
+| **Blog posts** | Supabase `blog_posts` | `lang` (es/en/fr/de/pt) + `translation_group_id` (UUID por familia de traducciones) |
 | **Landing pages** | Supabase `landing_pages` | Columna `idioma` |
 | **Contenido ciudades** | Supabase `ciudades_contenido` | Columna `idioma` + 22 campos JSONB |
 | **Catálogos** | Supabase RPCs | `get_servicio_traducido()`, `get_ciudad_traducida()` |
@@ -149,7 +152,7 @@ Cada página de ciudad incluye **14 secciones**:
 ### SEO Implementado
 
 - ✅ **JSON-LD**: Organization, WebSite, BlogPosting, BreadcrumbList, FAQPage, Service, Place
-- ✅ **Hreflang**: Alternates en todas las páginas (5 idiomas)
+- ✅ **Hreflang**: Alternates en todas las páginas; en artículos del blog, URLs por **slug real** por idioma (`buildBlogAlternates`)
 - ✅ **Canonicals**: URL canónica por página
 - ✅ **Open Graph / Twitter Cards**: Metadata social completa
 - ✅ **robots.txt** y **sitemap.xml** dinámicos
@@ -192,7 +195,8 @@ npm run images:webp                                       # PNG → WebP
 |-------|-----------|-------------|
 | `ciudades_contenido` | 19 × 5 = 95 | Contenido completo ciudades (22 campos, 5 idiomas) |
 | `landing_pages` | 176+ | Landing pages SEO |
-| `blog_posts` | 30+ × 5 | Artículos blog multiidioma |
+| `blog_posts` | 30+ × 5 | Artículos blog; columnas `lang`, `translation_group_id` |
+| `ai_blog_config` | 1 | Configuración asistente IA del blog (singleton) |
 | `ciudades_catalogo` | 19 | Catálogo ciudades |
 | `servicios_catalogo` | 4 | Catálogo servicios |
 | `leads` | Variable | Leads capturados (privado; no accesible por el chat) |
@@ -201,6 +205,14 @@ npm run images:webp                                       # PNG → WebP
 | `idiomas` | 5 | Idiomas activos |
 | `servicios_catalogo_traducciones` | 4 × 5 | Traducciones servicios |
 | `ciudades_catalogo_traducciones` | 19 × 5 | Traducciones ciudades |
+
+---
+
+## ✍️ Blog: asistente IA y traducciones
+
+- **Documentación detallada**: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](./docs/BLOG_IA_Y_TRADUCCIONES.md) (APIs, env, migraciones, flujo ES → traducir).
+- **Admin**: listado `/administrator/blog` — botones «Config IA», «Crear con IA»; editor de post — «Traducir con IA» (solo si `lang === es`), «Generar portada con IA» en imagen destacada.
+- **Público**: `GET /api/blog/translations` alimenta el selector de idioma en **`Navigation.tsx`** (layout ES/EN/FR/DE/PT) para saltar al slug correcto entre traducciones publicadas.
 
 ---
 
@@ -314,7 +326,8 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_ADMIN_EMAILS=admin@health4spain.com
-OPENAI_API_KEY=                    # Requerido para Chat Mar-IA y scripts de generación
+OPENAI_API_KEY=                    # Chat Mar-IA + asistente blog (texto/imagen) + scripts
+SERPAPI_KEY=                       # Opcional: modo «Noticias» del asistente blog (Google News)
 NEXT_PUBLIC_TINYMCE_API_KEY=
 NEXT_PUBLIC_WHATSAPP_NUMBER=34614404562
 NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
@@ -336,12 +349,14 @@ NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
 - [docs/MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md) - Modelo de negocio
 - [docs/PARTNERS_FASE1_CAPTACION.md](./docs/PARTNERS_FASE1_CAPTACION.md) - Partners Fase 1 (captación + cualificación + Founding)
 - [docs/MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md) - Partners post-firma (asignación, facturación)
+- [docs/BLOG_IA_Y_TRADUCCIONES.md](./docs/BLOG_IA_Y_TRADUCCIONES.md) - Asistente IA del blog, traducciones, hreflang, APIs
+- [docs/ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md) - Estrategia editorial SEO (visión producto)
 - [scripts/README.md](./scripts/README.md) - Scripts disponibles
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, GHL + LEADS (ES), PARTNERS FASE 1, PRODUCTION-READY  
-**Última actualización**: 5 de mayo de 2026  
-**Versión**: 3.3.0  
+**Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, GHL + LEADS (ES), PARTNERS FASE 1, BLOG IA + TRADUCCIONES ENLAZADAS, PRODUCTION-READY  
+**Última actualización**: 8 de mayo de 2026  
+**Versión**: 3.4.0  
 **Build**: 708+ páginas estáticas (incluye módulo Partners en `/es/partners` y `/administrator/partners`)  
 **Licencia**: Privado - Health4Spain © 2026

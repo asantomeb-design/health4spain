@@ -140,7 +140,7 @@ Respuesta: "Te contactaremos en menos de 24 horas"
 **Layout `/es`** (`src/app/es/layout.tsx`):
 
 ```
-<Navigation />     ← ÚNICO navbar. NavLinks estáticos.
+<Navigation />     ← Navbar + selector idioma (en /blog/[slug]: /api/blog/translations + blog-locale-switch)
 <main>{children}</main>
 <Footer />         ← getServicios() + links estáticos + enlace "Modificar consentimiento cookies"
 <StickyCTA />      ← Oculto en /contacto. Siempre /es/contacto
@@ -148,9 +148,9 @@ Respuesta: "Te contactaremos en menos de 24 horas"
 <CookieConsent />  ← Banner GDPR: Esenciales, Análisis, Marketing. Reabre desde footer.
 ```
 
-### Componentes no usados
+### Componentes no usados / legacy
 
-- `Header.tsx` — **No se usa** (legacy). Layout usa Navigation.tsx
+- `Header.tsx` — **No montado** en `es/layout.tsx` (el navbar activo es `Navigation.tsx`). Se mantiene como variante; la lógica de idioma en artículos de blog está centralizada en **`src/lib/blog-locale-switch.ts`** y la usa `Navigation.tsx` y `LanguageSwitcher.tsx`.
 
 ---
 
@@ -162,9 +162,13 @@ Respuesta: "Te contactaremos en menos de 24 horas"
 | GET | `/api/leads` | Admin | Listar leads |
 | GET | `/api/ciudades` | Público | Lista ciudades |
 | GET | `/api/blog` | Público | Posts |
+| GET | `/api/blog/translations` | Público | `?slug=&lang=` → slugs hermanos publicados (hreflang / selector idioma) |
 | GET/POST/PUT/DELETE | `/api/blog/[...]` | Admin | CRUD blog |
+| POST | `/api/admin/blog/ai/*` | Admin JWT | Asistente IA del blog (config, propuestas, noticias, redacción, portada, borrador, traducción) |
 | GET | `/api/landings` | Público | Landings |
 | POST | `/api/upload` | Admin | Subir imagen |
+
+> Detalle del blog IA: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](./BLOG_IA_Y_TRADUCCIONES.md)
 
 ---
 
@@ -187,7 +191,7 @@ Respuesta: "Te contactaremos en menos de 24 horas"
 2. **Home**: Migrar ciudades/servicios a getCiudades()/getServicios() para evitar duplicación
 3. **Footer destinos**: Usar getCiudades() o getCiudadesDestacadas() en lugar de 4 hardcodeados
 4. **Email leads**: Implementar notificación (TODO en /api/leads)
-5. **Header.tsx**: Eliminar si no se va a usar, o documentar propósito
+5. **Header.tsx**: No está en layout público; unificar o eliminar si no se usa
 
 ---
 
@@ -202,8 +206,9 @@ Respuesta: "Te contactaremos en menos de 24 horas"
 | Cookies GDPR | ✅ Banner con categorías, enlace footer |
 | Duplicación datos | ⚠️ Home + constants duplican BD |
 | Sitemap | ⚠️ Faltan ciudades/servicios |
-| Navbar | ✅ Solo Navigation.tsx |
-| Documentación | ✅ Actualizada |
+| Navbar | ✅ `Navigation.tsx`; idioma en artículos blog vía `blog-locale-switch` + `/api/blog/translations` |
+| Blog IA / traducciones | ✅ [`BLOG_IA_Y_TRADUCCIONES.md`](./BLOG_IA_Y_TRADUCCIONES.md) |
+| Documentación | ✅ Actualizada (mayo 2026) |
 
 ---
 

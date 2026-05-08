@@ -140,10 +140,14 @@ export async function POST(request: NextRequest) {
       }
       if (!b64) {
         const msg = err instanceof Error ? err.message : 'desconocido';
+        const orgHint =
+          /403|verified/i.test(msg) && /organization|organización/i.test(msg)
+            ? ' Si recibes 403 por verificación de organización (p. ej. con gpt-image-2), usa temporalmente gpt-image-1.5 en Config IA o verifica la organización en OpenAI.'
+            : '';
         return NextResponse.json(
           {
             success: false,
-            error: `Error generando imagen: ${msg}. Si usas un modelo gpt-image, en Config IA el tamaño debe ser auto, 1024×1024, 1536×1024 o 1024×1536 (no 1792×1024).`,
+            error: `Error generando imagen: ${msg}. Si usas un modelo gpt-image, en Config IA el tamaño debe ser auto, 1024×1024, 1536×1024 o 1024×1536 (no 1792×1024).${orgHint}`,
           },
           { status: 502 }
         );

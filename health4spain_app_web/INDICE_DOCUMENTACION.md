@@ -1,8 +1,8 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 5 de mayo de 2026  
-**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | Partners Fase 1 | 708+ páginas | 176+ landings SEO | Production-ready  
-**Versión:** 3.3.0
+**Fecha:** 8 de mayo de 2026  
+**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | Partners Fase 1 | Blog IA + translation_group_id | 708+ páginas | 176+ landings SEO | Production-ready  
+**Versión:** 3.4.0
 
 ---
 
@@ -12,7 +12,7 @@
 
 | Archivo | Descripción | Estado |
 |---------|-------------|--------|
-| **[README.md](./README.md)** | 📘 Visión general, stack, GHL/leads ES (webhook único + decisión cuenta única), multi-idioma | ✅ Actualizado |
+| **[README.md](./README.md)** | 📘 Visión general, stack, GHL/leads ES, blog IA y traducciones | ✅ Actualizado |
 | **[ESTADO_PROYECTO.md](./ESTADO_PROYECTO.md)** | 📊 Estado actual + hitos + números | ✅ Actualizado |
 | **[RESUMEN_ACTUALIZACIONES.md](./RESUMEN_ACTUALIZACIONES.md)** | 📝 Log de actualizaciones | ✅ Actualizado |
 | **[guion-cambios-cliente.txt](./guion-cambios-cliente.txt)** | 📝 Guion cambios cliente | ✅ Actualizado |
@@ -46,7 +46,8 @@
 | **[MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md)** | 💰 Modelo de negocio | 📖 Referencia |
 | **[PARTNERS_FASE1_CAPTACION.md](./docs/PARTNERS_FASE1_CAPTACION.md)** | 🤝 Partners Fase 1: captación + cualificación + magic link + Founding (BD, APIs, planes, ciudades→tier, ROI, operativa closer) | ✅ Nuevo |
 | **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners post-firma: asignación, panel partner activo, facturación (target/v2; GHL operativo) | 📖 Referencia (v2) |
-| **[ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md)** | ✍️ Estrategia SEO blog | 📖 Referencia |
+| **[BLOG_IA_Y_TRADUCCIONES.md](./docs/BLOG_IA_Y_TRADUCCIONES.md)** | ✍️ Asistente IA blog, SerpAPI, `translation_group_id`, APIs, Navigation/hreflang | ✅ Nuevo |
+| **[ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md)** | ✍️ Estrategia SEO blog (visión editorial); esquema BD en doc técnico anterior | 📖 Referencia |
 
 ### 📂 `/scripts`
 
@@ -72,11 +73,19 @@
 | `13-landing-visa-no-lucrativa.sql` | Landings visa no lucrativa ES+EN | ✅ Ejecutado |
 | `14-landing-visa-no-lucrativa-de-fr-pt.sql` | Landings visa no lucrativa DE+FR+PT | ✅ Ejecutado |
 | `15-ai-blog-config.sql` | Configuración asistente IA del blog | ✅ Ejecutado |
-| `16-partner-leads.sql` | Captación de partners B2B (Fase 1) | ✅ Nuevo |
+| `16-partner-leads.sql` | Captación partners B2B (Fase 1) | ✅ Ejecutado |
+| `17-blog-translation-groups.sql` | `translation_group_id` en `blog_posts`, backfill, índice único por grupo+lang | ✅ Ejecutar en prod si falta |
+| `18-ai-blog-model-image-gpt-image-1.5.sql` | `model_image` → `gpt-image-1.5` + DEFAULT | ✅ Opcional / tras error gpt-image-2 |
 
 ---
 
 ## 🎯 Guías Rápidas por Tarea
+
+### Blog IA y multi-idioma del blog
+- **Doc técnica**: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](./docs/BLOG_IA_Y_TRADUCCIONES.md)
+- **Admin**: `/administrator/blog` (Crear con IA, Config IA), editor (Traducir con IA solo ES, Generar portada con IA)
+- **API pública**: `GET /api/blog/translations?slug=&lang=` — mapa de slugs publicados por idioma
+- **Código**: `src/lib/blog-locale-switch.ts`, `Navigation.tsx`, `src/lib/seo.tsx` (`buildBlogAlternates`)
 
 ### Chat IA (Mar-IA)
 - **Widget**: `src/components/AIChatWidget.tsx` (avatar: `public/images/chat_ia_logo.jpg`)
@@ -139,10 +148,10 @@
 | Claves traducción UI | 200+ |
 | Landing pages SEO | 176+ |
 | Artículos blog | 30+ × 5 idiomas |
-| Tablas Supabase | 12+ (incl. chatbot_config, chat_messages, partner_leads) |
+| Tablas Supabase | 12+ (incl. chatbot_config, chat_messages, partner_leads, **ai_blog_config**) |
 | Endpoints API Partners | 4 (`leads`, `qualify`, `access/[token]`, `contract-request`) |
 
 ---
 
-**Última actualización:** 5 de mayo de 2026  
-**Versión:** 3.3.0
+**Última actualización:** 8 de mayo de 2026  
+**Versión:** 3.4.0

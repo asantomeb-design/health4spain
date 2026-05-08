@@ -1,6 +1,6 @@
 # Configuración de Supabase para Health4Spain
 
-**Última actualización:** 5 mayo 2026
+**Última actualización:** 8 mayo 2026
 
 ---
 
@@ -32,17 +32,19 @@ En **SQL Editor**, ejecutar en orden:
 | 12 | `12-chat-messages.sql` | Tabla `chat_messages` (historial conversaciones + ratings) |
 | 13 | `13-landing-visa-no-lucrativa.sql` | Landings visa no lucrativa ES+EN (2 madre + 38 ciudad) |
 | 14 | `14-landing-visa-no-lucrativa-de-fr-pt.sql` | Landings visa no lucrativa DE+FR+PT (3 madre + 57 ciudad) |
-| 15 | `15-ai-blog-config.sql` | Configuración del asistente IA del blog (modelos, prompts, glosarios) |
-| 16 | `16-partner-leads.sql` | **Captación de partners B2B (Fase 1)**: tabla `partner_leads` + vista `admin_partner_leads_overview`. Doc: [`docs/PARTNERS_FASE1_CAPTACION.md`](../docs/PARTNERS_FASE1_CAPTACION.md) |
-| 17 | `rls-policies.sql` | Row Level Security |
-| 18 | `storage-policies.sql` | Políticas Storage |
+| 15 | `15-ai-blog-config.sql` | Tabla `ai_blog_config` (singleton): modelos, prompts, estilo/tamaño imagen, noticias |
+| 16 | `16-partner-leads.sql` | **Partners Fase 1**: tabla `partner_leads` + vista admin |
+| 17 | `17-blog-translation-groups.sql` | Blog: `translation_group_id` en `blog_posts`, backfill, trigger INSERT, índice único `(translation_group_id, lang)`. Doc: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](../docs/BLOG_IA_Y_TRADUCCIONES.md) |
+| 18 | `18-ai-blog-model-image-gpt-image-1.5.sql` | `ai_blog_config.model_image` → `gpt-image-1.5` + DEFAULT (alternativa si no tienes org verificada para `gpt-image-2`) |
+| 19 | `rls-policies.sql` | Row Level Security |
+| 20 | `storage-policies.sql` | Políticas Storage |
 
 ## 3. Tablas Principales
 
 | Tabla | Descripción | Idiomas |
 |-------|-------------|---------|
 | `leads` | Leads capturados (`POST /api/leads`); opcional envío a GoHighLevel | - |
-| `blog_posts` | Artículos de blog | `lang` (es/en/fr/de/pt) |
+| `blog_posts` | Artículos de blog | `lang` (es/en/fr/de/pt), **`translation_group_id`** (UUID por familia de traducciones) |
 | `landing_pages` | Landing pages SEO (76 servicio×ciudad + 100 visa no lucrativa) | `idioma` |
 | `ciudades_catalogo` | 19 ciudades base | - |
 | `servicios_catalogo` | 4 servicios base | - |
@@ -53,6 +55,12 @@ En **SQL Editor**, ejecutar en orden:
 | `chatbot_config` | Configuración Chat IA (enabled, modelo, prompts, tablas conocimiento) | 1 fila |
 | `chat_messages` | Historial conversaciones Mar-IA + valoración (correcta/mejorable/errónea) | Variable |
 | `partner_leads` | Captación de partners B2B (Fase 1): formulario + cualificación + token UUID con TTL 7d + selección de contrato. RLS deny all anon/authenticated; solo `service_role` vía API. Detalle: [`docs/PARTNERS_FASE1_CAPTACION.md`](../docs/PARTNERS_FASE1_CAPTACION.md). | - |
+| `ai_blog_config` | Configuración singleton del asistente IA del blog (OpenAI + prompts + imagen + SerpAPI). | - |
+
+### ai_blog_config y blog_posts (traducciones)
+
+- **`ai_blog_config`**: una fila editable desde `/administrator/blog/ai-config` o vía API admin.
+- **`blog_posts.translation_group_id`**: todas las versiones idioma del mismo artículo comparten UUID; índice único impide dos posts del mismo idioma en un grupo. Ver **`docs/BLOG_IA_Y_TRADUCCIONES.md`**.
 
 ### ciudades_contenido (22 campos)
 

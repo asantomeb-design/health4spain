@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { LOGO_PATHS } from '@/lib/constants';
-import { switchLocalePath, type Locale } from '@/lib/routes';
+import type { Locale } from '@/lib/routes';
+import { BLOG_ARTICLE_PATH_RE, hrefForLocaleSwitch } from '@/lib/blog-locale-switch';
 
 const LANGUAGES: { code: Locale; label: string; flag: string }[] = [
   { code: 'es', label: 'ES', flag: '🇪🇸' },
@@ -14,10 +15,6 @@ const LANGUAGES: { code: Locale; label: string; flag: string }[] = [
   { code: 'fr', label: 'FR', flag: '🇫🇷' },
   { code: 'pt', label: 'PT', flag: '🇵🇹' },
 ];
-
-// Coincide con `/<locale>/<segmentoBlog>/<slug>` en cualquiera de los 5 idiomas.
-// Todos los locales usan "blog" como segmento (ver ROUTES en lib/routes.ts).
-const BLOG_ARTICLE_RE = /^\/(es|en|de|fr|pt)\/blog\/([^/]+)\/?$/;
 
 const NAV_ITEMS = {
   es: [
@@ -71,7 +68,7 @@ export default function Header() {
   // que el cambiador de idioma lleve al slug correcto en cada idioma. Si no
   // estamos en un artículo, descartamos cualquier mapa anterior.
   useEffect(() => {
-    const match = pathname.match(BLOG_ARTICLE_RE);
+    const match = pathname.match(BLOG_ARTICLE_PATH_RE);
     if (!match) {
       setBlogTranslations(null);
       return;
@@ -97,15 +94,8 @@ export default function Header() {
    * - En el resto: traduce los segmentos de ruta (servicios → services, etc.)
    *   con switchLocalePath.
    */
-  const switchLanguage = (target: Locale): string => {
-    const blogMatch = pathname.match(BLOG_ARTICLE_RE);
-    if (blogMatch) {
-      const targetSlug = blogTranslations?.[target];
-      if (targetSlug) return `/${target}/blog/${targetSlug}`;
-      return `/${target}/blog`;
-    }
-    return switchLocalePath(pathname, currentLang, target);
-  };
+  const switchLanguage = (target: Locale): string =>
+    hrefForLocaleSwitch(pathname, currentLang, target, blogTranslations);
 
   return (
     <header 

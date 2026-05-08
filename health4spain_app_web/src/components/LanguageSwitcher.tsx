@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { switchLocalePath, type Locale } from '@/lib/routes';
+import type { Locale } from '@/lib/routes';
+import { BLOG_ARTICLE_PATH_RE, hrefForLocaleSwitch } from '@/lib/blog-locale-switch';
 
 const languages: { code: Locale; name: string; flag: string }[] = [
   { code: 'es', name: 'Español', flag: '🇪🇸' },
@@ -13,8 +14,6 @@ const languages: { code: Locale; name: string; flag: string }[] = [
   { code: 'pt', name: 'Português', flag: '🇵🇹' },
 ];
 
-const BLOG_ARTICLE_RE = /^\/(es|en|de|fr|pt)\/blog\/([^/]+)\/?$/;
-
 export default function LanguageSwitcher() {
   const pathname = usePathname();
   const [blogTranslations, setBlogTranslations] = useState<Partial<Record<Locale, string>> | null>(null);
@@ -22,7 +21,7 @@ export default function LanguageSwitcher() {
   const currentLocale = (pathname.split('/')[1] || 'es') as Locale;
 
   useEffect(() => {
-    const match = pathname.match(BLOG_ARTICLE_RE);
+    const match = pathname.match(BLOG_ARTICLE_PATH_RE);
     if (!match) {
       setBlogTranslations(null);
       return;
@@ -41,15 +40,8 @@ export default function LanguageSwitcher() {
     };
   }, [pathname]);
 
-  const getLocalizedPath = (newLocale: Locale) => {
-    const blogMatch = pathname.match(BLOG_ARTICLE_RE);
-    if (blogMatch) {
-      const targetSlug = blogTranslations?.[newLocale];
-      if (targetSlug) return `/${newLocale}/blog/${targetSlug}`;
-      return `/${newLocale}/blog`;
-    }
-    return switchLocalePath(pathname, currentLocale, newLocale);
-  };
+  const getLocalizedPath = (newLocale: Locale) =>
+    hrefForLocaleSwitch(pathname, currentLocale, newLocale, blogTranslations);
 
   return (
     <div className="relative group">

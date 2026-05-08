@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS ai_blog_config (
   model_proposals  text DEFAULT 'gpt-5-mini',
   model_writer     text DEFAULT 'gpt-5.4',
   model_translator text DEFAULT 'gpt-5.4',
-  model_image      text DEFAULT 'gpt-image-1',
+  model_image      text DEFAULT 'gpt-image-1.5',
 
   -- Parámetros de generación
   temperature_proposals real DEFAULT 0.9 CHECK (temperature_proposals >= 0 AND temperature_proposals <= 2),

@@ -5,8 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { LOGO_PATHS } from '@/lib/constants';
-import { ROUTES, switchLocalePath, type Locale } from '@/lib/routes';
+import { ROUTES, type Locale } from '@/lib/routes';
 import { getDictionary } from '@/lib/dictionaries';
+import { BLOG_ARTICLE_PATH_RE, hrefForLocaleSwitch } from '@/lib/blog-locale-switch';
 
 const LANGUAGES = [
   { code: 'es' as Locale, label: 'ES', flag: '🇪🇸' },
@@ -38,14 +39,34 @@ function getNavLinks(locale: Locale) {
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const [blogTranslations, setBlogTranslations] = useState<Partial<Record<Locale, string>> | null>(null);
 
   const currentLang = (pathname.split('/')[1] || 'es') as Locale;
   const t = getDictionary(currentLang);
   const navLinks = getNavLinks(currentLang);
 
-  const switchLanguage = (langCode: Locale) => {
-    return switchLocalePath(pathname, currentLang, langCode);
-  };
+  useEffect(() => {
+    const match = pathname.match(BLOG_ARTICLE_PATH_RE);
+    if (!match) {
+      setBlogTranslations(null);
+      return;
+    }
+    const [, lang, slug] = match;
+    let cancelled = false;
+    fetch(`/api/blog/translations?slug=${encodeURIComponent(slug)}&lang=${lang}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (cancelled || !json?.success) return;
+        setBlogTranslations(json.data || null);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
+
+  const switchLanguage = (langCode: Locale) =>
+    hrefForLocaleSwitch(pathname, currentLang, langCode, blogTranslations);
 
   const isActive = (href: string, exact = false) => {
     if (exact) return pathname === href;

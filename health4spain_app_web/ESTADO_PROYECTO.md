@@ -1,13 +1,15 @@
 # 📊 Estado del Proyecto Health4Spain
 
-**Fecha de última actualización:** 5 de mayo de 2026
+**Fecha de última actualización:** 8 de mayo de 2026
 
 ---
 
-## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO + GHL/LEADS + PARTNERS FASE 1 + PRODUCTION-READY
+## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO + GHL/LEADS + PARTNERS FASE 1 + BLOG IA + PRODUCTION-READY
 
 ### 🎯 Hitos Alcanzados
 
+- ✅ **Asistente IA del blog** (mayo 2026): wizard «Crear con IA», Config IA (`ai_blog_config`), traducción desde editor (solo artículo ES), portadas IA (`blog-images/ai-covers/`), SerpAPI para modo noticias. Documentación: **`docs/BLOG_IA_Y_TRADUCCIONES.md`**.
+- ✅ **Blog enlazado entre idiomas**: columna `translation_group_id`, API `GET /api/blog/translations`, hreflang con slugs reales (`buildBlogAlternates`), navbar (`Navigation.tsx`) con `hrefForLocaleSwitch`. Migración **`supabase/17-blog-translation-groups.sql`**.
 - ✅ **Partners Fase 1 — Captación B2B** (mayo 2026): funnel completo de captación de partners pagadores, end-to-end. Landing pública `/es/partners` (Acceso 1) sin precios + formulario; cualificación humana en `/administrator/partners` con generación de **magic link** UUID (TTL 7 días) que se copia al portapapeles; panel privado `/es/partners/acceso?token=...` (Acceso 2) con calculadora ROI interactiva, selector multi-vertical con descuento progresivo y CTA «Solicitar contrato Founding»; tabla `partner_leads` (`supabase/16-partner-leads.sql`), 4 endpoints `/api/partners/*` y lógica centralizada en `src/lib/partners.ts` (matriz Tier × Plan, 19 ciudades→tier, Founding 30%×6m, ROI). Decisión de producto: 19 ciudades estratégicas + plazas compartidas (exclusividad solo en plan LIDERA, por trayectoria). Pagos/firmas manuales en v0; Stripe/Signaturit/Calendly diferidos. Detalle: **`docs/PARTNERS_FASE1_CAPTACION.md`**.
 - ✅ **GoHighLevel integrado** (API upsert + webhook único `GHL_INCOMING_WEBHOOK_SALUD`): valores legibles en **español** en CRM aunque el lead venga de formulario EN/FR/DE/PT (`src/lib/ghl-spanish-labels.ts`, campos `*_es` en webhook y custom fields API). **Una sola location GHL** acordada con el cliente; el JSON incluye `servicio` y `tipo_ruta` (`salud` / `otros`) para filtros y workflows. Fuente de verdad: **`README.md` → «CRM GoHighLevel (GHL) y leads»** (decisión de producto y nombre histórico de la variable).
 - ✅ **Panel admin** `/administrator/leads`: listado y eliminación de leads.
@@ -23,7 +25,7 @@
 - ✅ **Anti-canibalización SEO**: keyword "visa no lucrativa" exclusiva en landings dedicadas
 - ✅ **Contacto actualizado**: teléfono real +34 644 404 562 + WhatsApp en footer
 - ✅ **Blog styling**: estilos centralizados en globals.css (.blog-article-content)
-- ✅ **Blog multiidioma** con artículos traducidos
+- ✅ **Blog multiidioma** con artículos por idioma (`lang`), grupos de traducción (`translation_group_id`) y hreflang correcto en URLs de artículo
 - ✅ **Formulario embebido** en landings (conversión directa)
 - ✅ **Chat IA (Mar-IA)**: widget flotante, configurador en admin, historial y valoraciones, detección de idioma en dos agentes, contexto desde BD (servicios, ciudades, blog, landings); estado on/off persistido en BD y sin caché
 
@@ -137,7 +139,8 @@
 | `idiomas` | 5 | - |
 | `leads` | Variable | - |
 | `chatbot_config` | 1 | Configuración Chat IA (singleton) |
-| `chat_messages` | Variable | Historial conversaciones + ratings |
+| `ai_blog_config` | 1 | Configuración asistente IA del blog (singleton) |
+| `chat_messages` | Variable | Historial conversaciones Mar-IA + valoración |
 | `partner_leads` | Variable | Captación de partners B2B: formulario + cualificación + token + selección contrato |
 
 ### Migraciones SQL Ejecutadas
@@ -154,7 +157,9 @@
 10. `13-landing-visa-no-lucrativa.sql` - Landings visa no lucrativa ES+EN
 11. `14-landing-visa-no-lucrativa-de-fr-pt.sql` - Landings visa no lucrativa DE+FR+PT
 12. `15-ai-blog-config.sql` - Configuración del asistente IA del blog
-13. `16-partner-leads.sql` - Captación de partners B2B (Fase 1: formulario, cualificación, magic link, selección de contrato)
+13. `16-partner-leads.sql` - Captación de partners B2B (Fase 1)
+14. `17-blog-translation-groups.sql` - Grupos de traducción del blog (`translation_group_id` + trigger + índice único idioma por grupo)
+15. `18-ai-blog-model-image-gpt-image-1.5.sql` - `model_image` → `gpt-image-1.5` + DEFAULT columna (alternativa a error 403 con `gpt-image-2`)
 
 ---
 
@@ -220,6 +225,11 @@ npm run check-landings
 - [ ] Signaturit para firma digital (cuando volumen ≥ 20 firmas/mes)
 - [ ] Email/WhatsApp automatizado al generar token de Acceso 2
 
+### Completado Recientemente (May 2026 — Blog IA y traducciones)
+- ✅ **`ai_blog_config`** + rutas `/api/admin/blog/ai/*` (propuestas, noticias SerpAPI, redacción, portada, borrador, traducción).
+- ✅ **`translation_group_id`** en `blog_posts` + `/api/blog/translations` + SEO `buildBlogAlternates` + `Navigation`/`LanguageSwitcher` con `blog-locale-switch.ts`.
+- ✅ Editor: «Generar portada con IA»; normalización de tamaños imagen gpt-image vs DALL·E en `generate-cover`.
+
 ### Completado Recientemente (May 2026 — Partners Fase 1)
 - ✅ **Tabla `partner_leads`** (`supabase/16-partner-leads.sql`): 8 estados de funnel, token UUID con TTL 7d, RLS estricto.
 - ✅ **Lógica de negocio** centralizada en `src/lib/partners.ts`: matriz Tier × Plan, 19 ciudades→tier, multi-vertical (cascada 0/10/30/40 +5pp Founding), zonas adicionales (50%, desde ESCALA), Founding (30% × 6 meses, 10 plazas), `computeRoi()`.
@@ -255,6 +265,6 @@ npm run check-landings
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PARTNERS FASE 1 + PRODUCTION-READY  
-**Última actualización**: 5 de mayo de 2026  
-**Versión**: 3.3.0
+**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PARTNERS FASE 1 + BLOG IA + PRODUCTION-READY  
+**Última actualización**: 8 de mayo de 2026  
+**Versión**: 3.4.0

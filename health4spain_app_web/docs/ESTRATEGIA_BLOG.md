@@ -2,7 +2,8 @@
 
 > **Documento conceptual**  
 > El blog como motor de SEO y autoridad  
-> *(Abril 2026: para estado del producto y captación de leads/GHL, ver `README.md` en la raíz del proyecto.)*
+> *(Abril 2026: para estado del producto y captación de leads/GHL, ver `README.md` en la raíz del proyecto.)*  
+> *(Mayo 2026: implementación técnica del blog — IA, Supabase, APIs — en **`docs/BLOG_IA_Y_TRADUCCIONES.md`**.)*
 
 ---
 
@@ -318,83 +319,31 @@ El pilar enlaza a todos los satélites.
 
 ---
 
-## 📊 DATOS DEL BLOG EN SUPABASE
+## 📊 DATOS DEL BLOG EN SUPABASE (implementación real)
 
-### Tabla: BLOG_POSTS
+> El modelo conceptual anterior (campos `title_es`, `title_en`, categorías multi-tabla) **no coincide** con el esquema vigente. Esta sección describe lo que hay en producción.
 
-```
-BLOG_POSTS
-│
-├── Identificadores
-│   ├── id (UUID)
-│   ├── slug (único por idioma)
-│   └── slug_translations (JSON) → {"es": "arraigo-social", "en": "social-roots"}
-│
-├── Contenido por idioma
-│   ├── title_es, title_en, title_de, title_fr
-│   ├── content_es, content_en, content_de, content_fr (Markdown o HTML)
-│   ├── excerpt_es, excerpt_en, excerpt_de, excerpt_fr
-│   └── meta_description_es, meta_description_en...
-│
-├── Categorización
-│   ├── category (guias / tramites / vida-en-espana / noticias)
-│   ├── tags [] (array de etiquetas)
-│   └── target_profiles [] (móviles / familias / consolidados / jubilados)
-│
-├── SEO
-│   ├── focus_keyword_es, focus_keyword_en...
-│   ├── secondary_keywords [] 
-│   └── canonical_url (si aplica)
-│
-├── Relaciones
-│   ├── related_cities [] → FK a ciudades mencionadas
-│   ├── related_services [] → FK a servicios mencionados
-│   ├── related_posts [] → FK a artículos relacionados
-│   └── pillar_post_id → FK al artículo pilar (si es satélite)
-│
-├── Media
-│   ├── featured_image
-│   ├── featured_image_alt
-│   └── images [] (galería)
-│
-├── Publicación
-│   ├── status (borrador / revision / publicado / archivado)
-│   ├── published_at
-│   ├── updated_at
-│   └── author
-│
-├── Métricas (calculadas o importadas)
-│   ├── views_total
-│   ├── views_last_30_days
-│   ├── avg_time_on_page
-│   └── leads_generated (cuántos leads vinieron de este artículo)
-│
-└── Idiomas disponibles
-    └── available_locales [] → ["es", "en"] (no todos tienen los 4)
-```
+### Tabla `blog_posts` (una fila = un artículo en un idioma)
 
-### Tabla: BLOG_CATEGORIES
+| Área | Campos típicos |
+|------|----------------|
+| Identidad | `id` (UUID), `slug`, `lang` (`es` \| `en` \| `de` \| `fr` \| `pt`), **`translation_group_id`** (UUID compartido entre traducciones) |
+| Contenido | `title`, `excerpt`, `content` (HTML), `tags`, `category` |
+| SEO | `meta_title`, `meta_description` |
+| Media | `featured_image` (URL) |
+| Publicación | `status`, `published_at`, `author_name`, `views`, timestamps |
 
-```
-BLOG_CATEGORIES
-│
-├── id
-├── slug_es, slug_en, slug_de, slug_fr
-├── name_es, name_en, name_de, name_fr
-├── description_es, description_en...
-└── parent_id (para subcategorías, si las hay)
-```
+No existe en BD una tabla separada `blog_categories` para el blog público: la categoría es un enum/cadena en la fila (`guias`, `tramites`, `vida-espana`, `noticias`, `testimonios`).
 
-### Tabla: BLOG_TAGS
+### Tabla `ai_blog_config` (singleton)
 
-```
-BLOG_TAGS
-│
-├── id
-├── slug
-├── name_es, name_en, name_de, name_fr
-└── post_count (calculado)
-```
+Configuración del asistente IA: modelos OpenAI, prompts, temperaturas, estilo y tamaño de imagen, parámetros SerpAPI para noticias, guía editorial.
+
+### Referencia técnica completa
+
+**[`docs/BLOG_IA_Y_TRADUCCIONES.md`](./BLOG_IA_Y_TRADUCCIONES.md)** — APIs, variables de entorno, migraciones `15` y `17`, flujo ES → traducción, hreflang y selector de idioma.
+
+Los apartados conceptuales siguientes (calendario editorial, KPIs, clusters) siguen siendo válidos como **estrategia de producto**.
 
 ---
 

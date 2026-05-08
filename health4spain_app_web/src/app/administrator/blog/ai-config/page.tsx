@@ -186,7 +186,7 @@ export default function BlogAIConfigPage() {
               className="input"
             />
           </Field>
-          <Field label="Modelo de imagen" hint="Ej: gpt-image-2">
+          <Field label="Modelo de imagen" hint="Ej: gpt-image-1.5 (sin verificar org) o gpt-image-2 tras verificar en OpenAI. También dall-e-3.">
             <input
               type="text"
               value={config.model_image}
@@ -244,11 +244,11 @@ export default function BlogAIConfigPage() {
       </Section>
 
       {/* Imagen */}
-      <Section title="Portadas (gpt-image-2)">
+      <Section title="Portadas (modelo de imagen)">
         <Grid>
           <Field
             label="Tamaño de imagen"
-            hint="gpt-image / gpt-image-2 solo admiten auto, 1024², 1536×1024 y 1024×1536. Si eliges 1792×1024 con ese modelo, el servidor lo adaptará automáticamente."
+            hint="Modelos gpt-image-* (p. ej. 1.5, 2): solo auto, 1024², 1536×1024 y 1024×1536. Con 1792×1024 el servidor lo adapta. DALL·E 3 admite también 1792×1024."
           >
             <select
               value={config.image_size}

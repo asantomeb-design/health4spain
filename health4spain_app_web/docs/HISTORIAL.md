@@ -1,5 +1,16 @@
 # Historial de Desarrollo - Health4Spain
 
+## Versión 3.4.0 (8 mayo 2026)
+
+### Blog: asistente IA, traducciones enlazadas y documentación
+
+- **`ai_blog_config`** + wizard «Crear con IA», Config IA, APIs `/api/admin/blog/ai/*` (OpenAI + SerpAPI opcional para noticias).
+- **`translation_group_id`** en `blog_posts`; migración `17-blog-translation-groups.sql`; `GET /api/blog/translations`; SEO `buildBlogAlternates`; helper **`src/lib/blog-locale-switch.ts`** usado por **`Navigation.tsx`** y **`LanguageSwitcher.tsx`** (salto al slug correcto entre idiomas en artículos publicados).
+- Editor: «Generar portada con IA»; **`generate-cover`** normaliza tamaños imagen según modelo (gpt-image vs DALL·E 3).
+- Documentación nueva/unificada: **`docs/BLOG_IA_Y_TRADUCCIONES.md`**; actualizados README, ÍNDICE, ESTADO_PROYECTO, supabase/README, GUIA Supabase, CONFIGURACION_VERCEL, AUDITORIA, ESTRATEGIA_BLOG (esquema real), `.env.example`.
+
+---
+
 ## Versión 3.2.0 (9 abril 2026)
 
 ### SEO: Landings visa no lucrativa + schemas + anti-canibalización
@@ -101,7 +112,7 @@
 ### Navegación: Blog en navbar
 
 - **Componente**: `Navigation.tsx` — **único navbar del sitio público**
-- **Nota**: El layout usa solo `Navigation.tsx`. No existe otro navbar activo. (`Header.tsx` existe pero no se usa.)
+- **Nota**: El layout usa solo `Navigation.tsx`. `Header.tsx` es legacy (no montado en layout); ambos pueden usar `blog-locale-switch.ts` para artículos `/blog/[slug]`.
 - **Añadido**: Enlace Blog entre Servicios y Contacto
 - **Orden**: Inicio → Destinos → Servicios → Blog → Contacto
 

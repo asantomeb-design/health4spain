@@ -123,6 +123,20 @@ Repite el proceso:
 - Escritura solo para administradores autorizados
 - Permisos correctos en el bucket `blog-images`
 
+Las portadas generadas por IA del blog se suben a la carpeta **`ai-covers/`** dentro de ese bucket (no requiere bucket adicional).
+
+---
+
+## Paso 5b: Migraciones recientes (blog IA y traducciones)
+
+Si el proyecto ya existe pero faltan scripts nuevos, en **SQL Editor** ejecuta (tras revisar el orden en [`supabase/README.md`](./supabase/README.md)):
+
+- **`15-ai-blog-config.sql`** — tabla `ai_blog_config`
+- **`17-blog-translation-groups.sql`** — `translation_group_id` en `blog_posts`
+- **`18-ai-blog-model-image-gpt-image-1.5.sql`** — `model_image` por defecto `gpt-image-1.5` (útil si `gpt-image-2` devuelve 403 sin org verificada)
+
+Documentación operativa: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](./docs/BLOG_IA_Y_TRADUCCIONES.md).
+
 ---
 
 ## Paso 6: Configurar Autenticación (Google OAuth)
