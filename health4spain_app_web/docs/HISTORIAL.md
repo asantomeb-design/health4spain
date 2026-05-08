@@ -6,6 +6,7 @@
 
 - **`ai_blog_config`** + wizard «Crear con IA», Config IA, APIs `/api/admin/blog/ai/*` (OpenAI + SerpAPI opcional para noticias).
 - **`translation_group_id`** en `blog_posts`; migración `17-blog-translation-groups.sql`; `GET /api/blog/translations`; SEO `buildBlogAlternates`; helper **`src/lib/blog-locale-switch.ts`** usado por **`Navigation.tsx`** y **`LanguageSwitcher.tsx`** (salto al slug correcto entre idiomas en artículos publicados).
+- Migración **`18-ai-blog-model-image-gpt-image-1.5.sql`** aplicada en Supabase producción: **`model_image`** y DEFAULT **`gpt-image-1.5`** en `ai_blog_config`.
 - Editor: «Generar portada con IA»; **`generate-cover`** normaliza tamaños imagen según modelo (gpt-image vs DALL·E 3).
 - Documentación nueva/unificada: **`docs/BLOG_IA_Y_TRADUCCIONES.md`**; actualizados README, ÍNDICE, ESTADO_PROYECTO, supabase/README, GUIA Supabase, CONFIGURACION_VERCEL, AUDITORIA, ESTRATEGIA_BLOG (esquema real), `.env.example`.
 

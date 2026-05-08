@@ -110,7 +110,7 @@ health4spain/
 │   ├── 15-ai-blog-config.sql              # Tabla ai_blog_config (asistente IA del blog)
 │   ├── 16-partner-leads.sql               # Captación de partners B2B (Fase 1)
 │   ├── 17-blog-translation-groups.sql     # translation_group_id en blog_posts + backfill + índices
-│   └── 18-ai-blog-model-image-gpt-image-1.5.sql  # model_image → gpt-image-1.5 (+ DEFAULT)
+│   └── 18-ai-blog-model-image-gpt-image-1.5.sql  # model_image → gpt-image-1.5 (+ DEFAULT); ✅ aplicado prod mayo 2026
 └── public/images/                      # chat_ia_logo.jpg (avatar Mar-IA), favicon, logos
 ```
 

@@ -7,6 +7,7 @@
 - Asistente del blog en admin (`Crear con IA`, `Config IA`, SerpAPI, portadas OpenAI → Storage `blog-images/ai-covers/`).
 - `translation_group_id`, API pública `/api/blog/translations`, hreflang por slug real, navbar acorde (`Navigation` + `blog-locale-switch`).
 - Guía técnica: **`docs/BLOG_IA_Y_TRADUCCIONES.md`**. Versión del proyecto **3.4.0**.
+- **`supabase/18-ai-blog-model-image-gpt-image-1.5.sql`** ejecutado en **Supabase producción**: `ai_blog_config.model_image` y DEFAULT en **`gpt-image-1.5`** (evita 403 de `gpt-image-2` sin org verificada en OpenAI).
 
 ---
 

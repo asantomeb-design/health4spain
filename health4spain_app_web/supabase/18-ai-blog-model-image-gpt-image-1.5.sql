@@ -4,6 +4,7 @@
 -- Evita 403 de OpenAI cuando la organización aún no está verificada para gpt-image-2.
 -- Ejecutar en Supabase SQL Editor después de 17-blog-translation-groups.sql (o cuando ya exista ai_blog_config).
 -- Idempotente: actualiza la fila singleton y el DEFAULT de la columna.
+-- Referencia despliegue principal: ya ejecutado en Supabase producción (mayo 2026). Otros clones: ejecutar solo si falta.
 
 UPDATE ai_blog_config
 SET model_image = 'gpt-image-1.5'

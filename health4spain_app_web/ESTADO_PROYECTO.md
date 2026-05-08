@@ -159,7 +159,7 @@
 12. `15-ai-blog-config.sql` - Configuración del asistente IA del blog
 13. `16-partner-leads.sql` - Captación de partners B2B (Fase 1)
 14. `17-blog-translation-groups.sql` - Grupos de traducción del blog (`translation_group_id` + trigger + índice único idioma por grupo)
-15. `18-ai-blog-model-image-gpt-image-1.5.sql` - `model_image` → `gpt-image-1.5` + DEFAULT columna (alternativa a error 403 con `gpt-image-2`)
+15. `18-ai-blog-model-image-gpt-image-1.5.sql` - `model_image` → `gpt-image-1.5` + DEFAULT columna (alternativa a error 403 con `gpt-image-2`) — **✅ ejecutado en Supabase producción (mayo 2026)**
 
 ---
 

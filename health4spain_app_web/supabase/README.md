@@ -35,7 +35,7 @@ En **SQL Editor**, ejecutar en orden:
 | 15 | `15-ai-blog-config.sql` | Tabla `ai_blog_config` (singleton): modelos, prompts, estilo/tamaño imagen, noticias |
 | 16 | `16-partner-leads.sql` | **Partners Fase 1**: tabla `partner_leads` + vista admin |
 | 17 | `17-blog-translation-groups.sql` | Blog: `translation_group_id` en `blog_posts`, backfill, trigger INSERT, índice único `(translation_group_id, lang)`. Doc: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](../docs/BLOG_IA_Y_TRADUCCIONES.md) |
-| 18 | `18-ai-blog-model-image-gpt-image-1.5.sql` | `ai_blog_config.model_image` → `gpt-image-1.5` + DEFAULT (alternativa si no tienes org verificada para `gpt-image-2`) |
+| 18 | `18-ai-blog-model-image-gpt-image-1.5.sql` | `ai_blog_config.model_image` → `gpt-image-1.5` + DEFAULT (alternativa si no tienes org verificada para `gpt-image-2`). **Producción principal:** aplicado mayo 2026. |
 | 19 | `rls-policies.sql` | Row Level Security |
 | 20 | `storage-policies.sql` | Políticas Storage |
 

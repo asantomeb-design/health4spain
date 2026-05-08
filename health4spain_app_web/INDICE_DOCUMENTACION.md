@@ -75,7 +75,7 @@
 | `15-ai-blog-config.sql` | Configuración asistente IA del blog | ✅ Ejecutado |
 | `16-partner-leads.sql` | Captación partners B2B (Fase 1) | ✅ Ejecutado |
 | `17-blog-translation-groups.sql` | `translation_group_id` en `blog_posts`, backfill, índice único por grupo+lang | ✅ Ejecutar en prod si falta |
-| `18-ai-blog-model-image-gpt-image-1.5.sql` | `model_image` → `gpt-image-1.5` + DEFAULT | ✅ Opcional / tras error gpt-image-2 |
+| `18-ai-blog-model-image-gpt-image-1.5.sql` | `model_image` → `gpt-image-1.5` + DEFAULT columna | ✅ Ejecutado en producción (mayo 2026) |
 
 ---
 

@@ -98,7 +98,7 @@ Todas bajo `/api/admin/blog/ai/*` exigen **JWT de admin** (`Authorization: Beare
 
 ## Orden de migraciones SQL (fragmento)
 
-Después de `15-ai-blog-config.sql`, ejecutar **`17-blog-translation-groups.sql`** y, si quieres forzar **`gpt-image-1.5`** en config existente, **`18-ai-blog-model-image-gpt-image-1.5.sql`**, en producción si aún no están aplicadas. Ver lista completa en [`supabase/README.md`](../supabase/README.md).
+Después de `15-ai-blog-config.sql`, en entornos nuevos o clones ejecutar en orden **`17-blog-translation-groups.sql`** y **`18-ai-blog-model-image-gpt-image-1.5.sql`** si aún no constan en ese proyecto. **Producción del sitio principal (mayo 2026):** la migración **`18`** ya está aplicada en Supabase (`model_image` + DEFAULT `gpt-image-1.5`). Lista completa y orden: [`supabase/README.md`](../supabase/README.md).
 
 ---
 

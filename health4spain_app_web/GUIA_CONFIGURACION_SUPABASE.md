@@ -135,6 +135,8 @@ Si el proyecto ya existe pero faltan scripts nuevos, en **SQL Editor** ejecuta (
 - **`17-blog-translation-groups.sql`** — `translation_group_id` en `blog_posts`
 - **`18-ai-blog-model-image-gpt-image-1.5.sql`** — `model_image` por defecto `gpt-image-1.5` (útil si `gpt-image-2` devuelve 403 sin org verificada)
 
+**Referencia:** En producción del sitio principal, **`18-ai-blog-model-image-gpt-image-1.5.sql`** ya se ejecutó en Supabase (mayo 2026). En otros entornos, ejecuta solo lo que falte.
+
 Documentación operativa: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](./docs/BLOG_IA_Y_TRADUCCIONES.md).
 
 ---
