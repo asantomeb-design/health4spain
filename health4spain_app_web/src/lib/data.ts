@@ -187,6 +187,91 @@ export async function getBlogSlugs(locale: Locale) {
   }
 }
 
+// ── Translation groups ───────────────────────────────────────────────────
+//
+// Un grupo de traducción agrupa el mismo artículo en distintos idiomas con
+// un UUID común (`translation_group_id`). Estas funciones permiten resolver
+// "dame el slug del hermano de este post en idioma X" sin asumir que los
+// slugs son iguales en todos los idiomas.
+
+/**
+ * Devuelve un mapa { lang → slug } con todos los hermanos publicados del
+ * artículo identificado por (slug, locale). Solo posts en estado published
+ * con published_at <= ahora.
+ */
+export async function getBlogTranslations(
+  slug: string,
+  locale: Locale
+): Promise<Partial<Record<Locale, string>>> {
+  try {
+    const nowIso = new Date().toISOString();
+    const { data: source, error: sourceError } = await supabase
+      .from('blog_posts')
+      .select('translation_group_id')
+      .eq('slug', slug)
+      .eq('lang', locale)
+      .eq('status', 'published')
+      .lte('published_at', nowIso)
+      .single();
+
+    if (sourceError || !source?.translation_group_id) {
+      // Sin grupo, el único "hermano" es el propio artículo en su idioma
+      return { [locale]: slug };
+    }
+
+    const { data: siblings, error } = await supabase
+      .from('blog_posts')
+      .select('lang, slug')
+      .eq('translation_group_id', source.translation_group_id)
+      .eq('status', 'published')
+      .lte('published_at', nowIso);
+
+    if (error || !siblings) return { [locale]: slug };
+
+    const map: Partial<Record<Locale, string>> = {};
+    for (const s of siblings) {
+      if (s?.lang && s?.slug) {
+        map[s.lang as Locale] = s.slug as string;
+      }
+    }
+    if (!map[locale]) map[locale] = slug;
+    return map;
+  } catch {
+    return { [locale]: slug };
+  }
+}
+
+/**
+ * Versión que también devuelve borradores y archivados (para uso del admin).
+ * No se debe exponer públicamente.
+ */
+export async function getBlogTranslationsAllStatuses(
+  slug: string,
+  locale: Locale
+): Promise<Array<{ lang: Locale; slug: string; status: string }>> {
+  try {
+    const sb = createServerSupabaseClient();
+    const { data: source, error: sourceError } = await sb
+      .from('blog_posts')
+      .select('translation_group_id')
+      .eq('slug', slug)
+      .eq('lang', locale)
+      .single();
+
+    if (sourceError || !source?.translation_group_id) return [];
+
+    const { data, error } = await sb
+      .from('blog_posts')
+      .select('lang, slug, status')
+      .eq('translation_group_id', source.translation_group_id);
+
+    if (error || !data) return [];
+    return data as Array<{ lang: Locale; slug: string; status: string }>;
+  } catch {
+    return [];
+  }
+}
+
 // ── Landing Pages for sitemap ────────────────────────────────────────────
 
 export async function getLandingPagesForSitemap(locale: Locale) {

@@ -20,6 +20,9 @@ export interface BlogPost {
   
   // Multiidioma
   lang: 'es' | 'en' | 'de' | 'fr' | 'pt';
+  /** UUID compartido por todas las traducciones del mismo artículo. */
+  translation_group_id?: string;
+  /** @deprecated Antiguo. La vinculación real ahora es por translation_group_id. */
   translations?: {
     es?: string;
     en?: string;

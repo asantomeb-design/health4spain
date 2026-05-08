@@ -106,6 +106,24 @@ export async function POST(request: NextRequest) {
     const config = await getAiBlogConfig();
     const openai = getOpenAIClient();
 
+    // Asegurar que el post origen tiene translation_group_id.
+    // Si por algún motivo carece de él (datos antiguos previos a la migración 17),
+    // le generamos uno y lo asignamos antes de continuar.
+    let groupId: string | null = sourcePost.translation_group_id || null;
+    if (!groupId) {
+      groupId = crypto.randomUUID();
+      const { error: updateErr } = await supabase
+        .from('blog_posts')
+        .update({ translation_group_id: groupId })
+        .eq('id', sourcePost.id);
+      if (updateErr) {
+        return NextResponse.json(
+          { success: false, error: `No se pudo inicializar translation_group_id: ${updateErr.message}` },
+          { status: 500 }
+        );
+      }
+    }
+
     const created: Array<{ id: string; slug: string; lang: SupportedLang; admin_url: string }> = [];
     const errors: Array<{ lang: SupportedLang; error: string }> = [];
 
@@ -116,6 +134,22 @@ export async function POST(request: NextRequest) {
       }
       if (!(SUPPORTED_LANGS as string[]).includes(target)) {
         errors.push({ lang: target, error: 'idioma no soportado' });
+        continue;
+      }
+
+      // Si ya existe un hermano en este idioma dentro del grupo, no duplicamos.
+      const { data: existingSibling } = await supabase
+        .from('blog_posts')
+        .select('id, slug, status')
+        .eq('translation_group_id', groupId)
+        .eq('lang', target)
+        .maybeSingle();
+
+      if (existingSibling) {
+        errors.push({
+          lang: target,
+          error: `ya existe una traducción en este idioma (slug: ${existingSibling.slug}, estado: ${existingSibling.status})`,
+        });
         continue;
       }
 
@@ -174,7 +208,7 @@ export async function POST(request: NextRequest) {
       const slugBase = translated.slug ? slugify(translated.slug) : slugify(titleClean);
       const finalSlug = await ensureUniqueSlug(slugBase, target);
 
-      const insertData: Partial<BlogPost> = {
+      const insertData: Partial<BlogPost> & { translation_group_id?: string } = {
         slug: finalSlug,
         title: titleClean.slice(0, 200),
         excerpt: String(translated.excerpt || '').trim().slice(0, 280),
@@ -190,6 +224,7 @@ export async function POST(request: NextRequest) {
         status: 'draft',
         author_name: 'IA (Health4Spain)',
         published_at: undefined,
+        translation_group_id: groupId,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };

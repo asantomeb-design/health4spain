@@ -5,13 +5,19 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { LOGO_PATHS } from '@/lib/constants';
+import { switchLocalePath, type Locale } from '@/lib/routes';
 
-const LANGUAGES = [
+const LANGUAGES: { code: Locale; label: string; flag: string }[] = [
   { code: 'es', label: 'ES', flag: '🇪🇸' },
   { code: 'en', label: 'EN', flag: '🇬🇧' },
   { code: 'de', label: 'DE', flag: '🇩🇪' },
   { code: 'fr', label: 'FR', flag: '🇫🇷' },
+  { code: 'pt', label: 'PT', flag: '🇵🇹' },
 ];
+
+// Coincide con `/<locale>/<segmentoBlog>/<slug>` en cualquiera de los 5 idiomas.
+// Todos los locales usan "blog" como segmento (ver ROUTES en lib/routes.ts).
+const BLOG_ARTICLE_RE = /^\/(es|en|de|fr|pt)\/blog\/([^/]+)\/?$/;
 
 const NAV_ITEMS = {
   es: [
@@ -34,13 +40,18 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  // Mapa { lang -> slug } de las traducciones del artículo de blog actual.
+  // Se rellena solo cuando estamos en /<lang>/blog/<slug>; null en cualquier otra página.
+  const [blogTranslations, setBlogTranslations] = useState<Partial<Record<Locale, string>> | null>(null);
   const pathname = usePathname();
-  
-  // Detectar idioma actual
-  const currentLang = pathname.startsWith('/en') ? 'en' : 
-                      pathname.startsWith('/de') ? 'de' : 
-                      pathname.startsWith('/fr') ? 'fr' : 'es';
-  
+
+  // Detectar idioma actual (incluyendo pt)
+  const currentLang: Locale =
+    pathname.startsWith('/en') ? 'en' :
+    pathname.startsWith('/de') ? 'de' :
+    pathname.startsWith('/fr') ? 'fr' :
+    pathname.startsWith('/pt') ? 'pt' : 'es';
+
   const navItems = NAV_ITEMS[currentLang as keyof typeof NAV_ITEMS] || NAV_ITEMS.es;
 
   useEffect(() => {
@@ -56,10 +67,44 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  const switchLanguage = (langCode: string) => {
-    // Reemplazar el código de idioma en la URL actual
-    const newPath = pathname.replace(/^\/(es|en|de|fr)/, `/${langCode}`);
-    return newPath || `/${langCode}`;
+  // Si estamos en un artículo de blog, precargar el mapa de traducciones para
+  // que el cambiador de idioma lleve al slug correcto en cada idioma. Si no
+  // estamos en un artículo, descartamos cualquier mapa anterior.
+  useEffect(() => {
+    const match = pathname.match(BLOG_ARTICLE_RE);
+    if (!match) {
+      setBlogTranslations(null);
+      return;
+    }
+    const [, lang, slug] = match;
+    let cancelled = false;
+    fetch(`/api/blog/translations?slug=${encodeURIComponent(slug)}&lang=${lang}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (cancelled || !json?.success) return;
+        setBlogTranslations(json.data || null);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
+
+  /**
+   * Construye el href para cambiar al idioma destino.
+   * - En artículos de blog: usa el slug traducido si existe; si no, cae al
+   *   listado del blog en ese idioma para evitar 404s.
+   * - En el resto: traduce los segmentos de ruta (servicios → services, etc.)
+   *   con switchLocalePath.
+   */
+  const switchLanguage = (target: Locale): string => {
+    const blogMatch = pathname.match(BLOG_ARTICLE_RE);
+    if (blogMatch) {
+      const targetSlug = blogTranslations?.[target];
+      if (targetSlug) return `/${target}/blog/${targetSlug}`;
+      return `/${target}/blog`;
+    }
+    return switchLocalePath(pathname, currentLang, target);
   };
 
   return (

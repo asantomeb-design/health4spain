@@ -1,25 +1,54 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { switchLocalePath, type Locale } from '@/lib/routes';
 
-const languages = [
+const languages: { code: Locale; name: string; flag: string }[] = [
   { code: 'es', name: 'Español', flag: '🇪🇸' },
   { code: 'en', name: 'English', flag: '🇬🇧' },
   { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹' },
 ];
+
+const BLOG_ARTICLE_RE = /^\/(es|en|de|fr|pt)\/blog\/([^/]+)\/?$/;
 
 export default function LanguageSwitcher() {
   const pathname = usePathname();
-  
-  // Get current locale from pathname
-  const currentLocale = pathname.split('/')[1] || 'es';
-  
-  // Function to get new path with different locale
-  const getLocalizedPath = (newLocale: string) => {
-    const pathWithoutLocale = pathname.replace(/^\/(es|en|de|fr)/, '');
-    return `/${newLocale}${pathWithoutLocale || ''}`;
+  const [blogTranslations, setBlogTranslations] = useState<Partial<Record<Locale, string>> | null>(null);
+
+  const currentLocale = (pathname.split('/')[1] || 'es') as Locale;
+
+  useEffect(() => {
+    const match = pathname.match(BLOG_ARTICLE_RE);
+    if (!match) {
+      setBlogTranslations(null);
+      return;
+    }
+    const [, lang, slug] = match;
+    let cancelled = false;
+    fetch(`/api/blog/translations?slug=${encodeURIComponent(slug)}&lang=${lang}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (cancelled || !json?.success) return;
+        setBlogTranslations(json.data || null);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
+
+  const getLocalizedPath = (newLocale: Locale) => {
+    const blogMatch = pathname.match(BLOG_ARTICLE_RE);
+    if (blogMatch) {
+      const targetSlug = blogTranslations?.[newLocale];
+      if (targetSlug) return `/${newLocale}/blog/${targetSlug}`;
+      return `/${newLocale}/blog`;
+    }
+    return switchLocalePath(pathname, currentLocale, newLocale);
   };
 
   return (

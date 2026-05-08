@@ -13,6 +13,8 @@ interface BlogPost {
   category: string;
   status: string;
   views: number;
+  lang: string;
+  translation_group_id: string | null;
   published_at: string | null;
   created_at: string;
   updated_at: string;
@@ -38,7 +40,15 @@ const categoryLabels: Record<string, string> = {
   testimonios: 'Testimonios',
 };
 
-type SortKey = 'title' | 'category' | 'status' | 'views' | 'created_at' | 'published_at';
+const langLabels: Record<string, { flag: string; label: string }> = {
+  es: { flag: '🇪🇸', label: 'ES' },
+  en: { flag: '🇬🇧', label: 'EN' },
+  de: { flag: '🇩🇪', label: 'DE' },
+  fr: { flag: '🇫🇷', label: 'FR' },
+  pt: { flag: '🇵🇹', label: 'PT' },
+};
+
+type SortKey = 'title' | 'category' | 'status' | 'views' | 'lang' | 'created_at' | 'published_at';
 type SortDirection = 'asc' | 'desc';
 
 export default function BlogListPage() {
@@ -46,6 +56,7 @@ export default function BlogListPage() {
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
+  const [filterLang, setFilterLang] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('created_at');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
@@ -53,7 +64,16 @@ export default function BlogListPage() {
 
   useEffect(() => {
     fetchPosts();
-  }, [filterStatus, filterCategory]);
+  }, [filterStatus, filterCategory, filterLang]);
+
+  // Mapa { translation_group_id -> { lang -> {slug, status} } } para mostrar
+  // qué idiomas existen ya para cada artículo.
+  const groupsMap = posts.reduce((acc, post) => {
+    if (!post.translation_group_id) return acc;
+    if (!acc[post.translation_group_id]) acc[post.translation_group_id] = {};
+    acc[post.translation_group_id][post.lang] = { slug: post.slug, status: post.status };
+    return acc;
+  }, {} as Record<string, Record<string, { slug: string; status: string }>>);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -82,11 +102,12 @@ export default function BlogListPage() {
     try {
       let query = supabase
         .from('blog_posts')
-        .select('id, slug, title, excerpt, category, status, views, published_at, created_at, updated_at')
+        .select('id, slug, title, excerpt, category, status, views, lang, translation_group_id, published_at, created_at, updated_at')
         .order('created_at', { ascending: false });
 
       if (filterStatus) query = query.eq('status', filterStatus);
       if (filterCategory) query = query.eq('category', filterCategory);
+      if (filterLang) query = query.eq('lang', filterLang);
 
       const { data, error } = await query;
 
@@ -140,6 +161,8 @@ export default function BlogListPage() {
             return (statusLabels[post.status] || post.status || '').toLowerCase();
           case 'views':
             return post.views || 0;
+          case 'lang':
+            return post.lang || '';
           case 'created_at':
             return post.created_at ? new Date(post.created_at).getTime() : 0;
           case 'published_at':
@@ -207,13 +230,13 @@ export default function BlogListPage() {
 
       {/* Filters */}
       <div className="bg-white p-4 rounded-lg shadow-sm border mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <input
             type="text"
             placeholder="Buscar por título..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[accent] focus:border-transparent outline-none"
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[accent] focus:border-transparent outline-none col-span-2 md:col-span-1"
           />
           <select
             value={filterStatus}
@@ -235,8 +258,18 @@ export default function BlogListPage() {
               <option key={value} value={value}>{label}</option>
             ))}
           </select>
+          <select
+            value={filterLang}
+            onChange={(e) => setFilterLang(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[accent] focus:border-transparent outline-none"
+          >
+            <option value="">Todos los idiomas</option>
+            {Object.entries(langLabels).map(([value, { flag, label }]) => (
+              <option key={value} value={value}>{flag} {label}</option>
+            ))}
+          </select>
           <button
-            onClick={() => { setFilterStatus(''); setFilterCategory(''); setSearchTerm(''); }}
+            onClick={() => { setFilterStatus(''); setFilterCategory(''); setFilterLang(''); setSearchTerm(''); }}
             className="px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
           >
             Limpiar filtros
@@ -279,6 +312,16 @@ export default function BlogListPage() {
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   <button
+                    onClick={() => handleSort('lang')}
+                    className="flex items-center hover:text-gray-900 uppercase"
+                    title="Idioma del artículo y traducciones disponibles"
+                  >
+                    Idioma
+                    <SortIndicator columnKey="lang" />
+                  </button>
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <button
                     onClick={() => handleSort('views')}
                     className="flex items-center hover:text-gray-900 uppercase"
                   >
@@ -310,18 +353,23 @@ export default function BlogListPage() {
             <tbody className="divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center">
+                  <td colSpan={8} className="px-4 py-8 text-center">
                     <div className="w-6 h-6 border-2 border-[accent] border-t-transparent rounded-full animate-spin mx-auto"></div>
                   </td>
                 </tr>
               ) : filteredPosts.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={8} className="px-4 py-8 text-center text-gray-400">
                     No hay posts todavía
                   </td>
                 </tr>
               ) : (
-                filteredPosts.map((post) => (
+                filteredPosts.map((post) => {
+                  const groupSiblings = post.translation_group_id
+                    ? groupsMap[post.translation_group_id] || {}
+                    : {};
+                  const otherLangs = Object.keys(groupSiblings).filter((l) => l !== post.lang);
+                  return (
                   <tr key={post.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3">
                       <div>
@@ -336,6 +384,28 @@ export default function BlogListPage() {
                       <span className={`text-xs px-2 py-1 rounded-full ${statusColors[post.status] || 'bg-gray-100'}`}>
                         {statusLabels[post.status] || post.status}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-gray-800"
+                          title={`Idioma: ${langLabels[post.lang]?.label || post.lang}`}
+                        >
+                          <span>{langLabels[post.lang]?.flag || '🏳️'}</span>
+                          <span>{langLabels[post.lang]?.label || post.lang.toUpperCase()}</span>
+                        </span>
+                        {otherLangs.length > 0 && (
+                          <span
+                            className="inline-flex items-center gap-0.5 text-[11px] text-gray-500"
+                            title={`Traducciones existentes: ${otherLangs.map((l) => langLabels[l]?.label || l).join(', ')}`}
+                          >
+                            <span className="text-gray-300">+</span>
+                            {otherLangs.map((l) => (
+                              <span key={l}>{langLabels[l]?.flag || ''}</span>
+                            ))}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-600">
                       {post.views || 0}
@@ -360,7 +430,7 @@ export default function BlogListPage() {
                         </Link>
                         <span className="text-gray-300">|</span>
                         <Link
-                          href={`/es/blog/${post.slug}`}
+                          href={`/${post.lang}/blog/${post.slug}`}
                           target="_blank"
                           className="text-gray-500 hover:text-gray-700 text-sm"
                         >
@@ -376,7 +446,8 @@ export default function BlogListPage() {
                       </div>
                     </td>
                   </tr>
-                ))
+                  );
+                })
               )}
             </tbody>
           </table>

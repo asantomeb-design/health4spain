@@ -42,6 +42,41 @@ export function buildDynamicAlternates(
   };
 }
 
+/**
+ * Genera alternates/canonical para artículos de blog usando un mapa real
+ * de slugs por idioma. Solo emite hreflang para los idiomas presentes en
+ * `siblings`. Pensado para vincular traducciones reales (translation_group_id).
+ *
+ * @param locale Idioma del artículo actual.
+ * @param siblings Mapa { lang → slug } con todas las traducciones publicadas
+ *                 del artículo (debe incluir al menos el idioma actual).
+ */
+export function buildBlogAlternates(
+  locale: Locale,
+  siblings: Partial<Record<Locale, string>>
+) {
+  const languages: Record<string, string> = {};
+  for (const l of LOCALES) {
+    const sib = siblings[l];
+    if (!sib) continue;
+    const segment = ROUTES[l].blog || 'blog';
+    languages[l] = `${BASE_URL}/${l}/${segment}/${sib}`;
+  }
+  if (siblings.es) {
+    languages['x-default'] = `${BASE_URL}/es/${ROUTES.es.blog || 'blog'}/${siblings.es}`;
+  } else if (languages[locale]) {
+    languages['x-default'] = languages[locale];
+  }
+  const ownSlug = siblings[locale];
+  const canonicalSegment = ROUTES[locale].blog || 'blog';
+  return {
+    canonical: ownSlug
+      ? `${BASE_URL}/${locale}/${canonicalSegment}/${ownSlug}`
+      : `${BASE_URL}/${locale}/${canonicalSegment}`,
+    languages,
+  };
+}
+
 // ── Blog portada / cover image resolver ────────────────────────────────
 // IMPORTANTE: este mapeo debe coincidir EXACTAMENTE con el `categoryImages`
 // que usan las páginas del blog (listado y artículo). Si se añade/quita una

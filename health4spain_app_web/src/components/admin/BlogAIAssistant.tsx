@@ -43,13 +43,11 @@ interface Props {
   onSaved?: (slug: string) => void;
 }
 
-const LANG_OPTIONS: Array<{ value: Lang; label: string }> = [
-  { value: 'es', label: 'Español' },
-  { value: 'en', label: 'English' },
-  { value: 'fr', label: 'Français' },
-  { value: 'de', label: 'Deutsch' },
-  { value: 'pt', label: 'Português' },
-];
+// El wizard fuerza siempre español como idioma origen. Las traducciones a
+// los demás idiomas se generan después desde el editor del artículo con el
+// botón "Traducir con IA". Esto garantiza una única fuente de verdad por
+// grupo de traducción y evita que la IA cree el primer artículo en un
+// idioma que luego haya que volver a traducir.
 
 const CATEGORY_OPTIONS: Array<{ value: Category | ''; label: string }> = [
   { value: '', label: 'Auto (la decide la IA)' },
@@ -335,18 +333,12 @@ export default function BlogAIAssistant({ isOpen, onClose, onSaved }: Props) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Idioma</label>
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value as Lang)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent outline-none"
-                  >
-                    {LANG_OPTIONS.map((l) => (
-                      <option key={l.value} value={l.value}>{l.label}</option>
-                    ))}
-                  </select>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="rounded-lg border border-purple-200 bg-purple-50/60 px-3 py-2 text-sm text-purple-900 flex items-center gap-2">
+                  <span>🇪🇸</span>
+                  <span>
+                    <strong>Idioma origen: español.</strong> Una vez guardado el borrador, podrás abrirlo y traducirlo a otros idiomas con el botón <em>Traducir con IA</em>.
+                  </span>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Categoría sugerida</label>

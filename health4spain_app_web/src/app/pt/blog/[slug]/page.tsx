@@ -2,9 +2,10 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { supabase } from '@/lib/supabase';
+import { getBlogTranslations } from '@/lib/data';
 import { getDictionary } from '@/lib/dictionaries';
 import type { Locale } from '@/lib/routes';
-import { buildDynamicAlternates, buildOpenGraph, buildTwitter, blogPostingJsonLd, JsonLd, resolveBlogImage } from '@/lib/seo';
+import { buildBlogAlternates, buildOpenGraph, buildTwitter, blogPostingJsonLd, JsonLd, resolveBlogImage } from '@/lib/seo';
 
 const locale: Locale = 'pt';
 const t = getDictionary(locale);
@@ -38,11 +39,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.health4spain.com';
   const description = data.excerpt?.slice(0, 155) || '';
   const ogImage = resolveBlogImage(data.featured_image, data.category);
+  const siblings = await getBlogTranslations(slug, locale);
 
   return {
     title: `${data.title} | Health4Spain Blog`,
     description,
-    alternates: buildDynamicAlternates(locale, 'blog', slug),
+    alternates: buildBlogAlternates(locale, siblings),
     openGraph: buildOpenGraph(locale, {
       title: data.title,
       description,
