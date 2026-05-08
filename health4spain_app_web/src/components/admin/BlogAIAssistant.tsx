@@ -91,6 +91,8 @@ export default function BlogAIAssistant({ isOpen, onClose, onSaved }: Props) {
   const [draft, setDraft] = useState<DraftDoc | null>(null);
   const [coverUrl, setCoverUrl] = useState<string>('');
   const [coverPromptExtra, setCoverPromptExtra] = useState('');
+  /** Error solo del paso portada (visible junto al botón sin depender del scroll). */
+  const [portadaError, setPortadaError] = useState<string | null>(null);
 
   // Reset al abrir
   useEffect(() => {
@@ -102,6 +104,7 @@ export default function BlogAIAssistant({ isOpen, onClose, onSaved }: Props) {
       setExtraContext('');
       setNewsQuery('');
       setError(null);
+      setPortadaError(null);
       setProposals([]);
       setNewsHeadlines([]);
       setSelectedProposalIdx(null);
@@ -202,6 +205,7 @@ export default function BlogAIAssistant({ isOpen, onClose, onSaved }: Props) {
     if (!draft) return;
     setLoading(true);
     setError(null);
+    setPortadaError(null);
     try {
       const res = await fetchWithAuth('/api/admin/blog/ai/generate-cover', {
         method: 'POST',
@@ -219,6 +223,7 @@ export default function BlogAIAssistant({ isOpen, onClose, onSaved }: Props) {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Error desconocido';
       setError(msg);
+      setPortadaError(msg);
     } finally {
       setLoading(false);
     }
@@ -504,6 +509,11 @@ export default function BlogAIAssistant({ isOpen, onClose, onSaved }: Props) {
                         >
                           🔄 Regenerar portada
                         </button>
+                        {portadaError && (
+                          <p className="text-xs text-red-600 whitespace-pre-wrap border border-red-100 bg-red-50 rounded-lg px-3 py-2">
+                            {portadaError}
+                          </p>
+                        )}
                       </div>
                     ) : (
                       <div className="space-y-3">
@@ -523,8 +533,13 @@ export default function BlogAIAssistant({ isOpen, onClose, onSaved }: Props) {
                           {loading ? 'Generando...' : '✨ Generar portada con IA'}
                         </button>
                         <p className="text-xs text-gray-400">
-                          También puedes saltarte este paso y elegir la portada después desde el editor.
+                          También puedes saltarte este paso y generar la portada después desde el editor del artículo (bloque &quot;Imagen destacada&quot; → Generar portada con IA).
                         </p>
+                        {portadaError && (
+                          <p className="text-xs text-red-600 whitespace-pre-wrap border border-red-100 bg-red-50 rounded-lg px-3 py-2">
+                            {portadaError}
+                          </p>
+                        )}
                       </div>
                     )}
                   </div>

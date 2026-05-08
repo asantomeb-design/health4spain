@@ -8,6 +8,34 @@ export const maxDuration = 120;
 const COVERS_BUCKET = 'blog-images';
 const COVERS_FOLDER = 'ai-covers';
 
+/** Los modelos gpt-image-* solo admiten auto | 1024² | 1536×1024 | 1024×1536 (no 1792×1024). */
+function normalizeImageSizeForModel(
+  model: string,
+  requested: string
+): 'auto' | '1024x1024' | '1536x1024' | '1024x1536' | '1792x1024' | '1024x1792' | '256x256' | '512x512' {
+  const m = model.toLowerCase();
+  const req = (requested || '').trim() || '1792x1024';
+
+  if (m.includes('gpt-image')) {
+    if (req === 'auto') return 'auto';
+    if (req === '1024x1024' || req === '1536x1024' || req === '1024x1536') return req;
+    if (req === '1792x1024') return '1536x1024';
+    if (req === '1024x1792') return '1024x1536';
+    return 'auto';
+  }
+
+  if (m.includes('dall-e-3') || m.includes('dalle-3')) {
+    if (req === 'auto' || req === '1024x1024' || req === '1792x1024' || req === '1024x1792') return req;
+    if (req === '1536x1024') return '1792x1024';
+    if (req === '1024x1536') return '1024x1792';
+    return '1792x1024';
+  }
+
+  // dall-e-2 u otros
+  if (req === '256x256' || req === '512x512' || req === '1024x1024') return req;
+  return '1024x1024';
+}
+
 interface GenerateCoverBody {
   title: string;
   excerpt?: string;
@@ -36,29 +64,8 @@ export async function POST(request: NextRequest) {
   try {
     const config = await getAiBlogConfig();
     const openai = getOpenAIClient();
-    type ImageSize =
-      | 'auto'
-      | '1024x1024'
-      | '1792x1024'
-      | '1024x1792'
-      | '1536x1024'
-      | '1024x1536'
-      | '256x256'
-      | '512x512';
-    const ALLOWED_SIZES: ImageSize[] = [
-      'auto',
-      '1024x1024',
-      '1792x1024',
-      '1024x1792',
-      '1536x1024',
-      '1024x1536',
-      '256x256',
-      '512x512',
-    ];
-    const requested = body.size || config.image_size || '1792x1024';
-    const size: ImageSize = (ALLOWED_SIZES as readonly string[]).includes(requested)
-      ? (requested as ImageSize)
-      : '1792x1024';
+    const requestedRaw = body.size || config.image_size || '1792x1024';
+    let size = normalizeImageSizeForModel(config.model_image, requestedRaw);
 
     const promptParts: string[] = [
       `Editorial cover image for an article titled: "${body.title.trim()}"`,
@@ -77,30 +84,70 @@ export async function POST(request: NextRequest) {
 
     let b64: string | null = null;
 
-    try {
-      const result = await openai.images.generate({
+    const runGenerate = async (sz: typeof size) => {
+      const baseParams = {
         model: config.model_image,
         prompt,
-        size,
-        n: 1,
-      });
+        size: sz,
+        n: 1 as const,
+      };
+      const m = config.model_image.toLowerCase();
+      const withFormat =
+        m.includes('dall-e-3') || m.includes('dalle-3') || m.includes('dall-e-2')
+          ? { ...baseParams, response_format: 'b64_json' as const }
+          : baseParams;
+      return openai.images.generate(withFormat);
+    };
 
-      const first = result.data?.[0];
-      if (first?.b64_json) {
-        b64 = first.b64_json;
-      } else if (first?.url) {
-        // Algunos modelos devuelven URL en lugar de base64; lo descargamos
-        const imgResp = await fetch(first.url);
-        if (!imgResp.ok) throw new Error(`No se pudo descargar imagen del modelo (${imgResp.status})`);
-        const buf = Buffer.from(await imgResp.arrayBuffer());
-        b64 = buf.toString('base64');
+    try {
+      let result = await runGenerate(size);
+      const readB64 = async (res: Awaited<ReturnType<typeof runGenerate>>) => {
+        const first = res.data?.[0];
+        if (first?.b64_json) return first.b64_json;
+        if (first?.url) {
+          const imgResp = await fetch(first.url);
+          if (!imgResp.ok) throw new Error(`No se pudo descargar imagen del modelo (${imgResp.status})`);
+          const buf = Buffer.from(await imgResp.arrayBuffer());
+          return buf.toString('base64');
+        }
+        return null;
+      };
+      b64 = await readB64(result);
+
+      // Si el tamaño no era válido para el modelo, OpenAI falla: reintentamos con "auto"
+      if (!b64 && size !== 'auto') {
+        size = 'auto';
+        result = await runGenerate(size);
+        b64 = await readB64(result);
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'desconocido';
-      return NextResponse.json(
-        { success: false, error: `Error generando imagen: ${msg}` },
-        { status: 502 }
-      );
+      if (size !== 'auto') {
+        try {
+          size = 'auto';
+          const result = await runGenerate(size);
+          const first = result.data?.[0];
+          if (first?.b64_json) b64 = first.b64_json;
+          else if (first?.url) {
+            const imgResp = await fetch(first.url);
+            if (imgResp.ok) {
+              const buf = Buffer.from(await imgResp.arrayBuffer());
+              b64 = buf.toString('base64');
+            }
+          }
+        } catch {
+          /* fall through */
+        }
+      }
+      if (!b64) {
+        const msg = err instanceof Error ? err.message : 'desconocido';
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Error generando imagen: ${msg}. Si usas un modelo gpt-image, en Config IA el tamaño debe ser auto, 1024×1024, 1536×1024 o 1024×1536 (no 1792×1024).`,
+          },
+          { status: 502 }
+        );
+      }
     }
 
     if (!b64) {

@@ -92,6 +92,9 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
   const [showMediaManager, setShowMediaManager] = useState(false);
   const [mediaTarget, setMediaTarget] = useState<'featured' | 'content'>('featured');
   const [showTranslateModal, setShowTranslateModal] = useState(false);
+  const [coverAiLoading, setCoverAiLoading] = useState(false);
+  const [coverAiError, setCoverAiError] = useState<string | null>(null);
+  const [coverAiPromptExtra, setCoverAiPromptExtra] = useState('');
   const editorRef = useRef<any>(null);
   const router = useRouter();
   const { fetchWithAuth } = useAuth();
@@ -133,6 +136,35 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
   const openMediaManager = (target: 'featured' | 'content') => {
     setMediaTarget(target);
     setShowMediaManager(true);
+  };
+
+  const generateFeaturedWithAI = async () => {
+    if (!post.title.trim()) {
+      alert('Necesitas un título para generar la portada con IA');
+      return;
+    }
+    setCoverAiLoading(true);
+    setCoverAiError(null);
+    try {
+      const res = await fetchWithAuth('/api/admin/blog/ai/generate-cover', {
+        method: 'POST',
+        body: JSON.stringify({
+          title: post.title,
+          excerpt: post.excerpt || undefined,
+          prompt_extra: coverAiPromptExtra.trim() || undefined,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'No se pudo generar la imagen');
+      }
+      setPost((prev) => ({ ...prev, featured_image: json.data.url }));
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Error desconocido';
+      setCoverAiError(msg);
+    } finally {
+      setCoverAiLoading(false);
+    }
   };
 
   const handleMediaSelect = (url: string) => {
@@ -445,7 +477,7 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
 
           {/* Featured Image */}
           <div className="bg-white p-6 rounded-lg shadow-sm border">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Imagen Destacada</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Imagen destacada</label>
             {post.featured_image ? (
               <div className="relative">
                 <img
@@ -457,7 +489,7 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
                   <button
                     onClick={() => openMediaManager('featured')}
                     className="p-1.5 bg-white rounded-full shadow hover:bg-gray-100"
-                    title="Cambiar imagen"
+                    title="Elegir desde biblioteca"
                   >
                     <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -476,15 +508,60 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
               </div>
             ) : (
               <button
+                type="button"
                 onClick={() => openMediaManager('featured')}
                 className="w-full h-40 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-[accent] hover:text-[accent] transition"
               >
                 <svg className="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <span className="text-sm">Seleccionar imagen</span>
+                <span className="text-sm">Biblioteca / subir imagen</span>
               </button>
             )}
+
+            <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
+              <p className="text-xs text-gray-500">
+                Portada con IA (misma configuración que en &quot;Crear con IA&quot;; se guarda en el bucket <code className="text-[11px] bg-gray-100 px-1 rounded">blog-images/ai-covers/</code>).
+              </p>
+              <input
+                type="text"
+                value={coverAiPromptExtra}
+                onChange={(e) => setCoverAiPromptExtra(e.target.value)}
+                placeholder='Indicación opcional (ej. "luz natural, ambiente oficina")'
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[accent] focus:border-transparent outline-none"
+              />
+              <button
+                type="button"
+                onClick={generateFeaturedWithAI}
+                disabled={coverAiLoading || !post.title.trim()}
+                className="w-full px-4 py-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-accent text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+              >
+                {coverAiLoading ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Generando portada…
+                  </>
+                ) : (
+                  <>
+                    <span aria-hidden>✨</span>
+                    Generar portada con IA
+                  </>
+                )}
+              </button>
+              {post.featured_image && (
+                <button
+                  type="button"
+                  onClick={generateFeaturedWithAI}
+                  disabled={coverAiLoading || !post.title.trim()}
+                  className="w-full px-3 py-2 text-sm text-purple-700 border border-purple-200 rounded-lg hover:bg-purple-50 disabled:opacity-50"
+                >
+                  {coverAiLoading ? 'Generando…' : 'Regenerar portada con IA'}
+                </button>
+              )}
+              {coverAiError && (
+                <p className="text-xs text-red-600 whitespace-pre-wrap">{coverAiError}</p>
+              )}
+            </div>
           </div>
 
           {/* Tags */}

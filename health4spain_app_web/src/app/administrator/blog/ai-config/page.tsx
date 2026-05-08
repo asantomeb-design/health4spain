@@ -34,9 +34,12 @@ const TIMEFRAMES = [
 ];
 
 const IMAGE_SIZES = [
-  { value: '1024x1024', label: '1024×1024 (cuadrado)' },
-  { value: '1792x1024', label: '1792×1024 (horizontal hero)' },
-  { value: '1024x1792', label: '1024×1792 (vertical)' },
+  { value: 'auto', label: 'Automático (recomendado para gpt-image)' },
+  { value: '1536x1024', label: '1536×1024 horizontal (gpt-image)' },
+  { value: '1024x1536', label: '1024×1536 vertical (gpt-image)' },
+  { value: '1024x1024', label: '1024×1024 cuadrado' },
+  { value: '1792x1024', label: '1792×1024 horizontal (solo DALL·E 3)' },
+  { value: '1024x1792', label: '1024×1792 vertical (solo DALL·E 3)' },
 ];
 
 export default function BlogAIConfigPage() {
@@ -243,7 +246,10 @@ export default function BlogAIConfigPage() {
       {/* Imagen */}
       <Section title="Portadas (gpt-image-2)">
         <Grid>
-          <Field label="Tamaño de imagen">
+          <Field
+            label="Tamaño de imagen"
+            hint="gpt-image / gpt-image-2 solo admiten auto, 1024², 1536×1024 y 1024×1536. Si eliges 1792×1024 con ese modelo, el servidor lo adaptará automáticamente."
+          >
             <select
               value={config.image_size}
               onChange={(e) => update('image_size', e.target.value)}
