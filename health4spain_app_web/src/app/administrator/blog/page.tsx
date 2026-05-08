@@ -423,7 +423,7 @@ export default function BlogListPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <Link
-                          href={`/administrator/blog/${post.slug}`}
+                          href={`/administrator/blog/${post.slug}?lang=${encodeURIComponent(post.lang)}`}
                           className="text-accent hover:text-accent-600 text-sm font-medium"
                         >
                           Editar

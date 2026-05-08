@@ -89,6 +89,11 @@ export const BLOG_CATEGORY_IMAGES: Record<string, string> = {
   'salud': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200',
   'finanzas': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200',
   'vida-espana': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200',
+  // Alias mismos que el selector del admin (`/administrator/blog/[slug]`)
+  guias: 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=1200',
+  tramites: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200',
+  noticias: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200',
+  testimonios: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200',
 };
 
 /**

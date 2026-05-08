@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { supabase } from '@/lib/supabase';
 import MediaManager from '@/components/admin/MediaManager';
@@ -82,9 +82,11 @@ const categories = [
   { value: 'testimonios', label: 'Testimonios' },
 ];
 
-export default function BlogEditorPage({ params }: { params: { slug: string } }) {
-  const isNew = params.slug === 'new';
-  
+function BlogEditorInner({ slug }: { slug: string }) {
+  const isNew = slug === 'new';
+  const searchParams = useSearchParams();
+  const langFilter = (searchParams.get('lang') || 'es').trim() || 'es';
+
   const [post, setPost] = useState<BlogPost>(emptyPost);
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
@@ -110,14 +112,15 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
         published_at: now,
       }));
     }
-  }, [isNew, params.slug]);
+  }, [isNew, slug, langFilter]);
 
   const fetchPost = async () => {
     try {
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
-        .eq('slug', params.slug)
+        .eq('slug', slug)
+        .eq('lang', langFilter)
         .single();
 
       if (error) throw error;
@@ -214,6 +217,7 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
 
       const postData: BlogPost = {
         ...post,
+        featured_image: post.featured_image.trim(),
         tags,
         status: finalStatus,
         meta_title: post.meta_title || post.title,
@@ -229,10 +233,11 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
         const { error } = await supabase.from('blog_posts').insert(postData);
         if (error) throw error;
       } else {
-        const { error } = await supabase
-          .from('blog_posts')
-          .update(postData)
-          .eq('slug', params.slug);
+        if (!post.id) {
+          alert('Error interno: el post no tiene id. Recarga la página desde el listado (Editar).');
+          return;
+        }
+        const { error } = await supabase.from('blog_posts').update(postData).eq('id', post.id);
         if (error) throw error;
       }
 
@@ -631,6 +636,24 @@ export default function BlogEditorPage({ params }: { params: { slug: string } })
         bucket="blog-images"
       />
     </div>
+  );
+}
+
+export default function BlogEditorPage({ params }: { params: { slug: string } }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 max-w-6xl">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-48" />
+            <div className="h-12 bg-gray-200 rounded" />
+            <div className="h-96 bg-gray-200 rounded" />
+          </div>
+        </div>
+      }
+    >
+      <BlogEditorInner slug={params.slug} />
+    </Suspense>
   );
 }
 

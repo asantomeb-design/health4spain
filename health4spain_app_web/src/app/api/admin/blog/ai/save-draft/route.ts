@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(handleSupabaseError(error), { status: 500 });
   }
 
-  const adminUrl = `/administrator/blog/${data.slug}`;
+  const adminUrl = `/administrator/blog/${data.slug}?lang=${encodeURIComponent(data.lang)}`;
   const previewUrl = `/${data.lang}/blog/${data.slug}`;
 
   return NextResponse.json(

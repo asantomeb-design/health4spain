@@ -107,6 +107,7 @@ Después de `15-ai-blog-config.sql`, en entornos nuevos o clones ejecutar en ord
 - **400 temperature / sampling**: modelos como `gpt-5-mini` pueden rechazar `temperature`; el código reintenta sin sampling (`safeChatCompletion`).  
 - **Portada IA falla por tamaño**: revisar modelo en Config IA y tabla de tamaños en la misma pantalla.  
 - **403 «organization must be verified» con `gpt-image-2`**: verificar la organización en [OpenAI → Organization settings](https://platform.openai.com/settings/organization/general) o cambiar temporalmente el modelo de imagen a **`gpt-image-1.5`**.  
+- **Open Graph / WhatsApp no muestra la portada**: `generateMetadata` del blog usa `featured_image` → `og:image` / Twitter (`resolveBlogImage`). La portada IA debe quedar guardada en **`blog_posts.featured_image`** al pulsar Guardar/Publicar. El editor admin persiste por **`id`** y abre desde el listado con **`?lang=`**. WhatsApp cachea previews: puede tardar en refrescar o hace falta re-enviar el enlace / herramientas de depuración de enlaces.
 - **Upload Storage**: bucket `blog-images` público + políticas que permitan **service role** escribir desde API routes.
 
 ---

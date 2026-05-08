@@ -244,7 +244,7 @@ export async function POST(request: NextRequest) {
         id: inserted.id,
         slug: inserted.slug,
         lang: inserted.lang,
-        admin_url: `/administrator/blog/${inserted.slug}`,
+        admin_url: `/administrator/blog/${inserted.slug}?lang=${encodeURIComponent(inserted.lang)}`,
       });
     }
 
