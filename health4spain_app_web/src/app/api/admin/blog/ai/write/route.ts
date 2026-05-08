@@ -9,6 +9,8 @@ import {
   isSupportedCategory,
   isSupportedLang,
   LANG_NAMES,
+  modelSupportsSampling,
+  safeChatCompletion,
   sanitizeAIHtml,
   slugify,
   type SupportedLang,
@@ -120,7 +122,7 @@ export async function POST(request: NextRequest) {
     try {
       const responsesApi = (openai as unknown as { responses?: any }).responses;
       if (responsesApi?.create) {
-        const resp = await responsesApi.create({
+        const responsesParams: Record<string, unknown> = {
           model: config.model_writer,
           input: [
             {
@@ -133,8 +135,24 @@ export async function POST(request: NextRequest) {
             },
           ],
           tools: [{ type: 'web_search' }],
-          temperature: config.temperature_writer,
-        });
+        };
+        if (modelSupportsSampling(config.model_writer)) {
+          responsesParams.temperature = config.temperature_writer;
+        }
+
+        let resp;
+        try {
+          resp = await responsesApi.create(responsesParams);
+        } catch (innerErr: unknown) {
+          const status = (innerErr as { status?: number })?.status;
+          const msg = String((innerErr as { message?: string })?.message || '').toLowerCase();
+          if (status === 400 && /temperature|top[_ ]p|frequency_penalty|presence_penalty/.test(msg)) {
+            delete responsesParams.temperature;
+            resp = await responsesApi.create(responsesParams);
+          } else {
+            throw innerErr;
+          }
+        }
 
         raw = extractResponseOutputText(resp);
       }
@@ -145,7 +163,7 @@ export async function POST(request: NextRequest) {
 
     // Fallback: Chat Completions sin web_search (el modelo redacta con conocimiento propio)
     if (!raw) {
-      const completion = await openai.chat.completions.create({
+      const completion = await safeChatCompletion(openai, {
         model: config.model_writer,
         temperature: config.temperature_writer,
         response_format: { type: 'json_object' },

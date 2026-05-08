@@ -9,6 +9,7 @@ import {
   isSupportedCategory,
   isSupportedLang,
   LANG_NAMES,
+  safeChatCompletion,
   sanitizeAIHtml,
   slugify,
   SUPPORTED_LANGS,
@@ -139,7 +140,7 @@ export async function POST(request: NextRequest) {
 
       let raw = '';
       try {
-        const completion = await openai.chat.completions.create({
+        const completion = await safeChatCompletion(openai, {
           model: config.model_translator,
           temperature: config.temperature_translator,
           response_format: { type: 'json_object' },

@@ -257,3 +257,77 @@ export function isSupportedCategory(input: unknown): input is BlogCategoryValue 
 export function buildEditorialContext(config: AiBlogConfig): string {
   return `=== GUÍA DE ESTILO EDITORIAL DE HEALTH4SPAIN ===\n${config.editorial_guidelines}\n=== FIN GUÍA ===`;
 }
+
+/**
+ * Cache de modelos que no soportan parámetros de sampling personalizados
+ * (temperature, top_p, frequency_penalty, presence_penalty). Algunos modelos
+ * de razonamiento modernos (familia gpt-5.x, o-series, etc.) solo admiten
+ * los valores por defecto y devuelven 400 si se les envía otro valor.
+ */
+const MODELS_WITHOUT_SAMPLING = new Set<string>();
+
+interface ChatParamsLike {
+  model: string;
+  messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[];
+  response_format?: OpenAI.Chat.Completions.ChatCompletionCreateParams['response_format'];
+  temperature?: number;
+  top_p?: number;
+  frequency_penalty?: number;
+  presence_penalty?: number;
+  max_tokens?: number;
+}
+
+function isUnsupportedSamplingError(err: unknown): boolean {
+  if (!err || typeof err !== 'object') return false;
+  const status = (err as { status?: number }).status;
+  if (status !== 400) return false;
+  const message = String((err as { message?: string }).message || '').toLowerCase();
+  return (
+    /temperature/.test(message) ||
+    /top[_ ]p/.test(message) ||
+    /frequency_penalty/.test(message) ||
+    /presence_penalty/.test(message)
+  ) && (message.includes('default') || message.includes('only') || message.includes('does not support'));
+}
+
+/**
+ * Llama a chat.completions tolerando modelos que rechazan parámetros de sampling.
+ * Si recibe error 400 indicando que temperature/top_p/etc. no están soportados,
+ * reintenta sin esos parámetros y cachea el modelo para evitar el ida y vuelta.
+ */
+export async function safeChatCompletion(
+  openai: OpenAI,
+  params: ChatParamsLike
+): Promise<OpenAI.Chat.Completions.ChatCompletion> {
+  const stripped = (() => {
+    const p: ChatParamsLike = { ...params };
+    delete p.temperature;
+    delete p.top_p;
+    delete p.frequency_penalty;
+    delete p.presence_penalty;
+    return p;
+  })();
+
+  if (MODELS_WITHOUT_SAMPLING.has(params.model)) {
+    return openai.chat.completions.create(stripped as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming);
+  }
+
+  try {
+    return await openai.chat.completions.create(
+      params as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming
+    );
+  } catch (err: unknown) {
+    if (isUnsupportedSamplingError(err)) {
+      MODELS_WITHOUT_SAMPLING.add(params.model);
+      console.warn(
+        `Modelo "${params.model}" no admite parámetros de sampling; reintentando sin temperature/top_p.`
+      );
+      return openai.chat.completions.create(stripped as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming);
+    }
+    throw err;
+  }
+}
+
+export function modelSupportsSampling(model: string): boolean {
+  return !MODELS_WITHOUT_SAMPLING.has(model);
+}

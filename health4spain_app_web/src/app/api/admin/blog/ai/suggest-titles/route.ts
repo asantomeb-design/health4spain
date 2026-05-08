@@ -9,6 +9,7 @@ import {
   isSupportedCategory,
   isSupportedLang,
   LANG_NAMES,
+  safeChatCompletion,
   type SupportedLang,
 } from '@/lib/ai/openai-blog';
 import { searchNews, type NewsResult } from '@/lib/ai/web-search';
@@ -100,7 +101,7 @@ export async function POST(request: NextRequest) {
           : null,
     };
 
-    const completion = await openai.chat.completions.create({
+    const completion = await safeChatCompletion(openai, {
       model: config.model_proposals,
       temperature: config.temperature_proposals,
       response_format: { type: 'json_object' },
