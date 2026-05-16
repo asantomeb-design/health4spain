@@ -1,0 +1,3211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1F3864">
+<title>H4S Hub · COASEMED · v4 LBS · Cuadro de Mando</title>
+<style>
+:root{
+  /* Health4Spain · Paleta corporativa */
+  --h4s-cyan:#00BFE0;--h4s-cyan-soft:#E0F7FB;
+  --h4s-blue:#1F90D0;--h4s-blue-soft:#DCEEF8;
+  --h4s-navy:#1F3864;--h4s-navy-dark:#0F1F40;
+  --brand:#1F3864;--brand-dark:#0F1F40;--brand-light:#EEF1FB;--brand-soft:#D6DCF5;
+  --accent:#C9A227;--accent-soft:#FBF1D5;
+  --green:#16A34A;--green-soft:#DCFCE7;--green-bd:#86EFAC;
+  --blue:#2563EB;--blue-soft:#DBEAFE;--blue-bd:#93C5FD;
+  --amber:#D97706;--amber-soft:#FEF3C7;--amber-bd:#FDE68A;
+  --orange:#C05621;--orange-soft:#FEECDC;--orange-bd:#FBD38D;
+  --red:#DC2626;--red-soft:#FEE2E2;--red-bd:#FECACA;
+  --purple:#7C3AED;--purple-soft:#EDE9FE;
+  --bg:#F4F6FB;--white:#FFF;--border:#D8DEEE;
+  --text:#1A2240;--text2:#4A5568;--text3:#718096;
+  --r:14px;--r-sm:10px;--r-lg:20px;
+  --shadow:0 2px 10px rgba(31,56,100,.10);
+  --shadow-lg:0 8px 28px rgba(31,56,100,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  font-size:14px;line-height:1.45;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit;font-size:15px}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+/* ─── LOGIN ─── */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(140deg,var(--h4s-navy-dark) 0%,var(--h4s-navy) 45%,var(--h4s-blue) 100%);padding:20px}
+.login-card{background:white;border-radius:var(--r-lg);padding:28px 24px;width:100%;max-width:380px;box-shadow:var(--shadow-lg)}
+.login-logo{width:78px;height:auto;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.login-logo svg{display:block}
+.login-title{text-align:center;font-size:20px;font-weight:800;color:var(--brand);margin-bottom:4px;letter-spacing:-.3px}
+.login-sub{text-align:center;font-size:12px;color:var(--text3);margin-bottom:22px}
+.user-list{display:flex;flex-direction:column;gap:8px}
+.user-pick{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--border);
+  border-radius:var(--r);background:white;text-align:left;width:100%;transition:all .15s}
+.user-pick:hover{border-color:var(--brand);background:var(--brand-light)}
+.user-avatar{width:38px;height:38px;border-radius:50%;background:var(--brand);color:white;
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.user-info{flex:1;min-width:0}
+.user-name{font-weight:700;font-size:14px;color:var(--text)}
+.user-role{font-size:11px;color:var(--text3);margin-top:1px}
+.role-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:8px;text-transform:uppercase;letter-spacing:.04em}
+.rb-admin{background:var(--accent-soft);color:#8B6914}
+.rb-tech{background:var(--purple-soft);color:var(--purple)}
+.rb-sup{background:#ECFEFF;color:#1A8FB0}
+.rb-int{background:var(--green-soft);color:var(--green)}
+.rb-ext{background:var(--blue-soft);color:var(--blue)}
+
+/* ─── HEADER ─── */
+.hdr{background:linear-gradient(135deg,var(--h4s-navy-dark) 0%,var(--h4s-navy) 50%,var(--h4s-blue) 100%);
+  padding:14px 16px;position:sticky;top:0;z-index:50}
+.hdr-logo{background:white;padding:4px 6px}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hdr-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.hdr-logo{background:white;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:800;color:var(--brand);letter-spacing:-.5px;flex-shrink:0}
+.hdr-text{min-width:0;flex:1}
+.hdr-name{color:white;font-size:14px;font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-sub{color:rgba(255,255,255,.65);font-size:11px}
+.hdr-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);
+  color:white;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;cursor:pointer}
+.hdr-btn:hover{background:rgba(255,255,255,.25)}
+
+/* ─── PAGE / NAV ─── */
+.page-cont{padding:16px;max-width:560px;margin:0 auto;padding-bottom:92px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--border);
+  display:flex;padding:6px 0 8px;z-index:50;box-shadow:0 -2px 10px rgba(0,0,0,.04);
+  overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.bottom-nav::-webkit-scrollbar{display:none}
+.nav-btn{flex:1 0 70px;min-width:70px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;
+  font-size:10px;color:var(--text3);font-weight:600;cursor:pointer;background:none;border:none;transition:color .15s;white-space:nowrap}
+.nav-btn .nav-ic{font-size:20px}
+.nav-btn.active{color:var(--brand)}
+
+.sec{margin-bottom:18px}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px;padding-left:2px;display:flex;align-items:center;justify-content:space-between}
+.card{background:white;border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.card-pad{padding:14px 16px}
+
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;
+  border-radius:var(--r-sm);font-size:13px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all .15s;line-height:1}
+.btn-pri{background:var(--brand);color:white}
+.btn-pri:hover{background:var(--brand-dark)}
+.btn-acc{background:var(--accent);color:#3D2C00}
+.btn-out{background:white;border-color:var(--border);color:var(--text)}
+.btn-out:hover{border-color:var(--brand);color:var(--brand)}
+.btn-danger{background:var(--red-soft);color:var(--red);border-color:var(--red-bd)}
+.btn-sm{padding:7px 12px;font-size:12px}
+.btn-block{width:100%}
+.btn-ghost{background:transparent;color:var(--text2)}
+.btn-ghost:hover{background:var(--bg)}
+
+/* ─── DASHBOARD HOME ─── */
+.welcome{background:linear-gradient(135deg,var(--h4s-navy) 0%,var(--h4s-blue) 70%,var(--h4s-cyan) 100%);color:white;border-radius:var(--r-lg);
+  padding:18px 20px;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.welcome::before{content:'';position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.06)}
+.welcome-greet{font-size:12px;opacity:.7;margin-bottom:2px}
+.welcome-name{font-size:22px;font-weight:800;letter-spacing:-.3px}
+.welcome-role{margin-top:4px;font-size:11px;opacity:.85;display:inline-block;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:20px}
+
+.tile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:white;border:1px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;
+  transition:all .15s;position:relative;overflow:hidden}
+.tile:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.tile.disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+.tile-ic{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px;flex-shrink:0}
+.tile-ic.t-seg{background:var(--brand-light);color:var(--brand)}
+.tile-ic.t-act{background:var(--green-soft);color:var(--green)}
+.tile-ic.t-cfg{background:var(--accent-soft);color:#8B6914}
+.tile-ic.t-tech{background:var(--purple-soft);color:var(--purple)}
+.tile-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.tile-sub{font-size:11px;color:var(--text3);line-height:1.4}
+.tile-tag{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:3px 7px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em}
+.tag-on{background:var(--green-soft);color:var(--green)}
+.tag-off{background:var(--red-soft);color:var(--red)}
+
+/* ─── SEGUROS (CVR PANEL) ─── */
+.cvr-card{background:linear-gradient(140deg,var(--brand-dark),var(--brand));border-radius:var(--r-lg);
+  padding:16px;color:white;display:flex;align-items:center;gap:14px;margin-bottom:14px;box-shadow:var(--shadow-lg)}
+.ring-wrap{position:relative;flex-shrink:0;width:84px;height:84px}
+.ring-svg{width:84px;height:84px;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.15);stroke-width:7}
+.ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .7s}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-size:21px;font-weight:800;color:white;line-height:1}
+.ring-lbl{font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.06em;margin-top:2px}
+.cvr-right{flex:1;min-width:0}
+.cvr-nivel{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:8px}
+.cvr-stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.cs-item{text-align:center;padding:0 4px}
+.cs-item:not(:last-child){border-right:1px solid rgba(255,255,255,.15)}
+.cs-val{font-size:17px;font-weight:700;color:white;line-height:1;margin-bottom:2px}
+.cs-lbl{font-size:9px;color:rgba(255,255,255,.55)}
+
+.figura-banner{background:white;border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.fig-ic{width:36px;height:36px;border-radius:10px;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.fig-info{flex:1;min-width:0}
+.fig-name{font-size:13px;font-weight:700;color:var(--text)}
+.fig-detail{font-size:11px;color:var(--text3);margin-top:1px}
+
+.com-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.com-c{background:white;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px}
+.com-c.hi-sis{background:var(--brand-light);border-color:var(--brand-soft)}
+.com-c.hi-aut{background:var(--green-soft);border-color:var(--green-bd)}
+.com-c-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:4px}
+.com-c-val{font-size:22px;font-weight:700;line-height:1;margin-bottom:3px}
+.com-c-sub{font-size:10px;color:var(--text3)}
+.com-total-row{grid-column:span 2;background:var(--brand);border-radius:var(--r-sm);padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
+.com-total-lbl{color:rgba(255,255,255,.7);font-size:12px}
+.com-total-val{color:white;font-size:24px;font-weight:800}
+
+/* ─── RAMOS ─── */
+.ramo-row{border-bottom:1px solid var(--border)}
+.ramo-row:last-child{border-bottom:none}
+.ramo-head{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;user-select:none}
+.ramo-head:hover{background:var(--bg)}
+.ramo-bar{width:4px;height:36px;border-radius:2px;flex-shrink:0}
+.ramo-info{flex:1;min-width:0}
+.ramo-name{font-size:13px;font-weight:600;color:var(--text)}
+.ramo-pills{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
+.rp{font-size:9px;padding:2px 7px;border-radius:5px;font-weight:600}
+.tipo-sis{background:var(--brand-light);color:var(--brand)}
+.tipo-aut{background:var(--green-soft);color:var(--green)}
+.ramo-cpa{font-size:14px;font-weight:700;color:var(--amber)}
+.ramo-chev{font-size:10px;color:var(--text3);transition:transform .2s;margin-left:4px}
+.ramo-row.open .ramo-chev{transform:rotate(180deg)}
+.ramo-body{display:none;padding:0 14px 14px}
+.ramo-row.open .ramo-body{display:block}
+
+/* ─── ACTIVIDAD ─── */
+.act-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.act-stat{background:white;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;text-align:center}
+.as-val{font-size:22px;font-weight:800;color:var(--brand);line-height:1}
+.as-lbl{font-size:10px;color:var(--text3);margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+
+.pomo-card{background:linear-gradient(140deg,var(--green) 0%,#0F8B3D 100%);border-radius:var(--r-lg);
+  padding:20px;color:white;text-align:center;margin-bottom:14px;box-shadow:var(--shadow-lg)}
+.pomo-card.run{background:linear-gradient(140deg,var(--red) 0%,#B91C1C 100%)}
+.pomo-card.pause{background:linear-gradient(140deg,var(--amber) 0%,#B45309 100%)}
+.pomo-card.idle{background:linear-gradient(140deg,var(--brand) 0%,#3752B8 100%)}
+.pomo-task{font-size:12px;opacity:.85;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.pomo-time{font-size:54px;font-weight:800;letter-spacing:-1px;font-feature-settings:'tnum';line-height:1;margin-bottom:14px}
+.pomo-ctrl{display:flex;gap:8px;justify-content:center}
+.pomo-btn{padding:10px 18px;border-radius:var(--r-sm);background:rgba(255,255,255,.2);color:white;
+  font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,.25);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.pomo-btn:hover{background:rgba(255,255,255,.3)}
+.pomo-btn.primary{background:white;color:var(--brand)}
+.pomo-mode{display:flex;justify-content:center;gap:6px;margin-bottom:10px}
+.pm-tab{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,255,255,.18);color:white;border:1px solid rgba(255,255,255,.2);cursor:pointer}
+.pm-tab.act{background:white;color:var(--brand)}
+
+.task-list{display:flex;flex-direction:column;gap:8px}
+.task-item{background:white;border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s}
+.task-item:hover{border-color:var(--brand)}
+.task-item.selected{border-color:var(--green);background:var(--green-soft)}
+.task-color{width:6px;height:38px;border-radius:3px;flex-shrink:0}
+.task-info{flex:1;min-width:0}
+.task-name{font-size:13px;font-weight:700;color:var(--text)}
+.task-desc{font-size:11px;color:var(--text3);margin-top:1px}
+.task-meta{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+.task-pill{font-size:9px;padding:2px 7px;border-radius:5px;font-weight:600;background:var(--bg);color:var(--text2)}
+.task-price{font-size:13px;font-weight:800;color:var(--accent);text-align:right}
+.price-hidden{font-size:11px;color:var(--text3);text-align:right;font-style:italic}
+
+/* ─── ADMIN ─── */
+.admin-tabs{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:var(--r);padding:4px;margin-bottom:14px;overflow-x:auto}
+.admin-tab{flex:1;padding:9px 8px;border-radius:var(--r-sm);font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border:none;background:none;white-space:nowrap}
+.admin-tab.act{background:var(--brand);color:white}
+
+.usr-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}
+.usr-row:last-child{border-bottom:none}
+.usr-av{width:40px;height:40px;border-radius:50%;background:var(--brand);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.usr-info{flex:1;min-width:0}
+.usr-name{font-size:13px;font-weight:700}
+.usr-meta{font-size:11px;color:var(--text3);display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:2px}
+.tog-grp{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.tog{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--text3)}
+.switch{width:34px;height:20px;background:var(--border);border-radius:20px;position:relative;cursor:pointer;transition:background .2s}
+.switch::after{content:'';width:16px;height:16px;background:white;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--green)}
+.switch.on::after{left:16px}
+
+.modal-bk{position:fixed;inset:0;background:rgba(15,31,64,.6);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bk.show{display:flex}
+.modal{background:white;border-radius:var(--r-lg);width:100%;max-width:760px;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:15px;font-weight:800;color:var(--brand)}
+.modal-body{padding:16px 18px}
+.modal-ftr{padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.fld{margin-bottom:12px}
+.fld-lbl{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.fld-in,.fld-sel,.fld-tx{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:14px;background:white;color:var(--text)}
+.fld-in:focus,.fld-sel:focus,.fld-tx:focus{outline:none;border-color:var(--brand)}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ─── FAB ─── */
+.fab{position:fixed;bottom:80px;right:18px;width:54px;height:54px;border-radius:50%;background:var(--brand);color:white;
+  font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-lg);cursor:pointer;z-index:40;border:none}
+.fab:hover{background:var(--brand-dark)}
+
+/* ─── COMM CONFIG ─── */
+.cfg-tab-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.cfg-tab{padding:7px 12px;border-radius:20px;background:var(--bg);font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--border)}
+.cfg-tab.act{background:var(--brand);color:white;border-color:var(--brand)}
+.cfg-table{width:100%;border-collapse:collapse}
+.cfg-table th{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;padding:8px 6px;text-align:left;border-bottom:1px solid var(--border)}
+.cfg-table td{padding:8px 6px;border-bottom:1px solid var(--border);font-size:12px}
+.cfg-table input{width:70px;padding:5px 7px;border:1px solid var(--border);border-radius:6px;font-size:12px;text-align:right}
+
+.empty-state{text-align:center;padding:30px 20px;color:var(--text3);font-size:13px;background:white;border:2px dashed var(--border);border-radius:var(--r)}
+.empty-state .empty-ic{font-size:34px;display:block;margin-bottom:8px;opacity:.5}
+
+.alert{padding:11px 14px;border-radius:var(--r-sm);font-size:12px;margin-bottom:12px;border-left:3px solid;line-height:1.5}
+.alert-info{background:var(--brand-light);border-color:var(--brand);color:var(--text2)}
+.alert-warn{background:var(--amber-soft);border-color:var(--amber);color:#7C4A03}
+.alert-tech{background:var(--purple-soft);border-color:var(--purple);color:#4C1D95}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg viewBox="0 0 100 56" xmlns="http://www.w3.org/2000/svg" style="width:48px;height:auto">
+        <defs>
+          <linearGradient id="h4sLogoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#00BFE0"/>
+            <stop offset="0.55" stop-color="#1F90D0"/>
+            <stop offset="1" stop-color="#1F3864"/>
+          </linearGradient>
+        </defs>
+        <g fill="url(#h4sLogoGrad)" font-family="Arial Black, Helvetica, sans-serif" font-weight="900">
+          <rect x="6"  y="6" width="9" height="44" rx="1.5"/>
+          <polygon points="20,6 29,6 38,50 29,50"/>
+          <text x="42" y="46" font-size="42" letter-spacing="-2">4S</text>
+        </g>
+      </svg>
+    </div>
+    <div class="login-title">Health4Spain Hub</div>
+    <div class="login-sub" style="color:#1A8FB0;font-weight:700">v17 DEMO · Cuadro de Mando interno</div><div class="login-sub" style="margin-top:4px">Introduce tus credenciales para acceder</div>
+    <form id="login-form" onsubmit="event.preventDefault();doLogin();">
+      <div class="fld">
+        <div class="fld-lbl">Email</div>
+        <input class="fld-in" type="email" id="login-email" autocomplete="username" required placeholder="tu@email.com">
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Contraseña</div>
+        <div style="position:relative">
+          <input class="fld-in" type="password" id="login-pass" autocomplete="current-password" required placeholder="••••••••" style="padding-right:38px">
+          <button type="button" onclick="toggleLoginPass()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;cursor:pointer;font-size:18px;padding:4px 8px;color:var(--text3)" title="Mostrar/ocultar contraseña">👁</button>
+        </div>
+      </div>
+      <div id="login-err" style="display:none;background:var(--red-soft);color:var(--red);border-left:3px solid var(--red);padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:10px"></div>
+      <button class="btn btn-pri btn-block" type="submit" style="padding:13px;font-size:14px">Entrar</button>
+    </form>
+    <div style="font-size:10px;color:var(--text3);margin-top:14px;text-align:center;line-height:1.5">
+      ¿No tienes credenciales? Pídeselas a tu administrador.<br>
+      <a href="javascript:resetAllData()" style="color:var(--text3);text-decoration:underline">¿Problemas para entrar? Restablecer datos</a>
+    </div>
+
+    <!-- CREDENCIALES DEMO · uso interno (solo visible en modo demo) -->
+    <div style="margin-top:18px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px 14px">
+      <div style="font-size:10px;color:#15803D;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;text-align:center">🟢 Credenciales modo demo</div>
+      <div style="font-size:11px;color:#0F172A;line-height:1.7">
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted #BBF7D0;cursor:pointer" onclick="fillLogin('asantomeb@gmail.com','admin2026')">
+          <span><strong style="color:#0B1E3F">👑 Adolfo</strong> · Admin</span>
+          <span style="font-family:monospace;font-size:10px;color:#475569">admin2026</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted #BBF7D0;cursor:pointer" onclick="fillLogin('cmmartinez@health4spain.com','ana2026')">
+          <span><strong style="color:#4F46E5">👥 Ana</strong> · Supervisor</span>
+          <span style="font-family:monospace;font-size:10px;color:#475569">ana2026</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted #BBF7D0;cursor:pointer" onclick="fillLogin('claudia@health4spain.com','claudia2026')">
+          <span><strong style="color:#16A34A">🛠 Claudia</strong> · Técnico GHL</span>
+          <span style="font-family:monospace;font-size:10px;color:#475569">claudia2026</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted #BBF7D0;cursor:pointer" onclick="fillLogin('tamara@health4spain.com','tamara2026')">
+          <span><strong style="color:#F59E0B">📞 Tamara</strong> · Closer</span>
+          <span style="font-family:monospace;font-size:10px;color:#475569">tamara2026</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;cursor:pointer" onclick="fillLogin('noelia@health4spain.com','noelia2026')">
+          <span><strong style="color:#F59E0B">📞 Noelia</strong> · Closer</span>
+          <span style="font-family:monospace;font-size:10px;color:#475569">noelia2026</span>
+        </div>
+      </div>
+      <div style="font-size:9px;color:#15803D;text-align:center;margin-top:8px;font-style:italic">Pulsa cualquier fila para auto-rellenar y entrar</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN APP ═══════════════ -->
+<div id="app" style="display:none">
+  <div style="background:linear-gradient(90deg,#10B981 0%,#16A34A 100%);color:white;padding:8px 12px;font-size:11.5px;text-align:center;font-weight:700;border-bottom:2px solid #15803D;letter-spacing:0.5px;display:flex;justify-content:space-between;align-items:center">
+    <span style="flex:1;text-align:center">🟢 MODO DEMO · v17 · login por usuario · cada uno con sus credenciales · sin auto-login</span>
+    <button onclick="if(confirm('¿Resetear demo y recargar?'))(localStorage.clear(),sessionStorage.clear(),location.reload())" style="background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);color:white;padding:3px 10px;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:0.5px">↻ Reset</button>
+  </div>
+  <header class="hdr">
+    <div class="hdr-row">
+      <div class="hdr-left">
+        <div class="hdr-logo">
+          <svg viewBox="0 0 100 56" xmlns="http://www.w3.org/2000/svg" style="width:26px;height:auto">
+            <defs>
+              <linearGradient id="h4sHdrGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#00BFE0"/>
+                <stop offset="0.55" stop-color="#1F90D0"/>
+                <stop offset="1" stop-color="#1F3864"/>
+              </linearGradient>
+            </defs>
+            <g fill="url(#h4sHdrGrad)" font-family="Arial Black, Helvetica, sans-serif" font-weight="900">
+              <rect x="6"  y="6" width="9" height="44" rx="1.5"/>
+              <polygon points="20,6 29,6 38,50 29,50"/>
+              <text x="42" y="46" font-size="42" letter-spacing="-2">4S</text>
+            </g>
+          </svg>
+        </div>
+        <div class="hdr-text">
+          <div class="hdr-name" id="hdr-name">—</div>
+          <div class="hdr-sub" id="hdr-sub">—</div>
+        </div>
+      </div>
+      <button class="hdr-btn" onclick="logout()" title="Cerrar sesión">⏻</button>
+    </div>
+  </header>
+
+  <div class="page-cont">
+    <!-- Pages render here -->
+    <div id="page-home" class="page-view"><div style="padding:20px;background:#fffbe6;color:#7c5f00;border:2px dashed #f0c800;border-radius:8px;margin:14px 0">⏳ Cargando... si ves este mensaje 3 segundos después del login significa que renderHome NO se ha ejecutado.</div></div>
+    <div id="page-seguros" class="page-view" style="display:none"></div>
+    <div id="page-partners" class="page-view" style="display:none"></div>
+    <div id="page-comunicaciones" class="page-view" style="display:none"></div>
+    <div id="page-energia" class="page-view" style="display:none"></div>
+    <div id="page-lbs" class="page-view" style="display:none"></div>
+    <div id="page-actividad" class="page-view" style="display:none"></div>
+    <div id="page-admin" class="page-view" style="display:none"></div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav"></nav>
+</div>
+
+<!-- ═══════════════ MODAL ═══════════════ -->
+<div class="modal-bk" id="modal-bk">
+  <div class="modal" id="modal-box"></div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   ESTADO PERSISTENTE (localStorage)
+   ════════════════════════════════════════════ */
+const STORE_KEY='h4s_hub_v13_demo_'+Date.now();  // Clave única por sesión → siempre arranca fresh
+
+const DEFAULT_STATE={
+  // Usuarios del sistema
+  // ROLES v2: 'admin' (Adolfo) · 'supervisor' (Ana) · 'tech' (Claudia) · 'closer' (Tamara/Noelia/+futuros)
+  // tareasPermitidas: ids del catálogo a las que este usuario puede ser asignado.
+  // Si está vacío => ninguna; si no existe el campo => todas (backward compat).
+  users:[
+    {id:'u_adol',    name:'Adol Santomé',  email:'asantomeb@gmail.com',  role:'admin',  figura:'interno', accesoSeguros:true, accesoActividad:true,  accesoPartners:true,  accesoComunicaciones:true,  accesoEnergia:true,  accesoLbs:true, color:'#1F3864', tareasPermitidas:['t1','t2','t3','t4','t5','t6'], passHash:'6051fc84a7a0d74c225fb18a496b09952da5642e60723ecae543298edd7d82d6'},
+    {id:'u_claudia', name:'Claudia',       email:'claudia@coasemed.com', role:'tech',   figura:'interno', accesoSeguros:true, accesoActividad:true,  accesoPartners:true,  accesoComunicaciones:true,  accesoEnergia:true,  accesoLbs:true, color:'#7C3AED', tecnico:true, ghl:true, tareasPermitidas:['t3','t4','t5','t6'], passHash:'a544a28b9b248daa961a618e5885e9c2d265b0b48de01390c999fc91660acacf'},
+    {id:'u_ana',     name:'Ana García',    email:'cmmartinez@health4spain.com', role:'supervisor', figura:'interno', accesoSeguros:true, accesoActividad:true,  accesoPartners:true,  accesoComunicaciones:true,  accesoEnergia:true,  accesoLbs:true, color:'#1A8FB0', empresaPrincipal:'closermed', tareasPermitidas:['t1','t2','t3','t4','t5','t6'], passHash:'5c5faf6134002d61d850e9eee111661643f2b40ca5327ae75672219e7f93d002'},
+    {id:'u_tamara',  name:'Tamara (G2)',   email:'tamara@health4spain.com',        role:'closer', figura:'externo',accesoSeguros:true, accesoActividad:false, accesoPartners:false, accesoComunicaciones:false, accesoEnergia:false, accesoLbs:true, color:'#2563EB', tareasPermitidas:['t1','t2'], passHash:'2148e90530ca43eb4c75874e5d4a904aff946783ecebba15784da909e40fd359'},
+    {id:'u_noelia',  name:'Noelia (G2)',   email:'noelia@health4spain.com',        role:'closer', figura:'externo',accesoSeguros:true, accesoActividad:false, accesoPartners:false, accesoComunicaciones:false, accesoEnergia:false, accesoLbs:true, color:'#0369A1', tareasPermitidas:['t1','t2'], passHash:'2307eb26f6e9f677157d47125394ae4a3ba8f58d0d7b54974ea4cf83801a140c'},
+  ],
+
+  // ─── COMISIONES ASISA POR RAMO (% sobre prima) ───
+  // Cargado desde modelo financiero, hoja "2 · Comisiones ASISA"
+  comisionesAsisa:{
+    sal:{nombre:'Salud',     pct:0.25, primaMedia:1000, color:'#1F3864'},
+    vid:{nombre:'Vida',      pct:0.60, primaMedia:400,  color:'#16A34A'},
+    dec:{nombre:'Decesos',   pct:0.60, primaMedia:65,   color:'#7C3AED'},
+    den:{nombre:'Dental',    pct:0.25, primaMedia:280,  color:'#D97706'},
+    acc:{nombre:'Accidentes',pct:0.25, primaMedia:120,  color:'#DC2626'},
+    mas:{nombre:'Mascotas',  pct:0.30, primaMedia:240,  color:'#C05621'},
+    via:{nombre:'Viaje',     pct:0.20, primaMedia:60,   color:'#0369A1'},
+  },
+
+  // ─── COMISIONES LBS POR RAMO (% sobre prima) ───
+  // Tarifa propuesta · tramo OBJETIVO 2500 pts → 1000€/mes subvención
+  comisionesLbs:{
+    sal:{nombre:'Salud LBS',   pct:0.17, primaMedia:735, color:'#EF4444'},
+    dec:{nombre:'Decesos LBS', pct:0.50, primaMedia:220, color:'#7C3AED'},
+    vid:{nombre:'Vida LBS',    pct:0.30, primaMedia:300, color:'#16A34A'},
+  },
+
+  // ─── REPARTO COMISIÓN POR FIGURA ───
+  // Sobre la comisión bruta que ASISA paga a COASEMED
+  repartoComisiones:{
+    externo:{
+      label:'Agente Externo (Mercantil)',
+      desc:'Relación mercantil. Sin vínculo laboral.',
+      icon:'📋',
+      ref_propias: 0.40,   // 40% si es referencia propia
+      ref_sistema: 0.30,   // 30% si es lead del sistema
+    },
+    interno:{
+      label:'Agente Interno (Socio/Empleado)',
+      desc:'Vínculo laboral o societario directo con la empresa.',
+      icon:'🏢',
+      ref_propias: 0.30,   // 30% si es referencia propia
+      ref_sistema: 0.20,   // 20% si es lead del sistema
+    }
+  },
+
+  // ─── CATÁLOGO DE PLAZAS DE PARTNERS ───
+  // Estructura matricial: Plan × Zona. Comisión 40% sobre primera mensualidad.
+  partnersConfig:{
+    pctComision: 0.40,
+    mode: 'matrix',
+    planes:[
+      {id:'pl_activa', nombre:'Activa',  icon:'🌱', color:'#0EA5E9', desc:'Plan de entrada'},
+      {id:'pl_crece',  nombre:'Crece',   icon:'📈', color:'#16A34A', desc:'Crecimiento'},
+      {id:'pl_escala', nombre:'Escala',  icon:'🚀', color:'#7C3AED', desc:'Escalado'},
+      {id:'pl_lidera', nombre:'Lidera',  icon:'👑', color:'#C9A227', desc:'Liderazgo'},
+    ],
+    tiers:[
+      {id:'tA', nombre:'Tier A', label:'Premium'},
+      {id:'tB', nombre:'Tier B', label:'Medio'},
+      {id:'tC', nombre:'Tier C', label:'Desarrollo'},
+    ],
+    precios:{
+      pl_activa:{tA:195,  tB:145, tC:95},
+      pl_crece: {tA:390,  tB:290, tC:190},
+      pl_escala:{tA:690,  tB:590, tC:390},
+      pl_lidera:{tA:1095, tB:890, tC:590},
+    },
+  },
+  partnersCatalogo:[], // legacy · ya no se usa (matrix mode)
+
+  // ─── LBS SEGUROS · catálogo y ventas ───
+  lbsConfig:{ pctComision:0.17 }, // % por defecto (Salud), pero cada ramo tiene su % en lbsCatalogo
+  lbsCatalogo:[
+    {id:'lbs_sal', nombre:'Salud LBS',   cuota:735, color:'#EF4444', icon:'🏥', pct:0.17},
+    {id:'lbs_dec', nombre:'Decesos LBS', cuota:220, color:'#7C3AED', icon:'⚱️', pct:0.50},
+    {id:'lbs_vid', nombre:'Vida LBS',    cuota:300, color:'#16A34A', icon:'❤️', pct:0.30},
+  ],
+  // userPartnerSales[userId] = [{id, planId, tierId, cuota, fecha}]
+  userPartnerSales:{
+    u_ana:[
+      {id:'pa1', planId:'pl_crece',  tierId:'tA', cuota:390, fecha:'2026-05-04'},
+      {id:'pa2', planId:'pl_activa', tierId:'tB', cuota:145, fecha:'2026-05-12'},
+    ],
+    u_noelia:[
+      {id:'pa3', planId:'pl_activa', tierId:'tA', cuota:195, fecha:'2026-05-08'},
+    ],
+    u_adol:[
+      {id:'paA1', planId:'pl_escala', tierId:'tA', cuota:690, fecha:'2026-05-03'},
+      {id:'paA2', planId:'pl_crece',  tierId:'tA', cuota:390, fecha:'2026-05-07'},
+      {id:'paA3', planId:'pl_lidera', tierId:'tB', cuota:890, fecha:'2026-05-10'},
+      {id:'paA4', planId:'pl_activa', tierId:'tA', cuota:195, fecha:'2026-05-13'},
+    ],
+  },
+
+  // ─── COMUNICACIONES (telefonía, fibra, móvil) ───
+  comunicacionesConfig:{ pctComision: 0.30 },
+  comunicacionesCatalogo:[
+    {id:'c1', nombre:'Tarifa móvil',       cuota:25,  color:'#0EA5E9', icon:'📱'},
+    {id:'c2', nombre:'Fibra 600 MB',       cuota:35,  color:'#1F3864', icon:'🌐'},
+    {id:'c3', nombre:'Combo móvil + fibra',cuota:55,  color:'#16A34A', icon:'📞'},
+    {id:'c4', nombre:'Empresa multi-líneas',cuota:120,color:'#7C3AED', icon:'🏢', multi:true},
+  ],
+  userComunicacionesSales:{
+    u_tamara:[{id:'co1', catId:'c1', cuota:25, fecha:'2026-05-10'}],
+    u_ana:[{id:'co2', catId:'c2', cuota:35, fecha:'2026-05-08'}],
+    u_adol:[
+      {id:'coA1', catId:'c2', cuota:35, fecha:'2026-05-05'},
+      {id:'coA2', catId:'c3', cuota:55, fecha:'2026-05-09'},
+      {id:'coA3', catId:'c4', cuota:120, fecha:'2026-05-12'},
+    ],
+  },
+
+  // ─── ENERGÍA (luz y gas) ───
+  energiaConfig:{ pctComision: 0.30 },
+  energiaCatalogo:[
+    {id:'e1', nombre:'Luz Hogar',        cuota:60,  color:'#F59E0B', icon:'💡'},
+    {id:'e2', nombre:'Gas Hogar',        cuota:55,  color:'#DC2626', icon:'🔥'},
+    {id:'e3', nombre:'Dual luz + gas',   cuota:110, color:'#16A34A', icon:'⚡'},
+    {id:'e4', nombre:'Empresa energía',  cuota:300, color:'#7C3AED', icon:'🏭', multi:true},
+  ],
+  userEnergiaSales:{
+    u_adol:[
+      {id:'enA1', catId:'e3', cuota:110, fecha:'2026-05-06'},
+      {id:'enA2', catId:'e4', cuota:300, fecha:'2026-05-11'},
+    ],
+    u_ana:[{id:'enAn1', catId:'e1', cuota:60, fecha:'2026-05-08'}],
+  },
+
+  // ─── VALIDACIONES DE LIQUIDACIONES (estado por usuario × mes) ───
+  // Estados: pendiente | pendiente_aprobacion | validada | liquidada | rechazada
+  // Clave: userId + '_' + YYYY-MM
+  liquidacionesValidadas:{
+    'u_noelia_2026-04':{ estado:'liquidada', validadoPor:'u_ana', fechaValidacion:'2026-05-02', fechaPago:'2026-05-15', refTransfer:'TR-2026-04-NOE' },
+    'u_tamara_2026-04':{ estado:'liquidada', validadoPor:'u_ana', fechaValidacion:'2026-05-02', fechaPago:'2026-05-15', refTransfer:'TR-2026-04-TAM' },
+    'u_ana_2026-04':{ estado:'validada',   validadoPor:'u_adol', fechaValidacion:'2026-05-03' },
+  },
+
+  // ─── NIVELES CVR ───
+  nivelesCvr:[
+    {min:.30,lbl:'🟢 Élite',    c:'#16A34A',bg:'#DCFCE7',bd:'#86EFAC',bono:.010, bs:'+1,00% prima'},
+    {min:.25,lbl:'🔵 Óptimo',   c:'#2563EB',bg:'#DBEAFE',bd:'#93C5FD',bono:.005, bs:'+0,50% prima'},
+    {min:.20,lbl:'🟡 Objetivo', c:'#D97706',bg:'#FEF3C7',bd:'#FDE68A',bono:.0025,bs:'+0,25% prima'},
+    {min:.15,lbl:'🟠 Mínimo',   c:'#C05621',bg:'#FEECDC',bd:'#FBD38D',bono:0,    bs:'Sin bono'},
+    {min:0,  lbl:'🔴 Riesgo',   c:'#DC2626',bg:'#FEE2E2',bd:'#FECACA',bono:0,    bs:'Sin bono'},
+  ],
+
+  // ─── DATOS POR USUARIO (seguros) ───
+  // userId => {leads:N, polizas:{ramo:{sis:[{p}],aut:[{p}]}}}
+  userSeguros:{
+    // Mix de datos mock realistas · ASISA · para ver producción + CVR + liquidación
+    u_noelia:{leads:32, polizas:{
+      sal:{sis:[{p:1050},{p:980},{p:1120},{p:850},{p:1200}], aut:[{p:1050},{p:980}]},
+      vid:{sis:[{p:420}], aut:[{p:380}]},
+      dec:{sis:[{p:225},{p:225}], aut:[{p:200}]},
+      den:{sis:[{p:280}], aut:[]},
+      acc:{sis:[],aut:[]}, mas:{sis:[{p:240}],aut:[]}, via:{sis:[],aut:[]},
+    }},
+    u_tamara:{leads:28, polizas:{
+      sal:{sis:[{p:1100},{p:950},{p:1050}], aut:[{p:1200}]},
+      vid:{sis:[],aut:[{p:400}]},
+      dec:{sis:[{p:225}], aut:[]},
+      den:{sis:[],aut:[]}, acc:{sis:[{p:120}],aut:[]}, mas:{sis:[],aut:[]}, via:{sis:[{p:60}],aut:[]},
+    }},
+    u_ana:{leads:48, polizas:{
+      sal:{sis:[{p:1100},{p:950},{p:1280},{p:990},{p:1050},{p:1180},{p:920}], aut:[{p:1100},{p:1320},{p:980}]},
+      vid:{sis:[{p:420},{p:380}], aut:[{p:450}]},
+      dec:{sis:[{p:225},{p:225}], aut:[{p:200},{p:225}]},
+      den:{sis:[{p:280}],aut:[]}, acc:{sis:[],aut:[]}, mas:{sis:[{p:240}],aut:[]}, via:{sis:[],aut:[]},
+    }},
+    // MODO DEMO · Adolfo (admin) también con producción ejemplar
+    u_adol:{leads:65, polizas:{
+      sal:{sis:[{p:1180},{p:1050},{p:1320},{p:1100},{p:1280},{p:990},{p:1450},{p:1100}], aut:[{p:1200},{p:1380},{p:1080},{p:1150}]},
+      vid:{sis:[{p:420},{p:380},{p:450}], aut:[{p:520},{p:480}]},
+      dec:{sis:[{p:225},{p:225},{p:225}], aut:[{p:200},{p:225},{p:200}]},
+      den:{sis:[{p:280},{p:320}],aut:[{p:280}]}, acc:{sis:[{p:120}],aut:[]}, mas:{sis:[{p:240},{p:260}],aut:[]}, via:{sis:[{p:60}],aut:[]},
+    }},
+  },
+
+  // Mix de datos mock · LBS Seguros · para ver el módulo nuevo con producción
+  userLbsSales:{
+    u_noelia:[
+      {id:'lbs1', catId:'lbs_sal', cuota:735, fecha:'2026-05-08'},
+      {id:'lbs2', catId:'lbs_sal', cuota:735, fecha:'2026-05-12'},
+      {id:'lbs3', catId:'lbs_sal', cuota:780, fecha:'2026-05-14'},
+      {id:'lbs4', catId:'lbs_dec', cuota:220, fecha:'2026-05-10'},
+      {id:'lbs5', catId:'lbs_dec', cuota:220, fecha:'2026-05-13'},
+    ],
+    u_adol:[
+      {id:'lbsA1', catId:'lbs_sal', cuota:735, fecha:'2026-05-05'},
+      {id:'lbsA2', catId:'lbs_sal', cuota:735, fecha:'2026-05-09'},
+      {id:'lbsA3', catId:'lbs_sal', cuota:820, fecha:'2026-05-12'},
+      {id:'lbsA4', catId:'lbs_sal', cuota:735, fecha:'2026-05-14'},
+      {id:'lbsA5', catId:'lbs_dec', cuota:220, fecha:'2026-05-07'},
+      {id:'lbsA6', catId:'lbs_dec', cuota:240, fecha:'2026-05-11'},
+      {id:'lbsA7', catId:'lbs_vid', cuota:300, fecha:'2026-05-08'},
+      {id:'lbsA8', catId:'lbs_vid', cuota:340, fecha:'2026-05-13'},
+    ],
+    u_tamara:[
+      {id:'lbs6', catId:'lbs_sal', cuota:735, fecha:'2026-05-09'},
+      {id:'lbs7', catId:'lbs_sal', cuota:690, fecha:'2026-05-11'},
+      {id:'lbs8', catId:'lbs_dec', cuota:220, fecha:'2026-05-13'},
+      {id:'lbs9', catId:'lbs_vid', cuota:300, fecha:'2026-05-14'},
+    ],
+    u_ana:[
+      {id:'lbs10', catId:'lbs_sal', cuota:735, fecha:'2026-05-05'},
+      {id:'lbs11', catId:'lbs_sal', cuota:780, fecha:'2026-05-09'},
+      {id:'lbs12', catId:'lbs_sal', cuota:735, fecha:'2026-05-13'},
+      {id:'lbs13', catId:'lbs_dec', cuota:220, fecha:'2026-05-11'},
+    ],
+  },
+
+  // ─── CATÁLOGO DE TAREAS DE ACTIVIDAD ───
+  // El precio €/h SOLO lo ve el admin
+  tareasCatalogo:[
+    {id:'t1', nombre:'Llamada de cierre',            descripcion:'Llamada con lead caliente para cerrar póliza',  precioHora:18, color:'#1F3864', icon:'📞'},
+    {id:'t2', nombre:'Llamada de presentación',      descripcion:'Primer contacto con lead frío',                 precioHora:14, color:'#2563EB', icon:'📲'},
+    {id:'t3', nombre:'Onboarding partner',           descripcion:'Configurar GHL para nuevo partner',             precioHora:25, color:'#7C3AED', icon:'⚙️'},
+    {id:'t4', nombre:'Soporte al cliente',           descripcion:'Resolver dudas de pólizas activas',             precioHora:12, color:'#16A34A', icon:'💬'},
+    {id:'t5', nombre:'Contenido / RRSS',             descripcion:'Crear contenido para redes sociales',           precioHora:15, color:'#D97706', icon:'📝'},
+    {id:'t6', nombre:'Formación interna',            descripcion:'Sesión de formación equipo',                    precioHora:20, color:'#C05621', icon:'🎓'},
+  ],
+
+  // ─── ASIGNACIONES DE TAREAS (admin → colaborador) ───
+  // {id, userId, tareaId, fecha, sesionesPlanificadas, sesionesCompletadas, minutos, completada}
+  asignaciones:[
+    {id:'a3', userId:'u_claudia', tareaId:'t3', fecha:'2026-05-06', sesionesPlanificadas:3, sesionesCompletadas:1, minutos:25, completada:false},
+    {id:'a4', userId:'u_tamara',  tareaId:'t1', fecha:'2026-05-15', sesionesPlanificadas:5, sesionesCompletadas:3, minutos:75, completada:false},
+    {id:'a5', userId:'u_tamara',  tareaId:'t2', fecha:'2026-05-15', sesionesPlanificadas:3, sesionesCompletadas:2, minutos:50, completada:false},
+    {id:'a6', userId:'u_noelia',  tareaId:'t1', fecha:'2026-05-15', sesionesPlanificadas:6, sesionesCompletadas:5, minutos:125, completada:false},
+    {id:'a7', userId:'u_noelia',  tareaId:'t2', fecha:'2026-05-15', sesionesPlanificadas:2, sesionesCompletadas:2, minutos:50, completada:true},
+    {id:'a8', userId:'u_ana',     tareaId:'t6', fecha:'2026-05-15', sesionesPlanificadas:2, sesionesCompletadas:1, minutos:25, completada:false},
+  ],
+
+  // Ajustes Pomodoro
+  pomodoroConfig:{ work:25, short:5, long:15, longEvery:4 },
+
+  // Sesión activa Pomodoro (por usuario)
+  pomodoroState:{},
+};
+
+let S = loadState();
+
+// ─── MÓDULOS DE PRODUCTO (Partners + Comunicaciones + Energía + futuros) ───
+// Para añadir un módulo nuevo (p.ej. "Seguros decesos extra"):
+// 1) Añade entrada aquí.
+// 2) Añade el accesoX y los keys cfg/cat/sales en DEFAULT_STATE.
+// 3) Añade el toggle en el modal de usuario y lista admin.
+// Eso es todo: home, nav, página y admin se pintan automáticamente.
+const PRODUCT_MODULES = {
+  partners:{
+    label:'Partners',       icon:'🤝', color:'#7C3AED',
+    accessKey:'accesoPartners',
+    cfgKey:'partnersConfig', catKey:'partnersCatalogo', salesKey:'userPartnerSales',
+    desc:'Plazas de partners en clínicas, gimnasios y empresas',
+    saleNoun:'plaza', saleNounPlural:'plazas',
+    addBtnLabel:'Vender plaza',
+    pagador:'COASEMED',
+  },
+  comunicaciones:{
+    label:'Comunicaciones', icon:'📞', color:'#0EA5E9',
+    accessKey:'accesoComunicaciones',
+    cfgKey:'comunicacionesConfig', catKey:'comunicacionesCatalogo', salesKey:'userComunicacionesSales',
+    desc:'Telefonía, fibra y servicios móviles',
+    saleNoun:'contrato', saleNounPlural:'contratos',
+    addBtnLabel:'Nuevo contrato',
+    pagador:'COASEMED',
+  },
+  lbs:{
+    label:'LBS Seguros',    icon:'🏥', color:'#EF4444',
+    accessKey:'accesoLbs',
+    cfgKey:'lbsConfig', catKey:'lbsCatalogo', salesKey:'userLbsSales',
+    desc:'Salud · Vida · Decesos LBS',
+    saleNoun:'póliza', saleNounPlural:'pólizas',
+    addBtnLabel:'Nueva póliza',
+    pagador:'Closermed',
+  },
+  energia:{
+    label:'Energía',        icon:'⚡', color:'#F59E0B',
+    accessKey:'accesoEnergia',
+    cfgKey:'energiaConfig', catKey:'energiaCatalogo', salesKey:'userEnergiaSales',
+    desc:'Suministro de luz y gas',
+    saleNoun:'contrato', saleNounPlural:'contratos',
+    addBtnLabel:'Nuevo contrato',
+    pagador:'COASEMED',
+  },
+};
+// El bloque ASISA paga vía Closermed (la mediadora). Los demás vía COASEMED (plataforma).
+const SEGUROS_PAGADOR = 'Closermed';
+// Retención IRPF aplicada SOLO en el resumen consolidado de la home.
+const IRPF_PCT = 0.15;
+
+function getTareasPermitidas(u){
+  // Admin siempre todas. Si no hay campo definido => todas (compat). Si está vacío => ninguna.
+  if(!u) return [];
+  if(u.role==='admin') return S.tareasCatalogo.map(t=>t.id);
+  if(u.tareasPermitidas===undefined) return S.tareasCatalogo.map(t=>t.id);
+  return u.tareasPermitidas;
+}
+function puedeHacerTarea(u, tareaId){
+  return getTareasPermitidas(u).includes(tareaId);
+}
+
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORE_KEY);
+    if(raw){
+      const p=JSON.parse(raw);
+      // Merge users by email: aseguramos que TODO usuario tenga passHash
+      // (para autorrepararse si se guardó estado antes de añadir el campo passHash)
+      let users = Array.isArray(p.users) ? p.users.slice() : [];
+      DEFAULT_STATE.users.forEach(du=>{
+        const idx = users.findIndex(u=>(u.email||'').toLowerCase()===du.email.toLowerCase());
+        if(idx<0){
+          users.push(JSON.parse(JSON.stringify(du))); // no estaba: añadir
+        } else {
+          // Existe: si le falta passHash o tareasPermitidas, restaurar desde defaults
+          if(!users[idx].passHash) users[idx].passHash = du.passHash;
+          if(users[idx].tareasPermitidas===undefined) users[idx].tareasPermitidas = du.tareasPermitidas;
+          if(!users[idx].color) users[idx].color = du.color;
+          // Migración: añadir flags nuevos si faltan
+          ['accesoSeguros','accesoLbs','accesoActividad','accesoPartners','accesoComunicaciones','accesoEnergia'].forEach(k=>{
+            if(users[idx][k]===undefined) users[idx][k] = du[k];
+          });
+          if(!users[idx].role) users[idx].role = du.role;
+          if(!users[idx].figura) users[idx].figura = du.figura;
+        }
+      });
+      return Object.assign({},DEFAULT_STATE,p,{
+        repartoComisiones:Object.assign({},DEFAULT_STATE.repartoComisiones,p.repartoComisiones||{}),
+        comisionesAsisa:Object.assign({},DEFAULT_STATE.comisionesAsisa,p.comisionesAsisa||{}),
+        nivelesCvr:p.nivelesCvr||DEFAULT_STATE.nivelesCvr,
+        users:users,
+        tareasCatalogo:p.tareasCatalogo||DEFAULT_STATE.tareasCatalogo,
+        asignaciones:p.asignaciones||DEFAULT_STATE.asignaciones,
+        userSeguros:p.userSeguros||DEFAULT_STATE.userSeguros,
+        pomodoroConfig:p.pomodoroConfig||DEFAULT_STATE.pomodoroConfig,
+        pomodoroState:p.pomodoroState||{},
+        partnersConfig:Object.assign({},DEFAULT_STATE.partnersConfig,p.partnersConfig||{}),
+        partnersCatalogo:p.partnersCatalogo||DEFAULT_STATE.partnersCatalogo,
+        userPartnerSales:p.userPartnerSales||DEFAULT_STATE.userPartnerSales,
+        lbsConfig:Object.assign({},DEFAULT_STATE.lbsConfig,p.lbsConfig||{}),
+        lbsCatalogo:p.lbsCatalogo||DEFAULT_STATE.lbsCatalogo,
+        userLbsSales:p.userLbsSales||DEFAULT_STATE.userLbsSales,
+        comisionesLbs:Object.assign({},DEFAULT_STATE.comisionesLbs,p.comisionesLbs||{}),
+        comunicacionesConfig:Object.assign({},DEFAULT_STATE.comunicacionesConfig,p.comunicacionesConfig||{}),
+        comunicacionesCatalogo:p.comunicacionesCatalogo||DEFAULT_STATE.comunicacionesCatalogo,
+        userComunicacionesSales:p.userComunicacionesSales||DEFAULT_STATE.userComunicacionesSales,
+        energiaConfig:Object.assign({},DEFAULT_STATE.energiaConfig,p.energiaConfig||{}),
+        energiaCatalogo:p.energiaCatalogo||DEFAULT_STATE.energiaCatalogo,
+        userEnergiaSales:p.userEnergiaSales||DEFAULT_STATE.userEnergiaSales,
+      });
+    }
+  }catch(e){console.warn('loadState err',e);}
+  return JSON.parse(JSON.stringify(DEFAULT_STATE));
+}
+function saveState(){ /* MODO DEMO · no persistimos, todo vive en memoria */ }
+
+/* ════════════════════════════════════════════
+   AUTENTICACIÓN (email + contraseña con hash SHA-256)
+   ════════════════════════════════════════════ */
+let currentUser=null;
+let activePage='home';
+const SESSION_KEY='h4s_hub_session_v5';
+
+async function sha256(text){
+  const data=new TextEncoder().encode(text);
+  const buf=await crypto.subtle.digest('SHA-256',data);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function toggleLoginPass(){
+  const i=document.getElementById('login-pass');
+  i.type = i.type==='password' ? 'text' : 'password';
+}
+
+function resetAllData(){
+  if(!confirm('Esto borrará todos los datos guardados en este navegador (usuarios añadidos, pólizas, asignaciones, contraseñas locales). Las credenciales por defecto (admin2026, etc.) seguirán funcionando. ¿Continuar?')) return;
+  localStorage.removeItem(STORE_KEY);
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-pass').value;
+  const errEl=document.getElementById('login-err');
+  errEl.style.display='none';
+  if(!email||!pass){ errEl.textContent='Rellena email y contraseña.'; errEl.style.display='block'; return; }
+  const u=S.users.find(x=>x.email.toLowerCase()===email);
+  // Mensaje genérico para no filtrar qué emails existen
+  const generic='Email o contraseña incorrectos.';
+  if(!u){ errEl.textContent=generic; errEl.style.display='block'; return; }
+  if(!u.passHash){ errEl.textContent='Tu cuenta no tiene contraseña configurada. Contacta al administrador.'; errEl.style.display='block'; return; }
+  const h=await sha256(pass);
+  if(h!==u.passHash){ errEl.textContent=generic; errEl.style.display='block'; return; }
+  // OK
+  document.getElementById('login-pass').value='';
+  enterApp(u);
+  // Recordar sesión (token sencillo: hash(email + passHash + 'h4s'))
+  const tok=await sha256(u.email+'|'+u.passHash+'|h4s_session');
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify({uid:u.id,tok}));
+}
+
+async function tryRestoreSession(){
+  try{
+    const raw=sessionStorage.getItem(SESSION_KEY);
+    if(!raw) return false;
+    const {uid,tok}=JSON.parse(raw);
+    const u=S.users.find(x=>x.id===uid);
+    if(!u||!u.passHash) return false;
+    const expected=await sha256(u.email+'|'+u.passHash+'|h4s_session');
+    if(expected!==tok) return false;
+    enterApp(u);
+    return true;
+  }catch(e){return false;}
+}
+
+function enterApp(u){
+  currentUser=u;
+  activePage = 'home'; // reset SIEMPRE al login (evita aterrizar en página con datos cacheados)
+  // Limpieza preventiva de cualquier key residual
+  try {
+    Object.keys(sessionStorage).forEach(function(k){ if(k.indexOf('h4s_hub_active')===0 || k.indexOf('h4s_seg')===0) sessionStorage.removeItem(k); });
+    if(typeof S==='object' && S){ S._segUser = null; }
+  } catch(e){}
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('hdr-name').textContent='Hola, '+u.name.split(' ')[0];
+  let sub='';
+  if(u.role==='admin') sub='Administrador · COASEMED';
+  else if(u.role==='tech') sub='Técnico GoHighLevel · acceso total';
+  else sub=`Closer · ${u.figura==='interno'?'Agente interno':'Agente externo (mercantil)'}`;
+  document.getElementById('hdr-sub').textContent=sub;
+  activePage='home';
+  renderNav();
+  renderPage();
+}
+
+function logout(){
+  currentUser=null;
+  activePage='home';
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  // limpiar campos
+  const e=document.getElementById('login-email'),p=document.getElementById('login-pass');
+  if(e) e.value=''; if(p) p.value='';
+}
+
+/* ════════════════════════════════════════════
+   NAVEGACIÓN INFERIOR
+   ════════════════════════════════════════════ */
+function getAvailablePages(){
+  const u=currentUser;
+  const isAdmin = u.role==='admin'||u.role==='tech'||u.role==='supervisor';
+  const pages=[{id:'home', label:'Inicio', ic:'🏠'}];
+  if(isAdmin || u.accesoSeguros)
+    pages.push({id:'seguros', label:'ASISA', ic:'🛡️'});
+  Object.keys(PRODUCT_MODULES).forEach(k=>{
+    const M=PRODUCT_MODULES[k];
+    if(isAdmin || u[M.accessKey])
+      pages.push({id:k, label:M.label, ic:M.icon});
+  });
+  if(isAdmin || u.accesoActividad)
+    pages.push({id:'actividad', label:'Actividad', ic:'⏱️'});
+  if(isAdmin)
+    pages.push({id:'admin', label:'Configurar', ic:'⚙️'});
+  return pages;
+}
+
+function renderNav(){
+  const nav=document.getElementById('bottom-nav');
+  const pages=getAvailablePages();
+  nav.innerHTML=pages.map(p=>`
+    <button class="nav-btn ${activePage===p.id?'active':''}" onclick="goTo('${p.id}')">
+      <span class="nav-ic">${p.ic}</span>
+      <span>${p.label}</span>
+    </button>`).join('');
+}
+
+function goTo(page){
+  activePage=page;
+  renderNav();
+  renderPage();
+  window.scrollTo(0,0);
+}
+
+function renderPage(){
+  console.log('[renderPage] activePage =', activePage, '· user =', currentUser ? currentUser.email : 'null');
+  const allPages=['home','seguros','actividad','admin',...Object.keys(PRODUCT_MODULES)];
+  allPages.forEach(p=>{
+    const el=document.getElementById('page-'+p);
+    if(el) el.style.display=(activePage===p?'block':'none');
+  });
+  if(activePage==='home') renderHome();
+  else if(activePage==='seguros') renderSeguros();
+  else if(activePage==='actividad') renderActividad();
+  else if(activePage==='admin') renderAdmin();
+  else if(PRODUCT_MODULES[activePage]) renderModulePage(activePage);
+}
+
+/* ════════════════════════════════════════════
+   PÁGINA: INICIO (v15 · template literal robusto + producción detallada)
+   ════════════════════════════════════════════ */
+function renderHome(){
+  var homeEl = document.getElementById('page-home');
+  if(!homeEl){
+    // Defensa nuclear: si el div no existe, lo creamos
+    var main = document.querySelector('.page-cont') || document.querySelector('main') || document.body;
+    homeEl = document.createElement('div');
+    homeEl.id = 'page-home';
+    homeEl.className = 'page-view';
+    main.appendChild(homeEl);
+  }
+  // Garantizar visibilidad
+  homeEl.style.display = 'block';
+  homeEl.style.visibility = 'visible';
+  homeEl.style.opacity = '1';
+
+  try {
+    var u = currentUser;
+    if(!u){
+      homeEl.innerHTML = '<div style="padding:20px;color:#DC2626;background:#FEE2E2;border-radius:8px;margin:14px">No hay usuario en sesión. Recarga la página.</div>';
+      return;
+    }
+
+    var IRPF_PCT = 0.15;
+    var isAdmin = u.role === 'admin' || u.role === 'tech' || u.role === 'supervisor';
+    var roleLine = 'Closer';
+    if(u.role === 'admin') roleLine = 'Administrador · COASEMED';
+    else if(u.role === 'supervisor') roleLine = 'Supervisor · ' + (u.empresaPrincipal === 'closermed' ? 'Closermed' : 'COASEMED');
+    else if(u.role === 'tech') roleLine = 'Técnico GoHighLevel · Claudia';
+    else roleLine = 'Closer · ' + (u.figura === 'interno' ? 'Agente interno' : 'Agente externo (mercantil)');
+
+    // ── Cálculos con fallback seguro ──
+    var Cseg = {totalCobro:0, rows:{}, bonoAmt:0, cvr:0, nv:null};
+    try { Cseg = calcSeguros(u.id) || Cseg; } catch(e){ console.warn('calcSeguros:', e); }
+    var cobroAsisa = Cseg.totalCobro || 0;
+    var cobroProductos = 0;
+    var breakdown = [];
+    try {
+      if(typeof PRODUCT_MODULES === 'object' && PRODUCT_MODULES){
+        Object.keys(PRODUCT_MODULES).forEach(function(k){
+          try {
+            var M = PRODUCT_MODULES[k];
+            var Cm = calcModule(k, u.id) || {total:0};
+            cobroProductos += (Cm.total || 0);
+            if(Cm.total > 0) breakdown.push({key:k, label:M.label, icon:M.icon, total:Cm.total, color:M.color});
+          } catch(e){ console.warn('calcModule '+k+':', e); }
+        });
+      }
+    } catch(e){ console.warn('PRODUCT_MODULES loop:', e); }
+
+    var totalGlobal = cobroAsisa + cobroProductos;
+    var irpf = totalGlobal * IRPF_PCT;
+    var neto = totalGlobal - irpf;
+
+    // ── WELCOME ──
+    var html = '';
+    html += '<div style="background:linear-gradient(135deg,#0B1E3F 0%,#1F3864 50%,#1F90D0 100%);color:white;border-radius:14px;padding:20px 22px;margin-bottom:14px;box-shadow:0 4px 12px rgba(11,30,63,.18)">';
+    html += '<div style="font-size:11px;opacity:.75;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Bienvenido</div>';
+    html += '<div style="font-size:24px;font-weight:800;margin-bottom:5px">' + (u.name || 'Usuario') + '</div>';
+    html += '<div style="display:inline-block;background:rgba(255,255,255,.2);padding:3px 11px;border-radius:20px;font-size:11px;font-weight:600">' + roleLine + '</div>';
+    html += '</div>';
+
+    // ── CONSOLIDADO con IRPF ──
+    if(totalGlobal > 0){
+      html += '<div style="background:white;border:1px solid #D8DEEE;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(31,56,100,.08)">';
+      html += '<div style="font-size:11px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">💰 Tu cobro consolidado este mes</div>';
+      html += '<div style="display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:1px solid #E2E8F0;margin-bottom:14px">';
+      html += '<div><div style="font-size:36px;font-weight:800;color:#16A34A;line-height:1">' + Math.round(neto).toLocaleString('es-ES') + '€</div>';
+      html += '<div style="font-size:10px;color:#718096;margin-top:5px">Bruto ' + Math.round(totalGlobal).toLocaleString('es-ES') + '€ · IRPF retenido ' + Math.round(irpf).toLocaleString('es-ES') + '€ (15%)</div></div>';
+      html += '<div style="text-align:right"><div style="font-size:9px;color:#718096;text-transform:uppercase;letter-spacing:1px">Después IRPF</div><div style="font-size:14px;color:#16A34A;font-weight:800;margin-top:3px">' + Math.round(neto).toLocaleString('es-ES') + '€</div></div>';
+      html += '</div>';
+      if(cobroAsisa > 0){
+        html += '<div style="background:#F4F6FB;border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">';
+        html += '<span style="font-size:12px;font-weight:600;color:#1F3864">🛡️ ASISA · vía Closermed</span>';
+        html += '<strong style="color:#16A34A;font-size:14px">' + Math.round(cobroAsisa).toLocaleString('es-ES') + '€</strong>';
+        html += '</div>';
+      }
+      breakdown.forEach(function(b){
+        html += '<div style="background:#F4F6FB;border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">';
+        html += '<span style="font-size:12px;font-weight:600;color:#0B1E3F">' + b.icon + ' ' + b.label + ' · vía COASEMED</span>';
+        html += '<strong style="color:#16A34A;font-size:14px">' + Math.round(b.total).toLocaleString('es-ES') + '€</strong>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // ── BOTÓN VER MIS LIQUIDACIONES ──
+    html += '<button onclick="openLiquidacionesModal()" style="display:block;width:100%;background:linear-gradient(135deg,#0B1E3F 0%,#1F3864 50%,#1F90D0 100%);color:white;border:none;border-radius:12px;padding:16px 18px;margin-bottom:14px;cursor:pointer;text-align:left;box-shadow:0 4px 12px rgba(11,30,63,.18);font-family:inherit">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center">';
+    html += '<div><div style="font-size:11px;opacity:.75;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px">💰 Liquidaciones</div>';
+    html += '<div style="font-size:16px;font-weight:800">Ver mis liquidaciones</div>';
+    html += '<div style="font-size:10px;opacity:.75;margin-top:3px">Mes anterior · actual · próximo · detalle por póliza</div></div>';
+    html += '<div style="font-size:26px">→</div></div></button>';
+
+    // ── PRODUCCIÓN DETALLADA ASISA ──
+    try {
+      var asisaCfg = (typeof S === 'object' && S && S.comisionesAsisa) ? S.comisionesAsisa : {};
+      var asisaKeys = Object.keys(Cseg.rows || {});
+      if(asisaKeys.length > 0){
+        html += '<div style="background:white;border:1px solid #D8DEEE;border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 6px rgba(31,56,100,.06)">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">';
+        html += '<div style="font-size:13px;font-weight:800;color:#1F3864">🛡️ Producción ASISA</div>';
+        html += '<div style="font-size:10px;color:#718096">Régimen <strong style="color:#1E3A8A">n+2</strong></div></div>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:11px"><thead><tr style="background:#F4F6FB;color:#475569"><th style="text-align:left;padding:6px 8px">Ramo</th><th style="text-align:center;padding:6px 8px">Pól.</th><th style="text-align:right;padding:6px 8px">Primas</th><th style="text-align:right;padding:6px 8px">%</th><th style="text-align:right;padding:6px 8px">Comisión</th></tr></thead><tbody>';
+        asisaKeys.forEach(function(rk){
+          var r = Cseg.rows[rk];
+          var rcfg = asisaCfg[rk] || {nombre:rk, pct:0.25, color:'#1F3864'};
+          var npol = (r.nSis||0) + (r.nAut||0);
+          html += '<tr style="border-bottom:1px solid #F1F5F9">';
+          html += '<td style="padding:6px 8px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + rcfg.color + ';margin-right:6px"></span><strong style="color:#0B1E3F">' + rcfg.nombre + '</strong></td>';
+          html += '<td style="text-align:center;padding:6px 8px;color:#475569">' + npol + '</td>';
+          html += '<td style="text-align:right;padding:6px 8px;color:#475569">' + Math.round(r.totPrima||0).toLocaleString('es-ES') + '€</td>';
+          html += '<td style="text-align:right;padding:6px 8px;color:#475569">' + Math.round((rcfg.pct||0.25)*100) + '%</td>';
+          html += '<td style="text-align:right;padding:6px 8px"><strong style="color:#16A34A">' + Math.round(r.liqCloser||0).toLocaleString('es-ES') + '€</strong></td>';
+          html += '</tr>';
+        });
+        if(Cseg.bonoAmt && Cseg.bonoAmt > 0){
+          html += '<tr style="background:#FFFBEB"><td colspan="4" style="padding:6px 8px;font-style:italic;color:#92400E">🏆 Bonus CVR ' + (Cseg.nv?Cseg.nv.lbl:'') + '</td><td style="text-align:right;padding:6px 8px"><strong style="color:#16A34A">+' + Math.round(Cseg.bonoAmt).toLocaleString('es-ES') + '€</strong></td></tr>';
+        }
+        html += '</tbody></table></div>';
+      }
+    } catch(e){ console.warn('ASISA detalle:', e); }
+
+    // ── PRODUCCIÓN DETALLADA LBS ──
+    try {
+      var lbsSales = (typeof S === 'object' && S && S.userLbsSales && S.userLbsSales[u.id]) ? S.userLbsSales[u.id] : [];
+      var lbsCat = (typeof S === 'object' && S && S.lbsCatalogo) ? S.lbsCatalogo : [];
+      if(lbsSales.length > 0 && lbsCat.length > 0){
+        var lbsAgg = {};
+        lbsSales.forEach(function(s){
+          if(!lbsAgg[s.catId]) lbsAgg[s.catId] = {n:0, tot:0};
+          lbsAgg[s.catId].n += 1;
+          lbsAgg[s.catId].tot += (s.cuota||0);
+        });
+        html += '<div style="background:white;border:1px solid #D8DEEE;border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 6px rgba(31,56,100,.06)">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">';
+        html += '<div style="font-size:13px;font-weight:800;color:#0B1E3F">🏥 Producción LBS Seguros</div>';
+        html += '<div style="font-size:10px;color:#718096">Régimen <strong style="color:#0891B2">n+1</strong></div></div>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:11px"><thead><tr style="background:#F4F6FB;color:#475569"><th style="text-align:left;padding:6px 8px">Producto</th><th style="text-align:center;padding:6px 8px">Pól.</th><th style="text-align:right;padding:6px 8px">Cuotas</th><th style="text-align:right;padding:6px 8px">%</th><th style="text-align:right;padding:6px 8px">Comisión</th></tr></thead><tbody>';
+        var lbsTot = 0;
+        lbsCat.forEach(function(prod){
+          var agg = lbsAgg[prod.id];
+          if(!agg) return;
+          var lc = agg.tot * (prod.pct||0.17);
+          lbsTot += lc;
+          html += '<tr style="border-bottom:1px solid #F1F5F9">';
+          html += '<td style="padding:6px 8px"><span style="margin-right:6px">' + prod.icon + '</span><strong style="color:#0B1E3F">' + prod.nombre + '</strong></td>';
+          html += '<td style="text-align:center;padding:6px 8px;color:#475569">' + agg.n + '</td>';
+          html += '<td style="text-align:right;padding:6px 8px;color:#475569">' + Math.round(agg.tot).toLocaleString('es-ES') + '€</td>';
+          html += '<td style="text-align:right;padding:6px 8px;color:' + prod.color + ';font-weight:700">' + Math.round((prod.pct||0.17)*100) + '%</td>';
+          html += '<td style="text-align:right;padding:6px 8px"><strong style="color:#16A34A">' + Math.round(lc).toLocaleString('es-ES') + '€</strong></td>';
+          html += '</tr>';
+        });
+        html += '<tr style="background:#F0FDF4"><td colspan="4" style="padding:8px;font-weight:700;color:#15803D">Total LBS</td><td style="text-align:right;padding:8px"><strong style="color:#16A34A;font-size:13px">' + Math.round(lbsTot).toLocaleString('es-ES') + '€</strong></td></tr>';
+        html += '</tbody></table></div>';
+      }
+    } catch(e){ console.warn('LBS detalle:', e); }
+
+    // ── PRODUCCIÓN DETALLADA PARTNERS + LIQUIDACIÓN ──
+    try {
+      var pSales = (typeof S === 'object' && S && S.userPartnerSales && S.userPartnerSales[u.id]) ? S.userPartnerSales[u.id] : [];
+      var pCfg = (typeof S === 'object' && S && S.partnersConfig) ? S.partnersConfig : null;
+      if(pSales.length > 0 && pCfg){
+        var rep = (typeof S === 'object' && S && S.repartoComisiones && S.repartoComisiones[u.figura]) ? S.repartoComisiones[u.figura] : {ref_propias:0.40};
+        var pPct = pCfg.pctComision || 0.40;
+        html += '<div style="background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 100%);border:1px solid #FCD34D;border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(202,138,4,.12)">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">';
+        html += '<div style="font-size:13px;font-weight:800;color:#92400E">🤝 Liquidación Partners · ' + (u.figura==='externo'?'Agente Externo':'Agente Interno') + '</div>';
+        html += '<div style="font-size:10px;color:#92400E">Régimen <strong>n+2</strong></div></div>';
+        html += '<div style="background:white;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:10px;color:#475569"><strong style="color:#0B1E3F">Fórmula:</strong> Cuota × <strong>' + Math.round(pPct*100) + '%</strong> comisión × <strong>' + Math.round(rep.ref_propias*100) + '%</strong> reparto</div>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:11px"><thead><tr style="color:#92400E"><th style="text-align:left;padding:6px 8px">Plan · Tier</th><th style="text-align:center;padding:6px 8px">Fecha</th><th style="text-align:right;padding:6px 8px">Cuota</th><th style="text-align:right;padding:6px 8px">Bruto</th><th style="text-align:right;padding:6px 8px">Neto</th></tr></thead><tbody>';
+        var tB = 0, tN = 0;
+        pSales.forEach(function(ps){
+          var plan = (pCfg.planes||[]).find(function(x){return x.id===ps.planId;}) || {nombre:ps.planId, icon:'🤝'};
+          var tier = (pCfg.tiers||[]).find(function(x){return x.id===ps.tierId;}) || {nombre:ps.tierId};
+          var br = (ps.cuota||0) * pPct;
+          var nt = br * rep.ref_propias;
+          tB += br; tN += nt;
+          html += '<tr style="border-bottom:1px solid rgba(252,211,77,.4);background:rgba(255,255,255,.4)">';
+          html += '<td style="padding:6px 8px"><span style="margin-right:5px">' + plan.icon + '</span><strong style="color:#0B1E3F">' + plan.nombre + ' · ' + tier.nombre + '</strong></td>';
+          html += '<td style="text-align:center;padding:6px 8px;color:#475569">' + ps.fecha + '</td>';
+          html += '<td style="text-align:right;padding:6px 8px;color:#475569">' + Math.round(ps.cuota||0).toLocaleString('es-ES') + '€</td>';
+          html += '<td style="text-align:right;padding:6px 8px;color:#92400E">' + Math.round(br).toLocaleString('es-ES') + '€</td>';
+          html += '<td style="text-align:right;padding:6px 8px"><strong style="color:#16A34A">' + Math.round(nt).toLocaleString('es-ES') + '€</strong></td>';
+          html += '</tr>';
+        });
+        html += '<tr style="background:#FEF3C7"><td colspan="3" style="padding:8px;font-weight:700;color:#92400E">TOTAL LIQUIDACIÓN</td><td style="text-align:right;padding:8px;color:#92400E"><strong>' + Math.round(tB).toLocaleString('es-ES') + '€</strong></td><td style="text-align:right;padding:8px"><strong style="color:#16A34A;font-size:13px">' + Math.round(tN).toLocaleString('es-ES') + '€</strong></td></tr>';
+        html += '</tbody></table></div>';
+      }
+    } catch(e){ console.warn('Partners detalle:', e); }
+
+    // ── TILES DE ACCESOS ──
+    html += '<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Tus accesos</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+    var accSeg = isAdmin || u.accesoSeguros;
+    html += renderTile('seguros', '🛡️', 'ASISA', 'Pólizas, CVR y comisiones', '#1F3864', accSeg);
+    if(typeof PRODUCT_MODULES === 'object' && PRODUCT_MODULES){
+      Object.keys(PRODUCT_MODULES).forEach(function(k){
+        try {
+          var M = PRODUCT_MODULES[k];
+          var acc = isAdmin || (M.accessKey ? u[M.accessKey] : false);
+          html += renderTile(k, M.icon, M.label, M.desc, M.color, acc);
+        } catch(e){}
+      });
+    }
+    var accAct = isAdmin || u.accesoActividad;
+    html += renderTile('actividad', '⏱️', 'Actividad', 'Tareas y método Pomodoro', '#16A34A', accAct);
+    if(isAdmin){
+      html += renderTile('admin', '⚙️', 'Configurador', 'Usuarios, permisos y comisiones', '#C9A227', true);
+    }
+    html += '<button class="tile" onclick="openMiCuentaModal()" style="background:white;border:1px solid #D8DEEE;border-radius:14px;padding:16px;cursor:pointer;text-align:left;position:relative">';
+    html += '<div style="width:44px;height:44px;border-radius:11px;background:#FBE9E7;color:#C2410C;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px">👤</div>';
+    html += '<div style="font-size:14px;font-weight:700;color:#1A2240;margin-bottom:2px">Mi cuenta</div>';
+    html += '<div style="font-size:11px;color:#718096">Cambiar mi contraseña</div></button>';
+    html += '</div></div>';
+
+    homeEl.innerHTML = html;
+  } catch(err) {
+    console.error('[renderHome v15] ERROR:', err);
+    var msg = (err && err.message) ? String(err.message).replace(/</g,'&lt;') : 'desconocido';
+    var stk = (err && err.stack) ? String(err.stack).replace(/</g,'&lt;') : '(sin stack)';
+    homeEl.innerHTML = '<div style="padding:16px;margin:14px;background:#FEE2E2;border:2px solid #DC2626;border-radius:10px;color:#7F1D1D;font-family:monospace;font-size:11px">'
+      + '<div style="font-size:14px;font-weight:700;margin-bottom:10px;color:#991B1B">⚠ Error renderizando Home</div>'
+      + '<div style="margin-bottom:6px"><strong>Mensaje:</strong> ' + msg + '</div>'
+      + '<details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700">Ver stack trace</summary>'
+      + '<div style="white-space:pre-wrap;font-size:10px;line-height:1.4;background:#fff;padding:8px;border-radius:6px;border:1px solid #FCA5A5;margin-top:6px">' + stk + '</div></details>'
+      + '</div>';
+  }
+}
+
+
+function renderTile(pageId, icon, name, desc, color, active){
+  var s = active ? "" : "opacity:.45;pointer-events:none";
+  var tag = active ? '<span style="position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:3px 7px;border-radius:6px;text-transform:uppercase;background:#DCFCE7;color:#16A34A">Activo</span>' : '<span style="position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:3px 7px;border-radius:6px;text-transform:uppercase;background:#FEE2E2;color:#DC2626">No asignado</span>';
+  var click = active ? 'onclick="goTo(\'' + pageId + '\')"' : '';
+  return '<button class="tile" ' + click + ' style="background:white;border:1px solid ' + color + '33;border-radius:14px;padding:16px;cursor:pointer;text-align:left;position:relative;' + s + '">' +
+    tag +
+    '<div style="width:44px;height:44px;border-radius:11px;background:' + color + '1F;color:' + color + ';display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px">' + icon + '</div>' +
+    '<div style="font-size:14px;font-weight:700;color:#1A2240;margin-bottom:2px">' + name + '</div>' +
+    '<div style="font-size:11px;color:#718096;line-height:1.4">' + desc + '</div>' +
+    '</button>';
+}
+
+/* ════════════════════════════════════════════
+   PÁGINA: SEGUROS
+   ════════════════════════════════════════════ */
+function getRatesForUser(u){
+  const r = S.repartoComisiones[u.figura] || S.repartoComisiones.interno;
+  return { sis: r.ref_sistema, aut: r.ref_propias, fig: r };
+}
+
+function calcSeguros(userId){
+  const u=S.users.find(x=>x.id===userId)||currentUser;
+  const data=S.userSeguros[userId]||{leads:0,polizas:{}};
+  const leads=data.leads||0;
+  const pol=data.polizas||{};
+  const rates=getRatesForUser(u);
+  let tp=0,lcSis=0,lcAut=0;
+  const rows={};
+  Object.keys(S.comisionesAsisa).forEach(r=>{
+    const cfg=S.comisionesAsisa[r];
+    const v=pol[r]||{sis:[],aut:[]};
+    let rTp=0,rLcSis=0,rLcAut=0;
+    (v.sis||[]).forEach(({p})=>{ const cb=p*cfg.pct; rTp+=p; rLcSis+=cb*rates.sis; });
+    (v.aut||[]).forEach(({p})=>{ const cb=p*cfg.pct; rTp+=p; rLcAut+=cb*rates.aut; });
+    tp+=rTp; lcSis+=rLcSis; lcAut+=rLcAut;
+    if((v.sis||[]).length+(v.aut||[]).length>0)
+      rows[r]={nSis:(v.sis||[]).length,nAut:(v.aut||[]).length,totPrima:rTp,liqSis:rLcSis,liqAut:rLcAut,liqCloser:rLcSis+rLcAut};
+  });
+  const totPol=Object.keys(S.comisionesAsisa).reduce((s,r)=>s+((pol[r]?.sis||[]).length+(pol[r]?.aut||[]).length),0);
+  const cvr=totPol/Math.max(1,leads);
+  const nv=S.nivelesCvr.find(n=>cvr>=n.min)||S.nivelesCvr[S.nivelesCvr.length-1];
+  const bonoAmt=tp*nv.bono;
+  return{leads,pol,rates,tp,lcSis,lcAut,lc:lcSis+lcAut,rows,totPol,cvr,nv,bonoAmt,
+    totalCobro: lcSis+lcAut+bonoAmt};
+}
+
+// ─── Cálculo genérico para módulos de producto (Partners / Comunicaciones / Energía) ───
+function calcModule(modKey, userId){
+  const M = PRODUCT_MODULES[modKey];
+  const sales = S[M.salesKey][userId] || [];
+  const pct = S[M.cfgKey]?.pctComision || 0.40;
+  let total = 0;
+  sales.forEach(s=>{ total += (s.cuota||0) * pct; });
+  return { sales, pct, total, M };
+}
+
+const fmt=n=>Math.round(Math.abs(n)).toLocaleString('es-ES')+'€';
+
+function renderSeguros(){
+  const u=currentUser;
+  const isAdmin=u.role==='admin'||u.role==='tech'||u.role==='supervisor';
+  // Si admin: selector de usuario; si no: solo el suyo
+  const userId = (isAdmin && S._segUser) ? S._segUser : (isAdmin?u.id:u.id);
+  if(isAdmin && !S._segUser) S._segUser=u.id;
+  const targetU = S.users.find(x=>x.id===(S._segUser||u.id));
+  if(!S.userSeguros[targetU.id]) S.userSeguros[targetU.id]={leads:0,polizas:{}};
+  const C = calcSeguros(targetU.id);
+  const pct=Math.round(C.cvr*100);
+  const fig=S.repartoComisiones[targetU.figura];
+
+  let html='';
+
+  // Selector de usuario (solo admin)
+  if(isAdmin){
+    html+=`<div class="card card-pad" style="margin-bottom:14px">
+      <div class="fld-lbl">Ver datos del colaborador</div>
+      <select class="fld-sel" onchange="S._segUser=this.value;saveState();renderSeguros()">
+        ${S.users.filter(x=>x.role==='closer'||x.id===u.id).map(x=>`<option value="${x.id}" ${x.id===targetU.id?'selected':''}>${x.name} · ${S.repartoComisiones[x.figura].label}</option>`).join('')}
+      </select>
+    </div>`;
+  }
+
+  // Banner figura
+  html+=`<div class="figura-banner">
+    <div class="fig-ic">${fig.icon}</div>
+    <div class="fig-info">
+      <div class="fig-name">${fig.label}</div>
+      <div class="fig-detail">${fig.desc}</div>
+    </div>
+  </div>`;
+
+  // GHL data source banner
+  html+=`<div style="background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 100%);color:white;border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:11px">
+    <span style="font-size:18px">📊</span>
+    <div style="flex:1">
+      <strong style="font-size:12px">Datos sincronizados con GoHighLevel</strong><br>
+      <span style="opacity:.85;font-size:10px">Leads, contactados, presupuestos y pólizas se actualizan automáticamente desde el CRM. No editar a mano.</span>
+    </div>
+  </div>`;
+
+  // CVR Hero
+  const CIRC=2*Math.PI*37;
+  const off=CIRC*(1-Math.min(pct,100)/100);
+  html+=`<div class="cvr-card">
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 84 84">
+        <circle class="ring-bg" cx="42" cy="42" r="34"/>
+        <circle class="ring-fill" cx="42" cy="42" r="34"
+          stroke-dasharray="${2*Math.PI*34}" stroke-dashoffset="${(2*Math.PI*34)*(1-Math.min(pct,100)/100)}" stroke="${C.nv.c}"/>
+      </svg>
+      <div class="ring-center"><div class="ring-pct">${pct}%</div><div class="ring-lbl">CVR</div></div>
+    </div>
+    <div class="cvr-right">
+      <div class="cvr-nivel" style="background:${C.nv.bg};color:${C.nv.c}">${C.nv.lbl}</div>
+      <div class="cvr-stats-row">
+        <div class="cs-item"><div class="cs-val">${C.leads}</div><div class="cs-lbl">Leads</div></div>
+        <div class="cs-item"><div class="cs-val">${C.totPol}</div><div class="cs-lbl">Pólizas</div></div>
+        <div class="cs-item"><div class="cs-val">${fmt(C.totalCobro)}</div><div class="cs-lbl">Comisión €</div></div>
+      </div>
+    </div>
+  </div>`;
+
+  // Próximo nivel · widget motivacional
+  const niveles = S.nivelesCvr;
+  const idxActual = niveles.findIndex(n=>C.cvr>=n.min);
+  const siguiente = idxActual > 0 ? niveles[idxActual-1] : null;
+  if(siguiente){
+    const cierresFaltan = Math.ceil((siguiente.min * Math.max(1,C.leads)) - C.totPol);
+    const bonusExtra = (siguiente.bono - C.nv.bono) * C.tp;
+    html+=`<div style="background:linear-gradient(135deg,${siguiente.bg} 0%,#FFFFFF 100%);border:2px solid ${siguiente.bd};border-radius:14px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div>
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em">Próximo nivel</div>
+          <div style="font-size:16px;font-weight:800;color:${siguiente.c};margin-top:2px">${siguiente.lbl}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase">Bonus extra/mes</div>
+          <div style="font-size:18px;font-weight:800;color:${siguiente.c}">+${fmt(Math.max(0,bonusExtra))}</div>
+        </div>
+      </div>
+      <div style="background:white;border-radius:8px;padding:10px;border:1px dashed ${siguiente.bd}">
+        <div style="font-size:13px;color:var(--text);font-weight:600">Te faltan <span style="color:${siguiente.c};font-size:18px;font-weight:800">${Math.max(0,cierresFaltan)}</span> cierres más este mes para subir a ${siguiente.lbl.replace(/[🟢🔵🟡🟠🔴]\s*/,'')} <span style="color:${siguiente.c}">(+${(siguiente.bono*100).toFixed(2)}% sobre prima)</span></div>
+      </div>
+    </div>`;
+  } else {
+    html+=`<div style="background:linear-gradient(135deg,#DCFCE7 0%,#FFFFFF 100%);border:2px solid #86EFAC;border-radius:14px;padding:14px;margin-bottom:14px;text-align:center">
+      <div style="font-size:24px;margin-bottom:4px">🏆</div>
+      <div style="font-size:14px;font-weight:800;color:#16A34A">¡Nivel máximo · Élite!</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px">Sigue así para mantener el bonus +1,00% sobre prima</div>
+    </div>`;
+  }
+
+  // Producción del mes (de GHL) - métricas mock
+  const ghl_leads = C.leads;
+  const ghl_contactados = Math.round(C.leads * 0.85);
+  const ghl_presupuestos = Math.round(C.leads * 0.45);
+  const ghl_polizas = C.totPol;
+  html+=`<div class="sec">
+    <div class="sec-title" style="display:flex;align-items:center;gap:6px"><span>Producción del mes</span><span style="background:#EDE9FE;color:#7C3AED;font-size:8px;padding:2px 6px;border-radius:8px;font-weight:700">📊 GHL</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px">
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:18px;font-weight:800;color:#1F3864">${ghl_leads}</div>
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:2px">Asignados</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:18px;font-weight:800;color:#2563EB">${ghl_contactados}</div>
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:2px">Contactados</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:18px;font-weight:800;color:#D97706">${ghl_presupuestos}</div>
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:2px">Presupuestos</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:18px;font-weight:800;color:#16A34A">${ghl_polizas}</div>
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:2px">Pólizas</div>
+      </div>
+    </div>
+  </div>`;
+
+  // Leads control
+  html+=`<div class="sec">
+    <div class="sec-title">Control de leads</div>
+    <div class="card card-pad">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <span style="font-size:13px;color:var(--text2)">Leads asignados</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn btn-out btn-sm" onclick="chLeads(-5)">−</button>
+          <div style="font-size:24px;font-weight:800;color:var(--brand);min-width:46px;text-align:center">${C.leads}</div>
+          <button class="btn btn-out btn-sm" onclick="chLeads(5)">+</button>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text3)">CVR actual <strong style="color:${C.nv.c}">${pct}%</strong> · ${C.nv.bs}</div>
+    </div>
+  </div>`;
+
+  // Comisiones
+  html+=`<div class="sec">
+    <div class="sec-title" style="display:flex;align-items:center;gap:6px"><span>Comisiones de ${targetU.name.split(' ')[0]} este mes (€)</span><span style="background:#FEF3C7;color:#B45309;font-size:8px;padding:2px 6px;border-radius:8px;font-weight:700">CALCULADO</span></div>
+    <div class="com-grid">
+      <div class="com-c hi-sis">
+        <div class="com-c-lbl">Leads sistema</div>
+        <div class="com-c-val" style="color:var(--brand)">${fmt(C.lcSis)}</div>
+        <div class="com-c-sub">${Object.values(C.pol).reduce((s,r)=>s+(r.sis||[]).length,0)} pólizas</div>
+      </div>
+      <div class="com-c hi-aut">
+        <div class="com-c-lbl">Referencias propias</div>
+        <div class="com-c-val" style="color:var(--green)">${fmt(C.lcAut)}</div>
+        <div class="com-c-sub">${Object.values(C.pol).reduce((s,r)=>s+(r.aut||[]).length,0)} pólizas</div>
+      </div>
+      <div style="grid-column:span 2;background:${C.nv.bg};border:1.5px solid ${C.nv.bd};border-radius:var(--r-sm);padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--text3);letter-spacing:.05em">Bono CVR</div>
+          <div style="font-size:11px;color:var(--text3)">${C.nv.bs}</div>
+        </div>
+        <div style="font-size:21px;font-weight:800;color:${C.nv.c}">${fmt(C.bonoAmt)}</div>
+      </div>
+      <div class="com-total-row">
+        <div>
+          <div class="com-total-lbl">Total ASISA · vía ${SEGUROS_PAGADOR}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.55)">${fmt(C.lcSis)} sis + ${fmt(C.lcAut)} prop + ${fmt(C.bonoAmt)} bono</div>
+        </div>
+        <div class="com-total-val">${fmt(C.totalCobro)}</div>
+      </div>
+    </div>
+  </div>`;
+
+  // Producción por ramo
+  html+=`<div class="sec">
+    <div class="sec-title">Producción por ramo · toca para editar</div>
+    <div class="card" id="ramos-wrap"></div>
+  </div>`;
+
+  document.getElementById('page-seguros').innerHTML=html;
+  buildRamos(targetU.id, C);
+}
+
+// ─── Render genérico de página de módulo de producto ───
+let _moduleSelectedUser = {};
+
+function renderModulePage(modKey){
+  const M = PRODUCT_MODULES[modKey];
+  if(!M) return;
+  const u=currentUser;
+  const isAdmin = u.role==='admin'||u.role==='tech'||u.role==='supervisor';
+  const targetUid = (isAdmin && _moduleSelectedUser[modKey]) ? _moduleSelectedUser[modKey] : u.id;
+  if(isAdmin && !_moduleSelectedUser[modKey]) _moduleSelectedUser[modKey]=u.id;
+  const targetU = S.users.find(x=>x.id===targetUid) || u;
+  const C = calcModule(modKey, targetU.id);
+
+  let html='';
+
+  // Selector de usuario (admin)
+  if(isAdmin){
+    html+=`<div class="card card-pad" style="margin-bottom:14px">
+      <div class="fld-lbl">Ver datos de</div>
+      <select class="fld-sel" onchange="_moduleSelectedUser['${modKey}']=this.value;saveState();renderModulePage('${modKey}')">
+        ${S.users.filter(x=>x[M.accessKey]||x.role==='admin'||x.role==='tech').map(x=>`<option value="${x.id}" ${x.id===targetU.id?'selected':''}>${x.name}</option>`).join('')}
+      </select>
+    </div>`;
+  }
+
+  // Hero card del módulo
+  html+=`<div class="cvr-card" style="background:linear-gradient(140deg,${M.color},${M.color}DD)">
+    <div style="font-size:46px;flex-shrink:0">${M.icon}</div>
+    <div class="cvr-right">
+      <div style="font-size:13px;font-weight:700;color:white">${M.label} <span style="font-size:9px;background:rgba(255,255,255,.18);padding:2px 7px;border-radius:8px;font-weight:600;margin-left:4px">vía ${M.pagador}</span></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.65);margin-bottom:8px">${M.desc}</div>
+      <div class="cvr-stats-row">
+        <div class="cs-item"><div class="cs-val">${C.sales.length}</div><div class="cs-lbl">${C.sales.length===1?M.saleNoun:M.saleNounPlural}</div></div>
+        <div class="cs-item"><div class="cs-val">${Math.round(C.pct*100)}%</div><div class="cs-lbl">Comisión</div></div>
+        <div class="cs-item"><div class="cs-val">${fmt(C.total)}</div><div class="cs-lbl">Cobro</div></div>
+      </div>
+    </div>
+  </div>`;
+
+  // Lista de ventas
+  html+=`<div class="sec">
+    <div class="sec-title">
+      <span>${M.saleNounPlural[0].toUpperCase()+M.saleNounPlural.slice(1)} registrad${M.saleNounPlural.endsWith('s')?'os':'as'}</span>
+      <button class="btn btn-pri btn-sm" onclick="openAddSaleModal('${modKey}','${targetU.id}')">+ ${M.addBtnLabel}</button>
+    </div>
+    <div class="card" id="${modKey}-list"></div>
+  </div>`;
+
+  document.getElementById('page-'+modKey).innerHTML = html;
+  buildSalesList(modKey, targetU.id);
+}
+
+function buildSalesList(modKey, userId){
+  const M = PRODUCT_MODULES[modKey];
+  const wrap = document.getElementById(modKey+'-list');
+  if(!wrap) return;
+  const sales = S[M.salesKey][userId] || [];
+  const cfg = S[M.cfgKey];
+  const pct = cfg?.pctComision || 0.40;
+  const isMatrix = cfg?.mode==='matrix';
+  if(sales.length===0){
+    wrap.innerHTML=`<div class="empty-state" style="border:none;padding:20px"><span class="empty-ic">${M.icon}</span>Sin ${M.saleNounPlural} todavía.<br><span style="font-size:11px">Pulsa "+ ${M.addBtnLabel}" para registrar el primero.</span></div>`;
+    return;
+  }
+  let h='';
+  sales.forEach(s=>{
+    let nombre, icon, color, metaExtra='';
+    if(isMatrix){
+      const plan = cfg.planes.find(p=>p.id===s.planId) || {nombre:'?',icon:'❓',color:'#999'};
+      const tier = cfg.tiers.find(t=>t.id===s.tierId) || {nombre:'?',label:''};
+      nombre = `${plan.nombre} · ${tier.nombre}`;
+      icon = plan.icon;
+      color = plan.color;
+      metaExtra = `<span>·</span><span>${tier.label}</span>`;
+    } else {
+      const cat = S[M.catKey] || [];
+      const tipo = cat.find(t=>t.id===s.tipoId) || {nombre:'Desconocido',color:'#999',icon:'❓'};
+      nombre = tipo.nombre;
+      icon = tipo.icon;
+      color = tipo.color;
+      if(tipo.multi&&s.nActividades) metaExtra=`<span>·</span><span>${s.nActividades} unidades</span>`;
+    }
+    const com = (s.cuota||0)*pct;
+    h+=`<div class="usr-row">
+      <div class="task-color" style="background:${color};height:36px;width:6px;border-radius:3px"></div>
+      <div class="usr-info">
+        <div class="usr-name">${icon} ${nombre}</div>
+        <div class="usr-meta">
+          <span>${s.fecha||''}</span>
+          ${metaExtra}
+          <span>·</span><span>Cuota <strong>${(s.cuota||0).toLocaleString('es-ES')}€/mes</strong></span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em">Comisión</div>
+        <div style="font-size:15px;font-weight:800;color:var(--accent)">${fmt(com)}</div>
+        <button class="btn btn-danger btn-sm" style="margin-top:4px" onclick="delSale('${modKey}','${userId}','${s.id}')" title="Eliminar">×</button>
+      </div>
+    </div>`;
+  });
+  wrap.innerHTML=h;
+}
+
+function buildPartners(userId, C){
+  const wrap=document.getElementById('partners-wrap');
+  if(!wrap) return;
+  const sales = S.userPartnerSales[userId] || [];
+  const pct = S.partnersConfig?.pctComision || 0.40;
+  if(sales.length===0){
+    wrap.innerHTML=`<div class="empty-state" style="border:none;padding:18px"><span class="empty-ic">🤝</span>Sin plazas vendidas todavía.<br><span style="font-size:11px">Pulsa "+ Vender" para registrar la primera venta.</span></div>`;
+    return;
+  }
+  let h='';
+  sales.forEach((s,i)=>{
+    const tipo = S.partnersCatalogo.find(t=>t.id===s.tipoId) || {nombre:'Desconocido',color:'#999',icon:'❓'};
+    const com = (s.cuota||0)*pct;
+    h+=`<div class="usr-row">
+      <div class="task-color" style="background:${tipo.color};height:36px;width:6px;border-radius:3px"></div>
+      <div class="usr-info">
+        <div class="usr-name">${tipo.icon} ${tipo.nombre}${tipo.multi?' <span class="role-badge rb-tech">Multi</span>':''}</div>
+        <div class="usr-meta">
+          <span>${s.fecha||''}</span>
+          ${tipo.multi&&s.nActividades?`<span>·</span><span>${s.nActividades} actividades</span>`:''}
+          <span>·</span><span>Cuota <strong>${(s.cuota||0).toLocaleString('es-ES')}€</strong></span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em">Comisión</div>
+        <div style="font-size:15px;font-weight:800;color:var(--accent)">${fmt(com)}</div>
+        <button class="btn btn-danger btn-sm" style="margin-top:4px" onclick="delPartnerSale('${userId}','${s.id}')" title="Eliminar">×</button>
+      </div>
+    </div>`;
+  });
+  wrap.innerHTML=h;
+}
+
+// ─── Modal genérico de "vender" para Partners / Comunicaciones / Energía ───
+let _saleModuleKey = null;
+
+function openAddSaleModal(modKey, userId){
+  const M = PRODUCT_MODULES[modKey];
+  _saleModuleKey = modKey;
+  const cfg = S[M.cfgKey];
+  const today = new Date().toISOString().slice(0,10);
+  const isMatrix = cfg?.mode==='matrix';
+
+  if(isMatrix){
+    openModal(`
+      <div class="modal-hdr">
+        <div class="modal-title">${M.icon} ${M.addBtnLabel}</div>
+        <button class="hdr-btn" style="background:var(--bg);color:var(--text)" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="fld-row">
+          <div class="fld">
+            <div class="fld-lbl">Plan</div>
+            <select class="fld-sel" id="ps-plan" onchange="updMatrixCuota()">
+              ${cfg.planes.map(p=>`<option value="${p.id}">${p.icon} ${p.nombre}</option>`).join('')}
+            </select>
+          </div>
+          <div class="fld">
+            <div class="fld-lbl">Zona / Tier</div>
+            <select class="fld-sel" id="ps-tier" onchange="updMatrixCuota()">
+              ${cfg.tiers.map(t=>`<option value="${t.id}">${t.nombre} (${t.label})</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div class="fld-row">
+          <div class="fld">
+            <div class="fld-lbl">Cuota mensual</div>
+            <input class="fld-in" type="number" min="0" step="5" id="ps-cuota" readonly style="background:var(--bg)">
+          </div>
+          <div class="fld">
+            <div class="fld-lbl">Fecha</div>
+            <input class="fld-in" type="date" id="ps-fecha" value="${today}">
+          </div>
+        </div>
+        <div style="background:var(--accent-soft);border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:13px;color:#5c4400">
+          <strong>Comisión que cobrarás:</strong> <span id="ps-com" style="font-weight:800;font-size:15px">0€</span> · ${Math.round((cfg.pctComision||0.40)*100)}% sobre la primera mensualidad.
+        </div>
+      </div>
+      <div class="modal-ftr">
+        <button class="btn btn-out" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-pri" onclick="saveSaleMatrix('${modKey}','${userId}')">Registrar venta</button>
+      </div>
+    `);
+    updMatrixCuota();
+    return;
+  }
+
+  // Modo flat (Comunicaciones, Energía...)
+  openModal(`
+    <div class="modal-hdr">
+      <div class="modal-title">${M.icon} ${M.addBtnLabel}</div>
+      <button class="hdr-btn" style="background:var(--bg);color:var(--text)" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="fld">
+        <div class="fld-lbl">Tipo</div>
+        <select class="fld-sel" id="ps-tipo" onchange="updSaleCuota()">
+          ${S[M.catKey].map(t=>`<option value="${t.id}">${t.icon} ${t.nombre} · ${t.cuota}€/mes${t.multi?' (multi)':''}</option>`).join('')}
+        </select>
+      </div>
+      <div class="fld-row">
+        <div class="fld">
+          <div class="fld-lbl">Cuota mensual cobrada</div>
+          <input class="fld-in" type="number" min="0" step="5" id="ps-cuota">
+        </div>
+        <div class="fld">
+          <div class="fld-lbl">Fecha</div>
+          <input class="fld-in" type="date" id="ps-fecha" value="${today}">
+        </div>
+      </div>
+      <div class="fld" id="ps-nact-fld" style="display:none">
+        <div class="fld-lbl">Nº unidades / actividades (multi)</div>
+        <input class="fld-in" type="number" min="1" id="ps-nact" value="1">
+      </div>
+      <div style="background:var(--accent-soft);border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:12px;color:#5c4400">
+        <strong>Comisión que cobrarás:</strong> <span id="ps-com">0€</span> · ${Math.round((cfg?.pctComision||0.40)*100)}% sobre la primera cuota.
+      </div>
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-out" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-pri" onclick="saveSale('${modKey}','${userId}')">Registrar venta</button>
+    </div>
+  `);
+  updSaleCuota();
+  document.getElementById('ps-cuota').addEventListener('input',recalcSaleCom);
+  document.getElementById('ps-nact').addEventListener('input',recalcSaleCom);
+}
+
+function updMatrixCuota(){
+  const M = PRODUCT_MODULES[_saleModuleKey]; if(!M) return;
+  const cfg = S[M.cfgKey];
+  const planId = document.getElementById('ps-plan').value;
+  const tierId = document.getElementById('ps-tier').value;
+  const cuota = (cfg.precios?.[planId]?.[tierId]) || 0;
+  document.getElementById('ps-cuota').value = cuota;
+  document.getElementById('ps-com').textContent = fmt(cuota * (cfg.pctComision||0.40));
+}
+
+function saveSaleMatrix(modKey, userId){
+  const M = PRODUCT_MODULES[modKey];
+  const cfg = S[M.cfgKey];
+  const planId = document.getElementById('ps-plan').value;
+  const tierId = document.getElementById('ps-tier').value;
+  const cuota = (cfg.precios?.[planId]?.[tierId]) || 0;
+  const fecha = document.getElementById('ps-fecha').value;
+  if(cuota<=0) return alert('Cuota no válida.');
+  if(!S[M.salesKey][userId]) S[M.salesKey][userId]=[];
+  S[M.salesKey][userId].push({
+    id:modKey[0]+'s_'+Date.now(),
+    planId, tierId, cuota, fecha
+  });
+  saveState(); closeModal();
+  if(activePage===modKey) renderModulePage(modKey);
+}
+
+function updSaleCuota(){
+  const M = PRODUCT_MODULES[_saleModuleKey]; if(!M) return;
+  const tid=document.getElementById('ps-tipo').value;
+  const t=S[M.catKey].find(x=>x.id===tid);
+  if(!t) return;
+  document.getElementById('ps-cuota').value=t.cuota;
+  document.getElementById('ps-nact-fld').style.display = t.multi?'block':'none';
+  recalcSaleCom();
+}
+
+function recalcSaleCom(){
+  const M = PRODUCT_MODULES[_saleModuleKey]; if(!M) return;
+  const cuota=parseFloat(document.getElementById('ps-cuota').value)||0;
+  const tid=document.getElementById('ps-tipo').value;
+  const t=S[M.catKey].find(x=>x.id===tid);
+  let cuotaFinal=cuota;
+  if(t&&t.multi){
+    const n=parseInt(document.getElementById('ps-nact').value)||1;
+    cuotaFinal=cuota*n;
+  }
+  const pct=S[M.cfgKey]?.pctComision||0.40;
+  document.getElementById('ps-com').textContent=fmt(cuotaFinal*pct);
+}
+
+function saveSale(modKey, userId){
+  const M = PRODUCT_MODULES[modKey];
+  const tid=document.getElementById('ps-tipo').value;
+  const t=S[M.catKey].find(x=>x.id===tid);
+  let cuota=parseFloat(document.getElementById('ps-cuota').value)||0;
+  const fecha=document.getElementById('ps-fecha').value;
+  let nAct=null;
+  if(t&&t.multi){
+    nAct=parseInt(document.getElementById('ps-nact').value)||1;
+    cuota = cuota * nAct;
+  }
+  if(!t||cuota<=0) return alert('Datos no válidos.');
+  if(!S[M.salesKey][userId]) S[M.salesKey][userId]=[];
+  S[M.salesKey][userId].push({
+    id:modKey[0]+'s_'+Date.now(),
+    tipoId:tid, cuota, fecha,
+    ...(nAct?{nActividades:nAct}:{})
+  });
+  saveState(); closeModal();
+  if(activePage===modKey) renderModulePage(modKey);
+}
+
+function delSale(modKey, userId, saleId){
+  const M = PRODUCT_MODULES[modKey];
+  if(!confirm('¿Eliminar esta venta?')) return;
+  S[M.salesKey][userId]=(S[M.salesKey][userId]||[]).filter(s=>s.id!==saleId);
+  saveState();
+  if(activePage===modKey) renderModulePage(modKey);
+}
+
+// Compatibilidad con código antiguo (no se usa ya pero dejo redirección por si quedan referencias)
+function openAddPartnerModal(userId){ openAddSaleModal('partners',userId); }
+function delPartnerSale(userId,saleId){ delSale('partners',userId,saleId); }
+
+function chLeads(d){
+  const id=(currentUser.role==='admin'||currentUser.role==='tech')?(S._segUser||currentUser.id):currentUser.id;
+  if(!S.userSeguros[id]) S.userSeguros[id]={leads:0,polizas:{}};
+  S.userSeguros[id].leads=Math.max(1,Math.min(500,(S.userSeguros[id].leads||0)+d));
+  saveState(); renderSeguros();
+}
+
+function buildRamos(userId, C){
+  const wrap=document.getElementById('ramos-wrap');
+  const u=S.users.find(x=>x.id===userId);
+  const fig=S.repartoComisiones[u.figura];
+  let html='';
+  Object.keys(S.comisionesAsisa).forEach(r=>{
+    const cfg=S.comisionesAsisa[r];
+    const d=C.rows[r];
+    const open=S._openRamo===r?'open':'';
+    const cpaTxt=d?fmt(d.liqCloser):'—';
+    const pillsHtml=d?`<span class="rp tipo-sis">${d.nSis} sis</span> <span class="rp tipo-aut">${d.nAut} prop</span>`:`<span style="font-size:10px;color:var(--text3)">Sin pólizas · toca para añadir</span>`;
+    html+=`<div class="ramo-row ${open}" id="rr-${r}">
+      <div class="ramo-head" onclick="toggleRamo('${r}','${userId}')">
+        <div class="ramo-bar" style="background:${cfg.color}"></div>
+        <div class="ramo-info">
+          <div class="ramo-name">${cfg.nombre}</div>
+          <div class="ramo-pills">${pillsHtml}</div>
+        </div>
+        <div class="ramo-cpa">${cpaTxt}</div>
+        <span class="ramo-chev">▼</span>
+      </div>
+      <div class="ramo-body" id="rb-${r}"></div>
+    </div>`;
+  });
+  wrap.innerHTML=html;
+  if(S._openRamo) renderRamoBody(S._openRamo,userId);
+}
+
+function toggleRamo(r,userId){
+  if(S._openRamo===r){S._openRamo=null;}
+  else {S._openRamo=r;}
+  renderSeguros();
+}
+
+function renderRamoBody(r,userId){
+  const u=S.users.find(x=>x.id===userId);
+  const fig=S.repartoComisiones[u.figura];
+  const cfg=S.comisionesAsisa[r];
+  if(!S.userSeguros[userId].polizas[r]) S.userSeguros[userId].polizas[r]={sis:[],aut:[]};
+  const v=S.userSeguros[userId].polizas[r];
+  const body=document.getElementById('rb-'+r);
+  if(!body) return;
+  const renderTipo=(tipo,arr)=>{
+    const lbl=tipo==='sis'?'Leads sistema':'Referencias propias';
+    const rate=tipo==='sis'?fig.ref_sistema:fig.ref_propias;
+    const badge=tipo==='sis'?'tipo-sis':'tipo-aut';
+    let h=`<div style="display:flex;align-items:center;justify-content:space-between;margin:10px 0 6px">
+      <span class="rp ${badge}" style="font-size:10px">${lbl} (${arr.length})</span>
+      <button class="btn btn-sm" style="background:${cfg.color};color:white" onclick="addPol('${r}','${tipo}','${userId}')">+ Añadir</button>
+    </div>`;
+    if(arr.length===0) h+=`<div style="font-size:11px;color:var(--text3);text-align:center;padding:8px;font-style:italic">Sin pólizas</div>`;
+    arr.forEach((p,i)=>{
+      const cb=p.p*cfg.pct;
+      const cc=cb*rate;
+      h+=`<div style="margin-bottom:8px;border:1.5px solid ${cfg.color}33;border-radius:10px;background:white;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:${cfg.color}0D;border-bottom:1px solid ${cfg.color}22">
+          <span style="background:${cfg.color};color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">${i+1}</span>
+          <span class="rp ${badge}" style="font-size:9px">${tipo==='sis'?'Sistema':'Propia'}</span>
+          <span style="flex:1;font-size:11px;font-weight:600;color:${cfg.color}">Póliza ${i+1}</span>
+          <button onclick="delPol('${r}','${tipo}',${i},'${userId}')" style="width:22px;height:22px;border-radius:50%;border:1px solid var(--red-bd);background:var(--red-soft);color:var(--red);font-size:13px;cursor:pointer">×</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px">
+          <span style="font-size:11px;color:var(--text3);min-width:40px">Prima</span>
+          <input type="number" min="1" value="${p.p}" onchange="updPol('${r}','${tipo}',${i},'${userId}',this.value)"
+            style="flex:1;border:1.5px solid ${cfg.color}44;border-radius:8px;padding:7px 10px;font-size:15px;font-weight:700;background:var(--bg);outline:none">
+          <span style="font-size:11px;color:var(--text3)">€/año</span>
+          <div style="text-align:right;min-width:72px">
+            <div style="font-size:9px;color:var(--text3);font-weight:600">COMISIÓN €</div>
+            <div style="font-size:16px;font-weight:800;color:var(--green)">${Math.round(cc).toLocaleString('es-ES')}€</div>
+          </div>
+        </div>
+      </div>`;
+    });
+    return h;
+  };
+  const isAdmin = currentUser.role==='admin' || currentUser.role==='tech' || currentUser.role==='supervisor';
+  const detalleAdmin = isAdmin ? `
+    <div style="background:var(--bg);border-radius:var(--r-sm);padding:10px 12px;margin-top:8px;font-size:11px;color:var(--text2);border-left:3px solid var(--accent)">
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--text3);margin-bottom:4px;letter-spacing:.05em">Solo admin</div>
+      <div style="display:flex;justify-content:space-between"><span>Comisión ASISA</span><strong>${Math.round(cfg.pct*100)}%</strong></div>
+      <div style="display:flex;justify-content:space-between"><span>Reparto sistema (${u.figura==='interno'?'interno':'externo'})</span><strong style="color:var(--brand)">${Math.round(fig.ref_sistema*100)}%</strong></div>
+      <div style="display:flex;justify-content:space-between"><span>Reparto propias (${u.figura==='interno'?'interno':'externo'})</span><strong style="color:var(--green)">${Math.round(fig.ref_propias*100)}%</strong></div>
+    </div>
+  ` : '';
+  body.innerHTML=`
+    ${renderTipo('sis',v.sis||[])}
+    ${renderTipo('aut',v.aut||[])}
+    ${detalleAdmin}
+  `;
+}
+
+function addPol(r,tipo,userId){
+  const def={sal:835,vid:500,dec:180,den:180,acc:150,mas:250,via:120};
+  if(!S.userSeguros[userId].polizas[r]) S.userSeguros[userId].polizas[r]={sis:[],aut:[]};
+  S.userSeguros[userId].polizas[r][tipo].push({p:def[r]});
+  saveState(); renderSeguros();
+}
+function delPol(r,tipo,i,userId){
+  S.userSeguros[userId].polizas[r][tipo].splice(i,1);
+  saveState(); renderSeguros();
+}
+function updPol(r,tipo,i,userId,val){
+  const v=parseFloat(val);
+  if(!isNaN(v)&&v>0){
+    S.userSeguros[userId].polizas[r][tipo][i].p=v;
+    saveState(); renderSeguros();
+  }
+}
+
+/* ════════════════════════════════════════════
+   PÁGINA: ACTIVIDAD (Pomodoro + Tareas)
+   ════════════════════════════════════════════ */
+let pomoTimer=null;
+
+function getUserPomoState(uid){
+  if(!S.pomodoroState[uid]) S.pomodoroState[uid]={
+    mode:'work', // work | short | long
+    status:'idle', // idle | running | paused
+    secLeft: S.pomodoroConfig.work*60,
+    totalSec: S.pomodoroConfig.work*60,
+    currentTaskId:null,
+    sessionsToday:0,
+    minutesToday:0,
+    lastTick:null
+  };
+  return S.pomodoroState[uid];
+}
+
+function renderActividad(){
+  const u=currentUser;
+  const isAdmin=u.role==='admin'||u.role==='tech'||u.role==='supervisor';
+  // Solo el ADMIN puro ve €/h (ni closers ni técnico)
+  const seePrices = u.role==='admin';
+  // Asignaciones del usuario actual (o del seleccionado si admin)
+  const targetUid = (isAdmin && S._actUser) ? S._actUser : u.id;
+  if(isAdmin && !S._actUser) S._actUser=u.id;
+  const targetU=S.users.find(x=>x.id===targetUid);
+  const myAsig = S.asignaciones.filter(a=>a.userId===targetUid);
+  const ps=getUserPomoState(targetUid);
+  const tareaActiva = ps.currentTaskId?S.tareasCatalogo.find(t=>t.id===ps.currentTaskId):null;
+
+  let html='';
+
+  if(isAdmin){
+    html+=`<div class="card card-pad" style="margin-bottom:14px">
+      <div class="fld-lbl">Ver actividad de</div>
+      <select class="fld-sel" onchange="S._actUser=this.value;saveState();renderActividad()">
+        ${S.users.map(x=>`<option value="${x.id}" ${x.id===targetUid?'selected':''}>${x.name}</option>`).join('')}
+      </select>
+    </div>`;
+  }
+
+  // Aviso para colaborador
+  if(!isAdmin){
+    html+=`<div class="alert alert-info"><strong>Modo colaborador.</strong> Aquí ves tus tareas asignadas y la herramienta Pomodoro. El detalle económico lo gestiona el administrador.</div>`;
+  }
+
+  // Stats del día
+  const completadasHoy = myAsig.filter(a=>a.completada).length;
+  const minutosHoy = myAsig.reduce((s,a)=>s+(a.minutos||0),0);
+  const sesionesHoy = myAsig.reduce((s,a)=>s+(a.sesionesCompletadas||0),0);
+  html+=`<div class="act-stats">
+    <div class="act-stat"><div class="as-val">${sesionesHoy}</div><div class="as-lbl">Pomodoros</div></div>
+    <div class="act-stat"><div class="as-val">${Math.round(minutosHoy)}<span style="font-size:12px">min</span></div><div class="as-lbl">Tiempo</div></div>
+    <div class="act-stat"><div class="as-val">${completadasHoy}/${myAsig.length}</div><div class="as-lbl">Completadas</div></div>
+  </div>`;
+
+  // POMODORO CARD
+  const mins=Math.floor(ps.secLeft/60), secs=ps.secLeft%60;
+  const tStr=`${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  let pomoClass='idle';
+  if(ps.status==='running') pomoClass='run';
+  else if(ps.status==='paused') pomoClass='pause';
+  const modeLabels={work:'TRABAJANDO',short:'DESCANSO CORTO',long:'DESCANSO LARGO'};
+
+  // Selector de tarea actual: solo las que están asignadas a este usuario hoy
+  const tareasDelUsuario = myAsig
+    .filter(a=>!a.completada)
+    .map(a=>({a, t:S.tareasCatalogo.find(t=>t.id===a.tareaId)}))
+    .filter(x=>x.t);
+
+  let selectorHtml='';
+  if(tareasDelUsuario.length>0){
+    const noTask = ps.mode==='work' && !ps.currentTaskId;
+    selectorHtml=`<div class="card card-pad" style="margin-bottom:14px;${noTask&&ps.status==='idle'?'border:2px solid var(--amber)':''}">
+      <div class="fld-lbl" style="margin-bottom:6px">Tarea actual · ${noTask?'<span style="color:var(--amber)">elige una para poder iniciar</span>':'puedes cambiarla cuando esté en idle'}</div>
+      <select class="fld-sel" onchange="setCurrentTask('${targetUid}',this.value)" ${ps.status==='running'||ps.status==='paused'?'disabled':''}>
+        <option value="" ${!ps.currentTaskId?'selected':''}>— Elegir tarea —</option>
+        ${tareasDelUsuario.map(({a,t})=>`<option value="${t.id}" ${ps.currentTaskId===t.id?'selected':''}>${t.icon} ${t.nombre} · ${a.sesionesCompletadas||0}/${a.sesionesPlanificadas||0} pomodoros</option>`).join('')}
+      </select>
+      ${(ps.status==='running'||ps.status==='paused')?'<div style="font-size:10px;color:var(--text3);margin-top:4px">⏱️ Detén el Pomodoro para cambiar de tarea</div>':''}
+    </div>`;
+  } else {
+    selectorHtml=`<div class="alert alert-warn"><strong>Sin tareas asignadas.</strong> ${isAdmin?'Pulsa "+ Asignar" para asignarte una tarea.':'Habla con tu administrador para que te asigne tareas.'}</div>`;
+  }
+  html+=selectorHtml;
+  html+=`<div class="pomo-card ${pomoClass}">
+    <div class="pomo-mode">
+      <button class="pm-tab ${ps.mode==='work'?'act':''}" onclick="setPomoMode('${targetUid}','work')">Trabajo ${S.pomodoroConfig.work}m</button>
+      <button class="pm-tab ${ps.mode==='short'?'act':''}" onclick="setPomoMode('${targetUid}','short')">Pausa ${S.pomodoroConfig.short}m</button>
+      <button class="pm-tab ${ps.mode==='long'?'act':''}" onclick="setPomoMode('${targetUid}','long')">Larga ${S.pomodoroConfig.long}m</button>
+    </div>
+    <div class="pomo-task">${tareaActiva?tareaActiva.icon+' '+tareaActiva.nombre:modeLabels[ps.mode]}</div>
+    <div class="pomo-time">${tStr}</div>
+    <div class="pomo-ctrl">
+      ${ps.status==='idle'?`<button class="pomo-btn primary" onclick="tryStartPomo('${targetUid}')" ${(tareasDelUsuario.length===0||(ps.mode==='work'&&!ps.currentTaskId))?'disabled style="opacity:.45;cursor:not-allowed"':''}>▶ Iniciar</button>`:''}
+      ${ps.status==='running'?`<button class="pomo-btn primary" onclick="pomoPause('${targetUid}')">⏸ Pausar</button>`:''}
+      ${ps.status==='paused'?`<button class="pomo-btn primary" onclick="pomoResume('${targetUid}')">▶ Reanudar</button>`:''}
+      ${(ps.status==='running'||ps.status==='paused')?`<button class="pomo-btn" onclick="pomoStop('${targetUid}')">⏹ Detener</button>`:''}
+      <button class="pomo-btn" onclick="pomoReset('${targetUid}')">↺ Reset</button>
+    </div>
+  </div>`;
+
+  // TAREAS ASIGNADAS
+  html+=`<div class="sec">
+    <div class="sec-title">
+      <span>Tareas de hoy ${isAdmin?'· asignadas':''}</span>
+      ${isAdmin?`<button class="btn btn-out btn-sm" onclick="openAsignarModal('${targetUid}')">+ Asignar</button>`:''}
+    </div>
+    <div class="task-list">`;
+
+  if(myAsig.length===0){
+    html+=`<div class="empty-state"><span class="empty-ic">📋</span>${isAdmin?'No tienes tareas asignadas a este colaborador. Pulsa "+ Asignar".':'No tienes tareas asignadas hoy. Habla con tu administrador.'}</div>`;
+  } else {
+    myAsig.forEach(a=>{
+      const t=S.tareasCatalogo.find(tt=>tt.id===a.tareaId);
+      if(!t) return;
+      const sel = ps.currentTaskId===t.id;
+      const sesProgress = `${a.sesionesCompletadas||0}/${a.sesionesPlanificadas||0}`;
+      // Solo admin ve precio €/h y total
+      const precioHTML = seePrices
+        ? `<div class="task-price">${t.precioHora}€/h<div style="font-size:9px;color:var(--text3);font-weight:500">≈ ${(t.precioHora*((a.minutos||0)/60)).toFixed(2)}€ acumulado</div></div>`
+        : `<div class="price-hidden">·</div>`;
+      html+=`<div class="task-item ${sel?'selected':''}" onclick="selectTask('${targetUid}','${t.id}')">
+        <div class="task-color" style="background:${t.color}"></div>
+        <div class="task-info">
+          <div class="task-name">${t.icon} ${t.nombre}</div>
+          <div class="task-desc">${t.descripcion}</div>
+          <div class="task-meta">
+            <span class="task-pill">${sesProgress} pomodoros</span>
+            <span class="task-pill">${a.minutos||0} min</span>
+            ${a.completada?'<span class="task-pill" style="background:var(--green-soft);color:var(--green)">✓ Completada</span>':''}
+          </div>
+        </div>
+        ${precioHTML}
+      </div>`;
+    });
+  }
+  html+=`</div></div>`;
+
+  // Catálogo (solo admin/tech ven la lista; SOLO admin ve precios)
+  if(isAdmin){
+    html+=`<div class="sec">
+      <div class="sec-title">
+        <span>Catálogo de tareas${seePrices?' · solo admin':''}</span>
+        <button class="btn btn-out btn-sm" onclick="openTareaCatalogoModal()">+ Nueva</button>
+      </div>
+      <div class="card">`;
+    S.tareasCatalogo.forEach(t=>{
+      html+=`<div class="usr-row">
+        <div class="task-color" style="background:${t.color};height:38px"></div>
+        <div class="usr-info">
+          <div class="usr-name">${t.icon} ${t.nombre}</div>
+          <div class="usr-meta"><span>${t.descripcion}</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+          ${seePrices?`<span class="task-price" style="color:var(--accent);font-weight:800">${t.precioHora}€/h</span>`:''}
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-out btn-sm" onclick="openTareaCatalogoModal('${t.id}')">✎</button>
+            <button class="btn btn-danger btn-sm" onclick="delTareaCatalogo('${t.id}')">×</button>
+          </div>
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  }
+
+  document.getElementById('page-actividad').innerHTML=html;
+}
+
+function selectTask(uid,tid){
+  const ps=getUserPomoState(uid);
+  ps.currentTaskId = (ps.currentTaskId===tid)?null:tid;
+  saveState(); renderActividad();
+}
+function setCurrentTask(uid,tid){
+  const ps=getUserPomoState(uid);
+  ps.currentTaskId = tid || null;
+  saveState(); renderActividad();
+}
+function tryStartPomo(uid){
+  const ps=getUserPomoState(uid);
+  if(ps.mode==='work' && !ps.currentTaskId){
+    alert('Elige primero una tarea del desplegable.');
+    return;
+  }
+  pomoStart(uid);
+}
+
+function setPomoMode(uid, mode){
+  const ps=getUserPomoState(uid);
+  if(ps.status==='running') return;
+  ps.mode=mode;
+  ps.totalSec=S.pomodoroConfig[mode]*60;
+  ps.secLeft=ps.totalSec;
+  ps.status='idle';
+  saveState(); renderActividad();
+}
+function pomoStart(uid){
+  const ps=getUserPomoState(uid);
+  ps.status='running';
+  ps.lastTick=Date.now();
+  saveState(); startPomoTick(uid); renderActividad();
+}
+function pomoPause(uid){
+  const ps=getUserPomoState(uid);
+  if(ps.status!=='running') return;
+  // Aplicar el tiempo transcurrido antes de pausar
+  const dt=Math.floor((Date.now()-ps.lastTick)/1000);
+  ps.secLeft=Math.max(0,ps.secLeft-dt);
+  ps.status='paused';
+  ps.lastTick=null;
+  stopPomoTick();
+  saveState(); renderActividad();
+}
+function pomoResume(uid){
+  const ps=getUserPomoState(uid);
+  if(ps.status!=='paused') return;
+  ps.status='running';
+  ps.lastTick=Date.now();
+  saveState(); startPomoTick(uid); renderActividad();
+}
+function pomoStop(uid){
+  const ps=getUserPomoState(uid);
+  ps.status='idle';
+  ps.secLeft=ps.totalSec;
+  ps.lastTick=null;
+  stopPomoTick();
+  saveState(); renderActividad();
+}
+function pomoReset(uid){
+  const ps=getUserPomoState(uid);
+  ps.status='idle';
+  ps.totalSec=S.pomodoroConfig[ps.mode]*60;
+  ps.secLeft=ps.totalSec;
+  ps.lastTick=null;
+  stopPomoTick();
+  saveState(); renderActividad();
+}
+
+function startPomoTick(uid){
+  stopPomoTick();
+  pomoTimer=setInterval(()=>{
+    const ps=getUserPomoState(uid);
+    if(ps.status!=='running'){stopPomoTick();return;}
+    const now=Date.now();
+    const dt=Math.floor((now-(ps.lastTick||now))/1000);
+    if(dt>=1){
+      ps.secLeft=Math.max(0,ps.secLeft-dt);
+      ps.lastTick=now;
+      if(ps.secLeft<=0){
+        // Sesión terminada
+        if(ps.mode==='work'){
+          ps.sessionsToday=(ps.sessionsToday||0)+1;
+          const minWork=S.pomodoroConfig.work;
+          ps.minutesToday=(ps.minutesToday||0)+minWork;
+          // Asignar al task activo
+          if(ps.currentTaskId){
+            const a=S.asignaciones.find(x=>x.userId===uid && x.tareaId===ps.currentTaskId);
+            if(a){
+              a.sesionesCompletadas=(a.sesionesCompletadas||0)+1;
+              a.minutos=(a.minutos||0)+minWork;
+              if(a.sesionesPlanificadas && a.sesionesCompletadas>=a.sesionesPlanificadas) a.completada=true;
+            }
+          }
+          // Pasar a descanso
+          ps.mode = (ps.sessionsToday%S.pomodoroConfig.longEvery===0)?'long':'short';
+        } else {
+          ps.mode='work';
+        }
+        ps.totalSec=S.pomodoroConfig[ps.mode]*60;
+        ps.secLeft=ps.totalSec;
+        ps.status='idle';
+        ps.lastTick=null;
+        stopPomoTick();
+        try{ new Audio('data:audio/wav;base64,UklGRk4AAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YSoAAACAQ').play().catch(()=>{}); }catch(e){}
+        alert('Sesión completada · '+(ps.mode==='work'?'a trabajar':'descanso'));
+      }
+      saveState();
+      if(activePage==='actividad') renderActividad();
+    }
+  },1000);
+}
+function stopPomoTick(){ if(pomoTimer){clearInterval(pomoTimer);pomoTimer=null;} }
+
+/* ════════════════════════════════════════════
+   PÁGINA: ADMIN (Configurador)
+   ════════════════════════════════════════════ */
+let adminTab='users';
+function switchAdminTab(t){ adminTab=t; renderAdmin(); }
+
+function renderAdmin(){
+  if(!(currentUser.role==='admin'||currentUser.role==='tech')) return;
+  let html=`<div class="admin-tabs">
+    <button class="admin-tab ${adminTab==='users'?'act':''}" onclick="switchAdminTab('users')">👥 Usuarios</button>
+    <button class="admin-tab ${adminTab==='com'?'act':''}" onclick="switchAdminTab('com')">💰 Comisiones</button>
+    <button class="admin-tab ${adminTab==='tasks'?'act':''}" onclick="switchAdminTab('tasks')">📋 Tareas</button>
+    <button class="admin-tab ${adminTab==='tech'?'act':''}" onclick="switchAdminTab('tech')">🔧 Técnico GHL</button>
+  </div>`;
+
+  if(adminTab==='users') html+=adminUsers();
+  if(adminTab==='com') html+=adminComisiones();
+  if(adminTab==='tasks') html+=adminTasks();
+  if(adminTab==='tech') html+=adminTech();
+
+  document.getElementById('page-admin').innerHTML=html;
+}
+
+function adminUsers(){
+  let h=`<div class="alert alert-info"><strong>Gestión de colaboradores.</strong> Activa o desactiva acceso a <strong>Seguros</strong> y/o <strong>Actividad</strong> de forma independiente para cada usuario.</div>`;
+  h+=`<div class="sec"><div class="sec-title">
+    <span>Usuarios</span>
+    <button class="btn btn-pri btn-sm" onclick="openUserModal()">+ Añadir colaborador</button>
+  </div><div class="card">`;
+  S.users.forEach(u=>{
+    const ini=u.name.split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();
+    const isAdmin = u.role==='admin'||u.role==='tech'||u.role==='supervisor';
+    const nTareas = getTareasPermitidas(u).length;
+    const totalTareas = S.tareasCatalogo.length;
+    h+=`<div class="usr-row">
+      <div class="usr-av" style="background:${u.color}">${ini}</div>
+      <div class="usr-info">
+        <div class="usr-name">${u.name} ${u.role==='admin'?'<span class="role-badge rb-admin">Admin</span>':u.role==='tech'?'<span class="role-badge rb-tech">Técnico</span>':''}</div>
+        <div class="usr-meta">
+          <span>${u.email}</span>
+          <span>·</span>
+          <span class="role-badge ${u.figura==='interno'?'rb-int':'rb-ext'}">${u.figura==='interno'?'Interno':'Externo'}</span>
+          <span>·</span>
+          <span style="color:${nTareas>0?'var(--brand)':'var(--red)'};font-weight:600">${nTareas}/${totalTareas} tareas</span>
+        </div>
+      </div>
+      <div class="tog-grp">
+        <div style="display:grid;grid-template-columns:repeat(5,auto);gap:6px;align-items:center">
+          <div class="tog"><span title="ASISA">🛡️</span><div class="switch ${(u.accesoSeguros||isAdmin)?'on':''}" onclick="toggleAcceso('${u.id}','accesoSeguros')"></div></div>
+          <div class="tog"><span title="LBS Seguros">🏥</span><div class="switch ${(u.accesoLbs||isAdmin)?'on':''}" onclick="toggleAcceso('${u.id}','accesoLbs')"></div></div>
+          <div class="tog"><span title="Partners">🤝</span><div class="switch ${(u.accesoPartners||isAdmin)?'on':''}" onclick="toggleAcceso('${u.id}','accesoPartners')"></div></div>
+          <div class="tog"><span title="Comunicaciones">📞</span><div class="switch ${(u.accesoComunicaciones||isAdmin)?'on':''}" onclick="toggleAcceso('${u.id}','accesoComunicaciones')"></div></div>
+          <div class="tog"><span title="Energía">⚡</span><div class="switch ${(u.accesoEnergia||isAdmin)?'on':''}" onclick="toggleAcceso('${u.id}','accesoEnergia')"></div></div>
+          <div class="tog"><span title="Actividad">⏱️</span><div class="switch ${(u.accesoActividad||isAdmin)?'on':''}" onclick="toggleAcceso('${u.id}','accesoActividad')"></div></div>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:4px">
+          <button class="btn btn-out btn-sm" onclick="resetPass('${u.id}')" title="Cambiar contraseña">🔑</button>
+          <button class="btn btn-out btn-sm" onclick="openUserModal('${u.id}')" title="Editar">✎</button>
+          ${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm" onclick="delUser('${u.id}')" title="Borrar">🗑</button>`:''}
+        </div>
+      </div>
+    </div>`;
+  });
+  h+=`</div></div>`;
+  return h;
+}
+
+function openMiCuentaModal(){
+  const u=currentUser;
+  openModal(`
+    <div class="modal-hdr">
+      <div class="modal-title">👤 Mi cuenta</div>
+      <button class="hdr-btn" style="background:var(--bg);color:var(--text)" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--bg);border-radius:var(--r-sm);padding:12px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
+        <div class="usr-av" style="background:${u.color};width:46px;height:46px;font-size:16px">${u.name.split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase()}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:14px;font-weight:700">${u.name}</div>
+          <div style="font-size:11px;color:var(--text3)">${u.email}</div>
+        </div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">Cambiar contraseña</div>
+      <div class="fld">
+        <div class="fld-lbl">Contraseña actual</div>
+        <input class="fld-in" type="password" id="mc-current" autocomplete="current-password">
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Nueva contraseña (mínimo 6 caracteres)</div>
+        <input class="fld-in" type="password" id="mc-new" autocomplete="new-password">
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Confirma la nueva contraseña</div>
+        <input class="fld-in" type="password" id="mc-confirm" autocomplete="new-password">
+      </div>
+      <div id="mc-err" style="display:none;background:var(--red-soft);color:var(--red);border-left:3px solid var(--red);padding:9px 12px;border-radius:8px;font-size:12px;margin-top:6px"></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:8px;line-height:1.5">⚠️ Tras cambiarla tendrás que volver a iniciar sesión.</div>
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-out" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-pri" onclick="changeMyPassword()">Cambiar contraseña</button>
+    </div>
+  `);
+}
+
+async function changeMyPassword(){
+  const cur=document.getElementById('mc-current').value;
+  const np=document.getElementById('mc-new').value;
+  const conf=document.getElementById('mc-confirm').value;
+  const err=document.getElementById('mc-err');
+  err.style.display='none';
+  const showErr=t=>{err.textContent=t;err.style.display='block';};
+  if(!cur||!np||!conf) return showErr('Rellena los tres campos.');
+  if(np.length<6) return showErr('La nueva contraseña debe tener al menos 6 caracteres.');
+  if(np!==conf) return showErr('La nueva contraseña y su confirmación no coinciden.');
+  const curHash=await sha256(cur);
+  const u=S.users.find(x=>x.id===currentUser.id);
+  if(!u || curHash!==u.passHash) return showErr('La contraseña actual no es correcta.');
+  if(curHash===await sha256(np)) return showErr('La nueva contraseña debe ser distinta de la actual.');
+  u.passHash=await sha256(np);
+  saveState();
+  closeModal();
+  alert('✅ Contraseña actualizada. Por seguridad ahora cerraré tu sesión y te pediré que entres con la nueva.');
+  logout();
+}
+
+async function resetPass(uid){
+  const u=S.users.find(x=>x.id===uid); if(!u) return;
+  const np=prompt(`Nueva contraseña para ${u.name} (mínimo 6 caracteres):`);
+  if(np===null) return;
+  if(np.length<6) return alert('Mínimo 6 caracteres.');
+  u.passHash=await sha256(np);
+  saveState();
+  alert(`Contraseña actualizada.\n\nComunícale a ${u.name.split(' ')[0]} que entre con:\nEmail: ${u.email}\nPassword: ${np}\n\n(Esta es la única vez que se muestra la contraseña en claro.)`);
+  renderAdmin();
+}
+
+function toggleAcceso(uid,key){
+  const u=S.users.find(x=>x.id===uid);
+  if(!u || u.role==='admin' || u.role==='tech') return alert('Admin/Técnico tienen acceso total y no se puede modificar.');
+  u[key]=!u[key];
+  saveState(); renderAdmin();
+}
+
+function adminComisiones(){
+  let h=`<div class="alert alert-info"><strong>Hoja base de comisiones.</strong> Estos valores alimentan los cálculos de toda la app. Sincronizado con el modelo financiero (hoja "Comisiones ASISA" y "Reparto comisiones").</div>`;
+
+  // Reparto por figura
+  h+=`<div class="sec"><div class="sec-title">Reparto por figura comercial</div>
+    <div class="card card-pad">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:10px">% sobre la <strong>comisión bruta</strong> que ASISA paga a COASEMED.</div>`;
+  Object.keys(S.repartoComisiones).forEach(k=>{
+    const fig=S.repartoComisiones[k];
+    h+=`<div style="border:1.5px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="fig-ic">${fig.icon}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:var(--text)">${fig.label}</div>
+          <div style="font-size:11px;color:var(--text3)">${fig.desc}</div>
+        </div>
+      </div>
+      <div class="fld-row">
+        <div class="fld">
+          <div class="fld-lbl">Referencias propias</div>
+          <input class="fld-in" type="number" min="0" max="100" step="1" value="${Math.round(fig.ref_propias*100)}"
+            onchange="updReparto('${k}','ref_propias',this.value)">
+        </div>
+        <div class="fld">
+          <div class="fld-lbl">Leads del sistema</div>
+          <input class="fld-in" type="number" min="0" max="100" step="1" value="${Math.round(fig.ref_sistema*100)}"
+            onchange="updReparto('${k}','ref_sistema',this.value)">
+        </div>
+      </div>
+    </div>`;
+  });
+  h+=`</div></div>`;
+
+  // Tabla de comisiones ASISA
+  h+=`<div class="sec"><div class="sec-title">Comisiones ASISA por ramo</div>
+    <div class="card card-pad">
+      <table class="cfg-table">
+        <thead><tr><th>Ramo</th><th>%</th><th>Prima media</th></tr></thead>
+        <tbody>`;
+  Object.keys(S.comisionesAsisa).forEach(r=>{
+    const c=S.comisionesAsisa[r];
+    h+=`<tr>
+      <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${c.color};margin-right:6px"></span>${c.nombre}</td>
+      <td><input type="number" min="0" max="100" step="1" value="${Math.round(c.pct*100)}" onchange="updRamoCom('${r}','pct',this.value)">%</td>
+      <td><input type="number" min="0" step="10" value="${c.primaMedia}" onchange="updRamoCom('${r}','primaMedia',this.value)">€</td>
+    </tr>`;
+  });
+  h+=`</tbody></table></div></div>`;
+
+  // ─── Configuración por módulo (Partners + Comunicaciones + Energía + futuros) ───
+  Object.keys(PRODUCT_MODULES).forEach(modKey=>{
+    const M = PRODUCT_MODULES[modKey];
+    const cfg = S[M.cfgKey] || {};
+    const isMatrix = cfg.mode==='matrix';
+    h+=`<div class="sec"><div class="sec-title">${M.icon} ${M.label} · cuotas y comisión <span style="font-size:9px;background:var(--bg);padding:2px 8px;border-radius:8px;color:var(--text3);font-weight:600;margin-left:6px">vía ${M.pagador}</span></div>
+      <div class="card card-pad" style="border-left:4px solid ${M.color}">
+        <div class="fld">
+          <div class="fld-lbl">% comisión única sobre la primera cuota</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input class="fld-in" type="number" min="0" max="100" step="1" value="${Math.round((cfg.pctComision||0.40)*100)}" onchange="updModulePct('${modKey}',this.value)" style="width:90px">
+            <span style="font-size:12px;color:var(--text3)">% que cobra el closer al vender un ${M.saleNoun}.</span>
+          </div>
+        </div>`;
+
+    if(isMatrix){
+      // Editor de matriz Plan × Tier
+      h+=`<div style="font-size:11px;color:var(--text3);margin:10px 0 6px">Matriz de cuotas <strong>Plan × Zona</strong> (€/mes):</div>
+        <div style="overflow-x:auto"><table class="cfg-table" style="min-width:100%">
+          <thead><tr><th>Plan</th>${cfg.tiers.map(t=>`<th>${t.nombre}<br><span style="font-weight:400;color:var(--text3);font-size:9px">${t.label}</span></th>`).join('')}</tr></thead>
+          <tbody>`;
+      cfg.planes.forEach(p=>{
+        h+=`<tr>
+          <td>
+            <input type="text" value="${p.icon}" maxlength="2" onchange="updMatrixPlanCat('${modKey}','${p.id}','icon',this.value)" style="width:32px;padding:4px;text-align:center;font-size:13px;border:1px solid var(--border);border-radius:5px">
+            <input type="text" value="${p.nombre}" onchange="updMatrixPlanCat('${modKey}','${p.id}','nombre',this.value)" style="width:80px;margin-left:4px;padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-weight:600">
+          </td>
+          ${cfg.tiers.map(t=>`<td><input type="number" min="0" step="5" value="${cfg.precios[p.id]?.[t.id]||0}" onchange="updMatrixPrice('${modKey}','${p.id}','${t.id}',this.value)" style="width:75px;padding:6px;border:1px solid var(--border);border-radius:5px;text-align:right">€</td>`).join('')}
+        </tr>`;
+      });
+      h+=`</tbody></table></div>
+        <div style="font-size:10px;color:var(--text3);margin-top:6px;line-height:1.5">La matriz tiene ${cfg.planes.length} planes × ${cfg.tiers.length} zonas = <strong>${cfg.planes.length*cfg.tiers.length} combinaciones</strong>. La cuota de cada celda alimenta directamente el cálculo de comisión cuando el closer vende esa combinación.</div>`;
+    } else {
+      // Editor de lista plana (Comunicaciones, Energía)
+      h+=`<div style="font-size:11px;color:var(--text3);margin:10px 0 6px">Catálogo de tipos (edita nombre, cuota o color):</div>`;
+      (S[M.catKey]||[]).forEach(p=>{
+        h+=`<div style="display:flex;align-items:center;gap:8px;padding:10px 8px;border-bottom:1px solid var(--border);flex-wrap:wrap">
+          <input type="color" value="${p.color}" onchange="updModuleCat('${modKey}','${p.id}','color',this.value)" style="width:32px;height:32px;border:1px solid var(--border);border-radius:6px;flex-shrink:0">
+          <input type="text" value="${p.icon}" maxlength="2" onchange="updModuleCat('${modKey}','${p.id}','icon',this.value)" style="width:42px;padding:6px;text-align:center;font-size:14px;border:1px solid var(--border);border-radius:6px">
+          <input type="text" value="${p.nombre}" onchange="updModuleCat('${modKey}','${p.id}','nombre',this.value)" style="flex:1;min-width:120px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px">
+          <input type="number" min="0" step="5" value="${p.cuota}" onchange="updModuleCat('${modKey}','${p.id}','cuota',this.value)" style="width:80px;padding:6px;border:1px solid var(--border);border-radius:6px;text-align:right;font-size:13px">
+          <span style="font-size:11px;color:var(--text3)">€/mes</span>
+          <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);cursor:pointer">
+            <input type="checkbox" ${p.multi?'checked':''} onchange="updModuleCat('${modKey}','${p.id}','multi',this.checked)" style="accent-color:var(--brand)">Multi
+          </label>
+          <button class="btn btn-danger btn-sm" onclick="delModuleCat('${modKey}','${p.id}')" title="Eliminar">×</button>
+        </div>`;
+      });
+      h+=`<div style="text-align:center;padding:8px"><button class="btn btn-out btn-sm" onclick="addModuleCat('${modKey}')">+ Añadir tipo</button></div>`;
+    }
+    h+=`</div></div>`;
+  });
+
+  // Niveles CVR
+  h+=`<div class="sec"><div class="sec-title">Niveles CVR y bonos</div>
+    <div class="card card-pad">
+      <table class="cfg-table">
+        <thead><tr><th>Nivel</th><th>CVR mín</th><th>Bono % prima</th></tr></thead>
+        <tbody>`;
+  S.nivelesCvr.forEach((n,i)=>{
+    h+=`<tr>
+      <td>${n.lbl}</td>
+      <td><input type="number" min="0" max="100" step="1" value="${Math.round(n.min*100)}" onchange="updNivel(${i},'min',this.value)">%</td>
+      <td><input type="number" min="0" max="10" step="0.1" value="${(n.bono*100).toFixed(2)}" onchange="updNivel(${i},'bono',this.value)">%</td>
+    </tr>`;
+  });
+  h+=`</tbody></table></div></div>`;
+
+  return h;
+}
+function updReparto(figK,key,val){
+  const v=parseFloat(val)/100;
+  if(!isNaN(v) && v>=0 && v<=1){
+    S.repartoComisiones[figK][key]=v;
+    saveState(); renderAdmin();
+  }
+}
+function updRamoCom(r,k,val){
+  const v=parseFloat(val);
+  if(isNaN(v)) return;
+  if(k==='pct') S.comisionesAsisa[r].pct=v/100;
+  else S.comisionesAsisa[r][k]=v;
+  saveState();
+}
+function updNivel(i,k,val){
+  const v=parseFloat(val);
+  if(isNaN(v)) return;
+  S.nivelesCvr[i][k]=v/100;
+  saveState();
+}
+function updModulePct(modKey,val){
+  const M = PRODUCT_MODULES[modKey]; if(!M) return;
+  const v=parseFloat(val);
+  if(isNaN(v)||v<0||v>100) return;
+  S[M.cfgKey].pctComision=v/100;
+  saveState(); renderAdmin();
+}
+function updModuleCat(modKey,id,k,val){
+  const M = PRODUCT_MODULES[modKey]; if(!M) return;
+  const p=(S[M.catKey]||[]).find(x=>x.id===id); if(!p) return;
+  if(k==='cuota') p.cuota=parseFloat(val)||0;
+  else if(k==='multi') p.multi=!!val;
+  else p[k]=val;
+  saveState();
+}
+function addModuleCat(modKey){
+  const M = PRODUCT_MODULES[modKey]; if(!M) return;
+  S[M.catKey].push({id:modKey[0]+'_'+Date.now(),nombre:'Nuevo tipo',cuota:50,color:M.color,icon:M.icon});
+  saveState(); renderAdmin();
+}
+function delModuleCat(modKey,id){
+  const M = PRODUCT_MODULES[modKey]; if(!M) return;
+  if(!confirm('¿Borrar este tipo del catálogo? Las ventas existentes con este tipo perderán la referencia.')) return;
+  S[M.catKey]=S[M.catKey].filter(p=>p.id!==id);
+  saveState(); renderAdmin();
+}
+// Editor de matriz (Partners)
+function updMatrixPrice(modKey,planId,tierId,val){
+  const M = PRODUCT_MODULES[modKey]; if(!M) return;
+  const cfg = S[M.cfgKey]; if(!cfg?.precios) return;
+  if(!cfg.precios[planId]) cfg.precios[planId]={};
+  cfg.precios[planId][tierId] = parseFloat(val)||0;
+  saveState();
+}
+function updMatrixPlanCat(modKey,planId,k,val){
+  const M = PRODUCT_MODULES[modKey]; if(!M) return;
+  const p = S[M.cfgKey]?.planes?.find(x=>x.id===planId); if(!p) return;
+  p[k]=val;
+  saveState();
+}
+
+function adminTasks(){
+  const seePrices = currentUser.role==='admin';
+  let h=`<div class="alert alert-info"><strong>📊 Catálogo de tareas y asignaciones (sincronizado con GHL).</strong> ${seePrices?'El precio €/h SOLO lo ves tú como admin. Ni colaboradores ni técnico lo ven.':'Como técnico GHL puedes asignar y consultar tareas, pero el detalle económico es exclusivo del admin.'}</div>`;
+  // Catálogo
+  h+=`<div class="sec"><div class="sec-title">
+    <span>Catálogo de tareas</span>
+    <button class="btn btn-pri btn-sm" onclick="openTareaCatalogoModal()">+ Nueva tarea</button>
+  </div><div class="card">`;
+  S.tareasCatalogo.forEach(t=>{
+    h+=`<div class="usr-row">
+      <div class="task-color" style="background:${t.color};height:38px;width:6px;border-radius:3px"></div>
+      <div class="usr-info">
+        <div class="usr-name">${t.icon} ${t.nombre}</div>
+        <div class="usr-meta">${t.descripcion}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        ${seePrices?`<span style="font-size:14px;font-weight:800;color:var(--accent)">${t.precioHora}€/h</span>`:''}
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-out btn-sm" onclick="openTareaCatalogoModal('${t.id}')">✎</button>
+          <button class="btn btn-danger btn-sm" onclick="delTareaCatalogo('${t.id}')">×</button>
+        </div>
+      </div>
+    </div>`;
+  });
+  h+=`</div></div>`;
+
+  // Asignaciones
+  h+=`<div class="sec"><div class="sec-title">
+    <span>Asignaciones a colaboradores</span>
+    <button class="btn btn-pri btn-sm" onclick="openAsignarModal()">+ Asignar</button>
+  </div><div class="card">`;
+  if(S.asignaciones.length===0){
+    h+=`<div class="empty-state"><span class="empty-ic">📋</span>Sin asignaciones</div>`;
+  } else {
+    S.asignaciones.forEach(a=>{
+      const u=S.users.find(x=>x.id===a.userId);
+      const t=S.tareasCatalogo.find(x=>x.id===a.tareaId);
+      if(!u||!t) return;
+      const total=t.precioHora*((a.minutos||0)/60);
+      h+=`<div class="usr-row">
+        <div class="usr-av" style="background:${u.color};font-size:11px">${u.name.split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase()}</div>
+        <div class="usr-info">
+          <div class="usr-name">${u.name} → ${t.icon} ${t.nombre}</div>
+          <div class="usr-meta">
+            <span>${a.fecha}</span><span>·</span>
+            <span>${a.sesionesCompletadas||0}/${a.sesionesPlanificadas||0} pomodoros</span>
+            ${a.completada?'<span class="role-badge rb-int">✓</span>':''}
+          </div>
+        </div>
+        <div style="text-align:right">
+          ${seePrices?`<div style="font-size:13px;font-weight:800;color:var(--accent)">${total.toFixed(2)}€</div>`:''}
+          <div style="font-size:9px;color:var(--text3)">${a.minutos||0} min</div>
+          <button class="btn btn-danger btn-sm" style="margin-top:4px" onclick="delAsig('${a.id}')">×</button>
+        </div>
+      </div>`;
+    });
+  }
+  h+=`</div></div>`;
+  return h;
+}
+
+function delTareaCatalogo(id){
+  if(!confirm('¿Borrar tarea del catálogo?')) return;
+  S.tareasCatalogo=S.tareasCatalogo.filter(t=>t.id!==id);
+  saveState(); renderAdmin();
+}
+function delAsig(id){
+  if(!confirm('¿Eliminar asignación?')) return;
+  S.asignaciones=S.asignaciones.filter(a=>a.id!==id);
+  saveState(); renderAdmin();
+}
+
+function adminTech(){
+  return `<div class="alert alert-tech">
+    <strong>🔧 Acceso técnico Claudia · GoHighLevel.</strong> Esta sección está pensada para Claudia, técnico GHL, con acceso completo a:
+    <ul style="margin-top:8px;margin-left:18px">
+      <li>Configuración de embudos y workflows en GoHighLevel</li>
+      <li>Sincronización de leads sistema ↔ esta app</li>
+      <li>Mapeo de campos entre GHL Pipelines y bloque Seguros</li>
+      <li>Webhook de pólizas firmadas → asignación automática</li>
+      <li>API keys y credenciales de integración</li>
+      <li>Permisos de exportación de datos</li>
+    </ul>
+  </div>
+  <div class="sec"><div class="sec-title">Endpoints / claves técnicas</div>
+    <div class="card card-pad">
+      <div class="fld">
+        <div class="fld-lbl">URL Webhook entrante (GHL → H4S)</div>
+        <input class="fld-in" type="text" value="https://hub.coasemed.com/api/ghl/incoming" readonly>
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">URL Webhook saliente (H4S → GHL)</div>
+        <input class="fld-in" type="text" value="https://services.leadconnectorhq.com/hooks/coasemed" readonly>
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">API Key GHL (oculta)</div>
+        <input class="fld-in" type="password" value="************************************" readonly>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">Guardada en variables de entorno del servidor. Para rotarla habla con Adol.</div>
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Subaccount GHL</div>
+        <input class="fld-in" type="text" value="COASEMED · Health4Spain" readonly>
+      </div>
+    </div>
+  </div>
+  <div class="sec"><div class="sec-title">Mapeo de pipelines</div>
+    <div class="card card-pad" style="font-size:12px;color:var(--text2);line-height:1.7">
+      <div><strong>GHL Stage "Cita agendada"</strong> → Lead asignado al closer en H4S</div>
+      <div><strong>GHL Stage "Llamada realizada"</strong> → +1 lead trabajado</div>
+      <div><strong>GHL Stage "Cierre"</strong> → +1 póliza (sistema)</div>
+      <div><strong>Tag "Referencia propia"</strong> → +1 póliza (propia, comisión 40%/30%)</div>
+      <div><strong>Tag "Producto: Salud"</strong> → ramo = sal</div>
+    </div>
+  </div>`;
+}
+
+/* ════════════════════════════════════════════
+   MODALES
+   ════════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   LIQUIDACIONES · vista por meses + detalle por póliza + validación
+   ════════════════════════════════════════════ */
+
+// Devuelve la clave única userId_YYYY-MM para el offset
+function liqKey(userId, monthOffset){
+  var hoy = new Date();
+  var ref = new Date(hoy.getFullYear(), hoy.getMonth() + monthOffset, 1);
+  var mm = String(ref.getMonth()+1).padStart(2,'0');
+  return userId + '_' + ref.getFullYear() + '-' + mm;
+}
+
+// Construye lista detallada de "items individuales" (una fila por póliza) para un mes
+function buildLiquidacionItems(userId, mesProduccion){
+  // mesProduccion: Date · 1er día del mes
+  var items = []; // {producto, color, nPoliza, fechaProduccion, fechaCobro, regimen, prima, pct, bruto, neto}
+  if(!userId || typeof S !== 'object' || !S) return items;
+  var mesesEs = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var mesProdNum = mesProduccion.getMonth();
+  var year = mesProduccion.getFullYear();
+
+  // === ASISA · n+2 ===
+  try {
+    var seg = (S.userSeguros && S.userSeguros[userId]) ? S.userSeguros[userId] : null;
+    if(seg && seg.polizas){
+      var u = S.users.find(function(x){return x.id===userId;});
+      var rep = (S.repartoComisiones && u) ? S.repartoComisiones[u.figura] : null;
+      var fechaCobroAsisa = new Date(year, mesProdNum+2, 15);
+      var fechaCobroStr = '15 ' + mesesEs[fechaCobroAsisa.getMonth()] + ' ' + fechaCobroAsisa.getFullYear();
+      var pCounter = 1;
+      Object.keys(seg.polizas).forEach(function(ramoKey){
+        var ramoCfg = (S.comisionesAsisa||{})[ramoKey];
+        if(!ramoCfg) return;
+        var r = seg.polizas[ramoKey];
+        // Pólizas del sistema (ref_sistema)
+        (r.sis||[]).forEach(function(pol){
+          var bruto = (pol.p||0) * ramoCfg.pct;
+          var neto = bruto * (rep ? rep.ref_sistema : 0.30);
+          items.push({
+            producto:'ASISA · '+ramoCfg.nombre, color:ramoCfg.color, regimen:'n+2',
+            nPoliza:'ASI-'+ramoKey.toUpperCase()+'-S'+String(pCounter++).padStart(3,'0'),
+            origen:'Sistema',
+            fechaProduccion: String(year)+'-'+String(mesProdNum+1).padStart(2,'0')+'-'+String(((pCounter*3)%27)+1).padStart(2,'0'),
+            fechaCobro: fechaCobroStr,
+            base: pol.p||0, pct: ramoCfg.pct,
+            bruto: bruto, neto: neto
+          });
+        });
+        // Pólizas propias (ref_propias)
+        (r.aut||[]).forEach(function(pol){
+          var bruto = (pol.p||0) * ramoCfg.pct;
+          var neto = bruto * (rep ? rep.ref_propias : 0.40);
+          items.push({
+            producto:'ASISA · '+ramoCfg.nombre, color:ramoCfg.color, regimen:'n+2',
+            nPoliza:'ASI-'+ramoKey.toUpperCase()+'-P'+String(pCounter++).padStart(3,'0'),
+            origen:'Propia',
+            fechaProduccion: String(year)+'-'+String(mesProdNum+1).padStart(2,'0')+'-'+String(((pCounter*4)%27)+1).padStart(2,'0'),
+            fechaCobro: fechaCobroStr,
+            base: pol.p||0, pct: ramoCfg.pct,
+            bruto: bruto, neto: neto
+          });
+        });
+      });
+    }
+  } catch(e){ console.warn('items ASISA:', e); }
+
+  // === LBS · n+1 ===
+  try {
+    var lbsSales = (S.userLbsSales && S.userLbsSales[userId]) ? S.userLbsSales[userId] : [];
+    var lbsCat = S.lbsCatalogo || [];
+    var fechaCobroLbs = new Date(year, mesProdNum+1, 15);
+    var fechaCobroLbsStr = '15 ' + mesesEs[fechaCobroLbs.getMonth()] + ' ' + fechaCobroLbs.getFullYear();
+    lbsSales.forEach(function(s, idx){
+      var prod = lbsCat.find(function(p){return p.id===s.catId;});
+      if(!prod) return;
+      var bruto = (s.cuota||0) * (prod.pct||0.17);
+      items.push({
+        producto:'LBS · '+prod.nombre, color:prod.color, regimen:'n+1',
+        nPoliza:'LBS-'+(s.catId||'').toUpperCase().replace('LBS_','')+'-'+String(idx+1).padStart(3,'0'),
+        origen:'Propia',
+        fechaProduccion: s.fecha,
+        fechaCobro: fechaCobroLbsStr,
+        base: s.cuota||0, pct: prod.pct||0.17,
+        bruto: bruto, neto: bruto
+      });
+    });
+  } catch(e){ console.warn('items LBS:', e); }
+
+  // === Partners · n+2 ===
+  try {
+    var pSales = (S.userPartnerSales && S.userPartnerSales[userId]) ? S.userPartnerSales[userId] : [];
+    var pCfg = S.partnersConfig;
+    var u2 = S.users.find(function(x){return x.id===userId;});
+    var rep2 = (S.repartoComisiones && u2) ? S.repartoComisiones[u2.figura] : null;
+    var pPct = pCfg ? (pCfg.pctComision||0.40) : 0.40;
+    var fechaCobroP = new Date(year, mesProdNum+2, 15);
+    var fechaCobroPStr = '15 ' + mesesEs[fechaCobroP.getMonth()] + ' ' + fechaCobroP.getFullYear();
+    pSales.forEach(function(s, idx){
+      var plan = (pCfg && pCfg.planes) ? pCfg.planes.find(function(x){return x.id===s.planId;}) : null;
+      var tier = (pCfg && pCfg.tiers) ? pCfg.tiers.find(function(x){return x.id===s.tierId;}) : null;
+      var planNombre = plan ? plan.nombre : s.planId;
+      var tierNombre = tier ? tier.nombre : s.tierId;
+      var bruto = (s.cuota||0) * pPct;
+      var neto = bruto * (rep2 ? rep2.ref_propias : 0.40);
+      items.push({
+        producto:'Partners · '+planNombre+' '+tierNombre, color: plan?plan.color:'#C9A227', regimen:'n+2',
+        nPoliza:'PRT-'+String(idx+1).padStart(3,'0')+'-'+(s.tierId||'').toUpperCase(),
+        origen:'Propia',
+        fechaProduccion: s.fecha,
+        fechaCobro: fechaCobroPStr,
+        base: s.cuota||0, pct: pPct,
+        bruto: bruto, neto: neto
+      });
+    });
+  } catch(e){ console.warn('items Partners:', e); }
+
+  // === Comunicaciones · n+1 ===
+  try {
+    var cSales = (S.userComunicacionesSales && S.userComunicacionesSales[userId]) ? S.userComunicacionesSales[userId] : [];
+    var cCat = S.comunicacionesCatalogo || [];
+    var cPct = (S.comunicacionesConfig && S.comunicacionesConfig.pctComision) || 0.30;
+    var fechaCobroC = new Date(year, mesProdNum+1, 15);
+    var fechaCobroCStr = '15 ' + mesesEs[fechaCobroC.getMonth()] + ' ' + fechaCobroC.getFullYear();
+    cSales.forEach(function(s, idx){
+      var prod = cCat.find(function(p){return p.id===s.catId;});
+      if(!prod) return;
+      var bruto = (s.cuota||0) * cPct;
+      items.push({
+        producto:'Com. · '+prod.nombre, color:prod.color, regimen:'n+1',
+        nPoliza:'COM-'+(s.catId||'').toUpperCase()+'-'+String(idx+1).padStart(3,'0'),
+        origen:'Propia',
+        fechaProduccion: s.fecha,
+        fechaCobro: fechaCobroCStr,
+        base: s.cuota||0, pct: cPct,
+        bruto: bruto, neto: bruto
+      });
+    });
+  } catch(e){ console.warn('items Com:', e); }
+
+  // === Energía · n+1 ===
+  try {
+    var eSales = (S.userEnergiaSales && S.userEnergiaSales[userId]) ? S.userEnergiaSales[userId] : [];
+    var eCat = S.energiaCatalogo || [];
+    var ePct = (S.energiaConfig && S.energiaConfig.pctComision) || 0.30;
+    var fechaCobroE = new Date(year, mesProdNum+1, 15);
+    var fechaCobroEStr = '15 ' + mesesEs[fechaCobroE.getMonth()] + ' ' + fechaCobroE.getFullYear();
+    eSales.forEach(function(s, idx){
+      var prod = eCat.find(function(p){return p.id===s.catId;});
+      if(!prod) return;
+      var bruto = (s.cuota||0) * ePct;
+      items.push({
+        producto:'Energía · '+prod.nombre, color:prod.color, regimen:'n+1',
+        nPoliza:'ENE-'+(s.catId||'').toUpperCase()+'-'+String(idx+1).padStart(3,'0'),
+        origen:'Propia',
+        fechaProduccion: s.fecha,
+        fechaCobro: fechaCobroEStr,
+        base: s.cuota||0, pct: ePct,
+        bruto: bruto, neto: bruto
+      });
+    });
+  } catch(e){ console.warn('items Energía:', e); }
+
+  return items;
+}
+
+function calcLiquidacionDelMes(monthOffset){
+  var u = currentUser;
+  if(!u) return null;
+  var hoy = new Date();
+  var ref = new Date(hoy.getFullYear(), hoy.getMonth() + monthOffset, 1);
+  var mesesEs = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var mesNombre = mesesEs[ref.getMonth()] + ' ' + ref.getFullYear();
+  var mm = String(ref.getMonth()+1).padStart(2,'0');
+  var mesShort = mm + '/' + ref.getFullYear();
+  var keyVal = u.id + '_' + ref.getFullYear() + '-' + mm;
+
+  var items = buildLiquidacionItems(u.id, ref);
+  var totalBruto = 0, totalNeto = 0;
+  items.forEach(function(it){ totalBruto += it.bruto; totalNeto += it.neto; });
+
+  // Retenciones: IRPF (15%) + Seguridad Social aplicable según figura
+  var IRPF_PCT = 0.15;
+  var irpfAmt = totalNeto * IRPF_PCT;
+  var totalCobrar = totalNeto - irpfAmt;
+
+  // Estado de validación
+  var val = (typeof S === 'object' && S && S.liquidacionesValidadas) ? S.liquidacionesValidadas[keyVal] : null;
+  var estado;
+  if(val){
+    if(val.estado === 'liquidada') estado = {key:'liquidada', lbl:'LIQUIDADA · PAGADA', color:'#16A34A', bg:'#DCFCE7', icon:'💸', sub:'Cobrado '+(val.fechaPago||'')+' · Ref '+(val.refTransfer||'')};
+    else if(val.estado === 'validada') estado = {key:'validada', lbl:'✓ VALIDADA POR SUPERVISOR', color:'#15803D', bg:'#D1FAE5', icon:'✓', sub:'Aprobada por '+(val.validadoPor||'supervisor')+' el '+(val.fechaValidacion||'')};
+    else if(val.estado === 'rechazada') estado = {key:'rechazada', lbl:'RECHAZADA · revisar', color:'#DC2626', bg:'#FEE2E2', icon:'✗', sub:val.motivo||'Sin motivo'};
+    else estado = {key:'pend_apr', lbl:'PENDIENTE APROBACIÓN', color:'#EA580C', bg:'#FFEDD5', icon:'⏳', sub:'Esperando validación de supervisor'};
+  } else if(monthOffset < 0){
+    estado = {key:'pend_apr', lbl:'PENDIENTE APROBACIÓN', color:'#EA580C', bg:'#FFEDD5', icon:'⏳', sub:'Mes cerrado · esperando validación supervisor'};
+  } else if(monthOffset === 0){
+    estado = {key:'curso', lbl:'EN CURSO', color:'#0891B2', bg:'#CFFAFE', icon:'⏳', sub:'Mes en producción · se cierra el día 1 del mes próximo'};
+  } else {
+    estado = {key:'proy', lbl:'PROYECCIÓN', color:'#7C3AED', bg:'#EDE9FE', icon:'📅', sub:'Estimación basada en producción actual'};
+  }
+
+  return { mesNombre:mesNombre, mesShort:mesShort, mesProduccionISO:ref.getFullYear()+'-'+mm, items:items, totalBruto:totalBruto, totalNeto:totalNeto, irpfAmt:irpfAmt, irpfPct:IRPF_PCT, totalCobrar:totalCobrar, estado:estado, monthOffset:monthOffset, keyVal:keyVal };
+}
+
+function aprobarLiquidacion(keyVal){
+  if(!confirm('¿Validar esta liquidación? Una vez aprobada, el closer la verá como VALIDADA.')) return;
+  var validador = currentUser ? currentUser.id : 'desconocido';
+  var hoy = new Date();
+  var fechaStr = hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
+  if(!S.liquidacionesValidadas) S.liquidacionesValidadas = {};
+  S.liquidacionesValidadas[keyVal] = { estado:'validada', validadoPor:validador, fechaValidacion:fechaStr };
+  if(typeof saveState === 'function') saveState();
+  openLiquidacionesModal(); // re-render
+}
+
+function rechazarLiquidacion(keyVal){
+  var motivo = prompt('Motivo del rechazo:');
+  if(!motivo) return;
+  var validador = currentUser ? currentUser.id : 'desconocido';
+  var hoy = new Date();
+  var fechaStr = hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
+  if(!S.liquidacionesValidadas) S.liquidacionesValidadas = {};
+  S.liquidacionesValidadas[keyVal] = { estado:'rechazada', validadoPor:validador, fechaValidacion:fechaStr, motivo:motivo };
+  if(typeof saveState === 'function') saveState();
+  openLiquidacionesModal();
+}
+
+function marcarPagada(keyVal){
+  var ref = prompt('Referencia de transferencia:');
+  if(!ref) return;
+  var hoy = new Date();
+  var fechaStr = hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
+  if(!S.liquidacionesValidadas[keyVal]) S.liquidacionesValidadas[keyVal] = {};
+  S.liquidacionesValidadas[keyVal].estado = 'liquidada';
+  S.liquidacionesValidadas[keyVal].fechaPago = fechaStr;
+  S.liquidacionesValidadas[keyVal].refTransfer = ref;
+  if(typeof saveState === 'function') saveState();
+  openLiquidacionesModal();
+}
+
+function openLiquidacionesModal(){
+  var anterior = calcLiquidacionDelMes(-1);
+  var actual = calcLiquidacionDelMes(0);
+  var proximo = calcLiquidacionDelMes(1);
+  var isSupervisor = currentUser && (currentUser.role==='admin' || currentUser.role==='supervisor' || currentUser.role==='tech');
+
+  function fmtEur(n){ return Math.round(n||0).toLocaleString('es-ES')+'€'; }
+
+  function renderTabContent(L){
+    if(!L) return '<p style="padding:20px;color:#94A3B8">Sin datos</p>';
+    var h = '';
+
+    // === CABECERA con fecha producción y fecha de cobro ===
+    h += '<div style="background:linear-gradient(135deg,#0B1E3F 0%,#1F3864 100%);color:white;border-radius:10px;padding:14px 16px;margin-bottom:12px">';
+    h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">';
+    h += '<div style="flex:1"><div style="font-size:10px;opacity:.7;letter-spacing:1.5px;text-transform:uppercase">Mes de producción</div>';
+    h += '<div style="font-size:20px;font-weight:800;text-transform:capitalize;margin-top:1px">'+L.mesNombre+'</div></div>';
+    h += '<div style="background:'+L.estado.bg+';color:'+L.estado.color+';padding:6px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-align:center">'+L.estado.icon+' '+L.estado.lbl+'</div>';
+    h += '</div>';
+    h += '<div style="margin-top:8px;font-size:10px;opacity:.85">'+L.estado.sub+'</div>';
+    // Fechas de cobro
+    var fechasCobro = {};
+    L.items.forEach(function(it){ if(!fechasCobro[it.regimen]) fechasCobro[it.regimen] = it.fechaCobro; });
+    if(Object.keys(fechasCobro).length > 0){
+      h += '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.18);display:flex;gap:14px;font-size:10.5px">';
+      if(fechasCobro['n+1']) h += '<div><span style="opacity:.7">Cobro n+1:</span> <strong style="color:#67E8F9">'+fechasCobro['n+1']+'</strong></div>';
+      if(fechasCobro['n+2']) h += '<div><span style="opacity:.7">Cobro n+2:</span> <strong style="color:#93C5FD">'+fechasCobro['n+2']+'</strong></div>';
+      h += '</div>';
+    }
+    h += '</div>';
+
+    // Botones de acción supervisor (si aplica)
+    if(isSupervisor && L.items.length > 0 && L.monthOffset <= 0){
+      var st = L.estado.key;
+      if(st === 'pend_apr'){
+        h += '<div style="display:flex;gap:8px;margin-bottom:12px">';
+        h += '<button onclick="aprobarLiquidacion(\''+L.keyVal+'\')" style="flex:1;background:#16A34A;color:white;border:none;padding:10px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">✓ Validar liquidación</button>';
+        h += '<button onclick="rechazarLiquidacion(\''+L.keyVal+'\')" style="background:#DC2626;color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">✗ Rechazar</button>';
+        h += '</div>';
+      } else if(st === 'validada'){
+        h += '<button onclick="marcarPagada(\''+L.keyVal+'\')" style="display:block;width:100%;background:#0B1E3F;color:white;border:none;padding:10px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;margin-bottom:12px">💸 Marcar como pagada (registrar transferencia)</button>';
+      }
+    }
+
+    // === TABLA DETALLADA por póliza ===
+    if(L.items.length === 0){
+      h += '<div style="padding:30px;text-align:center;color:#94A3B8;font-size:13px;background:white;border-radius:8px">Sin producción registrada este mes</div>';
+    } else {
+      h += '<div style="background:white;border-radius:10px;overflow:hidden;border:1px solid #E2E8F0;margin-bottom:12px">';
+      h += '<div style="background:#0B1E3F;color:#fff;padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase">📋 Detalle por póliza · '+L.items.length+' operaciones</div>';
+      h += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:10.5px;min-width:680px">';
+      h += '<thead><tr style="background:#F4F6FB;color:#0B1E3F">';
+      h += '<th style="text-align:left;padding:7px 8px;font-weight:700">Producto</th>';
+      h += '<th style="text-align:left;padding:7px 8px;font-weight:700">Nº Póliza</th>';
+      h += '<th style="text-align:center;padding:7px 8px;font-weight:700">Producción</th>';
+      h += '<th style="text-align:center;padding:7px 8px;font-weight:700">Cobro</th>';
+      h += '<th style="text-align:center;padding:7px 8px;font-weight:700">Rég.</th>';
+      h += '<th style="text-align:right;padding:7px 8px;font-weight:700">Base</th>';
+      h += '<th style="text-align:right;padding:7px 8px;font-weight:700">%</th>';
+      h += '<th style="text-align:right;padding:7px 8px;font-weight:700">Bruto</th>';
+      h += '<th style="text-align:right;padding:7px 8px;font-weight:700">Tu neto</th>';
+      h += '</tr></thead><tbody>';
+      L.items.forEach(function(it, idx){
+        var bg = idx%2 ? '#FAFBFD' : 'white';
+        var regBadge = it.regimen === 'n+1'
+          ? '<span style="background:#CFFAFE;color:#0891B2;padding:1px 6px;border-radius:10px;font-weight:700;font-size:9px">n+1</span>'
+          : '<span style="background:#DBEAFE;color:#1E3A8A;padding:1px 6px;border-radius:10px;font-weight:700;font-size:9px">n+2</span>';
+        h += '<tr style="background:'+bg+';border-bottom:1px solid #F1F5F9">';
+        h += '<td style="padding:6px 8px"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:'+it.color+';margin-right:5px;vertical-align:middle"></span><strong style="color:#0B1E3F;font-size:10.5px">'+it.producto+'</strong></td>';
+        h += '<td style="padding:6px 8px;font-family:monospace;color:#475569">'+it.nPoliza+'</td>';
+        h += '<td style="text-align:center;padding:6px 8px;color:#475569;font-size:10px">'+it.fechaProduccion+'</td>';
+        h += '<td style="text-align:center;padding:6px 8px;color:#0B1E3F;font-size:10px;font-weight:600">'+it.fechaCobro+'</td>';
+        h += '<td style="text-align:center;padding:6px 8px">'+regBadge+'</td>';
+        h += '<td style="text-align:right;padding:6px 8px;color:#475569">'+fmtEur(it.base)+'</td>';
+        h += '<td style="text-align:right;padding:6px 8px;color:#475569">'+Math.round(it.pct*100)+'%</td>';
+        h += '<td style="text-align:right;padding:6px 8px;color:#92400E">'+fmtEur(it.bruto)+'</td>';
+        h += '<td style="text-align:right;padding:6px 8px"><strong style="color:#16A34A">'+fmtEur(it.neto)+'</strong></td>';
+        h += '</tr>';
+      });
+      h += '</tbody></table></div></div>';
+    }
+
+    // === DESGLOSE FINAL · totales + IRPF ===
+    if(L.items.length > 0){
+      h += '<div style="background:white;border:2px solid #0B1E3F;border-radius:10px;padding:14px 16px">';
+      h += '<div style="font-size:11px;font-weight:700;color:#0B1E3F;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">💰 Desglose final de la liquidación</div>';
+      // Filas
+      h += '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#475569;border-bottom:1px solid #F1F5F9"><span>Total comisión bruta (compañía → COASEMED)</span><strong style="color:#92400E">'+fmtEur(L.totalBruto)+'</strong></div>';
+      h += '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#475569;border-bottom:1px solid #F1F5F9"><span>Tu comisión neta (tras reparto según figura)</span><strong style="color:#0B1E3F">'+fmtEur(L.totalNeto)+'</strong></div>';
+      h += '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#DC2626;border-bottom:1px solid #F1F5F9"><span>− Retención IRPF '+Math.round(L.irpfPct*100)+'% (sobre tu neto)</span><strong>− '+fmtEur(L.irpfAmt)+'</strong></div>';
+      // Total
+      h += '<div style="display:flex;justify-content:space-between;padding:10px 0 4px 0;border-top:2px solid #0B1E3F;margin-top:4px"><span style="font-size:13px;font-weight:700;color:#0B1E3F">💸 TOTAL A COBRAR</span><strong style="font-size:22px;color:#16A34A">'+fmtEur(L.totalCobrar)+'</strong></div>';
+      // Notas regimen
+      h += '<div style="margin-top:10px;padding:8px 10px;background:#F8FAFC;border-radius:6px;font-size:9.5px;color:#64748B;line-height:1.5">';
+      h += '<strong style="color:#0B1E3F">Notas:</strong> Régimen <strong>n+1</strong> (LBS, Comunicaciones, Energía) cobra el mes siguiente al cierre. Régimen <strong>n+2</strong> (ASISA, Partners) cobra a los 2 meses. La retención IRPF se aplica al final, sobre la comisión neta tras reparto.';
+      h += '</div>';
+      h += '</div>';
+    }
+
+    return h;
+  }
+
+  var modal = '';
+  modal += '<div class="modal-hdr">';
+  modal += '<div class="modal-title">💰 Mis liquidaciones · '+(currentUser?currentUser.name:'')+'</div>';
+  modal += '<button class="hdr-btn" style="background:var(--bg);color:var(--text)" onclick="closeModal()">×</button>';
+  modal += '</div>';
+  modal += '<div style="padding:0">';
+  // Tabs
+  modal += '<div style="display:flex;gap:0;border-bottom:1px solid #E2E8F0;background:#F8FAFC;border-radius:8px 8px 0 0">';
+  modal += '<button id="liq-tab-prev" onclick="switchLiqTab(\'prev\')" style="flex:1;padding:10px 6px;background:transparent;border:none;border-bottom:3px solid transparent;font-weight:600;font-size:11px;color:#64748B;cursor:pointer">📅 Anterior<br/><span style="font-size:9px;opacity:.7">'+(anterior?anterior.mesShort:'')+'</span></button>';
+  modal += '<button id="liq-tab-act" onclick="switchLiqTab(\'act\')" style="flex:1;padding:10px 6px;background:transparent;border:none;border-bottom:3px solid #0B1E3F;font-weight:700;font-size:11px;color:#0B1E3F;cursor:pointer">⏳ Actual<br/><span style="font-size:9px;opacity:.85">'+(actual?actual.mesShort:'')+'</span></button>';
+  modal += '<button id="liq-tab-next" onclick="switchLiqTab(\'next\')" style="flex:1;padding:10px 6px;background:transparent;border:none;border-bottom:3px solid transparent;font-weight:600;font-size:11px;color:#64748B;cursor:pointer">📆 Próximo<br/><span style="font-size:9px;opacity:.7">'+(proximo?proximo.mesShort:'')+'</span></button>';
+  modal += '</div>';
+  modal += '<div id="liq-content-prev" style="display:none;padding:12px">'+renderTabContent(anterior)+'</div>';
+  modal += '<div id="liq-content-act" style="display:block;padding:12px">'+renderTabContent(actual)+'</div>';
+  modal += '<div id="liq-content-next" style="display:none;padding:12px">'+renderTabContent(proximo)+'</div>';
+  modal += '</div>';
+
+  openModal(modal);
+}
+
+function switchLiqTab(which){
+  ['prev','act','next'].forEach(function(t){
+    var tab = document.getElementById('liq-tab-'+t);
+    var pan = document.getElementById('liq-content-'+t);
+    if(!tab || !pan) return;
+    if(t === which){
+      tab.style.borderBottomColor = '#0B1E3F';
+      tab.style.color = '#0B1E3F';
+      tab.style.fontWeight = '700';
+      pan.style.display = 'block';
+    } else {
+      tab.style.borderBottomColor = 'transparent';
+      tab.style.color = '#64748B';
+      tab.style.fontWeight = '600';
+      pan.style.display = 'none';
+    }
+  });
+}
+
+function openModal(html){
+  document.getElementById('modal-box').innerHTML=html;
+  document.getElementById('modal-bk').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modal-bk').classList.remove('show');
+}
+document.getElementById('modal-bk').addEventListener('click',e=>{
+  if(e.target.id==='modal-bk') closeModal();
+});
+
+function openUserModal(uid){
+  const u = uid?S.users.find(x=>x.id===uid):null;
+  const isNew=!u;
+  openModal(`
+    <div class="modal-hdr">
+      <div class="modal-title">${isNew?'Nuevo colaborador':'Editar '+u.name}</div>
+      <button class="hdr-btn" style="background:var(--bg);color:var(--text)" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="fld">
+        <div class="fld-lbl">Nombre completo</div>
+        <input class="fld-in" id="m-name" value="${u?u.name:''}" placeholder="Ej: Juan Pérez">
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Email</div>
+        <input class="fld-in" id="m-email" value="${u?u.email:''}" placeholder="juan@coasemed.com">
+      </div>
+      <div class="fld-row">
+        <div class="fld">
+          <div class="fld-lbl">Rol</div>
+          <select class="fld-sel" id="m-role">
+            <option value="closer" ${u&&u.role==='closer'?'selected':''}>Closer</option>
+            <option value="admin" ${u&&u.role==='admin'?'selected':''}>Admin</option>
+            <option value="tech" ${u&&u.role==='tech'?'selected':''}>Técnico GHL</option>
+          </select>
+        </div>
+        <div class="fld">
+          <div class="fld-lbl">Figura comercial</div>
+          <select class="fld-sel" id="m-figura">
+            <option value="interno" ${u&&u.figura==='interno'?'selected':''}>Interno (socio/empleado)</option>
+            <option value="externo" ${u&&u.figura==='externo'?'selected':''}>Externo (mercantil)</option>
+          </select>
+        </div>
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Bloques con acceso</div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px"><input type="checkbox" id="m-acc-seg" ${(u?u.accesoSeguros:true)?'checked':''} style="accent-color:var(--brand);width:16px;height:16px">🛡️ ASISA</label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px"><input type="checkbox" id="m-acc-par" ${(u?u.accesoPartners:true)?'checked':''} style="accent-color:var(--brand);width:16px;height:16px">🤝 Partners</label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px"><input type="checkbox" id="m-acc-com" ${(u?u.accesoComunicaciones:false)?'checked':''} style="accent-color:var(--brand);width:16px;height:16px">📞 Comunicaciones</label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px"><input type="checkbox" id="m-acc-ene" ${(u?u.accesoEnergia:false)?'checked':''} style="accent-color:var(--brand);width:16px;height:16px">⚡ Energía</label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;grid-column:span 2"><input type="checkbox" id="m-acc-act" ${(u?u.accesoActividad:true)?'checked':''} style="accent-color:var(--brand);width:16px;height:16px">⏱️ Actividad / Tareas</label>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px">Marca solo los bloques a los que este colaborador puede acceder, según su capacitación o disponibilidad.</div>
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Color</div>
+        <input class="fld-in" id="m-color" type="color" value="${u?u.color:'#1F3864'}" style="height:42px">
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">${isNew?'Contraseña inicial':'Nueva contraseña (dejar en blanco para no cambiar)'}</div>
+        <input class="fld-in" id="m-pass" type="password" autocomplete="new-password" placeholder="${isNew?'Mínimo 6 caracteres':'••••••••'}">
+        ${!isNew?'<div style="font-size:10px;color:var(--text3);margin-top:4px">Si la cambias, el usuario tendrá que volver a iniciar sesión.</div>':''}
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Tareas que puede realizar</div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px;max-height:240px;overflow-y:auto" id="m-tareas-wrap">
+          ${S.tareasCatalogo.map(t=>{
+            const checked = u ? (getTareasPermitidas(u).includes(t.id)?'checked':'') : 'checked';
+            return `<label style="display:flex;align-items:center;gap:8px;padding:7px 6px;border-radius:6px;cursor:pointer;font-size:13px" onmouseover="this.style.background='white'" onmouseout="this.style.background='transparent'">
+              <input type="checkbox" class="m-tarea-chk" value="${t.id}" ${checked} style="width:16px;height:16px;accent-color:var(--brand)">
+              <span style="display:inline-block;width:6px;height:18px;border-radius:3px;background:${t.color};flex-shrink:0"></span>
+              <span style="flex:1">${t.icon} ${t.nombre}</span>
+            </label>`;
+          }).join('')}
+        </div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button type="button" class="btn btn-out btn-sm" style="flex:1" onclick="document.querySelectorAll('.m-tarea-chk').forEach(c=>c.checked=true)">Marcar todas</button>
+          <button type="button" class="btn btn-out btn-sm" style="flex:1" onclick="document.querySelectorAll('.m-tarea-chk').forEach(c=>c.checked=false)">Desmarcar todas</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ftr">
+      ${!isNew && u.id!==currentUser.id?`<button class="btn btn-danger" onclick="delUser('${u.id}')">Borrar usuario</button>`:''}
+      <button class="btn btn-out" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-pri" onclick="saveUser('${uid||''}')">Guardar</button>
+    </div>
+  `);
+}
+async function saveUser(uid){
+  const name=document.getElementById('m-name').value.trim();
+  const email=document.getElementById('m-email').value.trim();
+  if(!name||!email) return alert('Nombre y email obligatorios.');
+  const passInput=document.getElementById('m-pass');
+  const pass=passInput?passInput.value:'';
+  const isNew=!uid;
+  if(isNew && (!pass || pass.length<6)) return alert('Para nuevos usuarios la contraseña inicial es obligatoria (mínimo 6 caracteres).');
+  if(pass && pass.length<6) return alert('La contraseña debe tener al menos 6 caracteres.');
+  const tareasPermitidas=Array.from(document.querySelectorAll('.m-tarea-chk:checked')).map(c=>c.value);
+  const data={
+    name, email,
+    role: document.getElementById('m-role').value,
+    figura: document.getElementById('m-figura').value,
+    accesoSeguros:        document.getElementById('m-acc-seg').checked,
+    accesoPartners:       document.getElementById('m-acc-par').checked,
+    accesoComunicaciones: document.getElementById('m-acc-com').checked,
+    accesoEnergia:        document.getElementById('m-acc-ene').checked,
+    accesoActividad:      document.getElementById('m-acc-act').checked,
+    color: document.getElementById('m-color').value,
+    tareasPermitidas,
+  };
+  if(pass) data.passHash=await sha256(pass);
+  if(uid){
+    Object.assign(S.users.find(u=>u.id===uid),data);
+  } else {
+    S.users.push(Object.assign({id:'u_'+Date.now()},data));
+  }
+  saveState(); closeModal(); renderAdmin();
+}
+function delUser(uid){
+  const u=S.users.find(x=>x.id===uid);
+  if(!u) return;
+  if(uid===currentUser.id) return alert('No puedes borrar tu propio usuario mientras estás conectado. Inicia sesión con otro admin para borrarte.');
+  // No te quedes sin admins
+  if(u.role==='admin'){
+    const adminsRest = S.users.filter(x=>x.role==='admin' && x.id!==uid).length;
+    if(adminsRest===0) return alert('No puedes borrar al último administrador. Crea otro admin primero o cambia el rol de este usuario.');
+  }
+  if(!confirm(`¿Borrar a ${u.name} (${u.email})?\n\nSe eliminarán también sus datos de seguros, sus asignaciones de tareas y el estado de su Pomodoro. Esta acción NO se puede deshacer.`)) return;
+  S.users=S.users.filter(x=>x.id!==uid);
+  delete S.userSeguros[uid];
+  S.asignaciones=S.asignaciones.filter(a=>a.userId!==uid);
+  delete S.pomodoroState[uid];
+  saveState(); closeModal(); renderAdmin();
+}
+
+function openTareaCatalogoModal(tid){
+  const t=tid?S.tareasCatalogo.find(x=>x.id===tid):null;
+  const isNew=!t;
+  openModal(`
+    <div class="modal-hdr">
+      <div class="modal-title">${isNew?'Nueva tarea':'Editar '+t.nombre}</div>
+      <button class="hdr-btn" style="background:var(--bg);color:var(--text)" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="fld-row">
+        <div class="fld"><div class="fld-lbl">Icono</div><input class="fld-in" id="t-icon" value="${t?t.icon:'📋'}" maxlength="2"></div>
+        <div class="fld"><div class="fld-lbl">Color</div><input class="fld-in" id="t-color" type="color" value="${t?t.color:'#1F3864'}" style="height:42px"></div>
+      </div>
+      <div class="fld"><div class="fld-lbl">Nombre</div><input class="fld-in" id="t-name" value="${t?t.nombre:''}"></div>
+      <div class="fld"><div class="fld-lbl">Descripción</div><textarea class="fld-tx" id="t-desc" rows="2">${t?t.descripcion:''}</textarea></div>
+      ${currentUser.role==='admin'?`<div class="fld"><div class="fld-lbl">Precio €/hora (solo admin lo ve)</div><input class="fld-in" id="t-price" type="number" min="0" step="0.5" value="${t?t.precioHora:15}"></div>`:`<input type="hidden" id="t-price" value="${t?t.precioHora:15}">`}
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-out" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-pri" onclick="saveTareaCatalogo('${tid||''}')">Guardar</button>
+    </div>
+  `);
+}
+function saveTareaCatalogo(tid){
+  const data={
+    icon:document.getElementById('t-icon').value||'📋',
+    nombre:document.getElementById('t-name').value.trim(),
+    descripcion:document.getElementById('t-desc').value.trim(),
+    precioHora:parseFloat(document.getElementById('t-price').value)||0,
+    color:document.getElementById('t-color').value,
+  };
+  if(!data.nombre) return alert('Nombre obligatorio');
+  if(tid) Object.assign(S.tareasCatalogo.find(x=>x.id===tid),data);
+  else S.tareasCatalogo.push(Object.assign({id:'t_'+Date.now()},data));
+  saveState(); closeModal();
+  if(activePage==='admin') renderAdmin();
+  if(activePage==='actividad') renderActividad();
+}
+
+function openAsignarModal(presetUid){
+  const today=new Date().toISOString().slice(0,10);
+  openModal(`
+    <div class="modal-hdr">
+      <div class="modal-title">Asignar tarea</div>
+      <button class="hdr-btn" style="background:var(--bg);color:var(--text)" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="fld">
+        <div class="fld-lbl">Colaborador</div>
+        <select class="fld-sel" id="a-uid" onchange="refreshAsigTareas()">
+          ${S.users.map(u=>`<option value="${u.id}" ${u.id===presetUid?'selected':''}>${u.name}</option>`).join('')}
+        </select>
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Tarea</div>
+        <select class="fld-sel" id="a-tid"></select>
+        <div id="a-tid-empty" style="font-size:11px;color:var(--red);margin-top:4px;display:none">⚠️ Este usuario no tiene tareas permitidas. Edítalo desde Usuarios para habilitarle alguna.</div>
+      </div>
+      <div class="fld-row">
+        <div class="fld"><div class="fld-lbl">Fecha</div><input class="fld-in" id="a-date" type="date" value="${today}"></div>
+        <div class="fld"><div class="fld-lbl">Pomodoros previstos</div><input class="fld-in" id="a-ses" type="number" min="1" value="2"></div>
+      </div>
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-out" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-pri" onclick="saveAsignacion()">Asignar</button>
+    </div>
+  `);
+  refreshAsigTareas();
+}
+function refreshAsigTareas(){
+  const uid=document.getElementById('a-uid').value;
+  const u=S.users.find(x=>x.id===uid);
+  const sel=document.getElementById('a-tid');
+  const empty=document.getElementById('a-tid-empty');
+  const permitidas=getTareasPermitidas(u);
+  const opciones=S.tareasCatalogo.filter(t=>permitidas.includes(t.id));
+  if(opciones.length===0){
+    sel.innerHTML='<option disabled selected>— Sin tareas permitidas —</option>';
+    empty.style.display='block';
+  } else {
+    sel.innerHTML=opciones.map(t=>`<option value="${t.id}">${t.icon} ${t.nombre}${currentUser.role==='admin'?' · '+t.precioHora+'€/h':''}</option>`).join('');
+    empty.style.display='none';
+  }
+}
+function saveAsignacion(){
+  const userId=document.getElementById('a-uid').value;
+  const tareaId=document.getElementById('a-tid').value;
+  const u=S.users.find(x=>x.id===userId);
+  if(!tareaId || !puedeHacerTarea(u, tareaId)){
+    alert('Este colaborador no tiene permiso para esa tarea. Edita su perfil para habilitársela.');
+    return;
+  }
+  S.asignaciones.push({
+    id:'a_'+Date.now(),
+    userId, tareaId,
+    fecha:document.getElementById('a-date').value,
+    sesionesPlanificadas:parseInt(document.getElementById('a-ses').value)||1,
+    sesionesCompletadas:0,
+    minutos:0,
+    completada:false
+  });
+  saveState(); closeModal();
+  if(activePage==='admin') renderAdmin();
+  if(activePage==='actividad') renderActividad();
+}
+
+/* ════════════════════════════════════════════
+   ERROR CATCHER GLOBAL · visible en pantalla
+   ════════════════════════════════════════════ */
+window.addEventListener('error', function(ev){
+  console.error('[GLOBAL ERROR]', ev.error || ev.message);
+  try {
+    var existing = document.getElementById('global-err-box');
+    if(!existing){
+      var box = document.createElement('div');
+      box.id = 'global-err-box';
+      box.style.cssText = 'position:fixed;bottom:80px;left:8px;right:8px;background:#7F1D1D;color:#fff;padding:10px 14px;border-radius:8px;font-family:monospace;font-size:11px;z-index:9999;max-height:150px;overflow:auto;box-shadow:0 4px 12px rgba(0,0,0,.3)';
+      document.body.appendChild(box);
+    }
+    var el = document.getElementById('global-err-box');
+    el.innerHTML += '<div style="margin-bottom:4px"><strong>⚠ ' + (ev.message||'') + '</strong>' + (ev.filename ? ' @ ' + ev.filename.split('/').pop() + ':' + ev.lineno : '') + '</div>';
+  } catch(e){}
+});
+
+/* ════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════ */
+// Helper · auto-rellenar y entrar con un clic en la lista de credenciales demo
+function fillLogin(email, pass){
+  var emailIn = document.getElementById('login-email');
+  var passIn = document.getElementById('login-pass');
+  if(emailIn) emailIn.value = email;
+  if(passIn) passIn.value = pass;
+  doLogin();
+}
+
+(async()=>{
+  // MODO DEMO · arranque limpio · sin auto-login · cada usuario entra con sus credenciales
+  document.getElementById('login-screen').style.display='flex';
+  // Foco en el email para escribir directo
+  setTimeout(function(){
+    var el = document.getElementById('login-email');
+    if(el) el.focus();
+  }, 100);
+})();
+</script>
+</body>
+</html>
