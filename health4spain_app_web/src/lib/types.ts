@@ -478,3 +478,31 @@ export const CIUDADES = [
   { id: 'estepona', label: 'Estepona' },
   { id: 'nerja', label: 'Nerja' },
 ] as const;
+
+// Usuarios administradores (tabla admin_users + Supabase Auth)
+export interface AdminUser {
+  id: string;
+  email: string;
+  name: string | null;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+  /** ID en Supabase Auth, si existe cuenta de acceso */
+  auth_user_id?: string | null;
+  /** Último inicio de sesión (Supabase Auth) */
+  last_sign_in_at?: string | null;
+  /** Si tiene cuenta creada en Supabase Auth */
+  has_auth_account?: boolean;
+}
+
+export interface AdminUserCreatePayload {
+  email: string;
+  name?: string;
+  password: string;
+}
+
+export interface AdminUserUpdatePayload {
+  name?: string;
+  active?: boolean;
+  password?: string;
+}

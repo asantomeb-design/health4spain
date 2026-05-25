@@ -4,31 +4,24 @@ import { useEffect, useState, useCallback } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 
-// Lista de emails admin (desde env pública)
-const getAdminEmails = (): string[] => {
-  const emails = process.env.NEXT_PUBLIC_ADMIN_EMAILS || '';
-  return emails.split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
-};
-
-const isAdminEmail = (email: string | undefined): boolean => {
-  if (!email) return false;
-  
-  const adminEmails = getAdminEmails();
-  
-  // Si no hay emails configurados, permitir cualquiera (desarrollo)
-  if (adminEmails.length === 0) {
-    console.warn('⚠️ NEXT_PUBLIC_ADMIN_EMAILS no configurado - cualquier usuario puede acceder al admin');
-    return true;
-  }
-  
-  return adminEmails.includes(email.toLowerCase());
-};
-
 interface AuthState {
   user: User | null;
   session: Session | null;
   isAdmin: boolean;
   isLoading: boolean;
+}
+
+async function checkAdminViaApi(token: string): Promise<boolean> {
+  try {
+    const res = await fetch('/api/admin/check', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return false;
+    const json = await res.json();
+    return json?.is_admin === true;
+  } catch {
+    return false;
+  }
 }
 
 export function useAuth() {
@@ -71,12 +64,25 @@ export function useAuth() {
           });
           return;
         }
-        
-        setState({
-          user: session?.user ?? null,
-          session,
-          isAdmin: isAdminEmail(session?.user?.email),
-          isLoading: false,
+
+        if (!session?.access_token) {
+          setState({
+            user: null,
+            session: null,
+            isAdmin: false,
+            isLoading: false,
+          });
+          return;
+        }
+
+        checkAdminViaApi(session.access_token).then((isAdmin) => {
+          if (!mounted) return;
+          setState({
+            user: session.user,
+            session,
+            isAdmin,
+            isLoading: false,
+          });
         });
       })
       .catch((error) => {
@@ -94,15 +100,30 @@ export function useAuth() {
 
     // Escuchar cambios de auth
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (mounted) {
+      async (_event, session) => {
+        if (!mounted) return;
+
+        if (!session?.access_token) {
           setState({
-            user: session?.user ?? null,
-            session,
-            isAdmin: isAdminEmail(session?.user?.email),
+            user: null,
+            session: null,
+            isAdmin: false,
             isLoading: false,
           });
+          return;
         }
+
+        setState((prev) => ({ ...prev, isLoading: true }));
+
+        const isAdmin = await checkAdminViaApi(session.access_token);
+
+        if (!mounted) return;
+        setState({
+          user: session.user,
+          session,
+          isAdmin,
+          isLoading: false,
+        });
       }
     );
 
@@ -120,9 +141,11 @@ export function useAuth() {
     });
     
     if (error) throw error;
-    
-    // Verificar si es admin
-    if (!isAdminEmail(data.user?.email)) {
+
+    const token = data.session?.access_token;
+    const isAdmin = token ? await checkAdminViaApi(token) : false;
+
+    if (!isAdmin) {
       await supabase.auth.signOut();
       throw new Error('No tienes permisos de administrador');
     }

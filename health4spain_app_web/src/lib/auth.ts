@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createServerSupabaseClient } from '@/lib/supabase';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -28,23 +29,42 @@ const getAdminEmails = (): string[] => {
   return emails.split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
 };
 
-const isAdminEmail = (email: string | undefined): boolean => {
+const isAdminEmailInEnv = (email: string | undefined): boolean => {
   if (!email) return false;
-  
+
   const adminEmails = getAdminEmails();
-  
-  // Si no hay emails configurados, denegar por seguridad en producción
+
   if (adminEmails.length === 0) {
     if (process.env.NODE_ENV === 'production') {
-      console.error('❌ ADMIN_EMAILS no configurado - acceso denegado');
       return false;
     }
-    console.warn('⚠️ ADMIN_EMAILS no configurado - permitiendo en desarrollo');
     return true;
   }
-  
+
   return adminEmails.includes(email.toLowerCase());
 };
+
+/** Comprueba si el email es admin activo en admin_users o en la whitelist env */
+export async function isActiveAdminEmail(email: string | undefined): Promise<boolean> {
+  if (!email) return false;
+
+  const normalized = email.toLowerCase();
+
+  try {
+    const supabase = createServerSupabaseClient();
+    const { data } = await supabase
+      .from('admin_users')
+      .select('active')
+      .eq('email', normalized)
+      .maybeSingle();
+
+    if (data?.active === true) return true;
+  } catch (err) {
+    console.error('Error checking admin_users:', err);
+  }
+
+  return isAdminEmailInEnv(normalized);
+}
 
 export async function validateAdminAuth(request: NextRequest): Promise<AuthResult> {
   const authHeader = request.headers.get('Authorization');
@@ -84,8 +104,8 @@ export async function validateAdminAuth(request: NextRequest): Promise<AuthResul
       };
     }
     
-    // Verificar que es admin
-    if (!isAdminEmail(user.email)) {
+    // Verificar que es admin (admin_users o whitelist env)
+    if (!(await isActiveAdminEmail(user.email))) {
       return {
         user: null,
         error: NextResponse.json(
