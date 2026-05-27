@@ -1273,6 +1273,7 @@ src="https://www.facebook.com/tr?id=1885591562124890&ev=PageView&noscript=1"
 // === FLUJO DE PRE-CUALIFICACIÓN Y ACCESO AL PANEL ===
 document.getElementById('partnerForm').addEventListener('submit', function(e) {
   e.preventDefault();
+  if (typeof fbq === 'function') fbq('track', 'Lead');
   const form = e.target;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());

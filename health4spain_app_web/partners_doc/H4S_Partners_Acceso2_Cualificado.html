@@ -1077,7 +1077,7 @@ function calcMultiVertical() {
     <div class="cta-final">
       <h2 style="color: var(--c); font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.3px;">¿Listo para firmar como Founding Partner?</h2>
       <p>Te enviamos contrato digital + mandato SEPA con las condiciones Founding aplicadas a tu caso. Plazos: firma + setup técnico en 7 días, primer lead operativo en 14-21 días desde la firma.</p>
-      <a href="#" class="cta-btn" onclick="alert('Conectar con flujo de firma'); return false;">Solicitar contrato Founding</a>
+      <a href="#" class="cta-btn" onclick="if(typeof fbq==='function')fbq('track','Lead');alert('Conectar con flujo de firma'); return false;">Solicitar contrato Founding</a>
     </div>
   </div>
 </section>

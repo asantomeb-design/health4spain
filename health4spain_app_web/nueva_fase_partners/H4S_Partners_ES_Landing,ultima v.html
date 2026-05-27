@@ -650,5 +650,13 @@ src="https://www.facebook.com/tr?id=1885591562124890&ev=PageView&noscript=1"
   <b>Health4Spain</b> · by COASEMED S.L. · health4spain.com · Red de Partners 2026 · Documento confidencial
 </footer>
 
+<script>
+document.querySelectorAll('a[href^="mailto:"]').forEach(function(link) {
+  link.addEventListener('click', function() {
+    if (typeof fbq === 'function') fbq('track', 'Contact');
+  });
+});
+</script>
+
 </body>
 </html>
