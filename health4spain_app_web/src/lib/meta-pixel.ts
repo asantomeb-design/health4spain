@@ -15,48 +15,29 @@ export function isMetaPixelConfigured(): boolean {
   return Boolean(META_PIXEL_ID);
 }
 
+function injectMetaPixelLoader(): void {
+  if (typeof window === 'undefined' || window.fbq) return;
+
+  const script = document.createElement('script');
+  script.textContent = `
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+  `;
+  document.head.appendChild(script);
+}
+
 export function loadMetaPixel(): void {
   if (typeof window === 'undefined' || !META_PIXEL_ID || initialized || !canUseMarketing()) {
     return;
   }
 
-  if (!window.fbq) {
-    /* eslint-disable @typescript-eslint/no-implied-eval */
-    (function injectMetaPixel(f: Window, b: Document) {
-      if (f.fbq) return;
-      const n = function (...args: unknown[]) {
-        const fn = n as typeof n & {
-          callMethod?: (...a: unknown[]) => void;
-          queue: unknown[][];
-        };
-        if (fn.callMethod) {
-          fn.callMethod(...args);
-        } else {
-          fn.queue.push(args);
-        }
-      };
-      const fbq = n as typeof window.fbq & {
-        callMethod?: (...a: unknown[]) => void;
-        queue: unknown[][];
-        loaded?: boolean;
-        version?: string;
-        push?: typeof window.fbq;
-      };
-      fbq.queue = [];
-      f.fbq = fbq;
-      if (!f._fbq) f._fbq = fbq;
-      fbq.push = fbq;
-      fbq.loaded = true;
-      fbq.version = '2.0';
-      const t = b.createElement('script');
-      t.async = true;
-      t.src = 'https://connect.facebook.net/en_US/fbevents.js';
-      const s = b.getElementsByTagName('script')[0];
-      s?.parentNode?.insertBefore(t, s);
-    })(window, document);
-    /* eslint-enable @typescript-eslint/no-implied-eval */
-  }
-
+  injectMetaPixelLoader();
   window.fbq?.('init', META_PIXEL_ID);
   window.fbq?.('track', 'PageView');
   initialized = true;
