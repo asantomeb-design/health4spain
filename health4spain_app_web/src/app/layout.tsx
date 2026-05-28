@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto_Slab, Ubuntu } from "next/font/google";
 import HtmlLang from "@/components/HtmlLang";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import MetaPixel from "@/components/MetaPixel";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
@@ -81,6 +82,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <GoogleAnalytics />
+        <MetaPixel />
         <SpeedInsights />
         <HtmlLang />
         {children}

@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { PAISES_CON_CODIGO, CODIGOS_PARA_OTRO, PAISES } from '@/lib/constants';
 import { getDictionary } from '@/lib/dictionaries';
+import { trackMetaEvent } from '@/lib/meta-pixel';
 import type { Locale } from '@/lib/routes';
 
 interface FormData {
@@ -472,8 +473,10 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
           idioma_preferido: locale,
         }),
       });
-      if (response.ok) setIsSuccess(true);
-      else {
+      if (response.ok) {
+        trackMetaEvent('Lead');
+        setIsSuccess(true);
+      } else {
         const data = await response.json();
         alert(data.error || t.errorEnvio);
       }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { trackMetaEvent } from '@/lib/meta-pixel';
 import { PAISES_CON_CODIGO, CODIGOS_PARA_OTRO, PAISES } from '@/lib/constants';
 import { getDictionary } from '@/lib/dictionaries';
 import type { Locale } from '@/lib/routes';
@@ -120,6 +121,7 @@ export default function LandingFormEmbed({
       });
 
       if (response.ok) {
+        trackMetaEvent('Lead');
         setSubmitStatus('success');
         // Redirigir a página de gracias después de un breve delay
         setTimeout(() => {

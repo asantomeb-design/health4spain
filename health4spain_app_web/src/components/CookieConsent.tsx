@@ -8,6 +8,7 @@ import {
   DEFAULT_CONSENT,
   getStoredConsent,
 } from '@/lib/cookie-consent';
+import { loadMetaPixel } from '@/lib/meta-pixel';
 
 declare global {
   interface Window {
@@ -148,6 +149,9 @@ export default function CookieConsent({ lang = 'es' }: CookieConsentProps) {
         ad_user_data: consent.marketing ? 'granted' : 'denied',
         ad_personalization: consent.marketing ? 'granted' : 'denied',
       });
+    }
+    if (consent.marketing) {
+      loadMetaPixel();
     }
   };
 

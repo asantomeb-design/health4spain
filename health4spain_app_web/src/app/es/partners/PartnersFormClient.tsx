@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { CITIES, LANGUAGES } from '@/lib/constants';
+import { trackMetaEvent } from '@/lib/meta-pixel';
 import type { PartnerCarteraPct, PartnerService } from '@/lib/types';
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
@@ -103,6 +104,7 @@ export default function PartnersFormClient() {
         throw new Error(json?.error || 'No se pudo enviar la solicitud.');
       }
 
+      trackMetaEvent('Lead');
       setStatus('success');
       // Redirect to honest confirmation page.
       setTimeout(() => {

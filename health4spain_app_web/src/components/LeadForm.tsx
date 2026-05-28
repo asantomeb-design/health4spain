@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { trackMetaEvent } from '@/lib/meta-pixel';
 
 interface LeadFormProps {
   servicio?: string;
@@ -118,6 +119,7 @@ export default function LeadForm({
       
       if (!response.ok) throw new Error('Error al enviar');
       
+      trackMetaEvent('Lead');
       setSubmitStatus('success');
       setFormData({
         nombre: '',
