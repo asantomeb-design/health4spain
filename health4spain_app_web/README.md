@@ -32,7 +32,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 
 176+ landing pages SEO (76 servicio×ciudad + 100 visa no lucrativa) + blog multiidioma + páginas de destinos
 
-**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: API + webhook único, segmentación por `servicio` / `tipo_ruta`) + leads en español**, panel admin de leads, **módulo Partners Fase 1 (captación + cualificación + magic link + selector ROI/contrato Founding)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, production-ready — **v3.4.0** (8 May 2026)
+**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: API + webhook único, segmentación por `servicio` / `tipo_ruta`) + leads en español**, panel admin de leads, **módulo Partners Fase 1 (captación + cualificación + magic link + selector ROI/contrato Founding)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, **Meta Pixel (Facebook Ads) con consentimiento GDPR**, production-ready — **v3.4.1** (28 May 2026)
 
 ---
 
@@ -78,7 +78,9 @@ health4spain/
 │   │   ├── Footer.tsx              # Footer multiidioma
 │   │   ├── HtmlLang.tsx            # Dynamic <html lang="">
 │   │   ├── AIChatWidget.tsx        # Chat Mar-IA (widget flotante, avatar chat_ia_logo.jpg)
-│   │   ├── CookieConsent.tsx       # GDPR
+│   │   ├── CookieConsent.tsx       # GDPR (Análisis + Marketing)
+│   │   ├── GoogleAnalytics.tsx     # GA4 + Consent Mode v2
+│   │   ├── MetaPixel.tsx           # Meta Pixel (solo tras cookies Marketing)
 │   │   ├── LandingFormEmbed.tsx    # Formulario en landings
 │   │   └── ServiceIcon.tsx         # Iconos por servicio
 │   └── lib/
@@ -88,6 +90,7 @@ health4spain/
 │       ├── routes.ts               # URLs traducidas por idioma
 │       ├── seo.tsx                 # SEO helpers (JSON-LD, OG, hreflang, buildBlogAlternates…)
 │       ├── blog-locale-switch.ts   # Enlaces de idioma coherentes en /blog/[slug]
+│       ├── meta-pixel.ts           # Meta Pixel: load, PageView, Lead
 │       ├── services.ts             # RPCs traducidas
 │       ├── ciudades.ts             # Funciones ciudades
 │       └── partners.ts             # Lógica negocio Partners (precios Tier×Plan, ciudades→tier, multi-vertical, Founding, ROI)
@@ -331,6 +334,7 @@ SERPAPI_KEY=                       # Opcional: modo «Noticias» del asistente b
 NEXT_PUBLIC_TINYMCE_API_KEY=
 NEXT_PUBLIC_WHATSAPP_NUMBER=34614404562
 NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
+NEXT_PUBLIC_META_PIXEL_ID=1885591562124890   # Meta Ads (ver docs/META_PIXEL.md)
 
 # GoHighLevel (opcional — ver .env.example para mapeo de campos)
 # GHL_PRIVATE_TOKEN=
@@ -350,13 +354,14 @@ NEXT_PUBLIC_SITE_URL=https://www.health4spain.com
 - [docs/PARTNERS_FASE1_CAPTACION.md](./docs/PARTNERS_FASE1_CAPTACION.md) - Partners Fase 1 (captación + cualificación + Founding)
 - [docs/MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md) - Partners post-firma (asignación, facturación)
 - [docs/BLOG_IA_Y_TRADUCCIONES.md](./docs/BLOG_IA_Y_TRADUCCIONES.md) - Asistente IA del blog, traducciones, hreflang, APIs
+- [docs/META_PIXEL.md](./docs/META_PIXEL.md) - Meta Pixel: configuración, eventos, verificación
 - [docs/ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md) - Estrategia editorial SEO (visión producto)
 - [scripts/README.md](./scripts/README.md) - Scripts disponibles
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, GHL + LEADS (ES), PARTNERS FASE 1, BLOG IA + TRADUCCIONES ENLAZADAS, PRODUCTION-READY  
-**Última actualización**: 8 de mayo de 2026  
+**Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, GHL + LEADS (ES), PARTNERS FASE 1, BLOG IA + TRADUCCIONES ENLAZADAS, META PIXEL, PRODUCTION-READY  
+**Última actualización**: 28 de mayo de 2026  
 **Versión**: 3.4.0  
 **Build**: 708+ páginas estáticas (incluye módulo Partners en `/es/partners` y `/administrator/partners`)  
 **Licencia**: Privado - Health4Spain © 2026

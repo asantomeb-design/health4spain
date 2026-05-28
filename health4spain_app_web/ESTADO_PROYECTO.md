@@ -215,7 +215,6 @@ npm run check-landings
 ## 🚀 Próximos Pasos
 
 ### Pendiente
-- [ ] Google Analytics 4
 - [ ] Google Search Console + sitemap submission
 - [ ] Testing cross-browser
 - [ ] Onboarding primeros 10 partners (Founding) — captura via `/es/partners`, cualificación manual, firma offline
@@ -224,6 +223,12 @@ npm run check-landings
 - [ ] Stripe + GoCardless para suscripciones partners (cuando haya >30 partners)
 - [ ] Signaturit para firma digital (cuando volumen ≥ 20 firmas/mes)
 - [ ] Email/WhatsApp automatizado al generar token de Acceso 2
+
+### Completado Recientemente (May 2026 — Meta Pixel)
+- ✅ **Meta Pixel** (`1885591562124890`) en web Next.js: `MetaPixel.tsx` + `meta-pixel.ts` en `layout.tsx`.
+- ✅ Eventos `Lead` en formularios (leads, solicitar, partners); consentimiento GDPR (cookies Marketing).
+- ✅ Variable `NEXT_PUBLIC_META_PIXEL_ID` en Vercel; verificado con Meta Pixel Helper en producción.
+- ✅ Documentación: `docs/META_PIXEL.md`, actualizados README, CONFIGURACION_VERCEL, índices.
 
 ### Completado Recientemente (May 2026 — Blog IA y traducciones)
 - ✅ **`ai_blog_config`** + rutas `/api/admin/blog/ai/*` (propuestas, noticias SerpAPI, redacción, portada, borrador, traducción).

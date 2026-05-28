@@ -48,6 +48,9 @@ Debes configurar estas variables de entorno en tu proyecto de Vercel:
 |----------|-------|-------------|
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | `G-XXXXXXXXXX` | Google Analytics 4 |
 | `NEXT_PUBLIC_GTM_ID` | `GTM-XXXXXXX` | Google Tag Manager |
+| `NEXT_PUBLIC_META_PIXEL_ID` | `1885591562124890` | Meta (Facebook) Pixel — campañas Ads |
+
+Detalle del pixel (eventos, consentimiento, verificación): **[`docs/META_PIXEL.md`](./docs/META_PIXEL.md)**
 
 #### 🤖 OPENAI (Recomendado si usas Chat Mar-IA y/o asistente del blog)
 
@@ -174,6 +177,7 @@ Asegúrate de que en Supabase tengas configurado:
 - [ ] Acceso al panel de administrador funcionando
 - [ ] Editor de blog funcionando
 - [ ] Formularios de leads funcionando
+- [ ] (Opcional) `NEXT_PUBLIC_META_PIXEL_ID` configurado y pixel verificado con Meta Pixel Helper
 - [ ] (Opcional) Variables GHL configuradas y contacto creado en workflow de prueba
 
 ---
@@ -191,6 +195,11 @@ Asegúrate de que en Supabase tengas configurado:
 ### Error: "TinyMCE no carga"
 - Obtén API Key en https://www.tiny.cloud/
 - Configura `NEXT_PUBLIC_TINYMCE_API_KEY` en Vercel
+
+### Meta Pixel no detectado en la web
+- Configura `NEXT_PUBLIC_META_PIXEL_ID=1885591562124890` en Vercel y redeploy
+- Acepta cookies de **Marketing** en el banner GDPR
+- Ver guía: [`docs/META_PIXEL.md`](./docs/META_PIXEL.md)
 
 ---
 

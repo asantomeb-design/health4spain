@@ -2,6 +2,15 @@
 
 ---
 
+## 🆕 Meta Pixel (Facebook Ads) + documentación — 28 mayo 2026
+
+- Pixel **`1885591562124890`** integrado en web Next.js (`MetaPixel.tsx`, `src/lib/meta-pixel.ts`, `layout.tsx`).
+- Eventos **`Lead`** en formularios; activación solo con cookies **Marketing** (GDPR).
+- Variable **`NEXT_PUBLIC_META_PIXEL_ID`** en Vercel; verificado en producción con Meta Pixel Helper.
+- Guía técnica: **`docs/META_PIXEL.md`**. Versión del proyecto **3.4.1**.
+
+---
+
 ## 🆕 Blog IA + traducciones enlazadas + documentación — 8 mayo 2026
 
 - Asistente del blog en admin (`Crear con IA`, `Config IA`, SerpAPI, portadas OpenAI → Storage `blog-images/ai-covers/`).

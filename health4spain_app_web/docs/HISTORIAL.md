@@ -1,5 +1,17 @@
 # Historial de Desarrollo - Health4Spain
 
+## Versión 3.4.1 (28 mayo 2026)
+
+### Meta Pixel (Facebook Ads)
+
+- **`MetaPixel.tsx`** + **`src/lib/meta-pixel.ts`**: pixel global en `layout.tsx`; carga tras consentimiento cookies **Marketing** (`CookieConsent.tsx`).
+- Eventos **`Lead`** en `LeadForm`, `LandingFormEmbed`, `ContactFormClient`, `PartnersFormClient`.
+- Variable **`NEXT_PUBLIC_META_PIXEL_ID=1885591562124890`** en Vercel (Production + Preview); verificado con Meta Pixel Helper.
+- HTMLs prototipo partners (`partners_doc/`, `nueva_fase_partners/`) también incluyen pixel + eventos.
+- Documentación: **`docs/META_PIXEL.md`**; actualizados README, CONFIGURACION_VERCEL, ESTADO_PROYECTO, índices.
+
+---
+
 ## Versión 3.4.0 (8 mayo 2026)
 
 ### Blog: asistente IA, traducciones enlazadas y documentación

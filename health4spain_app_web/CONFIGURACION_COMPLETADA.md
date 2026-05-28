@@ -134,6 +134,7 @@ Sigue la guía en `CONFIGURACION_VERCEL.md`:
 - [ ] TinyMCE API Key configurada
 - [ ] WhatsApp configurado (opcional)
 - [ ] Google Analytics configurado (opcional)
+- [ ] Meta Pixel configurado (`NEXT_PUBLIC_META_PIXEL_ID`) — ver `docs/META_PIXEL.md`
 - [ ] Proyecto redeployado
 
 ### Supabase (Base de datos)
@@ -158,6 +159,7 @@ Estas variables empiezan con `NEXT_PUBLIC_` y son accesibles desde el navegador:
 - ✅ `NEXT_PUBLIC_SITE_URL`
 - ✅ `NEXT_PUBLIC_WHATSAPP_NUMBER`
 - ✅ `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+- ✅ `NEXT_PUBLIC_META_PIXEL_ID` (ID público; visible en navegador tras aceptar Marketing)
 
 ### Variables Privadas (backend - NUNCA exponer)
 Estas variables NO tienen `NEXT_PUBLIC_` y solo son accesibles en el servidor:

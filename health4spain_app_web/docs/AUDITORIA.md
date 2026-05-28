@@ -137,6 +137,15 @@ Respuesta: "Te contactaremos en menos de 24 horas"
 
 ## 6. LAYOUT Y COMPONENTES GLOBALES
 
+**Layout raíz** (`src/app/layout.tsx`):
+
+```
+<GoogleAnalytics />   ← GA4 + Consent Mode v2 (cookies Análisis)
+<MetaPixel />         ← Meta Pixel (cookies Marketing). Excluye /administrator
+<HtmlLang />
+{children}
+```
+
 **Layout `/es`** (`src/app/es/layout.tsx`):
 
 ```
@@ -204,6 +213,7 @@ Respuesta: "Te contactaremos en menos de 24 horas"
 | CTAs → Contacto | ✅ Todos unificados |
 | Flujo de leads | ✅ Funcional, falta email |
 | Cookies GDPR | ✅ Banner con categorías, enlace footer |
+| Meta Pixel | ✅ Tras consentimiento Marketing; `Lead` en formularios — ver `docs/META_PIXEL.md` |
 | Duplicación datos | ⚠️ Home + constants duplican BD |
 | Sitemap | ⚠️ Faltan ciudades/servicios |
 | Navbar | ✅ `Navigation.tsx`; idioma en artículos blog vía `blog-locale-switch` + `/api/blog/translations` |

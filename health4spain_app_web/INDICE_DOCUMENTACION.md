@@ -1,8 +1,8 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 8 de mayo de 2026  
-**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | Partners Fase 1 | Blog IA + translation_group_id | 708+ páginas | 176+ landings SEO | Production-ready  
-**Versión:** 3.4.0
+**Fecha:** 28 de mayo de 2026  
+**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | Partners Fase 1 | Blog IA + translation_group_id | Meta Pixel | 708+ páginas | 176+ landings SEO | Production-ready  
+**Versión:** 3.4.1
 
 ---
 
@@ -47,6 +47,7 @@
 | **[PARTNERS_FASE1_CAPTACION.md](./docs/PARTNERS_FASE1_CAPTACION.md)** | 🤝 Partners Fase 1: captación + cualificación + magic link + Founding (BD, APIs, planes, ciudades→tier, ROI, operativa closer) | ✅ Nuevo |
 | **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners post-firma: asignación, panel partner activo, facturación (target/v2; GHL operativo) | 📖 Referencia (v2) |
 | **[BLOG_IA_Y_TRADUCCIONES.md](./docs/BLOG_IA_Y_TRADUCCIONES.md)** | ✍️ Asistente IA blog, SerpAPI, `translation_group_id`, APIs, Navigation/hreflang | ✅ Nuevo |
+| **[META_PIXEL.md](./docs/META_PIXEL.md)** | 📊 Meta Pixel: variable Vercel, eventos Lead/PageView, GDPR, verificación | ✅ Nuevo |
 | **[ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md)** | ✍️ Estrategia SEO blog (visión editorial); esquema BD en doc técnico anterior | 📖 Referencia |
 
 ### 📂 `/scripts`
