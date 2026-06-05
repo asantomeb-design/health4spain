@@ -506,3 +506,208 @@ export interface AdminUserUpdatePayload {
   active?: boolean;
   password?: string;
 }
+
+// =============================================
+// Tipos para HUB COLABORADORES (B2E interno)
+// =============================================
+// Espejo TypeScript del esquema supabase/19-hub-colaboradores.sql.
+// El Hub es el cuadro de mando interno del equipo comercial (no la web pública).
+
+export type HubRole = 'admin' | 'supervisor' | 'tecnico' | 'closer';
+
+export type HubCanal = 'interno' | 'externo';
+
+export type HubRegimen = 'n+1' | 'n+2';
+
+export interface HubUser {
+  id: string;
+  nombre: string;
+  email: string;
+  nif?: string | null;
+  iban?: string | null;
+  rol: HubRole;
+  canal: HubCanal;
+  supervisor_id?: string | null;
+  productos_asignados: string[];
+  auth_user_id?: string | null;
+  ghl_user_id?: string | null;
+  activo: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface HubCompany {
+  id: string;
+  slug: string;
+  nombre: string;
+  parser_key: string;
+  regimen_default: HubRegimen;
+  activo: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface HubCommissionConfig {
+  id: string;
+  hub_user_id: string;
+  company_id: string;
+  producto: string;
+  pct_closer: number;
+  regimen?: HubRegimen | null;
+  activo: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type HubCsvUploadEstado = 'cargado' | 'asignando' | 'cerrado' | 'anulado';
+
+export interface HubCsvUpload {
+  id: string;
+  company_id: string;
+  periodo: string; // 'MM-YYYY'
+  file_hash: string;
+  filename: string;
+  n_lineas: number;
+  n_lineas_validas: number;
+  n_lineas_error: number;
+  total_comision_bruta: number;
+  uploaded_by_email?: string | null;
+  estado: HubCsvUploadEstado;
+  created_at: string;
+  updated_at: string;
+}
+
+export type HubLineaEstado =
+  | 'consolidandose'
+  | 'acumulado'
+  | 'cobrado'
+  | 'liquidada';
+
+export interface HubLiquidacionLinea {
+  id: string;
+  csv_upload_id: string;
+  company_id: string;
+  periodo: string;
+
+  // Esquema interno común
+  nif_agente?: string | null;
+  nombre_agente?: string | null;
+  cliente?: string | null;
+  producto?: string | null;
+  subramo?: string | null;
+  poliza?: string | null;
+  asegurado?: string | null;
+  fecha_desde?: string | null;
+  fecha_hasta?: string | null;
+  prima_neta?: number | null;
+  comision_bruta: number;
+  comision_pct_compania?: number | null;
+  ref_externa?: string | null;
+  raw: Record<string, unknown>;
+
+  // Asignación
+  hub_user_id?: string | null;
+  pct_reparto: number;
+  pct_closer?: number | null;
+  assigned_by_email?: string | null;
+  assigned_at?: string | null;
+
+  // Cálculo
+  comision_neta?: number | null;
+  bonus_cvr?: number | null;
+  irpf_pct: number;
+  irpf_importe?: number | null;
+  neto_pagar?: number | null;
+
+  // Régimen y estado
+  regimen?: HubRegimen | null;
+  fecha_cobro_estimada?: string | null;
+  estado: HubLineaEstado;
+  liquidacion_id?: string | null;
+
+  created_at: string;
+  updated_at: string;
+}
+
+export type HubLiquidacionEstado =
+  | 'pendiente'
+  | 'pendiente_aprobacion'
+  | 'aprobada'
+  | 'elegible'
+  | 'liquidada'
+  | 'rechazada';
+
+export interface HubLiquidacion {
+  id: string;
+  hub_user_id: string;
+  periodo: string;
+  total_bruto: number;
+  total_irpf: number;
+  total_neto: number;
+  n_lineas: number;
+  estado: HubLiquidacionEstado;
+  aprobada_por_email?: string | null;
+  aprobada_at?: string | null;
+  pagada_at?: string | null;
+  pago_referencia?: string | null;
+  comentario?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type HubCvrNivel = 'elite' | 'optimo' | 'objetivo' | 'minimo' | 'riesgo';
+
+export interface HubSnapshotCvr {
+  id: string;
+  hub_user_id: string;
+  fecha: string;
+  leads_recibidos_30d: number;
+  leads_cerrados_30d: number;
+  cvr: number;
+  nivel?: HubCvrNivel | null;
+  bonus_pct: number;
+  created_at: string;
+}
+
+export interface HubAuditLogEntry {
+  id: number;
+  ts: string;
+  actor_email?: string | null;
+  actor_rol?: string | null;
+  ip_address?: string | null;
+  action: string;
+  resource_type?: string | null;
+  resource_id?: string | null;
+  metadata?: Record<string, unknown> | null;
+  result?: string | null;
+}
+
+/** Fila normalizada del parser CSV (esquema interno común multi-compañía). */
+export interface HubParsedLine {
+  nif_agente?: string | null;
+  nombre_agente?: string | null;
+  cliente?: string | null;
+  producto?: string | null;
+  subramo?: string | null;
+  poliza?: string | null;
+  asegurado?: string | null;
+  fecha_desde?: string | null;
+  fecha_hasta?: string | null;
+  prima_neta?: number | null;
+  comision_bruta: number;
+  comision_pct_compania?: number | null;
+  ref_externa?: string | null;
+  periodo?: string | null;
+  raw: Record<string, unknown>;
+  /** Errores de validación de la fila (vacío = válida). */
+  errores: string[];
+}
+
+export interface HubParseResult {
+  lineas: HubParsedLine[];
+  n_total: number;
+  n_validas: number;
+  n_error: number;
+  total_comision_bruta: number;
+  periodo_detectado?: string | null;
+}
