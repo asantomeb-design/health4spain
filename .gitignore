@@ -1,0 +1,11 @@
+# Archivos sensibles / locales en la raíz del repo (NO subir)
+/contraseñas admin.txt
+/test_mail.php
+
+# Patrones de seguridad por si aparecen más en la raíz
+*contrase*a*.txt
+*password*.txt
+*credenciales*.txt
+.env
+.env.*
+!.env.example
