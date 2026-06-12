@@ -84,8 +84,8 @@ export default function PartnersAcceso1Page() {
           </p>
         </div>
 
-        <div className="container-narrow">
-          <div className="service-grid-2x2 lg:!grid-cols-5">
+        <div className="container-base">
+          <div className="partners-steps-grid partners-steps-grid--5">
             {[
               { n: '01', t: 'Captación', d: 'Campañas Meta + Google Ads en 5 idiomas, segmentadas por nacionalidad y zona.' },
               { n: '02', t: 'Landing', d: 'Formulario en idioma del cliente. Convierte en menos de 90 segundos.' },
@@ -93,8 +93,8 @@ export default function PartnersAcceso1Page() {
               { n: '04', t: 'Agenda', d: 'Cita confirmada con briefing: idioma, presupuesto, urgencia.' },
               { n: '05', t: 'Tu Cierre', d: 'El cliente llega informado y con cita. Tú apareces y cierras.' },
             ].map((s) => (
-              <div key={s.n} className="service-card text-center">
-                <div className="service-number">{s.n}</div>
+              <div key={s.n} className="partners-step-card text-center">
+                <div className="partners-step-num">{s.n}</div>
                 <h3>{s.t}</h3>
                 <p>{s.d}</p>
               </div>
@@ -118,8 +118,8 @@ export default function PartnersAcceso1Page() {
           </p>
         </div>
 
-        <div className="container-narrow">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="container-base">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5">
             {[
               {
                 name: 'Activa',
@@ -173,11 +173,11 @@ export default function PartnersAcceso1Page() {
             ].map((p) => (
               <article
                 key={p.name}
-                className={`service-card flex flex-col ${
+                className={`partners-step-card flex flex-col text-left ${
                   p.elite ? '!border-t-black ring-1 ring-black' : ''
                 }`}
               >
-                <div className="service-number mb-1">{p.name}</div>
+                <div className="partners-step-num mb-1">{p.name}</div>
                 <p className="text-xs uppercase tracking-widest font-bold text-accent mb-4">
                   {p.tag}
                 </p>
@@ -251,19 +251,19 @@ export default function PartnersAcceso1Page() {
           </p>
         </div>
 
-        <div className="container-narrow">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="container-base">
+          <div className="partners-steps-grid partners-steps-grid--4">
             {[
               { n: '1', t: 'Solicitas Acceso', d: 'Rellenas el formulario. 2 min. Sin precios mostrados aún.', when: 'Día 0' },
               { n: '2', t: 'Llamada de Cualificación', d: '20 min con un closer H4S. Validamos trayectoria, zona y capacidad.', when: 'Día 1-2' },
               { n: '3', t: 'Acceso Completo', d: 'Zona privada con calculadora ROI, tarifas y simulador de progresión.', when: 'Día 2-5' },
               { n: '4', t: 'Firma y Arranque', d: 'Contrato, mandato SEPA, config técnica. Operativo en 14-21 días.', when: 'Día 7-21' },
             ].map((s) => (
-              <div key={s.n} className="service-card text-center">
-                <div className="service-number">{s.n}</div>
+              <div key={s.n} className="partners-step-card text-center">
+                <div className="partners-step-num">{s.n}</div>
                 <h3>{s.t}</h3>
                 <p>{s.d}</p>
-                <span className="text-xs uppercase tracking-widest font-bold text-accent mt-auto pt-4">
+                <span className="text-[0.6875rem] uppercase tracking-widest font-bold text-accent mt-auto pt-3">
                   {s.when}
                 </span>
               </div>

@@ -284,6 +284,75 @@ h4 { font-size: 1.25rem; }
 }
 
 /* =============================================
+   PARTNERS PAGE · grids de pasos (5 / 4 cols)
+   No reutilizar service-grid-2x2 (max 900px, tipografía grande).
+   ============================================= */
+.partners-steps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: none;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .partners-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .partners-steps-grid--5 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .partners-steps-grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .partners-steps-grid--5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .partners-steps-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.partners-step-card {
+  background: white;
+  padding: 1.25rem 1rem;
+  border-top: 3px solid var(--color-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+.partners-step-card .partners-step-num {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1.2;
+}
+
+.partners-step-card h3 {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.partners-step-card p {
+  font-size: 0.8125rem;
+  color: var(--color-gray-text);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* =============================================
    STATS SECTION - MINIMALIST (fondo negro)
    ============================================= */
 @layer components {
