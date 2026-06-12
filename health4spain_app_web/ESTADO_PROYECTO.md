@@ -1,16 +1,17 @@
 # 📊 Estado del Proyecto Health4Spain
 
-**Fecha de última actualización:** 8 de mayo de 2026
+**Fecha de última actualización:** 12 de junio de 2026
 
 ---
 
-## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO + GHL/LEADS + PARTNERS FASE 1 + BLOG IA + PRODUCTION-READY
+## ✅ ESTADO ACTUAL: MULTI-IDIOMA + SEO + GHL/LEADS + PARTNERS FASE 1 + HUB COLABORADORES + BLOG IA + PRODUCTION-READY
 
 ### 🎯 Hitos Alcanzados
 
-- ✅ **Asistente IA del blog** (mayo 2026): wizard «Crear con IA», Config IA (`ai_blog_config`), traducción desde editor (solo artículo ES), portadas IA (`blog-images/ai-covers/`), SerpAPI para modo noticias. Documentación: **`docs/BLOG_IA_Y_TRADUCCIONES.md`**.
+- ✅ **Hub Colaboradores v1** (junio 2026): app interna `/hub` para comisiones del equipo de ventas. Carga CSV multi-compañía (ASISA + genérico), asignación a closers, cálculo IRPF/régimen, export contable, justificante PDF, RBAC 4 roles, audit log. BD `19-hub-colaboradores.sql` en producción. Integración GHL **preparada** (webhook + lectura pipelines/usuarios); **CVR automático pendiente** de Claudia. Detalle: **`docs/HUB_COLABORADORES.md`** · resumen cliente: **`HUB_ESTADO_SENCILLO.md`**.
+- ✅ **Asistente IA del blog** (mayo 2026): wizard «Crear con IA», Config IA (`ai_blog_config`), traducción desde editor (solo artículo ES), portadas IA (`blog-images/ai-covers/`), búsqueda de noticias vía OpenAI `web_search` (SerpAPI eliminado). Documentación: **`docs/BLOG_IA_Y_TRADUCCIONES.md`**.
 - ✅ **Blog enlazado entre idiomas**: columna `translation_group_id`, API `GET /api/blog/translations`, hreflang con slugs reales (`buildBlogAlternates`), navbar (`Navigation.tsx`) con `hrefForLocaleSwitch`. Migración **`supabase/17-blog-translation-groups.sql`**.
-- ✅ **Partners Fase 1 — Captación B2B** (mayo 2026): funnel completo de captación de partners pagadores, end-to-end. Landing pública `/es/partners` (Acceso 1) sin precios + formulario; cualificación humana en `/administrator/partners` con generación de **magic link** UUID (TTL 7 días) que se copia al portapapeles; panel privado `/es/partners/acceso?token=...` (Acceso 2) con calculadora ROI interactiva, selector multi-vertical con descuento progresivo y CTA «Solicitar contrato Founding»; tabla `partner_leads` (`supabase/16-partner-leads.sql`), 4 endpoints `/api/partners/*` y lógica centralizada en `src/lib/partners.ts` (matriz Tier × Plan, 19 ciudades→tier, Founding 30%×6m, ROI). Decisión de producto: 19 ciudades estratégicas + plazas compartidas (exclusividad solo en plan LIDERA, por trayectoria). Pagos/firmas manuales en v0; Stripe/Signaturit/Calendly diferidos. Detalle: **`docs/PARTNERS_FASE1_CAPTACION.md`**.
+- ✅ **Partners Fase 1 — Captación B2B** (mayo 2026): funnel completo… Detalle: **`docs/PARTNERS_FASE1_CAPTACION.md`**. **Fix jun 2026:** grids `partners-steps-grid` en `/es/partners` (texto ya no se corta en columnas estrechas).
 - ✅ **GoHighLevel integrado** (API upsert + webhook único `GHL_INCOMING_WEBHOOK_SALUD`): valores legibles en **español** en CRM aunque el lead venga de formulario EN/FR/DE/PT (`src/lib/ghl-spanish-labels.ts`, campos `*_es` en webhook y custom fields API). **Una sola location GHL** acordada con el cliente; el JSON incluye `servicio` y `tipo_ruta` (`salud` / `otros`) para filtros y workflows. Fuente de verdad: **`README.md` → «CRM GoHighLevel (GHL) y leads»** (decisión de producto y nombre histórico de la variable).
 - ✅ **Panel admin** `/administrator/leads`: listado y eliminación de leads.
 - ✅ **Panel admin** `/administrator/partners`: listado paginado con filtros (stage, servicio, ciudad), modal de detalle con cualificar A/B/C, rechazar, regenerar token, cambio manual de stage.
@@ -224,6 +225,13 @@ npm run check-landings
 - [ ] Signaturit para firma digital (cuando volumen ≥ 20 firmas/mes)
 - [ ] Email/WhatsApp automatizado al generar token de Acceso 2
 
+### Completado Recientemente (Jun 2026 — Hub Colaboradores)
+- ✅ **Migración 19** + 9 tablas Hub en producción; seed ASISA/LBS.
+- ✅ **SPA `/hub`** + APIs comisiones multi-compañía + parsers CSV + export + justificante.
+- ✅ **GHL Hub**: `ghl-client.ts`, `/hub/integraciones`, webhook `/api/hub/ghl/webhook` (CVR pendiente Claudia).
+- ✅ **Docs**: `docs/HUB_COLABORADORES.md`, `HUB_ESTADO_SENCILLO.md`, `docs/reunion-cliente-resumen.pdf`.
+- ✅ **Fix UX** `/es/partners`: columnas «De Google a Tu Agenda» y planes.
+
 ### Completado Recientemente (May 2026 — Meta Pixel)
 - ✅ **Meta Pixel** (`1885591562124890`) en web Next.js: `MetaPixel.tsx` + `meta-pixel.ts` en `layout.tsx`.
 - ✅ Eventos `Lead` en formularios (leads, solicitar, partners); consentimiento GDPR (cookies Marketing).
@@ -270,6 +278,6 @@ npm run check-landings
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PARTNERS FASE 1 + BLOG IA + PRODUCTION-READY  
-**Última actualización**: 8 de mayo de 2026  
-**Versión**: 3.4.0
+**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PARTNERS FASE 1 + HUB COLABORADORES v1 + BLOG IA + PRODUCTION-READY  
+**Última actualización**: 12 de junio de 2026  
+**Versión**: 3.5.0

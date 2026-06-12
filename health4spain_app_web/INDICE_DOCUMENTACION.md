@@ -1,8 +1,8 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 28 de mayo de 2026  
-**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | Partners Fase 1 | Blog IA + translation_group_id | Meta Pixel | 708+ páginas | 176+ landings SEO | Production-ready  
-**Versión:** 3.4.1
+**Fecha:** 12 de junio de 2026  
+**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | Partners Fase 1 | **Hub Colaboradores v1** | Blog IA + translation_group_id | Meta Pixel | Guía vivir España | Production-ready  
+**Versión:** 3.5.0
 
 ---
 
@@ -44,7 +44,10 @@
 | **[HISTORIAL.md](./docs/HISTORIAL.md)** | 📜 Historial de cambios | ✅ Actualizado |
 | **[SCRIPTS_LANDINGS.md](./docs/SCRIPTS_LANDINGS.md)** | 🤖 Scripts de generación | ✅ Actualizado |
 | **[MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md)** | 💰 Modelo de negocio | 📖 Referencia |
-| **[PARTNERS_FASE1_CAPTACION.md](./docs/PARTNERS_FASE1_CAPTACION.md)** | 🤝 Partners Fase 1: captación + cualificación + magic link + Founding (BD, APIs, planes, ciudades→tier, ROI, operativa closer) | ✅ Nuevo |
+| **[PARTNERS_FASE1_CAPTACION.md](./docs/PARTNERS_FASE1_CAPTACION.md)** | 🤝 Partners Fase 1: captación + cualificación + magic link + Founding (BD, APIs, planes, ciudades→tier, ROI, operativa closer) | ✅ Actualizado |
+| **[HUB_COLABORADORES.md](./docs/HUB_COLABORADORES.md)** | 🏢 Hub interno: comisiones multi-compañía, `/hub`, APIs, RBAC, GHL pendiente CVR | ✅ Nuevo |
+| **[HUB_ESTADO_SENCILLO.md](./HUB_ESTADO_SENCILLO.md)** | 📄 Resumen Hub/Partners/CRM para reunión cliente (lenguaje sencillo) | ✅ Nuevo |
+| **[reunion-cliente-resumen.pdf](./docs/reunion-cliente-resumen.pdf)** | 📄 PDF maquetado reunión cliente (jun 2026) | ✅ Nuevo |
 | **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners post-firma: asignación, panel partner activo, facturación (target/v2; GHL operativo) | 📖 Referencia (v2) |
 | **[BLOG_IA_Y_TRADUCCIONES.md](./docs/BLOG_IA_Y_TRADUCCIONES.md)** | ✍️ Asistente IA blog, SerpAPI, `translation_group_id`, APIs, Navigation/hreflang | ✅ Nuevo |
 | **[META_PIXEL.md](./docs/META_PIXEL.md)** | 📊 Meta Pixel: variable Vercel, eventos Lead/PageView, GDPR, verificación | ✅ Nuevo |
@@ -77,6 +80,7 @@
 | `16-partner-leads.sql` | Captación partners B2B (Fase 1) | ✅ Ejecutado |
 | `17-blog-translation-groups.sql` | `translation_group_id` en `blog_posts`, backfill, índice único por grupo+lang | ✅ Ejecutar en prod si falta |
 | `18-ai-blog-model-image-gpt-image-1.5.sql` | `model_image` → `gpt-image-1.5` + DEFAULT columna | ✅ Ejecutado en producción (mayo 2026) |
+| `19-hub-colaboradores.sql` | **Hub Colaboradores**: 9 tablas + vista comisiones + seed compañías | ✅ Ejecutado en producción (jun 2026) |
 
 ---
 
@@ -100,6 +104,14 @@
 - **Código**: `src/lib/gohighlevel.ts`, `src/lib/ghl-spanish-labels.ts`
 - **Admin**: `/administrator/leads` (listado y borrado)
 - **Env / mapeo**: `.env.example` (`GHL_PRIVATE_TOKEN`, `GHL_LOCATION_ID`, `GHL_INCOMING_WEBHOOK_SALUD`, `GHL_CUSTOM_FIELD_IDS`); deploy: **`CONFIGURACION_VERCEL.md`**
+
+### Hub Colaboradores (comisiones internas)
+- **Doc técnica**: [`docs/HUB_COLABORADORES.md`](./docs/HUB_COLABORADORES.md)
+- **Resumen cliente**: [`HUB_ESTADO_SENCILLO.md`](./HUB_ESTADO_SENCILLO.md) · PDF [`docs/reunion-cliente-resumen.pdf`](./docs/reunion-cliente-resumen.pdf)
+- **App**: `/hub/login` → dashboard, liquidaciones, asignación, comisiones, integraciones GHL
+- **APIs**: `/api/hub/*` · código en `src/lib/hub/`
+- **BD**: `supabase/19-hub-colaboradores.sql` · **CVR GHL pendiente** (Claudia: stages + webhook + mapeo closers)
+- **Nota**: Partners (`/es/partners`) **no** usa GHL; Hub sí para rendimiento/CVR.
 
 ### Partners (Fase 1 — captación B2B)
 - **Doc completo**: **[`docs/PARTNERS_FASE1_CAPTACION.md`](./docs/PARTNERS_FASE1_CAPTACION.md)** (BD, APIs, planes, ciudades→tier, ROI, operativa diaria del closer).
@@ -149,7 +161,7 @@
 | Claves traducción UI | 200+ |
 | Landing pages SEO | 176+ |
 | Artículos blog | 30+ × 5 idiomas |
-| Tablas Supabase | 12+ (incl. chatbot_config, chat_messages, partner_leads, **ai_blog_config**) |
+| Tablas Supabase | 21+ (incl. chatbot_config, chat_messages, partner_leads, hub_*, **ai_blog_config**) |
 | Endpoints API Partners | 4 (`leads`, `qualify`, `access/[token]`, `contract-request`) |
 
 ---

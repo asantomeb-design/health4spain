@@ -1,5 +1,28 @@
 # Historial de Desarrollo - Health4Spain
 
+## Versión 3.5.0 (12 junio 2026)
+
+### Hub Colaboradores (comisiones internas B2E)
+
+- **Migración `19-hub-colaboradores.sql`** aplicada en Supabase producción: 9 tablas Hub + vista comisiones + seed ASISA/LBS.
+- **SPA `/hub`**: login propio, layout por rol, dashboard, liquidaciones, asignación, comisiones (3 estados), integraciones GHL.
+- **APIs `/api/hub/*`**: auth multi-rol, carga CSV (parser ASISA + genérico, dedup SHA-256), asignación bulk, export contable, justificante HTML.
+- **Motor de negocio**: `src/lib/hub/` (RBAC, comisiones, IRPF, régimen n+1/n+2, audit log).
+- **GHL preparado**: cliente lectura (`ghl-client.ts`), endpoints pipelines/usuarios, webhook entrante con secret + idempotencia; **CVR automático pendiente** confirmación operativa (Claudia).
+- **Documentación**: `docs/HUB_COLABORADORES.md`, `HUB_ESTADO_SENCILLO.md`, `docs/reunion-cliente-resumen.pdf`.
+
+### Partners + público
+
+- **Fix layout `/es/partners`**: grids `partners-steps-grid` / `partners-step-card` (tipografía y ancho); evita texto cortado en «De Google a Tu Agenda» y secciones similares.
+- **Guía interactiva**: `public/guia-vivir-espana.html` (contenido estático enlazable).
+
+### Otros
+
+- **`.gitignore` en raíz del repo**: excluye archivos sensibles locales (`contraseñas admin.txt`, `test_mail.php`).
+- **SerpAPI eliminado del blog IA** (sustituido por OpenAI `web_search`); referencias obsoletas en docs corregidas en esta versión.
+
+---
+
 ## Versión 3.4.1 (28 mayo 2026)
 
 ### Meta Pixel (Facebook Ads)

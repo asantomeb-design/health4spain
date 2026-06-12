@@ -247,7 +247,11 @@ Es la base del módulo interactivo de Acceso 2 (sliders → KPIs en vivo).
 6. Formulario (`PartnersFormClient` · Client Component).
 7. FAQ.
 
-**Diseño:** sigue el patrón Modern Minimalist del resto del sitio (`section`, `container-narrow`, acento `#3bbdda`). Sin nuevos CSS.
+**Diseño:** sigue el patrón Modern Minimalist del resto del sitio (`section`, `container-base`/`container-narrow`, acento `#3bbdda`).
+
+**Layout jun 2026:** las secciones de 5 pasos («De Google a Tu Agenda») y 4 pasos («Cómo se Accede») usan clases **`partners-steps-grid`** y **`partners-step-card`** (`globals.css`), no `service-grid-2x2` de la home (max 900px + tipografía grande). Evita texto cortado en columnas estrechas.
+
+**CRM:** los `partner_leads` **no** se envían a GoHighLevel en v0; se gestionan en `/administrator/partners`. GHL sigue siendo solo para leads de cliente final.
 
 ### 5.2 `/es/partners/gracias` · confirmación honesta
 

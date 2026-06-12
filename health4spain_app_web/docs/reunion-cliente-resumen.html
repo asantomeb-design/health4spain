@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Health4Spain · Resumen reunión · Partners, Hub y CRM</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm 20mm 16mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: #1a1a1a;
+      background: #fff;
+    }
+    .cover {
+      page-break-after: always;
+      min-height: 250mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 4px solid #c7956d;
+      padding-bottom: 24px;
+    }
+    .cover .brand { font-size: 11pt; letter-spacing: 0.12em; text-transform: uppercase; color: #666; margin-bottom: 12px; }
+    .cover h1 { font-size: 28pt; font-weight: 700; line-height: 1.15; margin-bottom: 16px; max-width: 90%; }
+    .cover .sub { font-size: 13pt; color: #444; max-width: 85%; margin-bottom: 32px; }
+    .cover .meta { font-size: 9.5pt; color: #666; }
+    .cover .meta strong { color: #1a1a1a; }
+    .accent-bar { width: 48px; height: 4px; background: #c7956d; margin-bottom: 20px; }
+
+    h2 {
+      font-size: 14pt;
+      font-weight: 700;
+      margin: 22px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #c7956d;
+      page-break-after: avoid;
+    }
+    h3 { font-size: 11pt; font-weight: 700; margin: 16px 0 8px; color: #333; page-break-after: avoid; }
+    p { margin-bottom: 10px; }
+    ul { margin: 0 0 12px 18px; }
+    li { margin-bottom: 5px; }
+
+    .pill {
+      display: inline-block;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+    .pill-ok { background: #dcfce7; color: #166534; }
+    .pill-wait { background: #fef3c7; color: #92400e; }
+    .pill-no { background: #f3f4f6; color: #4b5563; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin: 12px 0 16px;
+      page-break-inside: avoid;
+    }
+    th, td { border: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f9fafb; font-weight: 700; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.03em; color: #555; }
+    tr:nth-child(even) td { background: #fafafa; }
+
+    .box {
+      border: 1px solid #e5e7eb;
+      border-left: 4px solid #c7956d;
+      padding: 14px 16px;
+      margin: 14px 0;
+      background: #fefefe;
+      page-break-inside: avoid;
+    }
+    .box-green { border-left-color: #16a34a; background: #f0fdf4; }
+    .box-amber { border-left-color: #d97706; background: #fffbeb; }
+    .box-title { font-weight: 700; font-size: 10pt; margin-bottom: 6px; }
+
+    .quote {
+      font-size: 11pt;
+      font-style: italic;
+      color: #444;
+      border-left: 3px solid #c7956d;
+      padding: 10px 16px;
+      margin: 16px 0;
+      background: #faf9f7;
+    }
+
+    .section { page-break-inside: avoid; }
+    .page-break { page-break-before: always; }
+
+    .claudia-msg {
+      font-size: 10pt;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 16px 18px;
+      border-radius: 6px;
+    }
+
+    footer.doc-footer {
+      margin-top: 24px;
+      padding-top: 12px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 8.5pt;
+      color: #888;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PORTADA -->
+  <div class="cover">
+    <div class="accent-bar"></div>
+    <div class="brand">Health4Spain</div>
+    <h1>Resumen para reunión con cliente y equipo</h1>
+    <p class="sub">Partners · Hub Colaboradores · CRM (GoHighLevel)<br/>Qué está hecho, qué falta y qué pedir a Claudia</p>
+    <p class="meta"><strong>Documento interno</strong> · Junio 2026 · Uso: Narciso + Javier + cliente</p>
+  </div>
+
+  <!-- INTRO -->
+  <h2>Lo esencial en 30 segundos</h2>
+  <p>Hay <strong>tres cosas distintas</strong> en el proyecto. No es lo mismo. Si se mezclan, se lian.</p>
+
+  <div class="box box-green">
+    <div class="box-title">1. Web normal (clientes finales)</div>
+    Extranjeros piden abogado, seguro, piso… → van a la base de datos y a <strong>GoHighLevel (CRM)</strong>. Claudia ya trabaja ahí. <span class="pill pill-ok">Hecho</span>
+  </div>
+  <div class="box box-green">
+    <div class="box-title">2. Partners (negocios que quieren unirse)</div>
+    Abogados, inmobiliarias… que quieren recibir clientes y pagar. Formulario en la web, gestión en el admin. <strong>No van al CRM.</strong> <span class="pill pill-ok">Captación hecha</span>
+  </div>
+  <div class="box box-amber">
+    <div class="box-title">3. Hub Colaboradores (equipo interno de ventas)</div>
+    Comerciales de seguros por dentro. App privada para comisiones del Excel de las aseguradoras. <span class="pill pill-ok">Comisiones hechas</span> · <span class="pill pill-wait">CVR pendiente (Claudia)</span>
+  </div>
+
+  <!-- DETALLE 1 -->
+  <h2>1. Clientes finales (la web de siempre)</h2>
+  <ul>
+    <li>Entran por formularios, landings, etc.</li>
+    <li>Se guardan en Supabase y se envían a <strong>GHL</strong>.</li>
+    <li>Claudia y el equipo operan esos leads en el CRM.</li>
+    <li><strong>Estado: funcionando.</strong></li>
+  </ul>
+
+  <!-- DETALLE 2 -->
+  <h2>2. Partners (monetización B2B)</h2>
+  <p>Un <strong>partner</strong> es un negocio externo (abogado, gestoría, inmobiliaria…) que dice: <em>«Quiero formar parte y que me mandéis clientes»</em>.</p>
+
+  <h3>Flujo actual (ya montado)</h3>
+  <ol style="margin-left:18px;margin-bottom:12px;">
+    <li>Entra por <strong>/es/partners</strong> y rellena el formulario.</li>
+    <li>Se guarda en <strong>partner_leads</strong> (no en GHL).</li>
+    <li>Revisáis en <strong>/administrator/partners</strong>: aprobáis o rechazáis.</li>
+    <li>Si aprueba → enlace secreto por WhatsApp/email → panel privado → pide contrato.</li>
+    <li>Firma y cobro: <strong>a mano</strong> (PDF, transferencia). La web no cobra sola.</li>
+  </ol>
+
+  <div class="box">
+    <div class="box-title">Claudia y partners</div>
+    <strong>No tiene que hacer nada.</strong> Los partners no pasan por GoHighLevel. Lo lleváis en el panel admin de la web.
+  </div>
+
+  <p><strong>Lo que falta a futuro (Fase 2, no hecho):</strong> el partner ya firmado recibe leads automáticamente, panel operativo y facturación integrada.</p>
+
+  <!-- DETALLE 3 -->
+  <div class="page-break"></div>
+  <h2>3. Hub Colaboradores (equipo interno)</h2>
+  <p>Los <strong>colaboradores</strong> son vuestros comerciales por dentro (closers, supervisores, admin). <strong>No son partners.</strong></p>
+
+  <h3>Problema que resuelve</h3>
+  <p>Cada mes las aseguradoras (ASISA, etc.) mandan un <strong>Excel con comisiones</strong>. Antes había que repartirlo a mano, calcular IRPF y preparar papeles para la gestoría.</p>
+
+  <h3>Qué hace la app (/hub) — ya hecho</h3>
+  <ul>
+    <li>Subir el Excel de la aseguradora.</li>
+    <li>Asignar cada línea al closer que cerró la venta.</li>
+    <li>Calcular automáticamente comisión, IRPF y neto a pagar.</li>
+    <li>Cada comercial ve su dinero (consolidándose / pendiente / cobrado).</li>
+    <li>Export Excel para gestoría + PDF justificante.</li>
+  </ul>
+  <p><span class="pill pill-ok">Hecho y subido</span> Base de datos creada en producción (migración 19).</p>
+
+  <h3>Qué falta (depende de Claudia)</h3>
+  <p>Conectar con GHL para saber <strong>cuántos leads cierra cada comercial</strong> → CVR (ratio de cierre) → bonus de comisión en tiempo real.</p>
+  <p>Sin esto: <strong>las comisiones del Excel ya funcionan</strong>. Solo falta el bonus por rendimiento automático.</p>
+
+  <!-- TABLA -->
+  <h2>Tabla resumen (para la reunión)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Clientes web</th>
+        <th>Partners</th>
+        <th>Colaboradores (Hub)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Quién</strong></td>
+        <td>Extranjero</td>
+        <td>Negocio externo</td>
+        <td>Comercial interno</td>
+      </tr>
+      <tr>
+        <td><strong>Para qué</strong></td>
+        <td>Pedir servicio</td>
+        <td>Unirse y pagar por clientes</td>
+        <td>Cobrar comisiones</td>
+      </tr>
+      <tr>
+        <td><strong>CRM (GHL)</strong></td>
+        <td>Sí</td>
+        <td>No</td>
+        <td>Solo CVR (pendiente)</td>
+      </tr>
+      <tr>
+        <td><strong>Estado</strong></td>
+        <td>✅ Hecho</td>
+        <td>✅ Captación hecha</td>
+        <td>✅ Comisiones · ⏳ CVR</td>
+      </tr>
+      <tr>
+        <td><strong>Claudia</strong></td>
+        <td>Ya opera</td>
+        <td>Nada</td>
+        <td>Falta configurar</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PRESUPUESTO -->
+  <h2>Presupuesto acordado (Hub)</h2>
+  <table>
+    <tbody>
+      <tr><td><strong>Hub base</strong></td><td>2.500 €</td></tr>
+      <tr><td><strong>Módulo multi-compañía</strong> (CSV, reparto, PDF, export)</td><td>800 €</td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>3.300 € + IVA</strong></td></tr>
+      <tr><td>Adaptador compañía adicional</td><td>250 €</td></tr>
+      <tr><td>Mantenimiento (desde mes 2)</td><td>100 €/mes</td></tr>
+    </tbody>
+  </table>
+
+  <!-- FRASE CLIENTE -->
+  <div class="quote">
+    «Partners = captar negocios que paguen por clientes (hecho, fuera del CRM).<br/>
+    Hub = pagar comisiones al equipo de ventas (hecho; falta enchufar rendimiento con GHL vía Claudia).<br/>
+    Leads web = lo de siempre en GHL (hecho).»
+  </div>
+
+  <!-- MENSAJE CLAUDIA -->
+  <div class="page-break"></div>
+  <h2>Mensaje para Claudia (copiar y enviar)</h2>
+  <p>Solo Hub Colaboradores. <strong>No es partners.</strong></p>
+
+  <div class="claudia-msg">Hola Claudia,
+
+Te escribo solo por el Hub de Colaboradores (comisiones del equipo de ventas). No es lo de partners — eso no pasa por GHL y no te afecta.
+
+Ya está hecho: app en /hub para subir Excel de aseguradoras, repartir comisiones, calcular IRPF y sacar papeles. Usamos el mismo GHL que ya tenéis — no necesito credenciales nuevas.
+
+Necesito 4 cosas tuyas:
+
+1. ¿Cómo marcáis una venta cerrada en GHL? (pipeline/opportunity, tag, etc.)
+2. Qué stage = lead recibido y cuál = cerrado/ganado (yo ya veo los IDs en /hub/integraciones; solo dime cuál es cuál).
+3. Qué usuario de GHL es cada closer (Tamara = ?, etc.).
+4. Activar un webhook POST en GHL cuando cambie el stage, hacia:
+   https://www.health4spain.com/api/hub/ghl/webhook?secret=&lt;te paso el secreto por privado&gt;
+
+Sin esto las comisiones del Excel ya van; esto es solo para el bonus por rendimiento (CVR) automático.
+
+Gracias. Si quieres, 15 min de pantalla y lo cerramos.</div>
+
+  <footer class="doc-footer">
+    Health4Spain · Documento generado para uso interno · health4spain.com
+  </footer>
+
+</body>
+</html>

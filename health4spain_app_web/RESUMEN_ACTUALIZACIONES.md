@@ -2,6 +2,17 @@
 
 ---
 
+## 🆕 Hub Colaboradores + docs reunión + fix partners — 12 junio 2026
+
+- **Hub v1** desplegado: `/hub`, APIs comisiones, parsers CSV ASISA, migración **`19-hub-colaboradores.sql`** en producción.
+- **GHL Hub** preparado (webhook, pipelines, integraciones); CVR automático pendiente Claudia.
+- **Documentación**: `docs/HUB_COLABORADORES.md`, `HUB_ESTADO_SENCILLO.md`, `docs/reunion-cliente-resumen.pdf`.
+- **Fix UX** `/es/partners`: grids `partners-steps-grid` (texto ya no cortado en 5 columnas).
+- **Guía pública**: `public/guia-vivir-espana.html`.
+- Versión del proyecto **3.5.0**.
+
+---
+
 ## 🆕 Meta Pixel (Facebook Ads) + documentación — 28 mayo 2026
 
 - Pixel **`1885591562124890`** integrado en web Next.js (`MetaPixel.tsx`, `src/lib/meta-pixel.ts`, `layout.tsx`).

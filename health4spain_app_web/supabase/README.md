@@ -1,6 +1,6 @@
 # Configuración de Supabase para Health4Spain
 
-**Última actualización:** 8 mayo 2026
+**Última actualización:** 12 junio 2026
 
 ---
 
@@ -36,8 +36,9 @@ En **SQL Editor**, ejecutar en orden:
 | 16 | `16-partner-leads.sql` | **Partners Fase 1**: tabla `partner_leads` + vista admin |
 | 17 | `17-blog-translation-groups.sql` | Blog: `translation_group_id` en `blog_posts`, backfill, trigger INSERT, índice único `(translation_group_id, lang)`. Doc: [`docs/BLOG_IA_Y_TRADUCCIONES.md`](../docs/BLOG_IA_Y_TRADUCCIONES.md) |
 | 18 | `18-ai-blog-model-image-gpt-image-1.5.sql` | `ai_blog_config.model_image` → `gpt-image-1.5` + DEFAULT (alternativa si no tienes org verificada para `gpt-image-2`). **Producción principal:** aplicado mayo 2026. |
-| 19 | `rls-policies.sql` | Row Level Security |
-| 20 | `storage-policies.sql` | Políticas Storage |
+| 19 | `19-hub-colaboradores.sql` | **Hub Colaboradores**: `hub_users`, `hub_companies`, comisiones, CSV, liquidaciones, CVR snapshots, audit, webhooks. Doc: [`docs/HUB_COLABORADORES.md`](../docs/HUB_COLABORADORES.md). **Producción:** aplicado jun 2026. |
+| 20 | `rls-policies.sql` | Row Level Security |
+| 21 | `storage-policies.sql` | Políticas Storage |
 
 ## 3. Tablas Principales
 
@@ -55,7 +56,15 @@ En **SQL Editor**, ejecutar en orden:
 | `chatbot_config` | Configuración Chat IA (enabled, modelo, prompts, tablas conocimiento) | 1 fila |
 | `chat_messages` | Historial conversaciones Mar-IA + valoración (correcta/mejorable/errónea) | Variable |
 | `partner_leads` | Captación de partners B2B (Fase 1): formulario + cualificación + token UUID con TTL 7d + selección de contrato. RLS deny all anon/authenticated; solo `service_role` vía API. Detalle: [`docs/PARTNERS_FASE1_CAPTACION.md`](../docs/PARTNERS_FASE1_CAPTACION.md). | - |
-| `ai_blog_config` | Configuración singleton del asistente IA del blog (OpenAI + prompts + imagen + SerpAPI). | - |
+| `ai_blog_config` | Configuración singleton del asistente IA del blog (OpenAI + prompts + imagen). | - |
+| `hub_users` | Colaboradores internos Hub (rol, canal, `ghl_user_id`, supervisor). RLS deny anon. | - |
+| `hub_companies` | Aseguradoras (parser_key, régimen). Seed: ASISA, LBS. | - |
+| `hub_liquidacion_lineas` | Líneas CSV + asignación closer + cálculo comisión/IRPF. | - |
+| `hub_csv_uploads` | Cargas CSV con dedup por hash. | - |
+| `hub_liquidaciones` | Nómina mensual por closer (workflow 6 estados). | - |
+| `hub_snapshots_cvr` | CVR diario por closer (pendiente poblar desde GHL). | - |
+| `hub_audit_log` | Auditoría append-only. | - |
+| `hub_processed_events` | Idempotencia webhooks GHL. | - |
 
 ### ai_blog_config y blog_posts (traducciones)
 
@@ -142,3 +151,7 @@ NEXT_PUBLIC_ADMIN_EMAILS=tu-email@gmail.com
 ### `partner_leads` no acepta inserts desde el navegador
 - Es **intencional**: la RLS está configurada como `deny all` para roles `anon` y `authenticated`. Toda lectura/escritura debe pasar por las API routes server-side (`/api/partners/*`), que usan `service_role`.
 - Si necesitas insertar manualmente para pruebas, hazlo desde el SQL Editor (que también usa `service_role`) o vía `POST /api/partners/leads`.
+
+### Tablas Hub (`hub_*`) — mismo patrón RLS
+- Acceso **solo** vía APIs `/api/hub/*` con `service_role`. Los usuarios entran por Supabase Auth pero la autorización fina vive en `hub_users.rol`.
+- Alta de colaboradores: insert manual en `hub_users` + cuenta Supabase Auth con el mismo email.

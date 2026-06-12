@@ -32,7 +32,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 
 176+ landing pages SEO (76 servicio×ciudad + 100 visa no lucrativa) + blog multiidioma + páginas de destinos
 
-**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: API + webhook único, segmentación por `servicio` / `tipo_ruta`) + leads en español**, panel admin de leads, **módulo Partners Fase 1 (captación + cualificación + magic link + selector ROI/contrato Founding)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, **Meta Pixel (Facebook Ads) con consentimiento GDPR**, production-ready — **v3.4.1** (28 May 2026)
+**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: API + webhook único, segmentación por `servicio` / `tipo_ruta`) + leads en español**, panel admin de leads, **módulo Partners Fase 1**, **Hub Colaboradores v1 (comisiones multi-compañía + `/hub`)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, **Meta Pixel (Facebook Ads) con consentimiento GDPR**, **guía interactiva vivir en España** (`/guia-vivir-espana.html`), production-ready — **v3.5.0** (12 jun 2026)
 
 ---
 
@@ -46,7 +46,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 - **Logo**: Unificado en toda la web con `h4s vertical color_recortado.webp` (header, footer, Open Graph, SEO)
 - **Estilos**: Tailwind CSS
 - **Editor**: TinyMCE
-- **IA**: OpenAI (chat Mar-IA, **asistente blog**: propuestas/redacción/traducción/imagen; modelos configurables en BD) + **SerpAPI** opcional (modo noticias del wizard)
+- **IA**: OpenAI (chat Mar-IA, **asistente blog**: propuestas/redacción/traducción/imagen; modelos configurables en BD; búsqueda noticias vía **`web_search`** nativo)
 - **Chat IA (Mar-IA)**: Widget flotante con asistente virtual; detección de idioma en dos agentes; contexto desde Supabase (servicios, ciudades, blog, landings); sin caché para estado activo/inactivo
 - **Optimización**: sharp (conversión WebP)
 - **i18n**: Sistema híbrido (Supabase dinámico + dictionaries.ts estático)
@@ -300,6 +300,25 @@ landing /es/partners → POST /api/partners/leads → partner_leads (Supabase)
 - **Pre-cualificación honesta**: tras enviar el formulario, el partner aterriza en una página de «un humano te llamará en 24h» en lugar de una falsa cualificación instantánea animada (lo proponía la propuesta inicial).
 - **Pagos / firmas / agendado**: en v0 todo es **manual** (transferencia SEPA, PDF firmado, llamada por WhatsApp). Stripe + GoCardless + Signaturit + Calendly se difieren a v1.5/v2.
 - **Solo `/es` en v0**: la captación es en castellano (material legal solo en ES). Las rutas `partners` están reservadas en `routes.ts` para los 5 idiomas; el footer enlaza siempre a `/es/partners`.
+- **Layout jun 2026**: sección «De Google a Tu Agenda» usa `partners-steps-grid` (no `service-grid-2x2` de la home) para evitar texto cortado en 5 columnas.
+
+---
+
+## 🏢 Hub Colaboradores (equipo interno · comisiones)
+
+App privada **`/hub`** para closers, supervisores, admin y técnico. **No es Partners** ni el CRM de leads públicos.
+
+| Qué hace | Estado |
+|----------|--------|
+| Carga CSV aseguradoras (ASISA + genérico), dedup, asignación a closers | ✅ |
+| Cálculo comisión, IRPF, régimen n+1/n+2, export gestoría, PDF justificante | ✅ |
+| CVR / bonus en tiempo real vía GHL | ⏳ Pendiente Claudia |
+| Partners en GHL | ❌ No aplica |
+
+- **Doc técnica**: [`docs/HUB_COLABORADORES.md`](./docs/HUB_COLABORADORES.md)
+- **Resumen cliente**: [`HUB_ESTADO_SENCILLO.md`](./HUB_ESTADO_SENCILLO.md)
+- **BD**: `supabase/19-hub-colaboradores.sql` (producción)
+- **Env Hub**: `GHL_WEBHOOK_SECRET`, `GHL_STAGE_RECIBIDO`, `GHL_STAGE_CERRADO` (ver `.env.example`)
 
 ---
 
@@ -341,6 +360,12 @@ NEXT_PUBLIC_META_PIXEL_ID=1885591562124890   # Meta Ads (ver docs/META_PIXEL.md)
 # GHL_LOCATION_ID=
 # GHL_INCOMING_WEBHOOK_SALUD=   # URL única; recibe todos los leads (ver sección GHL en README)
 # GHL_CUSTOM_FIELD_IDS={"ciudad_interes":"uuid-..."}
+
+# Hub Colaboradores (GHL entrante → CVR)
+# GHL_WEBHOOK_SECRET=
+# GHL_STAGE_RECIBIDO=
+# GHL_STAGE_CERRADO=
+# GHL_PIPELINE_SEGUROS=
 ```
 
 ---
@@ -351,6 +376,9 @@ NEXT_PUBLIC_META_PIXEL_ID=1885591562124890   # Meta Ads (ver docs/META_PIXEL.md)
 - [INDICE_DOCUMENTACION.md](./INDICE_DOCUMENTACION.md) - Índice completo
 - [docs/AUDITORIA.md](./docs/AUDITORIA.md) - Auditoría técnica
 - [docs/MODELO_NEGOCIO.md](./docs/MODELO_NEGOCIO.md) - Modelo de negocio
+- [docs/HUB_COLABORADORES.md](./docs/HUB_COLABORADORES.md) - Hub interno: comisiones, `/hub`, APIs, GHL
+- [HUB_ESTADO_SENCILLO.md](./HUB_ESTADO_SENCILLO.md) - Resumen Hub/Partners para cliente
+- [docs/reunion-cliente-resumen.pdf](./docs/reunion-cliente-resumen.pdf) - PDF reunión (jun 2026)
 - [docs/PARTNERS_FASE1_CAPTACION.md](./docs/PARTNERS_FASE1_CAPTACION.md) - Partners Fase 1 (captación + cualificación + Founding)
 - [docs/MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md) - Partners post-firma (asignación, facturación)
 - [docs/BLOG_IA_Y_TRADUCCIONES.md](./docs/BLOG_IA_Y_TRADUCCIONES.md) - Asistente IA del blog, traducciones, hreflang, APIs
