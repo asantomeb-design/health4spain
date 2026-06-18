@@ -12,8 +12,10 @@ import type { Lead } from '@/lib/types';
 import {
   buildGhlWebhookSpanishFields,
   idiomaPreferidoEs,
+  parseServiciosSlug,
   presupuestoEs,
   servicioEs,
+  serviciosEs,
   urgenciaEs,
   type GhlWebhookSpanishFields,
 } from '@/lib/ghl-spanish-labels';
@@ -64,6 +66,10 @@ const CUSTOM_FIELD_VALUE_KEYS = [
   'ciudad_origen',
   'pais_origen',
   'servicio_solicitado',
+  'h4s_servicio',
+  'h4s_ciudad',
+  'h4s_situacion',
+  'h4s_score',
   'presupuesto',
   'urgencia',
   'idioma_preferido',
@@ -125,11 +131,19 @@ function buildGhlCustomFields(
       ? spanish?.presupuesto_es ?? presupuestoEs(presupuestoSlug) ?? presupuestoSlug
       : undefined;
 
+  const servicioSlugs = parseServiciosSlug(lead.servicio);
+  const servicioLista = servicioSlugs.length ? servicioSlugs : (lead.servicio ? [lead.servicio] : []);
+  const servicioTexto = spanish?.servicio_es ?? serviciosEs(servicioLista);
+
   const values: Record<CustomFieldInternalKey, string | undefined> = {
     ciudad_interes: ciudadInteres,
     ciudad_origen: lead.ciudad_origen,
     pais_origen: lead.pais_origen,
-    servicio_solicitado: spanish?.servicio_es ?? servicioEs(lead.servicio),
+    servicio_solicitado: servicioTexto,
+    h4s_servicio: servicioTexto,
+    h4s_ciudad: ciudadInteres,
+    h4s_situacion: spanish?.urgencia_es ?? urgenciaEs(lead.urgencia ?? ''),
+    h4s_score: lead.score != null ? String(lead.score) : undefined,
     presupuesto: presupuestoValor,
     urgencia: spanish?.urgencia_es ?? urgenciaEs(lead.urgencia ?? ''),
     idioma_preferido:
@@ -179,8 +193,12 @@ export async function createGHLContact(
   }
 
   // Construir tags dinámicos
-  const tags: string[] = ['web-lead', 'health4spain'];
-  if (lead.servicio && SERVICIO_TAGS[lead.servicio]) tags.push(SERVICIO_TAGS[lead.servicio]);
+  const tags: string[] = ['web-lead', 'health4spain', 'origen-web'];
+  const servicioSlugs = parseServiciosSlug(lead.servicio);
+  const serviciosParaTags = servicioSlugs.length ? servicioSlugs : (lead.servicio ? [lead.servicio] : []);
+  for (const slug of serviciosParaTags) {
+    if (SERVICIO_TAGS[slug]) tags.push(SERVICIO_TAGS[slug]);
+  }
   if (lead.perfil && PERFIL_TAGS[lead.perfil]) tags.push(PERFIL_TAGS[lead.perfil]);
   if (esAltaUrgencia(lead.urgencia)) tags.push('alta-urgencia');
 
@@ -195,7 +213,7 @@ export async function createGHLContact(
     email: lead.email,
     phone,
     tags,
-    source: lead.utm_source || 'web-organico',
+    source: 'origen-web',
     ...(lead.utm_source && { utmSource: lead.utm_source }),
     ...(lead.utm_medium && { utmMedium: lead.utm_medium }),
     ...(lead.utm_campaign && { utmCampaign: lead.utm_campaign }),
@@ -268,7 +286,7 @@ export async function sendLeadToGHLIncomingWebhook(
     return;
   }
 
-  const esSalud = lead.servicio === 'seguros';
+  const esSalud = parseServiciosSlug(lead.servicio).includes('seguros') || lead.servicio === 'seguros';
 
   const telefonoCompleto = normalizeGhlPhone(lead.codigo_pais, lead.telefono);
   const { firstName, lastName } = splitNombreCompleto(lead.nombre);
@@ -277,7 +295,26 @@ export async function sendLeadToGHLIncomingWebhook(
   const spanish =
     extras?.spanishFields ?? (await buildGhlWebhookSpanishFields(lead, extras));
 
+  const servicioSlugs = spanish.servicios.length ? spanish.servicios : parseServiciosSlug(lead.servicio);
+  const ciudadNombre = spanish.ciudad_servicio_espana_nombre?.trim() || lead.ciudad;
+  const emailAsunto = `Tu consulta sobre ${spanish.servicio_es} en ${ciudadNombre} - Health4Spain`;
+
   const payload = {
+    ...spanish,
+    /** Marca de origen para distinguir leads web de WhatsApp en GHL. */
+    origen: 'origen-web',
+    /** Alias para etiquetado / workflows GHL. */
+    source: 'origen-web',
+    /** Campos h4s_* para custom fields ya creados en GHL. */
+    h4s_servicio: spanish.servicio_es,
+    h4s_ciudad: ciudadNombre,
+    h4s_situacion: spanish.urgencia_es,
+    h4s_score: lead.score ?? null,
+    /** Asunto preconstruido para emails (evita [object Object] en plantillas). */
+    email_asunto: emailAsunto,
+    /** Textos planos para plantillas que usan servicio/ciudad directamente. */
+    servicio_nombre: spanish.servicio_es,
+    ciudad_nombre: ciudadNombre,
     /** Ayuda en GHL si quieres ramificar: `salud` solo si servicio es seguros; si no, `otros`. */
     tipo_ruta: esSalud ? 'salud' : 'otros',
     lead_id: lead.id,
@@ -295,7 +332,8 @@ export async function sendLeadToGHLIncomingWebhook(
     pais_origen: lead.pais_origen ?? null,
     /** Ciudad donde vive / procedencia (paso 2 del formulario solicitar). */
     ciudad_origen: lead.ciudad_origen ?? null,
-    servicio: lead.servicio,
+    servicio: servicioSlugs[0] ?? lead.servicio,
+    servicios: servicioSlugs,
     /**
      * Slug de la ciudad/zona en España donde quiere el servicio (paso 1).
      * `ciudad` se mantiene por compatibilidad; preferir `ciudad_servicio_espana` en mapeos nuevos.
@@ -315,7 +353,6 @@ export async function sendLeadToGHLIncomingWebhook(
     score: lead.score ?? null,
     status: lead.status,
     created_at: lead.created_at,
-    ...spanish,
   };
 
   try {

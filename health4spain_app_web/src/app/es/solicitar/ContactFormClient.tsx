@@ -9,7 +9,7 @@ import { trackMetaEvent } from '@/lib/meta-pixel';
 import type { Locale } from '@/lib/routes';
 
 interface FormData {
-  servicio: string;
+  servicios: string[];
   ciudad_interes: string;
   nombre: string;
   email: string;
@@ -31,7 +31,7 @@ type RequestDict = ReturnType<typeof getDictionary>['request'];
 
 interface StepProps {
   formData: FormData;
-  updateFormData: (field: keyof FormData, value: string) => void;
+  updateFormData: (field: keyof FormData, value: string | string[]) => void;
   errors: Partial<Record<keyof FormData, string>>;
   ciudades?: { id: string; label: string }[];
   onAutoAdvance?: () => void;
@@ -58,10 +58,11 @@ const URGENCIA_SCORES: Record<string, number> = {
 
 function Step1({ formData, updateFormData, errors, onAutoAdvance, t, locale }: StepProps & { locale?: Locale }) {
   const handleServicioClick = (servicioId: string) => {
-    updateFormData('servicio', servicioId);
-    if (onAutoAdvance) {
-      setTimeout(() => { onAutoAdvance(); }, 300);
-    }
+    const current = formData.servicios;
+    const next = current.includes(servicioId)
+      ? current.filter((s) => s !== servicioId)
+      : [...current, servicioId];
+    updateFormData('servicios', next);
   };
 
   const descs = SERVICIO_DESCRIPTIONS[locale || 'es'] || SERVICIO_DESCRIPTIONS['es'];
@@ -71,6 +72,7 @@ function Step1({ formData, updateFormData, errors, onAutoAdvance, t, locale }: S
       <div className="mb-4">
         <h2 className="text-xl md:text-2xl font-extrabold mb-1 text-[#111827]">{t.step1Title}</h2>
         <p className="text-sm md:text-base text-[#6b7280]">{t.step1Subtitle}</p>
+        <p className="text-xs text-[#6b7280] mt-1">Puedes elegir varios servicios</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
         {SERVICIO_IDS.map((id) => (
@@ -79,7 +81,7 @@ function Step1({ formData, updateFormData, errors, onAutoAdvance, t, locale }: S
             type="button"
             onClick={() => handleServicioClick(id)}
             className={`p-4 md:p-5 border-2 rounded-xl text-center transition-all duration-200 cursor-pointer ${
-              formData.servicio === id
+              formData.servicios.includes(id)
                 ? 'border-[#1a56db] bg-gradient-to-br from-[#eff6ff] to-[#dbeafe] shadow-[0_4px_12px_rgba(26,86,219,0.15)]'
                 : 'border-gray-200 bg-white hover:border-[#1a56db] hover:bg-[#eff6ff]'
             }`}
@@ -90,7 +92,7 @@ function Step1({ formData, updateFormData, errors, onAutoAdvance, t, locale }: S
           </button>
         ))}
       </div>
-      {errors.servicio && <p className="text-accent text-center mt-1 text-sm">{errors.servicio}</p>}
+      {errors.servicios && <p className="text-accent text-center mt-1 text-sm">{errors.servicios}</p>}
     </div>
   );
 }
@@ -317,7 +319,7 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
     pais_origen: '',
     ciudad_origen: '',
     fecha_nacimiento: '',
-    servicio: '',
+    servicios: [],
     ciudad_interes: '',
     presupuesto: '',
     urgencia: '',
@@ -348,7 +350,7 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
 
     setFormData((prev) => ({
       ...prev,
-      servicio: servicio || prev.servicio,
+      servicios: servicio ? [servicio] : prev.servicios,
       ciudad_interes: ciudad || prev.ciudad_interes,
       utm_source,
       utm_medium,
@@ -381,7 +383,7 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
     return () => document.body.classList.remove('form-active');
   }, []);
 
-  const updateFormData = (field: keyof FormData, value: string) => {
+  const updateFormData = (field: keyof FormData, value: string | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -410,11 +412,11 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
       if (step === 2) validatePersonalData(newErrors);
       if (step === 3) validateBudget(newErrors);
     } else if (flowType === 'from-city') {
-      if (step === 1 && !formData.servicio) newErrors.servicio = t.errorServicio;
+      if (step === 1 && !formData.servicios.length) newErrors.servicios = t.errorServicio;
       if (step === 2) validatePersonalData(newErrors);
       if (step === 3) validateBudget(newErrors);
     } else {
-      if (step === 1 && !formData.servicio) newErrors.servicio = t.errorServicio;
+      if (step === 1 && !formData.servicios.length) newErrors.servicios = t.errorServicio;
       if (step === 2 && !formData.ciudad_interes) newErrors.ciudad_interes = t.errorCiudad;
       if (step === 3) validatePersonalData(newErrors);
       if (step === 4) validateBudget(newErrors);
@@ -435,7 +437,7 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
     let score = 50;
     score += PRESUPUESTO_SCORES[formData.presupuesto] ?? 0;
     score += URGENCIA_SCORES[formData.urgencia] ?? 0;
-    if (['seguros', 'abogados', 'inmobiliarias'].includes(formData.servicio)) score += 10;
+    if (['seguros', 'abogados', 'inmobiliarias'].some((s) => formData.servicios.includes(s))) score += 10;
     if (formData.ciudad_interes && formData.ciudad_interes !== 'otra') score += 5;
     if (formData.mensaje && formData.mensaje.length > 50) score += 5;
     return Math.min(100, score);
@@ -458,7 +460,8 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
           pais_origen: formData.pais_origen,
           ciudad_origen: formData.ciudad_origen,
           fecha_nacimiento: formData.fecha_nacimiento || undefined,
-          servicio: formData.servicio,
+          servicios: formData.servicios,
+          servicio: formData.servicios.join(','),
           ciudad: formData.ciudad_interes,
           ciudad_servicio_espana_nombre:
             ciudades.find((c) => c.id === formData.ciudad_interes)?.label ?? '',
@@ -588,19 +591,18 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
 
         <div className="bg-white border border-gray-200 p-4 md:p-6 rounded-xl">
           {/* Banner de información preseleccionada - ahora EDITABLE */}
-          {(formData.servicio || formData.ciudad_interes) && currentStep > 1 && (
+          {(formData.servicios.length > 0 || formData.ciudad_interes) && currentStep > 1 && (
             <div className="mb-4 p-2.5 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-xs text-blue-800 font-medium mb-2">{t.buscas}</p>
               <div className="flex flex-wrap gap-2">
-                {formData.servicio && (
+                {formData.servicios.map((servicioId) => (
                   <button
+                    key={servicioId}
                     type="button"
                     onClick={() => {
-                      // Ir al paso de selección de servicio
                       if (flowType === 'from-city' || flowType === 'default') {
                         setCurrentStep(1);
                       } else if (flowType === 'from-service') {
-                        // Cambiar el flujo a default y volver al paso 1 (servicio)
                         setFlowType('default');
                         setCurrentStep(1);
                       }
@@ -609,11 +611,11 @@ export default function ContactFormClient({ ciudades, locale = 'es' }: ContactFo
                   >
                     <span className="text-blue-600">✓</span>
                     <span className="font-medium">
-                      {t.servicios[formData.servicio as keyof typeof t.servicios] ?? formData.servicio}
+                      {t.servicios[servicioId as keyof typeof t.servicios] ?? servicioId}
                     </span>
                     <span className="text-xs text-gray-400 group-hover:text-blue-600">✏️</span>
                   </button>
-                )}
+                ))}
                 {formData.ciudad_interes && (
                   <button
                     type="button"

@@ -2,20 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, handleSupabaseError } from '@/lib/supabase';
 import { validateAdminAuth } from '@/lib/auth';
 import { Lead } from '@/lib/types';
-import { buildGhlWebhookSpanishFields } from '@/lib/ghl-spanish-labels';
+import { buildGhlWebhookSpanishFields, mergeServicioSlugs, normalizeLeadField } from '@/lib/ghl-spanish-labels';
 import { createGHLContact, sendLeadToGHLIncomingWebhook } from '@/lib/gohighlevel';
 
 // POST /api/leads - Crear nuevo lead (endpoint público)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
-    // Validación básica (ciudad puede venir como ciudad_interes en LandingFormEmbed)
-    const ciudad = body.ciudad || body.ciudad_interes;
-    const requiredFields = ['nombre', 'email', 'telefono', 'servicio'];
-    const missingFields = requiredFields.filter(field => !body[field]);
+
+    const serviciosNorm = extractServicios(body);
+    const ciudad = normalizeLeadField(body.ciudad || body.ciudad_interes);
+    const requiredFields = ['nombre', 'email', 'telefono'];
+    const missingFields = requiredFields.filter((field) => !body[field]);
+    if (!serviciosNorm.length) missingFields.push('servicio');
     if (!ciudad) missingFields.push('ciudad');
-    
+
     if (missingFields.length > 0) {
       return NextResponse.json(
         { success: false, error: `Faltan campos requeridos: ${missingFields.join(', ')}` },
@@ -23,15 +24,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const servicioNorm = String(body.servicio ?? '').trim();
-    const ciudadNorm = String(ciudad ?? '').trim();
-    if (!servicioNorm || !ciudadNorm) {
+    if (!ciudad) {
       return NextResponse.json(
         { success: false, error: 'Servicio o ciudad no válidos' },
         { status: 400 }
       );
     }
-    
+
     // Validar email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(body.email)) {
@@ -40,44 +39,58 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     const supabase = createServerSupabaseClient();
-    
-    // Verificar si ya existe un lead reciente con este email + servicio (anti-spam)
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-    const { data: existingLead } = await supabase
-      .from('leads')
-      .select('id')
-      .eq('email', body.email)
-      .eq('servicio', servicioNorm)
-      .gte('created_at', oneHourAgo)
-      .single();
-    
-    if (existingLead) {
-      return NextResponse.json(
-        { success: false, error: 'Ya recibimos tu solicitud. Te contactaremos pronto.' },
-        { status: 409 }
-      );
-    }
-    
-    // Usar score del frontend o calcular
-    const score = body.score || calculateLeadScore(body);
-    
+    const emailNorm = body.email.toLowerCase().trim();
+
     // Teléfono: si hay codigo_pais, guardar solo el número; si no, formato legacy (completo)
     const telefonoValor = body.codigo_pais
       ? (body.telefono || '').replace(/\D/g, '').trim()
       : (body.telefono || '').trim();
 
-    // Crear lead
+    // Upsert: un lead por persona (email o teléfono), fusionando servicios
+    let existingLead: Lead | null = null;
+
+    const { data: byEmail } = await supabase
+      .from('leads')
+      .select('*')
+      .eq('email', emailNorm)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    existingLead = (byEmail as Lead | null) ?? null;
+
+    if (!existingLead && telefonoValor) {
+      let phoneQuery = supabase.from('leads').select('*');
+      if (body.codigo_pais) {
+        phoneQuery = phoneQuery.eq('codigo_pais', body.codigo_pais).eq('telefono', telefonoValor);
+      } else {
+        phoneQuery = phoneQuery.eq('telefono', telefonoValor);
+      }
+      const { data: byPhone } = await phoneQuery
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      existingLead = (byPhone as Lead | null) ?? null;
+    }
+
+    // Usar score del frontend o calcular
+    const score = body.score || calculateLeadScore({ ...body, servicio: serviciosNorm[0], ciudad });
+
+    const servicioMerged = existingLead
+      ? mergeServicioSlugs(existingLead.servicio, serviciosNorm)
+      : serviciosNorm.join(',');
+
     const urgenciaNorm = String(body.urgencia ?? '').trim();
-    const newLead: Partial<Lead> = {
+    const leadFields: Partial<Lead> = {
       nombre: body.nombre.trim(),
-      email: body.email.toLowerCase().trim(),
+      email: emailNorm,
       codigo_pais: body.codigo_pais || undefined,
       telefono: telefonoValor,
       fecha_nacimiento: body.fecha_nacimiento || undefined,
-      servicio: servicioNorm,
-      ciudad: ciudadNorm,
+      servicio: servicioMerged,
+      ciudad,
       pais_origen: body.pais_origen || undefined,
       ciudad_origen: body.ciudad_origen || undefined,
       presupuesto: body.presupuesto || undefined,
@@ -89,20 +102,41 @@ export async function POST(request: NextRequest) {
       utm_medium: body.utm_medium || undefined,
       utm_campaign: body.utm_campaign || undefined,
       dispositivo: body.dispositivo || undefined,
-      status: 'nuevo',
       score,
-      created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
-    
-    const { data, error } = await supabase
-      .from('leads')
-      .insert(newLead)
-      .select()
-      .single();
-    
-    if (error) {
-      return NextResponse.json(handleSupabaseError(error), { status: 500 });
+
+    let data: Lead;
+
+    if (existingLead) {
+      const { data: updated, error } = await supabase
+        .from('leads')
+        .update(leadFields)
+        .eq('id', existingLead.id)
+        .select()
+        .single();
+
+      if (error) {
+        return NextResponse.json(handleSupabaseError(error), { status: 500 });
+      }
+      data = updated as Lead;
+    } else {
+      const newLead: Partial<Lead> = {
+        ...leadFields,
+        status: 'nuevo',
+        created_at: new Date().toISOString(),
+      };
+
+      const { data: inserted, error } = await supabase
+        .from('leads')
+        .insert(newLead)
+        .select()
+        .single();
+
+      if (error) {
+        return NextResponse.json(handleSupabaseError(error), { status: 500 });
+      }
+      data = inserted as Lead;
     }
     
     const ciudadServicioNombre =
@@ -149,7 +183,7 @@ export async function POST(request: NextRequest) {
         ])
       )
       .catch((err) => console.error('[GHL] Error preparando/enviando lead:', err));
-    
+
     return NextResponse.json({
       success: true,
       message: 'Solicitud recibida. Te contactaremos en menos de 24 horas.',
@@ -257,4 +291,22 @@ function calculateLeadScore(lead: Record<string, unknown>): number {
   if (lead.ciudad && lead.ciudad !== 'otra') score += 5;
   
   return Math.min(100, Math.max(1, score));
+}
+
+function normalizeServicioValue(raw: unknown): string | null {
+  const value = normalizeLeadField(raw);
+  return value || null;
+}
+
+/** Acepta `servicios` (array) o `servicio` (string/objeto) del formulario. */
+function extractServicios(body: Record<string, unknown>): string[] {
+  const fromArray = Array.isArray(body.servicios)
+    ? body.servicios.map(normalizeServicioValue).filter((s): s is string => Boolean(s))
+    : [];
+
+  const single = normalizeServicioValue(body.servicio);
+  const merged = [...fromArray];
+  if (single && !merged.includes(single)) merged.unshift(single);
+
+  return merged;
 }

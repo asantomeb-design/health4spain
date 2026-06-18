@@ -13,6 +13,8 @@ export type GhlWebhookExtrasInput = { ciudadServicioNombre?: string };
 /** Payload de etiquetas ES para webhook GHL y custom fields API (mismo origen que `request` ES). */
 export interface GhlWebhookSpanishFields {
   servicio_es: string;
+  /** Lista de slugs cuando el lead tiene varios servicios. */
+  servicios: string[];
   presupuesto_es: string;
   urgencia_es: string;
   idioma_preferido_es: string;
@@ -54,6 +56,38 @@ export function servicioEs(slug: string | undefined | null): string {
   if (id === 'otro') return 'Otro servicio';
   const s = requestEs().servicios as Record<string, string>;
   return s[id] ?? id;
+}
+
+/** Extrae slugs desde un campo `servicio` (uno o varios separados por coma). */
+export function parseServiciosSlug(value: string | undefined | null): string[] {
+  const s = (value ?? '').trim();
+  if (!s) return [];
+  return s.split(',').map((x) => x.trim()).filter(Boolean);
+}
+
+/** Etiquetas en español para varios servicios (p. ej. emails GHL). */
+export function serviciosEs(slugs: string[]): string {
+  if (!slugs.length) return 'No indicado';
+  return slugs.map((slug) => servicioEs(slug)).join(', ');
+}
+
+/** Une slugs existentes con nuevos sin duplicar. */
+export function mergeServicioSlugs(existing: string | undefined | null, incoming: string[]): string {
+  const set = new Set([...parseServiciosSlug(existing), ...incoming.map((s) => s.trim()).filter(Boolean)]);
+  return Array.from(set).join(',');
+}
+
+/** Normaliza un valor de formulario que puede venir como string u objeto { id, nombre, label, value }. */
+export function normalizeLeadField(value: unknown): string {
+  if (value == null) return '';
+  if (typeof value === 'string') return value.trim();
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value).trim();
+  if (typeof value === 'object') {
+    const obj = value as Record<string, unknown>;
+    const candidate = obj.nombre ?? obj.label ?? obj.value ?? obj.id ?? obj.slug;
+    if (candidate != null) return String(candidate).trim();
+  }
+  return '';
 }
 
 export function presupuestoEs(key: string | undefined | null): string | null {
@@ -143,9 +177,12 @@ export async function buildGhlWebhookSpanishFields(
   }
 
   const presupuestoRaw = (lead.presupuesto ?? '').trim();
+  const servicioSlugs = parseServiciosSlug(lead.servicio);
+  const servicioLista = servicioSlugs.length ? servicioSlugs : (lead.servicio ? [lead.servicio] : []);
 
   return {
-    servicio_es: servicioEs(lead.servicio),
+    servicio_es: serviciosEs(servicioLista),
+    servicios: servicioLista,
     presupuesto_es: presupuestoRaw
       ? presupuestoEs(presupuestoRaw) ?? presupuestoRaw
       : 'No especificado',
