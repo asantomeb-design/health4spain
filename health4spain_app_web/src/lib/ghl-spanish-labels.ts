@@ -164,7 +164,8 @@ export async function buildGhlWebhookSpanishFields(
   lead: Lead,
   extras?: GhlWebhookExtrasInput
 ): Promise<GhlWebhookSpanishFields> {
-  const esSalud = lead.servicio === 'seguros';
+  const servicioSlugs = parseServiciosSlug(lead.servicio);
+  const esSalud = servicioSlugs.includes('seguros') || lead.servicio === 'seguros';
   let ciudadNombre = extras?.ciudadServicioNombre?.trim() || null;
   if (!ciudadNombre && lead.ciudad === 'otra') {
     ciudadNombre = requestEs().otherCity;
@@ -177,7 +178,6 @@ export async function buildGhlWebhookSpanishFields(
   }
 
   const presupuestoRaw = (lead.presupuesto ?? '').trim();
-  const servicioSlugs = parseServiciosSlug(lead.servicio);
   const servicioLista = servicioSlugs.length ? servicioSlugs : (lead.servicio ? [lead.servicio] : []);
 
   return {

@@ -68,8 +68,12 @@ const CUSTOM_FIELD_VALUE_KEYS = [
   'servicio_solicitado',
   'h4s_servicio',
   'h4s_ciudad',
+  'h4s_pais_origen',
   'h4s_situacion',
+  'h4s_plazo_necesidad',
+  'h4s_idioma',
   'h4s_score',
+  'h4s_presupuesto',
   'presupuesto',
   'urgencia',
   'idioma_preferido',
@@ -123,8 +127,8 @@ function buildGhlCustomFields(
     return [];
   }
 
-  const ciudadInteres =
-    spanish?.ciudad_servicio_espana_nombre?.trim() || lead.ciudad;
+  const ciudadDestino =
+    spanish?.ciudad_servicio_espana_nombre?.trim() || lead.ciudad?.trim() || '';
   const presupuestoSlug = lead.presupuesto?.trim();
   const presupuestoValor =
     presupuestoSlug != null && presupuestoSlug !== ''
@@ -134,16 +138,24 @@ function buildGhlCustomFields(
   const servicioSlugs = parseServiciosSlug(lead.servicio);
   const servicioLista = servicioSlugs.length ? servicioSlugs : (lead.servicio ? [lead.servicio] : []);
   const servicioTexto = spanish?.servicio_es ?? serviciosEs(servicioLista);
+  const urgenciaTexto = spanish?.urgencia_es ?? urgenciaEs(lead.urgencia ?? '');
+  const idiomaTexto =
+    spanish?.idioma_preferido_es ?? idiomaPreferidoEs(lead.idioma_preferido);
+  const paisOrigenTexto = spanish?.pais_origen_es ?? lead.pais_origen ?? '';
 
   const values: Record<CustomFieldInternalKey, string | undefined> = {
-    ciudad_interes: ciudadInteres,
+    ciudad_interes: ciudadDestino,
     ciudad_origen: lead.ciudad_origen,
     pais_origen: lead.pais_origen,
     servicio_solicitado: servicioTexto,
     h4s_servicio: servicioTexto,
-    h4s_ciudad: ciudadInteres,
-    h4s_situacion: spanish?.urgencia_es ?? urgenciaEs(lead.urgencia ?? ''),
+    h4s_ciudad: ciudadDestino,
+    h4s_pais_origen: paisOrigenTexto || undefined,
+    h4s_situacion: urgenciaTexto,
+    h4s_plazo_necesidad: urgenciaTexto,
+    h4s_idioma: idiomaTexto,
     h4s_score: lead.score != null ? String(lead.score) : undefined,
+    h4s_presupuesto: presupuestoValor,
     presupuesto: presupuestoValor,
     urgencia: spanish?.urgencia_es ?? urgenciaEs(lead.urgencia ?? ''),
     idioma_preferido:
@@ -193,7 +205,7 @@ export async function createGHLContact(
   }
 
   // Construir tags dinámicos
-  const tags: string[] = ['web-lead', 'health4spain', 'origen-web'];
+  const tags: string[] = ['web-lead', 'health4spain', 'web', 'origen-web'];
   const servicioSlugs = parseServiciosSlug(lead.servicio);
   const serviciosParaTags = servicioSlugs.length ? servicioSlugs : (lead.servicio ? [lead.servicio] : []);
   for (const slug of serviciosParaTags) {
@@ -213,7 +225,7 @@ export async function createGHLContact(
     email: lead.email,
     phone,
     tags,
-    source: 'origen-web',
+    source: 'web',
     ...(lead.utm_source && { utmSource: lead.utm_source }),
     ...(lead.utm_medium && { utmMedium: lead.utm_medium }),
     ...(lead.utm_campaign && { utmCampaign: lead.utm_campaign }),
@@ -267,13 +279,74 @@ export interface GHLWebhookExtras {
 }
 
 /**
- * Envía el lead por POST JSON al webhook entrante de GHL correspondiente al servicio elegido.
- * URL en servidor: GHL_INCOMING_WEBHOOK_SALUD (único webhook; segmentar en GHL con `servicio` o `tipo_ruta`).
- *
- * Claves recomendadas en el flujo GHL:
- * - Campo estándar **City** → `{{inboundWebhookRequest.ciudad_origen}}` (ciudad de procedencia del usuario).
- * - Custom **¿Dónde en España?** → `{{inboundWebhookRequest.ciudad_servicio_espana_nombre}}` (nombre en español; slug en `ciudad_servicio_espana`).
- * - Textos en español para GHL (sin flujos de traducción): `servicio_es`, `urgencia_es`, `presupuesto_es`, `idioma_preferido_es`, `dispositivo_es`, `tipo_ruta_es`, `status_es`, `pais_origen_es`, `fecha_nacimiento_legible_es`.
+ * Payload del webhook según brief H4S_BR_1_v2:
+ * - Mantener nombres de campo históricos (ciudad, servicio, ciudad_origen…)
+ * - ciudad = destino en España (slug); ciudad_origen = procedencia del lead
+ * - servicio = slug string; un POST por servicio (opción A)
+ * - Sin objetos ni arrays en ningún valor
+ */
+function buildWebhookPayloadV2(
+  lead: Lead,
+  spanish: GhlWebhookSpanishFields,
+  servicioSlug: string,
+  telefonoCompleto: string,
+  firstName: string,
+  lastName: string
+): Record<string, string | number | null> {
+  const esSalud = servicioSlug === 'seguros';
+  const ciudadDestinoSlug = lead.ciudad?.trim() || '';
+  const ciudadDestinoNombre =
+    spanish.ciudad_servicio_espana_nombre?.trim() || ciudadDestinoSlug;
+  const servicioTexto = servicioEs(servicioSlug);
+
+  return {
+    tipo_ruta: esSalud ? 'salud' : 'otros',
+    origen: 'web',
+    lead_id: lead.id,
+    nombre: lead.nombre,
+    firstName,
+    lastName,
+    email: lead.email,
+    telefono: lead.telefono,
+    telefono_completo: telefonoCompleto,
+    codigo_pais: lead.codigo_pais ?? null,
+    fecha_nacimiento: lead.fecha_nacimiento ?? null,
+    pais_origen: lead.pais_origen ?? null,
+    ciudad_origen: lead.ciudad_origen ?? null,
+    servicio: servicioSlug,
+    ciudad: ciudadDestinoSlug,
+    presupuesto: lead.presupuesto ?? null,
+    urgencia: lead.urgencia ?? null,
+    idioma_preferido: lead.idioma_preferido ?? 'es',
+    mensaje: lead.mensaje ?? null,
+    landing_page: lead.landing_page ?? null,
+    utm_source: lead.utm_source ?? null,
+    utm_medium: lead.utm_medium ?? null,
+    utm_campaign: lead.utm_campaign ?? null,
+    dispositivo: lead.dispositivo ?? null,
+    score: lead.score ?? null,
+    status: lead.status,
+    created_at: lead.created_at,
+    // Textos legibles para plantillas GHL (campos históricos *_es)
+    servicio_es: servicioTexto,
+    urgencia_es: spanish.urgencia_es,
+    presupuesto_es: spanish.presupuesto_es,
+    idioma_preferido_es: spanish.idioma_preferido_es,
+    dispositivo_es: spanish.dispositivo_es,
+    tipo_ruta_es: esSalud ? 'Seguros de salud' : 'Otros servicios',
+    status_es: spanish.status_es,
+    ciudad_servicio_espana_nombre: ciudadDestinoNombre,
+    ciudad_servicio_espana: ciudadDestinoSlug,
+    ciudad_interes: ciudadDestinoSlug,
+    pais_origen_es: spanish.pais_origen_es,
+    fecha_nacimiento_legible_es: spanish.fecha_nacimiento_legible_es,
+    email_asunto: `Tu consulta sobre ${servicioTexto} en ${ciudadDestinoNombre} - Health4Spain`,
+  };
+}
+
+/**
+ * Envía el lead por POST JSON al webhook entrante de GHL (brief H4S_BR_1_v2).
+ * Opción A: un envío por cada servicio. Sin renombrar campos del webhook.
  */
 export async function sendLeadToGHLIncomingWebhook(
   lead: Lead,
@@ -286,87 +359,53 @@ export async function sendLeadToGHLIncomingWebhook(
     return;
   }
 
-  const esSalud = parseServiciosSlug(lead.servicio).includes('seguros') || lead.servicio === 'seguros';
+  const spanish =
+    extras?.spanishFields ?? (await buildGhlWebhookSpanishFields(lead, extras));
 
   const telefonoCompleto = normalizeGhlPhone(lead.codigo_pais, lead.telefono);
   const { firstName, lastName } = splitNombreCompleto(lead.nombre);
 
-  const ciudadServicioSlug = lead.ciudad;
-  const spanish =
-    extras?.spanishFields ?? (await buildGhlWebhookSpanishFields(lead, extras));
+  const servicioSlugs = spanish.servicios.length
+    ? spanish.servicios
+    : parseServiciosSlug(lead.servicio);
+  const serviciosParaEnviar = servicioSlugs.length
+    ? servicioSlugs
+    : lead.servicio?.trim()
+      ? [lead.servicio.trim()]
+      : [];
 
-  const servicioSlugs = spanish.servicios.length ? spanish.servicios : parseServiciosSlug(lead.servicio);
-  const ciudadNombre = spanish.ciudad_servicio_espana_nombre?.trim() || lead.ciudad;
-  const emailAsunto = `Tu consulta sobre ${spanish.servicio_es} en ${ciudadNombre} - Health4Spain`;
+  if (!serviciosParaEnviar.length) {
+    console.warn('[GHL Webhook] Lead sin servicio; se omite el envío.', lead.id);
+    return;
+  }
 
-  const payload = {
-    ...spanish,
-    /** Marca de origen para distinguir leads web de WhatsApp en GHL. */
-    origen: 'origen-web',
-    /** Alias para etiquetado / workflows GHL. */
-    source: 'origen-web',
-    /** Campos h4s_* para custom fields ya creados en GHL. */
-    h4s_servicio: spanish.servicio_es,
-    h4s_ciudad: ciudadNombre,
-    h4s_situacion: spanish.urgencia_es,
-    h4s_score: lead.score ?? null,
-    /** Asunto preconstruido para emails (evita [object Object] en plantillas). */
-    email_asunto: emailAsunto,
-    /** Textos planos para plantillas que usan servicio/ciudad directamente. */
-    servicio_nombre: spanish.servicio_es,
-    ciudad_nombre: ciudadNombre,
-    /** Ayuda en GHL si quieres ramificar: `salud` solo si servicio es seguros; si no, `otros`. */
-    tipo_ruta: esSalud ? 'salud' : 'otros',
-    lead_id: lead.id,
-    nombre: lead.nombre,
-    firstName,
-    lastName,
-    email: lead.email,
-    telefono: lead.telefono,
-    phone: telefonoCompleto,
-    telefono_completo: telefonoCompleto,
-    codigo_pais: lead.codigo_pais ?? null,
-    fecha_nacimiento: lead.fecha_nacimiento ?? null,
-    /** Alias camelCase por si GHL solo sugiere claves “estilo inglés” en el mapeo */
-    dateOfBirth: lead.fecha_nacimiento ?? null,
-    pais_origen: lead.pais_origen ?? null,
-    /** Ciudad donde vive / procedencia (paso 2 del formulario solicitar). */
-    ciudad_origen: lead.ciudad_origen ?? null,
-    servicio: servicioSlugs[0] ?? lead.servicio,
-    servicios: servicioSlugs,
-    /**
-     * Slug de la ciudad/zona en España donde quiere el servicio (paso 1).
-     * `ciudad` se mantiene por compatibilidad; preferir `ciudad_servicio_espana` en mapeos nuevos.
-     */
-    ciudad: ciudadServicioSlug,
-    ciudad_interes: ciudadServicioSlug,
-    ciudad_servicio_espana: ciudadServicioSlug,
-    presupuesto: lead.presupuesto ?? null,
-    urgencia: lead.urgencia,
-    idioma_preferido: lead.idioma_preferido,
-    mensaje: lead.mensaje ?? null,
-    landing_page: lead.landing_page,
-    utm_source: lead.utm_source ?? null,
-    utm_medium: lead.utm_medium ?? null,
-    utm_campaign: lead.utm_campaign ?? null,
-    dispositivo: lead.dispositivo ?? null,
-    score: lead.score ?? null,
-    status: lead.status,
-    created_at: lead.created_at,
-  };
+  for (const servicioSlug of serviciosParaEnviar) {
+    const payload = buildWebhookPayloadV2(
+      lead,
+      spanish,
+      servicioSlug,
+      telefonoCompleto,
+      firstName,
+      lastName
+    );
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    if (!response.ok) {
-      const snippet = (await response.text()).slice(0, 300);
-      console.error('[GHL Webhook] Respuesta no OK:', response.status, snippet);
+      if (!response.ok) {
+        const snippet = (await response.text()).slice(0, 300);
+        console.error(
+          `[GHL Webhook] Respuesta no OK (${servicioSlug}):`,
+          response.status,
+          snippet
+        );
+      }
+    } catch (err) {
+      console.error(`[GHL Webhook] Error de red (${servicioSlug}):`, err);
     }
-  } catch (err) {
-    console.error('[GHL Webhook] Error de red:', err);
   }
 }

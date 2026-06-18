@@ -293,9 +293,12 @@ function calculateLeadScore(lead: Record<string, unknown>): number {
   return Math.min(100, Math.max(1, score));
 }
 
+const SERVICIOS_VALIDOS = new Set(['seguros', 'abogados', 'inmobiliarias', 'gestorias', 'otro']);
+
 function normalizeServicioValue(raw: unknown): string | null {
-  const value = normalizeLeadField(raw);
-  return value || null;
+  const value = normalizeLeadField(raw).toLowerCase();
+  if (!value) return null;
+  return SERVICIOS_VALIDOS.has(value) ? value : value;
 }
 
 /** Acepta `servicios` (array) o `servicio` (string/objeto) del formulario. */
