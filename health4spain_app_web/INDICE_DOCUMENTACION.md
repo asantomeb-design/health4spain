@@ -1,7 +1,7 @@
 # 📚 Índice de Documentación - Health4Spain
 
 **Fecha:** 12 de junio de 2026  
-**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (ES) | Partners Fase 1 | **Hub Colaboradores v1** | Blog IA + translation_group_id | Meta Pixel | Guía vivir España | Production-ready  
+**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (v2 jun 2026) | Partners Fase 1 | **Hub Colaboradores v1** | Blog IA + translation_group_id | Meta Pixel | Guía vivir España | Production-ready  
 **Versión:** 3.5.0
 
 ---
@@ -98,12 +98,13 @@
 - **Historial**: `/administrator/chat-history`
 - **APIs**: `/api/chat`, `/api/chat/config`, `/api/chat/rate`
 
-### Leads y GoHighLevel (listo)
-- **Captura**: `POST /api/leads` → Supabase `leads` + (opcional) GHL API + webhook único (`GHL_INCOMING_WEBHOOK_SALUD` = URL única para todos los leads)
-- **Producto**: una sola **location** GHL acordada con el cliente; segmentación con `servicio` / `tipo_ruta` en el JSON — ver **`README.md`** (CRM GHL + decisión definitiva)
-- **Código**: `src/lib/gohighlevel.ts`, `src/lib/ghl-spanish-labels.ts`
-- **Admin**: `/administrator/leads` (listado y borrado)
-- **Env / mapeo**: `.env.example` (`GHL_PRIVATE_TOKEN`, `GHL_LOCATION_ID`, `GHL_INCOMING_WEBHOOK_SALUD`, `GHL_CUSTOM_FIELD_IDS`); deploy: **`CONFIGURACION_VERCEL.md`**
+### Leads y GoHighLevel (listo — actualizado jun 2026)
+- **Captura**: `POST /api/leads` → Supabase `leads` (upsert email/teléfono) + GHL API + webhook (`GHL_INCOMING_WEBHOOK_SALUD`)
+- **Webhook v2**: un POST **por servicio**; payload plano (`ciudad` = destino, `ciudad_origen` = procedencia, `origen: web`) — ver **`README.md`** § «Corrección payload GHL — junio 2026»
+- **Briefs cliente**: `H4S_BR_1_v2.DOC` (definitivo), `H4S_BR_1.doc`, `Brief_Javi_Fix_Leads_Web.docx`
+- **Código**: `src/lib/gohighlevel.ts`, `src/lib/ghl-spanish-labels.ts`, `src/app/api/leads/route.ts`
+- **Admin**: `/administrator/leads`
+- **Env**: `.env.example`, deploy **`CONFIGURACION_VERCEL.md`**
 
 ### Hub Colaboradores (comisiones internas)
 - **Doc técnica**: [`docs/HUB_COLABORADORES.md`](./docs/HUB_COLABORADORES.md)

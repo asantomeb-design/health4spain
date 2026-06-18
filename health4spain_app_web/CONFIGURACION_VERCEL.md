@@ -80,7 +80,7 @@ Detalle del pixel (eventos, consentimiento, verificación): **[`docs/META_PIXEL.
 | `GHL_INCOMING_WEBHOOK_SALUD` | URL del **único** webhook entrante: recibe **todos** los leads (POST JSON). El nombre de la variable es histórico; en GHL se segmenta con `servicio` y `tipo_ruta` (`salud` \| `otros`) |
 | `GHL_CUSTOM_FIELD_IDS` | JSON `{ "clave": "uuid-campo-ghl" }` — ver `.env.example` |
 
-**Decisión operativa (abr. 2026):** el cliente trabaja con **una sola subcuenta (location)** GHL; no hace falta duplicar variables por cuenta. Detalle del acuerdo, escenarios descartados y payload: **`README.md` → sección «CRM GoHighLevel (GHL) y leads»**.
+**Decisión operativa (abr. 2026):** una sola **location** GHL. Payload y mapeo actualizados **jun. 2026** (brief `H4S_BR_1_v2`): ver **`README.md`** → «CRM GoHighLevel (GHL) y leads».
 
 Si el repo en GitHub incluye la carpeta padre, en Vercel el **Root Directory** debe ser `health4spain_app_web`.
 

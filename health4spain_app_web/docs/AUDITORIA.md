@@ -3,7 +3,7 @@
 **Fecha:** 2 abril 2026  
 **Alcance:** Funcionamiento, flujo de datos, CTAs, servicios, documentación
 
-> **Nota:** Desde abril 2026, **GoHighLevel** está integrado (API + webhook único) con etiquetas en español para el CRM; **`/administrator/leads`** permite gestionar y eliminar leads. Operación acordada con **una sola subcuenta** GHL; segmentación vía payload (`servicio`, `tipo_ruta`) — ver **`README.md`** (sección CRM GHL). Algunas tablas de este documento pueden no reflejar el árbol de rutas multi-idioma más reciente.
+> **Nota:** Desde **junio 2026** el payload GHL sigue el brief `H4S_BR_1_v2` (un POST por servicio, `ciudad` = destino, `origen: web`). Integración API + webhook único; **`/administrator/leads`** para gestión. Una sola subcuenta GHL — ver **`README.md`** § CRM GHL.
 
 ---
 

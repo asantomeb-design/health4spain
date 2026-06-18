@@ -32,7 +32,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 
 176+ landing pages SEO (76 servicio×ciudad + 100 visa no lucrativa) + blog multiidioma + páginas de destinos
 
-**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: API + webhook único, segmentación por `servicio` / `tipo_ruta`) + leads en español**, panel admin de leads, **módulo Partners Fase 1**, **Hub Colaboradores v1 (comisiones multi-compañía + `/hub`)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, **Meta Pixel (Facebook Ads) con consentimiento GDPR**, **guía interactiva vivir en España** (`/guia-vivir-espana.html`), production-ready — **v3.5.0** (12 jun 2026)
+**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: payload v2 jun 2026, API + webhook, un POST/servicio, `origen: web`) + leads en español**, panel admin de leads, **módulo Partners Fase 1**, **Hub Colaboradores v1 (comisiones multi-compañía + `/hub`)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, **Meta Pixel (Facebook Ads) con consentimiento GDPR**, **guía interactiva vivir en España** (`/guia-vivir-espana.html`), production-ready — **v3.6.0** (18 jun 2026)
 
 ---
 
@@ -235,12 +235,82 @@ npm run images:webp                                       # PNG → WebP
 ### Qué hace el código (resumen técnico)
 
 - **POST `/api/leads`**: valida, guarda **siempre** en Supabase en la tabla **`leads`** (una sola tabla para todos los servicios) y, si están configuradas las variables, dispara integraciones GHL **en segundo plano** (no bloquean la respuesta al usuario).
-- **API v2** (`src/lib/gohighlevel.ts` → `createGHLContact`): upsert de contacto en la **location** indicada por `GHL_LOCATION_ID`, con token `GHL_PRIVATE_TOKEN`. Custom fields en español vía `GHL_CUSTOM_FIELD_IDS` (JSON en `.env`) y etiquetas por tipo de servicio.
-- **Webhook entrante** (`sendLeadToGHLIncomingWebhook`): **un único** endpoint configurable con `GHL_INCOMING_WEBHOOK_SALUD`. Envío **POST** con cuerpo **JSON** en cada lead. El payload incluye slugs técnicos (`servicio`, `ciudad`, etc.) y campos legibles en español (`servicio_es`, `urgencia_es`, `presupuesto_es`, `ciudad_servicio_espana_nombre`, `pais_origen_es`, `fecha_nacimiento_legible_es`, …) desde `src/lib/ghl-spanish-labels.ts`, para que en GHL se trabaje en español aunque el formulario se envíe en EN/FR/DE/PT.
-- **Campos útiles para automatizaciones**: `servicio` (`seguros` | `abogados` | `inmobiliarias` | `gestorias`) y **`tipo_ruta`**: `salud` si el usuario eligió seguros de salud, **`otros`** en el resto de casos. Así se puede ramificar en un solo flujo con **Si/No** o filtros sin cambiar la web.
-- **Admin**: `/administrator/leads` — listado y eliminación de leads (solo admins). Detalle de variables: `.env.example`.
+- **Upsert por contacto**: si ya existe un lead con el mismo **email** o **teléfono**, se **actualiza** el registro y se **fusionan** los servicios (slugs separados por coma en `leads.servicio`). No se crean filas duplicadas en Supabase.
+- **API v2** (`src/lib/gohighlevel.ts` → `createGHLContact`): upsert de contacto en la **location** indicada por `GHL_LOCATION_ID`, con token `GHL_PRIVATE_TOKEN`. Custom fields en español vía `GHL_CUSTOM_FIELD_IDS` (JSON en `.env`), etiquetas `web`, `web-lead`, `origen-web` y por servicio (`servicio-seguros`, etc.).
+- **Webhook entrante** (`sendLeadToGHLIncomingWebhook`): **un único** endpoint (`GHL_INCOMING_WEBHOOK_SALUD`). Por cada lead se envía **un POST JSON por cada servicio** elegido (opción A del brief cliente: multiservicio = varios envíos, uno por derivación/partner).
+- **Textos en español**: `src/lib/ghl-spanish-labels.ts` genera `servicio_es`, `urgencia_es`, `ciudad_servicio_espana_nombre`, etc., para plantillas GHL aunque el formulario venga en EN/FR/DE/PT.
+- **Admin**: `/administrator/leads` — listado y eliminación de leads (solo admins). Variables: `.env.example`.
 
-> **Nombre de la variable `GHL_INCOMING_WEBHOOK_SALUD`:** es histórico (primer planteamiento solo canal “salud”). Hoy **esa URL recibe todos los leads**; la distinción salud vs otros va en el JSON (`tipo_ruta`, `servicio`).
+> **Nombre de la variable `GHL_INCOMING_WEBHOOK_SALUD`:** histórico (primer planteamiento solo canal “salud”). Hoy **esa URL recibe todos los leads**; la segmentación va en el JSON (`tipo_ruta`, `servicio`, `origen`).
+
+### Corrección payload GHL — junio 2026 (brief `H4S_BR_1_v2`)
+
+*Referencia interna: `H4S_BR_1.doc` (v1) y `H4S_BR_1_v2.DOC` (v2, definitivo). El v2 **no cambia el alcance**: aclara que hay que **mantener los nombres de campo del webhook** y corregir solo los **valores**.*
+
+**Problemas que reportó el cliente (evidencia CRM):**
+
+| Caso | Síntoma en GHL |
+|------|----------------|
+| César (1 servicio, Seguros/Murcia) | `h4s_servicio` y `h4s_ciudad` vacíos; mensaje con ciudad de **origen** (Luanda) en vez de **destino** (Murcia) |
+| Nataly (4 servicios) | Emails con `[object Object]` — el servicio llegaba como objeto/array |
+
+**Tres correcciones implementadas (v2):**
+
+1. **`servicio` siempre string** — slug normalizado (`seguros`, `abogados`, `inmobiliarias`, `gestorias`). Nunca objeto ni array en el JSON.
+2. **Ciudades separadas** — `ciudad` = destino en España (slug); `ciudad_origen` = procedencia del lead. No se cruzan.
+3. **`origen: "web"`** — en todos los envíos web, para distinguir de leads Meta/WhatsApp.
+
+**Reglas del payload (webhook):**
+
+- Todos los valores son **string** o **null** (sin objetos `{}` ni arrays `[]` dentro de un campo).
+- **No renombrar** campos del webhook histórico (`ciudad`, `servicio`, `ciudad_origen`…); el mapeo a custom fields GHL lo hace el cliente en su workflow.
+- Multiservicio: **un POST por servicio** (misma URL de webhook).
+
+**Ejemplo de payload por envío (un servicio):**
+
+```json
+{
+  "tipo_ruta": "salud",
+  "origen": "web",
+  "lead_id": "uuid",
+  "nombre": "César Dumba",
+  "email": "cesar@ejemplo.com",
+  "telefono": "632180950",
+  "telefono_completo": "+34632180950",
+  "codigo_pais": "+34",
+  "pais_origen": "Angola",
+  "ciudad_origen": "Luanda",
+  "servicio": "seguros",
+  "ciudad": "murcia",
+  "urgencia": "proximo-trimestre",
+  "idioma_preferido": "es",
+  "score": 75,
+  "status": "nuevo",
+  "servicio_es": "Seguro de Salud",
+  "ciudad_servicio_espana_nombre": "Murcia",
+  "email_asunto": "Tu consulta sobre Seguro de Salud en Murcia - Health4Spain"
+}
+```
+
+**Diccionario webhook → GHL** (el cliente mapea en su workflow; claves estables):
+
+| Campo webhook | Uso / campo GHL |
+|---------------|-----------------|
+| `servicio` | `h4s_servicio` (slug para enrutar) |
+| `servicio_es` | Texto legible para emails |
+| `ciudad` | `h4s_ciudad` — **destino** España (slug) |
+| `ciudad_servicio_espana_nombre` | Nombre destino para plantillas ("Murcia") |
+| `ciudad_origen` | Ciudad de procedencia del lead |
+| `pais_origen` | `h4s_pais_origen` |
+| `urgencia` | `h4s_plazo_necesidad` |
+| `idioma_preferido` | `h4s_idioma` |
+| `presupuesto` | `h4s_presupuesto` |
+| `score` | Score / prioridad |
+| `origen` | Etiqueta/campo = `web` |
+
+**Validación tras deploy:** lead de prueba (1 servicio) + lead multiservicio. En GHL deben verse `h4s_servicio` y `h4s_ciudad` correctos, mensaje de bienvenida sin `[object Object]` ni blancos, y `origen = web`. Si los campos custom siguen vacíos, revisar **mapeo del workflow GHL** (lado cliente).
+
+**Código:** `src/lib/gohighlevel.ts` (`buildWebhookPayloadV2`, `createGHLContact`), `src/lib/ghl-spanish-labels.ts`, `src/app/api/leads/route.ts`, formularios `ContactFormClient.tsx`, `LeadForm.tsx`, `LandingFormEmbed.tsx`.
 
 ### Decisión de producto: una sola subcuenta GHL (definitiva)
 

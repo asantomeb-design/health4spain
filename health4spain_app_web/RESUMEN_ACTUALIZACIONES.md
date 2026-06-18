@@ -64,6 +64,15 @@
 
 ---
 
+## 🆕 Leads web → GHL (brief H4S_BR_1_v2) — 18 junio 2026
+
+- **Problema**: leads entraban al CRM “planos” — servicio como objeto/array, ciudades cruzadas, sin `origen: web`.
+- **Solución**: payload webhook alineado con `H4S_BR_1_v2.DOC`; un POST por servicio; upsert en Supabase por email/teléfono; multiservicio en formulario solicitar.
+- **Documentación**: `README.md` (sección CRM GHL ampliada), `docs/HISTORIAL.md` (v3.6.0), `.env.example` (mapeo campos).
+- **Pendiente cliente**: mapeo workflow GHL (`servicio` → `h4s_servicio`, etc.).
+
+---
+
 ## 🆕 GoHighLevel + leads en español — 2 abril 2026
 
 - **CRM GHL**: Tras `POST /api/leads`, sincronización opcional por API v2 (upsert contacto) y **webhook entrante único** (`GHL_INCOMING_WEBHOOK_SALUD`).

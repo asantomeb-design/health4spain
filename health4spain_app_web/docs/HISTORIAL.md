@@ -1,5 +1,30 @@
 # Historial de Desarrollo - Health4Spain
 
+## Versión 3.6.0 (18 junio 2026)
+
+### Leads web → GoHighLevel (brief `H4S_BR_1_v2`)
+
+Corrección del payload enviado al CRM tras feedback del cliente (Adol / H4S SEGUROS + CAPTACIÓN). Documentos de referencia en raíz del proyecto: `H4S_BR_1.doc`, `H4S_BR_1_v2.DOC`, `Brief_Javi_Fix_Leads_Web.docx`.
+
+**Problemas corregidos:**
+
+- Servicio como objeto/array en multiservicio → `[object Object]` en emails GHL.
+- `h4s_servicio` / `h4s_ciudad` vacíos; ciudad de origen enviada donde debía ir la de destino.
+- Falta de marca de canal `origen: web`.
+
+**Implementación:**
+
+- **`POST /api/leads`**: upsert por email/teléfono; servicios fusionados en `leads.servicio` (slugs separados por coma); selección múltiple de servicios en `/es/solicitar`.
+- **Webhook** (`buildWebhookPayloadV2`): JSON plano (string o null); mantiene nombres históricos (`ciudad`, `servicio`, `ciudad_origen`); `ciudad` = destino España; **un POST por servicio**.
+- **API GHL**: `createGHLContact` con `source: web`, etiquetas `web` + por servicio; custom fields `h4s_*` vía `GHL_CUSTOM_FIELD_IDS`.
+- **Textos email**: `servicio_es`, `ciudad_servicio_espana_nombre`, `email_asunto` preconstruido.
+
+**Commits:** `4bf5d5f` (dedup + origen), `62713ff` (alineación v2).
+
+**Pendiente lado cliente:** mapeo en workflow GHL (`servicio` → `h4s_servicio`, `ciudad` → `h4s_ciudad`, plantillas usando `servicio_es` y `ciudad_servicio_espana_nombre`). Detalle: **`README.md`** § CRM GHL.
+
+---
+
 ## Versión 3.5.0 (12 junio 2026)
 
 ### Hub Colaboradores (comisiones internas B2E)
