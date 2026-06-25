@@ -92,53 +92,89 @@ function getSessionId(): string {
   return id;
 }
 
-const HANDOFF_TAG = 'bot-handoff-humano';
-
-interface ChatOption {
-  label: string;
-  tag?: string;
+interface ParsedMessage {
+  text: string;
+  options: string[];
 }
 
-const OPTIONS_RE = /^\[\[OPCIONES\]\]\s*(.+)$/m;
+// Frases tipo "(responde con el número)" que sobran cuando hay botones
+const CHOICE_HINT_RE = /\s*[(（]?\s*(responde con el número|reply with the number|answer with the number|répond(?:s|ez) avec le numéro|antworten? mit der nummer|responda com o número)[^)\n]*[)）]?\s*:?\s*$/gim;
 
-// Extrae las opciones pulsables del marcador [[OPCIONES]] etiqueta1 | etiqueta2::tag
-function parseOptions(content: string): ChatOption[] {
-  const m = content.match(OPTIONS_RE);
-  if (!m) return [];
-  return m[1]
-    .split('|')
-    .map(part => part.trim())
-    .filter(Boolean)
-    .map(part => {
-      const [label, tag] = part.split('::');
-      return { label: (label || '').trim(), tag: tag?.trim() || undefined };
-    })
-    .filter(o => o.label.length > 0)
-    .slice(0, 8);
+function cleanLabel(s: string): string {
+  return s.replace(/\*\*/g, '').replace(/\s+/g, ' ').trim();
 }
 
-// Quita el marcador (y los parciales mientras llega en streaming) del texto visible
-function stripMarker(content: string, streaming: boolean): string {
-  const idx = content.indexOf('[[OPCIONES]]');
-  if (idx !== -1) return content.slice(0, idx).replace(/\n+$/, '').trimEnd();
-  if (streaming) {
-    const partial = content.match(/\n*\[\[?[A-ZÑ]*$/);
-    if (partial && partial.index !== undefined) return content.slice(0, partial.index).trimEnd();
+// Opciones numeradas en una sola línea: "¿Qué servicio? 1. Seguro  2. Abogado  3. Gestoría"
+function parseInlineNumbered(line: string): ParsedMessage {
+  const re = /(\d+)[.)]\s+/g;
+  const marks: { num: number; at: number; end: number }[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(line))) marks.push({ num: Number(m[1]), at: m.index, end: re.lastIndex });
+
+  const run: { num: number; at: number; end: number }[] = [];
+  for (const it of marks) {
+    if (run.length === 0) {
+      if (it.num === 1) run.push(it);
+    } else if (it.num === run[run.length - 1].num + 1) {
+      run.push(it);
+    }
   }
-  return content;
+  if (run.length < 2) return { text: line, options: [] };
+
+  const options: string[] = [];
+  for (let i = 0; i < run.length; i++) {
+    const from = run[i].end;
+    const to = i + 1 < run.length ? run[i + 1].at : line.length;
+    options.push(cleanLabel(line.slice(from, to)));
+  }
+  return { text: line.slice(0, run[0].at).trim(), options: options.filter(Boolean) };
 }
 
-// Heurística etiqueta/tag -> icono de línea (consistente en todos los dispositivos)
-function inferIcon(label: string, tag?: string): string {
-  const s = `${label} ${tag || ''}`.toLowerCase();
-  if (/(asesor|persona|humano|advisor|human|agent|berater|conseiller|handoff|llam|call|whatsapp|teléfono|telefono|phone)/.test(s)) return 'chat';
+// Detecta las opciones (numeradas o con viñetas) que Mar-IA pone al final del mensaje
+// y las separa del texto, para pintarlas como botones pulsables.
+function extractOptions(content: string): ParsedMessage {
+  const lines = content.replace(/\s+$/, '').split('\n');
+
+  // 1) Bloque final de líneas-opción (una opción por línea)
+  let end = lines.length;
+  while (end > 0 && lines[end - 1].trim() === '') end--;
+  let start = end;
+  const opts: string[] = [];
+  while (start > 0) {
+    const m = lines[start - 1].trim().match(/^(?:\d+[.)]|[-•*])\s+(.+)$/);
+    if (m) { opts.unshift(cleanLabel(m[1])); start--; } else break;
+  }
+  if (opts.length >= 2) {
+    const text = lines.slice(0, start).join('\n').replace(CHOICE_HINT_RE, '').trim();
+    return { text, options: opts };
+  }
+
+  // 2) Opciones en la última línea con texto (formato en línea)
+  const lastIdx = end - 1;
+  if (lastIdx >= 0) {
+    const inline = parseInlineNumbered(lines[lastIdx]);
+    if (inline.options.length >= 2) {
+      const before = lines.slice(0, lastIdx).join('\n');
+      const text = `${before}\n${inline.text}`.replace(CHOICE_HINT_RE, '').trim();
+      return { text, options: inline.options };
+    }
+  }
+
+  return { text: content.replace(CHOICE_HINT_RE, '').trim(), options: [] };
+}
+
+// Heurística etiqueta -> icono de línea (consistente en todos los dispositivos)
+function inferIcon(label: string): string {
+  const s = label.toLowerCase();
+  if (/(asesor|persona|humano|advisor|human|agent|berater|conseiller|llam|call|whatsapp|teléfono|telefono|phone)/.test(s)) return 'chat';
+  if (/(cita|agend|appointment|rendez|termin|reserva|hueco|hora)/.test(s)) return 'cal';
   if (/(seguro|insurance|médic|medic|health|salud|assurance|krankenvers)/.test(s)) return 'med';
-  if (/(abogad|lawyer|trámite|tramite|gestor|legal|visa|visad|avocat|anwalt|recht)/.test(s)) return 'file';
+  if (/(abogad|lawyer|trámite|tramite|gestor|legal|visa|visad|avocat|anwalt|recht|arraigo|reagrup)/.test(s)) return 'file';
   if (/(vivienda|inmobil|casa|home|housing|wohnung|logement|imóvel|imovel|aluga)/.test(s)) return 'home';
   if (/(info|información|informacion|information)/.test(s)) return 'info';
   if (/(español|english|deutsch|français|francais|português|portugues|idioma|language|langue|sprache)/.test(s)) return 'globe';
-  if (/(españa|espana|spain|latino|país|pais|country|otro|other)/.test(s)) return 'pin';
-  if (/(ya|ahora|now|already|jetzt|maintenant)/.test(s)) return 'check';
+  if (/(españa|espana|spain|latino|país|pais|country|otro|other|estudiante|student|trabaj|autónomo|autonomo|nómada|nomada|jubil)/.test(s)) return 'pin';
+  if (/(ya estoy|ahora|now|already|jetzt|maintenant)/.test(s)) return 'check';
   if (/(mes|month|trimestre|próxim|proxim|monat|mois)/.test(s)) return 'cal';
   if (/(explor|looking|solo|just|nur)/.test(s)) return 'search';
   return 'arrow';
@@ -171,14 +207,6 @@ function OptIcon({ name }: { name: string }) {
   }
 }
 
-const HANDOFF_TXT: Record<string, { title: string; name: string; phone: string; submit: string; cancel: string; sent: string; sending: string }> = {
-  es: { title: 'Te conectamos con un asesor. Déjanos cómo contactarte:', name: 'Tu nombre', phone: 'WhatsApp o teléfono', submit: 'Que me llamen', cancel: 'Cancelar', sent: '¡Hecho! Un asesor te escribe en unos minutos. Gracias.', sending: 'Enviando...' },
-  en: { title: 'We will connect you with an advisor. How can we reach you?', name: 'Your name', phone: 'WhatsApp or phone', submit: 'Request a call', cancel: 'Cancel', sent: "Done! An advisor will contact you shortly. Thank you.", sending: 'Sending...' },
-  fr: { title: 'Nous vous mettons en relation avec un conseiller. Comment vous contacter ?', name: 'Votre nom', phone: 'WhatsApp ou téléphone', submit: 'Être rappelé', cancel: 'Annuler', sent: 'Parfait ! Un conseiller vous contactera sous peu. Merci.', sending: 'Envoi...' },
-  de: { title: 'Wir verbinden Sie mit einem Berater. Wie erreichen wir Sie?', name: 'Ihr Name', phone: 'WhatsApp oder Telefon', submit: 'Rückruf anfordern', cancel: 'Abbrechen', sent: 'Erledigt! Ein Berater meldet sich in Kürze. Danke.', sending: 'Senden...' },
-  pt: { title: 'Vamos conectá-lo com um consultor. Como podemos contactá-lo?', name: 'Seu nome', phone: 'WhatsApp ou telefone', submit: 'Quero que me liguem', cancel: 'Cancelar', sent: 'Pronto! Um consultor entrará em contacto em breve. Obrigado.', sending: 'A enviar...' },
-};
-
 export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -187,12 +215,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
   const [config, setConfig] = useState<ChatbotPublicConfig | null>(null);
   const [configLoaded, setConfigLoaded] = useState(false);
   const [sessionId, setSessionId] = useState<string>('');
-  const [tags, setTags] = useState<string[]>([]);
   const [activeLang, setActiveLang] = useState(lang);
-  const [handoffOpen, setHandoffOpen] = useState(false);
-  const [handoffName, setHandoffName] = useState('');
-  const [handoffPhone, setHandoffPhone] = useState('');
-  const [handoffSending, setHandoffSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -218,21 +241,8 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
     if (stored) {
       try { setMessages(JSON.parse(stored)); } catch {}
     }
-    const storedTags = sessionStorage.getItem('ai-chat-tags');
-    if (storedTags) {
-      try { setTags(JSON.parse(storedTags)); } catch {}
-    }
     const storedLang = sessionStorage.getItem('ai-chat-lang');
     if (storedLang) setActiveLang(storedLang);
-  }, []);
-
-  const addTag = useCallback((tag: string) => {
-    setTags(prev => {
-      if (prev.includes(tag)) return prev;
-      const next = [...prev, tag];
-      sessionStorage.setItem('ai-chat-tags', JSON.stringify(next));
-      return next;
-    });
   }, []);
 
   useEffect(() => {
@@ -253,17 +263,12 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
     const newId = crypto.randomUUID();
     sessionStorage.setItem('ai-chat-session-id', newId);
     sessionStorage.removeItem('ai-chat-history');
-    sessionStorage.removeItem('ai-chat-tags');
     sessionStorage.removeItem('ai-chat-lang');
     setSessionId(newId);
     setMessages([]);
     setInput('');
-    setTags([]);
     setActiveLang(lang);
-    setHandoffOpen(false);
-    setHandoffName('');
-    setHandoffPhone('');
-  }, []);
+  }, [lang]);
 
   const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isStreaming) return;
@@ -346,55 +351,15 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
     }
   }, [messages, isStreaming, lang, activeLang]);
 
-  const handleOptionClick = useCallback((opt: ChatOption) => {
-    if (opt.tag === HANDOFF_TAG) {
-      setHandoffOpen(true);
-      return;
-    }
-    if (opt.tag) addTag(opt.tag);
-    sendMessage(opt.label);
-  }, [addTag, sendMessage]);
-
-  const submitHandoff = useCallback(async () => {
-    if (handoffSending) return;
-    const nombre = handoffName.trim();
-    const telefono = handoffPhone.trim();
-    if (!nombre || !telefono) return;
-
-    setHandoffSending(true);
-    const t = HANDOFF_TXT[activeLang] || HANDOFF_TXT.es;
-    const transcript = messages
-      .slice(-10)
-      .map(m => `${m.role === 'user' ? 'Usuario' : 'Mar-IA'}: ${stripMarker(m.content, false)}`)
-      .join('\n');
-
-    try {
-      await fetch('/api/chat/handoff', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, telefono, tags, lang: activeLang, session_id: sessionId, transcript }),
-      });
-    } catch {
-      // No bloquear la UX si GHL/red falla; igualmente confirmamos al usuario.
-    } finally {
-      setHandoffOpen(false);
-      setHandoffName('');
-      setHandoffPhone('');
-      setHandoffSending(false);
-      setMessages(prev => [...prev, { role: 'assistant', content: t.sent }]);
-    }
-  }, [handoffSending, handoffName, handoffPhone, tags, activeLang, sessionId, messages]);
-
   if (!configLoaded || !config?.enabled) return null;
 
   const primaryColor = config.primary_color || '#293f92';
   const welcomeMsg = config.welcome_message?.[lang] || config.welcome_message?.es || '';
   const suggestions = config.suggested_questions?.[lang] || config.suggested_questions?.es || [];
-  const handoffTxt = HANDOFF_TXT[activeLang] || HANDOFF_TXT.es;
 
   const lastMessage = messages[messages.length - 1];
   const lastOptions = !isStreaming && lastMessage?.role === 'assistant'
-    ? parseOptions(lastMessage.content)
+    ? extractOptions(lastMessage.content).options
     : [];
 
   return (
@@ -481,7 +446,11 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
                 >
                   <div className={`text-sm break-words ${msg.role === 'user' ? 'text-white whitespace-pre-wrap' : 'text-gray-700 flex flex-col gap-0.5'}`}>
                     {msg.role === 'assistant'
-                      ? renderMarkdown(stripMarker(msg.content, isStreaming && i === messages.length - 1))
+                      ? renderMarkdown(
+                          isStreaming && i === messages.length - 1
+                            ? msg.content
+                            : extractOptions(msg.content).text
+                        )
                       : msg.content}
                     {isStreaming && i === messages.length - 1 && msg.role === 'assistant' && (
                       <span className="inline-block w-1.5 h-4 ml-0.5 bg-gray-400 animate-pulse rounded-sm" />
@@ -492,59 +461,18 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
             ))}
 
             {/* Botones pulsables (tap-only) de la última respuesta */}
-            {lastOptions.length > 0 && !handoffOpen && (
+            {lastOptions.length > 0 && (
               <div className="maria-opts" style={{ '--mc': primaryColor } as CSSProperties}>
-                {lastOptions.map((opt, i) => {
-                  const isFinal = opt.tag === HANDOFF_TAG;
-                  return (
-                    <button
-                      key={`${opt.label}-${i}`}
-                      onClick={() => handleOptionClick(opt)}
-                      className={`maria-chip${isFinal ? ' final' : ''}`}
-                    >
-                      {!isFinal && <OptIcon name={inferIcon(opt.label, opt.tag)} />}
-                      <span>{opt.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Formulario de handoff a asesor humano */}
-            {handoffOpen && (
-              <div className="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex flex-col gap-2.5">
-                <p className="text-sm text-gray-700">{handoffTxt.title}</p>
-                <input
-                  type="text"
-                  value={handoffName}
-                  onChange={e => setHandoffName(e.target.value)}
-                  placeholder={handoffTxt.name}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-gray-400 outline-none"
-                />
-                <input
-                  type="tel"
-                  value={handoffPhone}
-                  onChange={e => setHandoffPhone(e.target.value)}
-                  placeholder={handoffTxt.phone}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-gray-400 outline-none"
-                />
-                <div className="flex gap-2">
+                {lastOptions.map((label, i) => (
                   <button
-                    onClick={submitHandoff}
-                    disabled={!handoffName.trim() || !handoffPhone.trim() || handoffSending}
-                    className="flex-1 px-3 py-2 rounded-lg text-white text-sm font-semibold transition-all disabled:opacity-40"
-                    style={{ backgroundColor: primaryColor }}
+                    key={`${label}-${i}`}
+                    onClick={() => sendMessage(label)}
+                    className="maria-chip"
                   >
-                    {handoffSending ? handoffTxt.sending : handoffTxt.submit}
+                    <OptIcon name={inferIcon(label)} />
+                    <span>{label}</span>
                   </button>
-                  <button
-                    onClick={() => setHandoffOpen(false)}
-                    disabled={handoffSending}
-                    className="px-3 py-2 rounded-lg border border-gray-200 text-gray-500 text-sm hover:bg-gray-50"
-                  >
-                    {handoffTxt.cancel}
-                  </button>
-                </div>
+                ))}
               </div>
             )}
 

@@ -260,21 +260,6 @@ NEVER mix languages. Every single word of your response must be in ${detectedLan
 
 FORMAT: Use Markdown. Use **bold** for key concepts. Use bullet lists with - for enumerations. To invite contact, use a link to ${contactPath} adapted to ${detectedLanguage}.
 
-TAP-ONLY OPTIONS (very important for the web widget):
-When it makes sense to offer the user a small set of discrete choices (qualifying questions such as language, country of origin, what they need, urgency/timing, or offering to talk to a human advisor), end your message with EXACTLY ONE final line using this machine-readable marker:
-[[OPCIONES]] Label one | Label two | Label three
-Rules for the marker:
-- It must be the LAST line of the message, and there must be at most ONE such line.
-- Provide between 2 and 8 options separated by " | ".
-- Each label is a short tappable phrase (max ~5 words), translated to ${detectedLanguage}, with NO numbers, NO emojis and NO markdown.
-- Do NOT repeat the same options as a bullet list above the marker; write the question in plain text and let the marker carry the options.
-- You may attach an internal CRM tag to an option with "::tag" (lowercase, hyphen-separated). The user never sees the tag. Example: España::pais-espana | Latinoamérica::pais-latam
-- Useful tags: services -> servicio-seguros, servicio-abogados, servicio-gestorias, servicio-inmobiliarias; urgency -> alta-urgencia.
-- When the user could benefit from speaking to a person, ALWAYS include an option tagged ::bot-handoff-humano, e.g. "Hablar con un asesor::bot-handoff-humano".
-- Only use the marker when discrete choices genuinely help. For open informational answers, do NOT add it.
-
-NEVER present choices as a numbered list (1., 2., 3.) and NEVER ask the user to "reply with the corresponding number". The user CANNOT type numbers reliably: always use the [[OPCIONES]] marker instead so the web widget renders tappable buttons. This rule overrides any other instruction below about numbered options.
-
 `;
     systemContent += config.system_prompt || '';
     if (context) {
