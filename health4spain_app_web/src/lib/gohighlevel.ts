@@ -40,7 +40,7 @@ const PERFIL_TAGS: Record<string, string> = {
 
 export interface GHLContactPayload {
   nombre: string;
-  email: string;
+  email?: string;
   telefono: string;
   codigo_pais?: string;
   ciudad?: string;
@@ -194,7 +194,8 @@ function esAltaUrgencia(urgencia: string | undefined): boolean {
 
 export async function createGHLContact(
   lead: GHLContactPayload,
-  spanishFields?: GhlWebhookSpanishFields | null
+  spanishFields?: GhlWebhookSpanishFields | null,
+  extraTags?: string[]
 ): Promise<void> {
   const apiKey = process.env.GHL_PRIVATE_TOKEN;
   const locationId = process.env.GHL_LOCATION_ID;
@@ -213,6 +214,13 @@ export async function createGHLContact(
   }
   if (lead.perfil && PERFIL_TAGS[lead.perfil]) tags.push(PERFIL_TAGS[lead.perfil]);
   if (esAltaUrgencia(lead.urgencia)) tags.push('alta-urgencia');
+  // Tags adicionales (p. ej. etiquetas acumuladas por el chat de Mar-IA y bot-handoff-humano)
+  if (extraTags?.length) {
+    for (const t of extraTags) {
+      const clean = (t || '').trim();
+      if (clean && !tags.includes(clean)) tags.push(clean);
+    }
+  }
 
   const { firstName, lastName } = splitNombreCompleto(lead.nombre);
   const phone = normalizeGhlPhone(lead.codigo_pais, lead.telefono);
@@ -222,7 +230,6 @@ export async function createGHLContact(
     locationId,
     firstName,
     lastName,
-    email: lead.email,
     phone,
     tags,
     source: 'web',
@@ -230,6 +237,10 @@ export async function createGHLContact(
     ...(lead.utm_medium && { utmMedium: lead.utm_medium }),
     ...(lead.utm_campaign && { utmCampaign: lead.utm_campaign }),
   };
+
+  // Email opcional: el upsert acepta solo teléfono (p. ej. handoff de WhatsApp sin email).
+  const emailNorm = lead.email?.trim();
+  if (emailNorm) payload.email = emailNorm;
 
   // Campo estándar "City" en GHL = ciudad donde vive el contacto (paso 2), no la ciudad del servicio en España (paso 1).
   const ciudadOrigen = lead.ciudad_origen?.trim();

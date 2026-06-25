@@ -991,3 +991,48 @@ input:focus, textarea:focus, select:focus {
     padding-bottom: 80px;
   }
 }
+
+/* ====== Chat Mar-IA: opciones pulsables (tap-only) ====== */
+.maria-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.maria-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  border: 1.5px solid var(--mc, #293f92);
+  color: var(--mc, #293f92);
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.maria-chip:hover {
+  background: var(--mc, #293f92);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+.maria-chip.final {
+  justify-content: center;
+  border: none;
+  background: var(--mc, #293f92);
+  color: #fff;
+}
+.maria-chip svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
