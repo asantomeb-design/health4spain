@@ -130,32 +130,51 @@ function parseInlineNumbered(line: string): ParsedMessage {
   return { text: line.slice(0, run[0].at).trim(), options: options.filter(Boolean) };
 }
 
-// Detecta las opciones (numeradas o con viñetas) que Mar-IA pone al final del mensaje
-// y las separa del texto, para pintarlas como botones pulsables.
+const OPTION_LINE_RE = /^(?:\d+[.)]|[-•*])\s+(.+)$/;
+
+function joinText(before: string[], after: string[]): string {
+  return [...before, ...after]
+    .join('\n')
+    .replace(CHOICE_HINT_RE, '')
+    .replace(/\n{2,}/g, '\n')
+    .trim();
+}
+
+// Detecta las opciones (numeradas o con viñetas) que Mar-IA genera —estén al
+// final o en medio del mensaje— y las separa del texto para pintarlas como botones.
 function extractOptions(content: string): ParsedMessage {
   const lines = content.replace(/\s+$/, '').split('\n');
+  const matches = lines.map(l => l.trim().match(OPTION_LINE_RE));
 
-  // 1) Bloque final de líneas-opción (una opción por línea)
-  let end = lines.length;
-  while (end > 0 && lines[end - 1].trim() === '') end--;
-  let start = end;
-  const opts: string[] = [];
-  while (start > 0) {
-    const m = lines[start - 1].trim().match(/^(?:\d+[.)]|[-•*])\s+(.+)$/);
-    if (m) { opts.unshift(cleanLabel(m[1])); start--; } else break;
+  // 1) Bloque contiguo más largo de líneas-opción (una opción por línea)
+  let bestStart = -1;
+  let bestLen = 0;
+  let i = 0;
+  while (i < lines.length) {
+    if (matches[i]) {
+      let j = i;
+      while (j < lines.length && matches[j]) j++;
+      if (j - i > bestLen) { bestLen = j - i; bestStart = i; }
+      i = j;
+    } else {
+      i++;
+    }
   }
-  if (opts.length >= 2) {
-    const text = lines.slice(0, start).join('\n').replace(CHOICE_HINT_RE, '').trim();
-    return { text, options: opts };
+  if (bestLen >= 2) {
+    const options: string[] = [];
+    for (let k = bestStart; k < bestStart + bestLen; k++) {
+      const m = matches[k];
+      if (m) options.push(cleanLabel(m[1]));
+    }
+    const text = joinText(lines.slice(0, bestStart), lines.slice(bestStart + bestLen));
+    return { text, options };
   }
 
-  // 2) Opciones en la última línea con texto (formato en línea)
-  const lastIdx = end - 1;
-  if (lastIdx >= 0) {
-    const inline = parseInlineNumbered(lines[lastIdx]);
+  // 2) Opciones en una sola línea (formato en línea: "... 1. A  2. B  3. C")
+  for (let k = lines.length - 1; k >= 0; k--) {
+    const inline = parseInlineNumbered(lines[k]);
     if (inline.options.length >= 2) {
-      const before = lines.slice(0, lastIdx).join('\n');
-      const text = `${before}\n${inline.text}`.replace(CHOICE_HINT_RE, '').trim();
+      const text = joinText(lines.slice(0, k), [inline.text, ...lines.slice(k + 1)]);
       return { text, options: inline.options };
     }
   }
