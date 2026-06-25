@@ -44,3 +44,11 @@ _spec_temp.zip
 _spec_text.xml
 /word/
 Spec_Tecnica_*.docx
+
+# Documentos de trabajo, briefs y prototipos del cliente (solo local, no commitear)
+/20260624 cambos cliente chat/
+/nueva_fase_partners/
+/guia definitiva para vivir en España.html
+*.doc
+*.docx
+*.DOC
