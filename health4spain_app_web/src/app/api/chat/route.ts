@@ -6,7 +6,29 @@ interface ChatRequestBody {
   message: string;
   history: { role: 'user' | 'assistant'; content: string }[];
   lang: string;
+  /** Idioma activo de la conversación (se mantiene estable entre turnos). */
+  current_lang?: string;
   session_id?: string;
+}
+
+const CODE_TO_LANG: Record<string, string> = {
+  es: 'Spanish',
+  en: 'English',
+  fr: 'French',
+  de: 'German',
+  pt: 'Portuguese',
+};
+
+const LANG_TO_CODE: Record<string, string> = {
+  spanish: 'es', español: 'es', espanol: 'es', castellano: 'es',
+  english: 'en', inglés: 'en', ingles: 'en',
+  french: 'fr', français: 'fr', francais: 'fr', francés: 'fr',
+  german: 'de', deutsch: 'de', alemán: 'de', aleman: 'de',
+  portuguese: 'pt', português: 'pt', portugues: 'pt',
+};
+
+function langNameToCode(name: string, fallback: string): string {
+  return LANG_TO_CODE[name.trim().toLowerCase()] || fallback;
 }
 
 let cachedConfig: any = null;
@@ -143,7 +165,22 @@ async function fetchContext(config: any, keywords: string[]): Promise<string> {
   return contextParts.join('\n');
 }
 
-async function detectLanguageWithAI(openai: OpenAI, message: string, history: { role: string; content: string }[]): Promise<string> {
+async function detectLanguageWithAI(
+  openai: OpenAI,
+  message: string,
+  history: { role: string; content: string }[],
+  currentLanguage: string
+): Promise<string> {
+  const trimmed = message.trim();
+
+  // Atajo: mensajes cortos/ambiguos (números de menú, "ok", "sí", emojis, una sola
+  // palabra/etiqueta de botón) NO deben cambiar el idioma de la conversación.
+  const isAmbiguous =
+    /^[\d\s.,;:!¡¿?()\-–—+#*/\\@|]+$/.test(trimmed) || // solo números/símbolos
+    trimmed.length <= 3 ||
+    /^[\p{Emoji}\s]+$/u.test(trimmed);
+  if (isAmbiguous) return currentLanguage;
+
   const recentHistory = history.slice(-4).map(m =>
     `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content.slice(0, 100)}`
   ).join('\n');
@@ -157,10 +194,14 @@ async function detectLanguageWithAI(openai: OpenAI, message: string, history: { 
 Respond with ONLY the language name in English (e.g. "English", "French", "Spanish", "German", "Portuguese", "Italian", "Dutch", "Russian", "Arabic", "Chinese", "Japanese", "Korean", etc.).
 Do NOT respond with anything else. Just the language name. One word or two words max.
 
+The CURRENT conversation language is "${currentLanguage}". Keep it stable.
+
 Rules:
 - Focus on the LAST user message only.
 - If the user explicitly requests a language (e.g. "english?", "in english please", "en français"), return THAT requested language.
-- If the message is ambiguous (like "ok", "hi", emojis), look at the conversation history for context. If still ambiguous, return "English".`,
+- If the message is short, a menu choice, a single word, a proper noun (like a city or country name), a number, "ok", "yes", or emojis, you CANNOT determine the language from it: return the current conversation language "${currentLanguage}".
+- Only return a DIFFERENT language when the user clearly writes a full phrase in that other language.
+- If in doubt, return "${currentLanguage}".`,
       },
       {
         role: 'user',
@@ -173,13 +214,13 @@ Rules:
     max_tokens: 10,
   });
 
-  return (detection.choices[0]?.message?.content || 'English').trim();
+  return (detection.choices[0]?.message?.content || currentLanguage).trim();
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequestBody = await request.json();
-    const { message, history = [], lang = 'es', session_id } = body;
+    const { message, history = [], lang = 'es', current_lang, session_id } = body;
 
     if (!message?.trim()) {
       return Response.json({ error: 'Message is required' }, { status: 400 });
@@ -198,14 +239,19 @@ export async function POST(request: NextRequest) {
 
     const openai = new OpenAI({ apiKey });
 
-    // AGENTE 1: Detectar idioma del mensaje
-    const detectedLanguage = await detectLanguageWithAI(openai, message, history);
+    // Idioma activo de la conversación: lo enviado por el cliente o el locale de la página.
+    const currentLangCode = (current_lang || lang || 'es').toLowerCase();
+    const currentLanguageName = CODE_TO_LANG[currentLangCode] || 'Spanish';
+
+    // AGENTE 1: Detectar idioma del mensaje (estable: no cambia con respuestas cortas).
+    const detectedLanguage = await detectLanguageWithAI(openai, message, history, currentLanguageName);
+    const resolvedLangCode = langNameToCode(detectedLanguage, currentLangCode);
 
     // Buscar contexto en paralelo (no depende del idioma)
     const keywords = extractKeywords(message);
     const context = await fetchContext(config, keywords);
 
-    const contactPath = `/${lang}/contacto`;
+    const contactPath = `/${resolvedLangCode}/contacto`;
 
     // AGENTE 2: Responder al usuario en el idioma detectado
     let systemContent = `You MUST respond ENTIRELY in ${detectedLanguage}. This is non-negotiable.
@@ -226,6 +272,8 @@ Rules for the marker:
 - Useful tags: services -> servicio-seguros, servicio-abogados, servicio-gestorias, servicio-inmobiliarias; urgency -> alta-urgencia.
 - When the user could benefit from speaking to a person, ALWAYS include an option tagged ::bot-handoff-humano, e.g. "Hablar con un asesor::bot-handoff-humano".
 - Only use the marker when discrete choices genuinely help. For open informational answers, do NOT add it.
+
+NEVER present choices as a numbered list (1., 2., 3.) and NEVER ask the user to "reply with the corresponding number". The user CANNOT type numbers reliably: always use the [[OPCIONES]] marker instead so the web widget renders tappable buttons. This rule overrides any other instruction below about numbered options.
 
 `;
     systemContent += config.system_prompt || '';
@@ -263,6 +311,8 @@ Rules for the marker:
       async start(controller) {
         let fullResponse = '';
         try {
+          // Informar al cliente del idioma resuelto para mantenerlo estable.
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ lang: resolvedLangCode })}\n\n`));
           for await (const chunk of stream) {
             const content = chunk.choices[0]?.delta?.content;
             if (content) {

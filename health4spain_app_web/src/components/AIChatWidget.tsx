@@ -188,6 +188,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
   const [configLoaded, setConfigLoaded] = useState(false);
   const [sessionId, setSessionId] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
+  const [activeLang, setActiveLang] = useState(lang);
   const [handoffOpen, setHandoffOpen] = useState(false);
   const [handoffName, setHandoffName] = useState('');
   const [handoffPhone, setHandoffPhone] = useState('');
@@ -221,6 +222,8 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
     if (storedTags) {
       try { setTags(JSON.parse(storedTags)); } catch {}
     }
+    const storedLang = sessionStorage.getItem('ai-chat-lang');
+    if (storedLang) setActiveLang(storedLang);
   }, []);
 
   const addTag = useCallback((tag: string) => {
@@ -251,10 +254,12 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
     sessionStorage.setItem('ai-chat-session-id', newId);
     sessionStorage.removeItem('ai-chat-history');
     sessionStorage.removeItem('ai-chat-tags');
+    sessionStorage.removeItem('ai-chat-lang');
     setSessionId(newId);
     setMessages([]);
     setInput('');
     setTags([]);
+    setActiveLang(lang);
     setHandoffOpen(false);
     setHandoffName('');
     setHandoffPhone('');
@@ -280,6 +285,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
           message: text.trim(),
           history: updatedMessages.slice(-20),
           lang,
+          current_lang: activeLang,
           session_id: sessionId,
         }),
       });
@@ -310,6 +316,10 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
 
           try {
             const parsed = JSON.parse(data);
+            if (parsed.lang && parsed.lang !== activeLang) {
+              setActiveLang(parsed.lang);
+              sessionStorage.setItem('ai-chat-lang', parsed.lang);
+            }
             if (parsed.content) {
               accumulated += parsed.content;
               setMessages(prev => {
@@ -334,7 +344,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
     } finally {
       setIsStreaming(false);
     }
-  }, [messages, isStreaming, lang]);
+  }, [messages, isStreaming, lang, activeLang]);
 
   const handleOptionClick = useCallback((opt: ChatOption) => {
     if (opt.tag === HANDOFF_TAG) {
@@ -352,7 +362,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
     if (!nombre || !telefono) return;
 
     setHandoffSending(true);
-    const t = HANDOFF_TXT[lang] || HANDOFF_TXT.es;
+    const t = HANDOFF_TXT[activeLang] || HANDOFF_TXT.es;
     const transcript = messages
       .slice(-10)
       .map(m => `${m.role === 'user' ? 'Usuario' : 'Mar-IA'}: ${stripMarker(m.content, false)}`)
@@ -362,7 +372,7 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
       await fetch('/api/chat/handoff', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, telefono, tags, lang, session_id: sessionId, transcript }),
+        body: JSON.stringify({ nombre, telefono, tags, lang: activeLang, session_id: sessionId, transcript }),
       });
     } catch {
       // No bloquear la UX si GHL/red falla; igualmente confirmamos al usuario.
@@ -373,14 +383,14 @@ export default function AIChatWidget({ lang = 'es' }: AIChatWidgetProps) {
       setHandoffSending(false);
       setMessages(prev => [...prev, { role: 'assistant', content: t.sent }]);
     }
-  }, [handoffSending, handoffName, handoffPhone, tags, lang, sessionId, messages]);
+  }, [handoffSending, handoffName, handoffPhone, tags, activeLang, sessionId, messages]);
 
   if (!configLoaded || !config?.enabled) return null;
 
   const primaryColor = config.primary_color || '#293f92';
   const welcomeMsg = config.welcome_message?.[lang] || config.welcome_message?.es || '';
   const suggestions = config.suggested_questions?.[lang] || config.suggested_questions?.es || [];
-  const handoffTxt = HANDOFF_TXT[lang] || HANDOFF_TXT.es;
+  const handoffTxt = HANDOFF_TXT[activeLang] || HANDOFF_TXT.es;
 
   const lastMessage = messages[messages.length - 1];
   const lastOptions = !isStreaming && lastMessage?.role === 'assistant'
