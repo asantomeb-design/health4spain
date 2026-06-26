@@ -148,33 +148,40 @@ function extractOptions(content: string): ParsedMessage {
   const lines = content.replace(/\s+$/, '').split('\n');
   const matches = lines.map(l => l.trim().match(OPTION_LINE_RE));
 
-  // Localizar todos los bloques contiguos de líneas-opción (>= 2 líneas)
-  const blocks: { start: number; len: number; numbered: boolean }[] = [];
-  let i = 0;
-  while (i < lines.length) {
-    if (matches[i]) {
-      let j = i;
-      while (j < lines.length && matches[j]) j++;
-      if (j - i >= 2) {
-        const numbered = /^\d+[.)]/.test(lines[i].trim());
-        blocks.push({ start: i, len: j - i, numbered });
-      }
-      i = j;
-    } else {
-      i++;
+  // Índices de líneas-opción, agrupados (se permiten líneas en blanco entre ellas,
+  // pero NO una línea de texto normal: eso separa dos listas distintas).
+  const optIndices: number[] = [];
+  matches.forEach((m, idx) => { if (m) optIndices.push(idx); });
+
+  const groups: number[][] = [];
+  let cur: number[] = [];
+  for (const idx of optIndices) {
+    if (cur.length === 0) { cur = [idx]; continue; }
+    const prev = cur[cur.length - 1];
+    let onlyBlank = true;
+    for (let q = prev + 1; q < idx; q++) {
+      if (lines[q].trim() !== '') { onlyBlank = false; break; }
     }
+    if (onlyBlank) cur.push(idx);
+    else { groups.push(cur); cur = [idx]; }
   }
+  if (cur.length) groups.push(cur);
+
+  // Bloques con 2+ opciones; se prioriza el numerado y, en igualdad, el último.
+  const blocks = groups
+    .filter(g => g.length >= 2)
+    .map(g => ({ idxs: g, numbered: /^\d+[.)]/.test(lines[g[0]].trim()) }));
 
   if (blocks.length > 0) {
     const numbered = blocks.filter(b => b.numbered);
     const pool = numbered.length > 0 ? numbered : blocks;
     const chosen = pool[pool.length - 1]; // la última (la pregunta real)
-    const options: string[] = [];
-    for (let k = chosen.start; k < chosen.start + chosen.len; k++) {
-      const m = matches[k];
-      if (m) options.push(cleanLabel(m[1]));
-    }
-    const text = joinText(lines.slice(0, chosen.start), lines.slice(chosen.start + chosen.len));
+    const options = chosen.idxs
+      .map(idx => cleanLabel(matches[idx]?.[1] ?? ''))
+      .filter(Boolean);
+    const first = chosen.idxs[0];
+    const last = chosen.idxs[chosen.idxs.length - 1];
+    const text = joinText(lines.slice(0, first), lines.slice(last + 1));
     return { text, options };
   }
 
