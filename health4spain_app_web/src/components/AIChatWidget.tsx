@@ -142,35 +142,43 @@ function joinText(before: string[], after: string[]): string {
 
 // Detecta las opciones (numeradas o con viñetas) que Mar-IA genera —estén al
 // final o en medio del mensaje— y las separa del texto para pintarlas como botones.
+// Cuando hay varias listas (p.ej. una informativa con viñetas + la pregunta real
+// numerada), se prioriza la numerada y, en igualdad, la ÚLTIMA (la pregunta).
 function extractOptions(content: string): ParsedMessage {
   const lines = content.replace(/\s+$/, '').split('\n');
   const matches = lines.map(l => l.trim().match(OPTION_LINE_RE));
 
-  // 1) Bloque contiguo más largo de líneas-opción (una opción por línea)
-  let bestStart = -1;
-  let bestLen = 0;
+  // Localizar todos los bloques contiguos de líneas-opción (>= 2 líneas)
+  const blocks: { start: number; len: number; numbered: boolean }[] = [];
   let i = 0;
   while (i < lines.length) {
     if (matches[i]) {
       let j = i;
       while (j < lines.length && matches[j]) j++;
-      if (j - i > bestLen) { bestLen = j - i; bestStart = i; }
+      if (j - i >= 2) {
+        const numbered = /^\d+[.)]/.test(lines[i].trim());
+        blocks.push({ start: i, len: j - i, numbered });
+      }
       i = j;
     } else {
       i++;
     }
   }
-  if (bestLen >= 2) {
+
+  if (blocks.length > 0) {
+    const numbered = blocks.filter(b => b.numbered);
+    const pool = numbered.length > 0 ? numbered : blocks;
+    const chosen = pool[pool.length - 1]; // la última (la pregunta real)
     const options: string[] = [];
-    for (let k = bestStart; k < bestStart + bestLen; k++) {
+    for (let k = chosen.start; k < chosen.start + chosen.len; k++) {
       const m = matches[k];
       if (m) options.push(cleanLabel(m[1]));
     }
-    const text = joinText(lines.slice(0, bestStart), lines.slice(bestStart + bestLen));
+    const text = joinText(lines.slice(0, chosen.start), lines.slice(chosen.start + chosen.len));
     return { text, options };
   }
 
-  // 2) Opciones en una sola línea (formato en línea: "... 1. A  2. B  3. C")
+  // Opciones en una sola línea (formato en línea: "... 1. A  2. B  3. C")
   for (let k = lines.length - 1; k >= 0; k--) {
     const inline = parseInlineNumbered(lines[k]);
     if (inline.options.length >= 2) {
