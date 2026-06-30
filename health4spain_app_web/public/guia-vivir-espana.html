@@ -328,8 +328,6 @@ document.getElementById('goCrear').addEventListener('click',()=>document.querySe
 document.getElementById('optOrigen').addEventListener('click',e=>{const o=e.target.closest('.opt');if(!o)return;bstate.origen=o.dataset.o;renderBuilder();});
 document.getElementById('optPerfil').addEventListener('click',e=>{const o=e.target.closest('.opt');if(!o)return;bstate.perfil=o.dataset.p;renderBuilder();});
 document.getElementById('optCity').addEventListener('change',function(){bstate.city=this.value;});
-document.getElementById('optOrigen').addEventListener('click',e=>{const o=e.target.closest('.opt');if(!o)return;bstate.origen=o.dataset.o;renderBuilder();});
-document.getElementById('optPerfil').addEventListener('click',e=>{const o=e.target.closest('.opt');if(!o)return;bstate.perfil=o.dataset.p;renderBuilder();});
 document.getElementById('optCountry').addEventListener('change',function(){bstate.country=this.value;bstate.consul=null;const nl=CLANG[this.value]||'es';if(nl!==LANG){LANG=nl;localStorage.setItem('h4s_lang',LANG);setLangUI();renderStatic();applyConsent();}else{renderBuilder();}});
 document.getElementById('optConsul').addEventListener('change',function(){bstate.consul=this.value;});
 document.getElementById('btnGen').addEventListener('click',buildIt);
