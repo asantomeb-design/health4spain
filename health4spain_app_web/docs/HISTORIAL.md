@@ -1,5 +1,26 @@
 # Historial de Desarrollo - Health4Spain
 
+## Versión 3.6.1 (30 junio 2026)
+
+### Guía interactiva «Vivir en España» — corrección de enlaces + documentación
+
+**Archivos:** `public/guia-vivir-espana.html`, `guia definitiva para vivir en España_ORG.html` (sincronizados).
+
+**Correcciones:**
+
+- **`survPath()` / `survUrl()`**: CTAs alineados con `src/lib/routes.ts` — EN `/en/request`, DE `/de/anfrage`, FR `/fr/demande` (evita 404).
+- **Trámites:** EX-15 (`modelos-generales`), UNEDasiss (`unedasiss.uned.es`).
+- **Transporte Murcia:** Movibus (`movibus.carm.es`), ALSA (`alsa.es`).
+- **Asociaciones:** dominios actualizados o enlace web retirado si el sitio está caído.
+
+**Documentación:** `docs/GUIA_VIVIR_ESPANA.md`; actualizados README, índice, ESTADO_PROYECTO, RESUMEN_ACTUALIZACIONES.
+
+**Política acordada:** la guía permanece en HTML como v1 provisional; el HTML del cliente es referencia de contenido, no canal de producción sin revisión; integración Next cuando sea parte del producto principal.
+
+**Commit:** `2ca1818`.
+
+---
+
 ## Versión 3.6.0 (18 junio 2026)
 
 ### Leads web → GoHighLevel (brief `H4S_BR_1_v2`)

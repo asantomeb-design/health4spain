@@ -4,10 +4,18 @@
 **Alcance:** Funcionamiento, flujo de datos, CTAs, servicios, documentación
 
 > **Nota:** Desde **junio 2026** el payload GHL sigue el brief `H4S_BR_1_v2` (un POST por servicio, `ciudad` = destino, `origen: web`). Integración API + webhook único; **`/administrator/leads`** para gestión. Una sola subcuenta GHL — ver **`README.md`** § CRM GHL.
+>
+> **Guía HTML (30 jun 2026):** `/guia-vivir-espana.html` — archivo estático en `public/` (no App Router). CTAs de formulario deben usar las mismas rutas que `routes.ts`. Detalle: **`docs/GUIA_VIVIR_ESPANA.md`**.
 
 ---
 
 ## 1. ARQUITECTURA DE RUTAS
+
+### Archivo estático (`public/`)
+
+| URL | Archivo | Notas |
+|-----|---------|-------|
+| `/guia-vivir-espana.html` | `public/guia-vivir-espana.html` | Guía interactiva 5 idiomas UI; JS embebido; enlaces a `/es/solicitar`, `/en/request`, etc. |
 
 ### Sitio Público (`/es/*`)
 
@@ -23,6 +31,10 @@
 | `/es/blog/[slug]` | blog/[slug]/page.tsx | **Supabase** blog_posts | Post individual |
 | `/es/contacto` | contacto/page.tsx | **Supabase** getCiudades() | Página contacto con mapa |
 | `/es/solicitar` | solicitar/page.tsx | **Supabase** getCiudades() | Formulario multi-paso (4 pasos). LandingFormEmbed en landings |
+| `/en/request` | request/page.tsx | Idem | Formulario EN (slug traducido vía `routes.ts`) |
+| `/de/anfrage` | anfrage/page.tsx | Idem | Formulario DE |
+| `/fr/demande` | demande/page.tsx | Idem | Formulario FR |
+| `/pt/solicitar` | solicitar/page.tsx | Idem | Formulario PT |
 | `/es/sobre-nosotros` | sobre-nosotros/page.tsx | Estático | |
 | `/es/profesionales` | profesionales/page.tsx | Estático | |
 | `/es/presupuesto` | presupuesto/page.tsx | Estático | |

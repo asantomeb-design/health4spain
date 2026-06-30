@@ -1,8 +1,8 @@
 # 📚 Índice de Documentación - Health4Spain
 
-**Fecha:** 12 de junio de 2026  
-**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (v2 jun 2026) | Partners Fase 1 | **Hub Colaboradores v1** | Blog IA + translation_group_id | Meta Pixel | Guía vivir España | Production-ready  
-**Versión:** 3.5.0
+**Fecha:** 30 de junio de 2026  
+**Estado:** ✅ Multi-idioma (5) | SEO completo | GHL + leads (v2 jun 2026) | Partners Fase 1 | **Hub Colaboradores v1** | Blog IA + translation_group_id | Meta Pixel | Guía vivir España (HTML) | Production-ready  
+**Versión:** 3.6.1
 
 ---
 
@@ -51,6 +51,7 @@
 | **[MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md)** | 🤝 Partners post-firma: asignación, panel partner activo, facturación (target/v2; GHL operativo) | 📖 Referencia (v2) |
 | **[BLOG_IA_Y_TRADUCCIONES.md](./docs/BLOG_IA_Y_TRADUCCIONES.md)** | ✍️ Asistente IA blog, SerpAPI, `translation_group_id`, APIs, Navigation/hreflang | ✅ Nuevo |
 | **[META_PIXEL.md](./docs/META_PIXEL.md)** | 📊 Meta Pixel: variable Vercel, eventos Lead/PageView, GDPR, verificación | ✅ Nuevo |
+| **[GUIA_VIVIR_ESPANA.md](./docs/GUIA_VIVIR_ESPANA.md)** | 🗺️ Guía HTML estática: URL, mantenimiento, rutas formulario por idioma, enlaces, política v1 | ✅ Nuevo |
 | **[ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md)** | ✍️ Estrategia SEO blog (visión editorial); esquema BD en doc técnico anterior | 📖 Referencia |
 
 ### 📂 `/scripts`
@@ -124,6 +125,12 @@
 - **BD**: `supabase/16-partner-leads.sql` (tabla `partner_leads`, RLS deny all anon/authenticated, vista `admin_partner_leads_overview`).
 - **i18n**: `t.footer.forPartners` traducido en los 5 idiomas; clave `partners` reservada en `routes.ts`. En v0 solo se renderiza `/es/partners`; el footer de cualquier locale enlaza a esa URL.
 
+### Guía «Vivir en España» (HTML estático)
+- **Doc técnica**: [`docs/GUIA_VIVIR_ESPANA.md`](./docs/GUIA_VIVIR_ESPANA.md)
+- **Producción**: `public/guia-vivir-espana.html` → https://www.health4spain.com/guia-vivir-espana.html
+- **Backup cliente**: `guia definitiva para vivir en España_ORG.html` (mantener sincronizado)
+- **CTAs formulario**: alinear con `src/lib/routes.ts` (`solicitar` / `request` / `anfrage` / `demande`)
+
 ### Contenido de Ciudades
 
 1. Editar `GUIA_COTENIDO_LANDING_DESTINOS` si necesitas cambiar la estructura
@@ -167,5 +174,5 @@
 
 ---
 
-**Última actualización:** 8 de mayo de 2026  
-**Versión:** 3.4.0
+**Última actualización:** 30 de junio de 2026  
+**Versión:** 3.6.1

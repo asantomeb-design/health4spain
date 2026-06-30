@@ -32,7 +32,7 @@ Health4Spain es una plataforma-marketplace digital que conecta a personas extran
 
 176+ landing pages SEO (76 servicio×ciudad + 100 visa no lucrativa) + blog multiidioma + páginas de destinos
 
-**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: payload v2 jun 2026, API + webhook, un POST/servicio, `origen: web`) + leads en español**, panel admin de leads, **módulo Partners Fase 1**, **Hub Colaboradores v1 (comisiones multi-compañía + `/hub`)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, **Meta Pixel (Facebook Ads) con consentimiento GDPR**, **guía interactiva vivir en España** (`/guia-vivir-espana.html`), production-ready — **v3.6.0** (18 jun 2026)
+**✅ ESTADO**: Proyecto multi-idioma, SEO completo, **GoHighLevel (CRM: payload v2 jun 2026, API + webhook, un POST/servicio, `origen: web`) + leads en español**, panel admin de leads, **módulo Partners Fase 1**, **Hub Colaboradores v1 (comisiones multi-compañía + `/hub`)**, **asistente IA del blog + grupos de traducción (`translation_group_id`) + portadas IA**, **Meta Pixel (Facebook Ads) con consentimiento GDPR**, **guía interactiva vivir en España** ([`/guia-vivir-espana.html`](https://www.health4spain.com/guia-vivir-espana.html) — HTML en `public/`), production-ready — **v3.6.1** (30 jun 2026)
 
 ---
 
@@ -113,8 +113,11 @@ health4spain/
 │   ├── 15-ai-blog-config.sql              # Tabla ai_blog_config (asistente IA del blog)
 │   ├── 16-partner-leads.sql               # Captación de partners B2B (Fase 1)
 │   ├── 17-blog-translation-groups.sql     # translation_group_id en blog_posts + backfill + índices
-│   └── 18-ai-blog-model-image-gpt-image-1.5.sql  # model_image → gpt-image-1.5 (+ DEFAULT); ✅ aplicado prod mayo 2026
-└── public/images/                      # chat_ia_logo.jpg (avatar Mar-IA), favicon, logos
+│   ├── 18-ai-blog-model-image-gpt-image-1.5.sql  # model_image → gpt-image-1.5
+│   └── 19-hub-colaboradores.sql           # Hub Colaboradores (jun 2026)
+├── public/
+│   ├── guia-vivir-espana.html        # Guía interactiva (HTML estático, 5 idiomas UI)
+│   └── images/                       # chat_ia_logo.jpg, favicon, logos
 ```
 
 ---
@@ -392,6 +395,22 @@ App privada **`/hub`** para closers, supervisores, admin y técnico. **No es Par
 
 ---
 
+## 🗺️ Guía interactiva «Vivir en España» (HTML estático)
+
+Página autocontenida para Costa Blanca + Costa Cálida: itinerario, 19 ciudades, asociaciones y generador personalizado.
+
+| | |
+|--|--|
+| **URL** | https://www.health4spain.com/guia-vivir-espana.html |
+| **Código** | `public/guia-vivir-espana.html` (+ backup `guia definitiva para vivir en España_ORG.html`) |
+| **Doc técnica** | [`docs/GUIA_VIVIR_ESPANA.md`](./docs/GUIA_VIVIR_ESPANA.md) |
+
+**Importante:** los CTAs de formulario en la guía deben usar las mismas rutas que `src/lib/routes.ts` (`/es/solicitar`, `/en/request`, `/de/anfrage`, `/fr/demande`, `/pt/solicitar`). No es una página Next: no hereda Meta Pixel ni cookie banner; los enlaces llevan a rutas Next que sí los tienen.
+
+**Política (jun 2026):** mantener en HTML como v1 provisional; nuevas ampliaciones del cliente integrarlas en la app, no publicar HTML suelto sin revisión de enlaces.
+
+---
+
 ## 🎨 Diseño y UX
 
 - **Modern Minimalist**: Negro, blanco, acento azul (`#3bbdda`)
@@ -453,13 +472,14 @@ NEXT_PUBLIC_META_PIXEL_ID=1885591562124890   # Meta Ads (ver docs/META_PIXEL.md)
 - [docs/MODELO_PARTNERS_LEADS.md](./docs/MODELO_PARTNERS_LEADS.md) - Partners post-firma (asignación, facturación)
 - [docs/BLOG_IA_Y_TRADUCCIONES.md](./docs/BLOG_IA_Y_TRADUCCIONES.md) - Asistente IA del blog, traducciones, hreflang, APIs
 - [docs/META_PIXEL.md](./docs/META_PIXEL.md) - Meta Pixel: configuración, eventos, verificación
+- [docs/GUIA_VIVIR_ESPANA.md](./docs/GUIA_VIVIR_ESPANA.md) - Guía HTML estática: URL, mantenimiento, enlaces, política de evolución
 - [docs/ESTRATEGIA_BLOG.md](./docs/ESTRATEGIA_BLOG.md) - Estrategia editorial SEO (visión producto)
 - [scripts/README.md](./scripts/README.md) - Scripts disponibles
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, GHL + LEADS (ES), PARTNERS FASE 1, BLOG IA + TRADUCCIONES ENLAZADAS, META PIXEL, PRODUCTION-READY  
-**Última actualización**: 28 de mayo de 2026  
-**Versión**: 3.4.0  
-**Build**: 708+ páginas estáticas (incluye módulo Partners en `/es/partners` y `/administrator/partners`)  
+**Estado**: ✅ MULTI-IDIOMA, SEO COMPLETO, GHL + LEADS (ES), PARTNERS FASE 1, BLOG IA + TRADUCCIONES ENLAZADAS, META PIXEL, GUÍA HTML, PRODUCTION-READY  
+**Última actualización**: 30 de junio de 2026  
+**Versión**: 3.6.1  
+**Build**: 748+ páginas estáticas Next + `guia-vivir-espana.html` en `public/`  
 **Licencia**: Privado - Health4Spain © 2026

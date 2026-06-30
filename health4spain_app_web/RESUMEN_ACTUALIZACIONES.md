@@ -2,6 +2,19 @@
 
 ---
 
+## 🆕 Guía HTML: enlaces corregidos + documentación — 30 junio 2026
+
+- **Fix producción** (`public/guia-vivir-espana.html`, commit `2ca1818`):
+  - Formularios por idioma: `/en/request`, `/de/anfrage`, `/fr/demande` (antes `/…/solicitar` → 404).
+  - EX-15 → `inclusion.gob.es/…/modelos-generales`; UNEDasiss → `unedasiss.uned.es`.
+  - Movibus → `movibus.carm.es`; ALSA → `alsa.es`.
+  - Asociaciones: HELP Murcia `.es`, Beneluxos raíz VIW; webs caídas sin enlace (solo teléfono).
+- **Documentación nueva**: `docs/GUIA_VIVIR_ESPANA.md` (mantenimiento, rutas, política v1 HTML vs Next).
+- **Actualizados**: README, INDICE_DOCUMENTACION, ESTADO_PROYECTO, HISTORIAL.
+- Versión del proyecto **3.6.1**.
+
+---
+
 ## 🆕 Hub Colaboradores + docs reunión + fix partners — 12 junio 2026
 
 - **Hub v1** desplegado: `/hub`, APIs comisiones, parsers CSV ASISA, migración **`19-hub-colaboradores.sql`** en producción.

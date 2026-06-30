@@ -1,6 +1,6 @@
 # 📊 Estado del Proyecto Health4Spain
 
-**Fecha de última actualización:** 12 de junio de 2026
+**Fecha de última actualización:** 30 de junio de 2026
 
 ---
 
@@ -8,6 +8,7 @@
 
 ### 🎯 Hitos Alcanzados
 
+- ✅ **Guía interactiva HTML** (jun 2026): `public/guia-vivir-espana.html` — https://www.health4spain.com/guia-vivir-espana.html — itinerario, 19 ciudades, asociaciones, 5 idiomas UI. **Fix enlaces 30 jun:** formularios EN/DE/FR, EX-15, UNEDasiss, transporte Murcia, asociaciones caídas. Doc: **`docs/GUIA_VIVIR_ESPANA.md`**. Política: v1 provisional en HTML; evolución futura vía Next si entra en producto principal.
 - ✅ **Hub Colaboradores v1** (junio 2026): app interna `/hub` para comisiones del equipo de ventas. Carga CSV multi-compañía (ASISA + genérico), asignación a closers, cálculo IRPF/régimen, export contable, justificante PDF, RBAC 4 roles, audit log. BD `19-hub-colaboradores.sql` en producción. Integración GHL **preparada** (webhook + lectura pipelines/usuarios); **CVR automático pendiente** de Claudia. Detalle: **`docs/HUB_COLABORADORES.md`** · resumen cliente: **`HUB_ESTADO_SENCILLO.md`**.
 - ✅ **Asistente IA del blog** (mayo 2026): wizard «Crear con IA», Config IA (`ai_blog_config`), traducción desde editor (solo artículo ES), portadas IA (`blog-images/ai-covers/`), búsqueda de noticias vía OpenAI `web_search` (SerpAPI eliminado). Documentación: **`docs/BLOG_IA_Y_TRADUCCIONES.md`**.
 - ✅ **Blog enlazado entre idiomas**: columna `translation_group_id`, API `GET /api/blog/translations`, hreflang con slugs reales (`buildBlogAlternates`), navbar (`Navigation.tsx`) con `hrefForLocaleSwitch`. Migración **`supabase/17-blog-translation-groups.sql`**.
@@ -278,6 +279,6 @@ npm run check-landings
 
 ---
 
-**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PARTNERS FASE 1 + HUB COLABORADORES v1 + BLOG IA + PRODUCTION-READY  
-**Última actualización**: 12 de junio de 2026  
-**Versión**: 3.5.0
+**Estado**: ✅ MULTI-IDIOMA + SEO + GHL/LEADS (ES) + PARTNERS FASE 1 + HUB COLABORADORES v1 + BLOG IA + GUÍA HTML + PRODUCTION-READY  
+**Última actualización**: 30 de junio de 2026  
+**Versión**: 3.6.1
