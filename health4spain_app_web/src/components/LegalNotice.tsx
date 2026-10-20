@@ -12,7 +12,7 @@ export const TITULAR = {
   cif: 'B-26891572',
   domicilio: 'Calle Emilio Castelar, 45 — 30740 San Pedro del Pinatar (Murcia), España',
   registro: 'Registro Mercantil de Murcia',
-  registroDatos: '', // p. ej. 'Hoja MU-XXXXXX'
+  registroDatos: 'Hoja MU-119811, inscripción 1.ª',
   email: 'legal@health4spain.com',
   telefono: '+34 614 404 562',
   web: 'www.health4spain.com',
