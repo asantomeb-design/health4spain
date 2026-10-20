@@ -1,3 +1,4 @@
+import { LEGAL_LINK_LABEL } from './LegalNotice';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getServicios } from '@/lib/services';
@@ -29,6 +30,7 @@ const socialLinks = [
   },
 ];
 
+
 interface FooterProps {
   locale?: Locale;
 }
@@ -53,6 +55,7 @@ export default async function Footer({ locale = 'es' }: FooterProps) {
   ];
 
   const legal = [
+    { href: `/${locale}/${r.legalNotice}`, label: LEGAL_LINK_LABEL[locale] },
     { href: `/${locale}/${r.privacy}`, label: t.footer.privacy },
     { href: `/${locale}/${r.terms}`, label: t.footer.terms },
     { href: `/${locale}/${r.cookies}`, label: t.footer.cookies },

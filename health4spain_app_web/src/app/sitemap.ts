@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.health4spain.c
 
 const STATIC_ROUTE_KEYS = [
   'home', 'services', 'destinations', 'blog', 'contact',
-  'about', 'privacy', 'cookies', 'terms', 'professionals',
+  'about', 'privacy', 'cookies', 'terms', 'legalNotice', 'professionals',
   'quote', 'sitemap', 'request',
 ];
 
